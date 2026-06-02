@@ -259,8 +259,9 @@ function AdminPage() {
       {/* Filters + search */}
       <div className="mt-8 flex items-center gap-3 flex-wrap">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
-          <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search title, summary, tag…"
+          <label htmlFor="admin-search" className="sr-only">Search content</label>
+          <Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+          <input id="admin-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search title, summary, tag…"
             className="h-9 w-64 pl-8 pr-3 rounded-lg border border-input bg-surface-elevated text-xs focus:outline-none focus:ring-2 focus:ring-ring" />
         </div>
         <div className="flex items-center gap-1.5">
