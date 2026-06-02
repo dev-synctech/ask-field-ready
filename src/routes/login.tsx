@@ -2,6 +2,7 @@ import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-ro
 import { useState, FormEvent } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { MailCheck } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({
@@ -9,8 +10,15 @@ export const Route = createFileRoute("/login")({
     redirect: z.string().optional(),
   }).parse,
   beforeLoad: async ({ search }) => {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) throw redirect({ to: (search.redirect as any) || '/ask' });
+    // Use getUser() — re-validates the JWT; getSession() can return stale cached tokens.
+    const { data, error } = await supabase.auth.getUser();
+    if (!error && data.user) {
+      // Already signed in → route by entitlement (paid → /ask, otherwise → /checkout).
+      const { data: ent } = await supabase
+        .from('entitlements').select('status').maybeSingle();
+      const target = search.redirect || (ent?.status === 'active' ? '/ask' : '/checkout');
+      throw redirect({ to: target as any });
+    }
   },
   component: AuthPage,
 });
@@ -24,30 +32,93 @@ function AuthPage() {
   const [displayName, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [checkEmail, setCheckEmail] = useState(false);
+  const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+  async function routeAfterAuth() {
+    // Decide destination based on entitlement status.
+    const { data: ent } = await supabase
+      .from('entitlements').select('status').maybeSingle();
+    const target = search.redirect || (ent?.status === 'active' ? '/ask' : '/checkout');
+    navigate({ to: target as any, replace: true });
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
     setError(''); setLoading(true);
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email, password,
           options: {
-            emailRedirectTo: `${window.location.origin}/ask`,
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
             data: { display_name: displayName || email.split('@')[0] },
           },
         });
         if (error) throw error;
+        // If email confirmation is required, no session is returned.
+        if (!data.session) {
+          setCheckEmail(true);
+          return;
+        }
+        await routeAfterAuth();
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        await routeAfterAuth();
       }
-      navigate({ to: (search.redirect as any) || '/ask' });
     } catch (err: any) {
-      setError(err.message ?? 'Authentication failed');
+      setError(err?.message ?? 'Authentication failed');
     } finally {
       setLoading(false);
     }
+  }
+
+  async function resend() {
+    setResendState('sending');
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    });
+    setResendState(error ? 'error' : 'sent');
+  }
+
+  if (checkEmail) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <header className="px-5 h-16 flex items-center">
+          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Home</Link>
+        </header>
+        <div className="flex-1 flex items-center justify-center px-5 pb-12">
+          <div className="w-full max-w-sm text-center">
+            <div className="size-14 mx-auto rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+              <MailCheck className="size-7" />
+            </div>
+            <h1 className="mt-5 text-2xl font-display font-semibold">Check your email</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              We sent a confirmation link to <span className="text-foreground font-medium">{email}</span>. Click it to finish setting up your account.
+            </p>
+            <button
+              onClick={resend}
+              disabled={resendState === 'sending' || resendState === 'sent'}
+              className="mt-6 inline-flex h-11 px-5 rounded-xl border border-border bg-card text-sm font-medium hover:bg-accent disabled:opacity-60"
+            >
+              {resendState === 'sending' ? 'Sending…'
+                : resendState === 'sent' ? 'Email sent ✓'
+                : resendState === 'error' ? 'Try again'
+                : 'Resend confirmation email'}
+            </button>
+            <div className="mt-6 text-xs text-muted-foreground">
+              Wrong address?{' '}
+              <button onClick={() => { setCheckEmail(false); setResendState('idle'); }} className="text-primary font-medium">
+                Use a different email
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -76,9 +147,9 @@ function AuthPage() {
           </form>
           <div className="text-center mt-6 text-sm text-muted-foreground">
             {mode === 'signup' ? (
-              <>Already have an account? <button onClick={() => setMode('signin')} className="text-primary font-medium">Sign in</button></>
+              <>Already have an account? <button onClick={() => { setMode('signin'); setError(''); }} className="text-primary font-medium">Sign in</button></>
             ) : (
-              <>New here? <button onClick={() => setMode('signup')} className="text-primary font-medium">Create account</button></>
+              <>New here? <button onClick={() => { setMode('signup'); setError(''); }} className="text-primary font-medium">Create account</button></>
             )}
           </div>
         </div>
