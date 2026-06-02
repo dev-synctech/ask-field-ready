@@ -42,7 +42,10 @@ function AccountPage() {
         <p className="mt-1 text-sm">No PHI. No vendor or organization names. Everything in Mizly is vendor-neutral by design.</p>
       </div>
 
-      <div className="mt-6 flex justify-end">
+      <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
+        <Link to="/legal" className="text-xs text-muted-foreground hover:text-foreground underline">
+          Trademark &amp; legal notice
+        </Link>
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back to landing</Link>
       </div>
     </div>
