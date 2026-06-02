@@ -1,9 +1,12 @@
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { MailCheck } from "lucide-react";
-import { DemoModeButton } from "@/components/DemoModeButton";
+import { MailCheck, FlaskConical } from "lucide-react";
+import { DemoModeButton, isDemoModeAllowed } from "@/components/DemoModeButton";
+// TODO: REMOVE BEFORE PRODUCTION LAUNCH
+import { seedDemoAdmin, DEMO_ADMIN_EMAIL } from "@/lib/seed-demo-admin.functions";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({
