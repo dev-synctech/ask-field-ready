@@ -113,6 +113,11 @@ function QuestionsListPage() {
         Vendor-neutral and PHI-free. Use neutral wording like "workflow may vary by site/system." Do not copy raw source text verbatim.
       </div>
 
+      <div className="mt-4">
+        <GuardrailCard />
+      </div>
+
+
       {/* Filters */}
       <div className="mt-6 rounded-2xl border border-border bg-card p-4 space-y-3">
         <div className="relative">
