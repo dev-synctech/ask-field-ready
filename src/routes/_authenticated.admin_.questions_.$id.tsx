@@ -209,31 +209,79 @@ function QuestionDetailPage() {
             <textarea value={draft.source_notes} onChange={e => setDraft({ ...draft, source_notes: e.target.value })} className={`${inputCls} h-16 py-2`} placeholder="Provenance, caveats, sanitization notes." />
           </Field>
 
+          <div className="rounded-xl border border-border bg-secondary/30 p-3">
+            <div className="text-[11px] font-medium text-foreground/80 mb-2">Applies to</div>
+            <div className="flex flex-wrap gap-1.5">
+              {APPLIES_TO_OPTIONS.map(opt => {
+                const on = draft.applies_to.includes(opt);
+                return (
+                  <button type="button" key={opt}
+                    onClick={() => setDraft({ ...draft, applies_to: on ? draft.applies_to.filter(x => x !== opt) : [...draft.applies_to, opt] })}
+                    className={`text-[11px] px-2.5 py-1 rounded-full border transition-colors ${on ? "bg-primary text-primary-foreground border-primary" : "border-border bg-card hover:bg-secondary"}`}>
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-2 text-[11px] text-muted-foreground">
+              Text-only labels — never use vendor logos or screenshots.{" "}
+              <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-3">
+            <div className="text-[11px] font-medium text-foreground/80 mb-2">Publish approval checklist</div>
+            <ul className="space-y-1.5">
+              {PUBLISH_CHECKLIST.map(item => (
+                <li key={item}>
+                  <label className="flex items-start gap-2 text-xs cursor-pointer">
+                    <input type="checkbox" checked={!!draft.checklist[item]}
+                      onChange={e => setDraft({ ...draft, checklist: { ...draft.checklist, [item]: e.target.checked } })}
+                      className="mt-0.5 size-3.5 accent-primary" />
+                    <span>{item}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <label className="flex items-start gap-2 rounded-xl border border-border bg-secondary/40 p-3 cursor-pointer">
             <input type="checkbox" checked={draft.sanitized} onChange={e => setDraft({ ...draft, sanitized: e.target.checked })} className="mt-0.5 size-4 accent-primary" />
             <div className="text-xs">
               <div className="font-medium">Sanitized approved</div>
-              <div className="text-muted-foreground">No PHI, vendor names, organization names, or verbatim source text.</div>
-              <div className="mt-1 text-[11px] text-muted-foreground italic">Drafts can be saved anytime. Publishing to Mizly requires sanitized approval.</div>
+              <div className="text-muted-foreground">No PHI, vendor names, organization names, or verbatim source text. All publish-checklist items above are satisfied.</div>
+              <div className="mt-1 text-[11px] text-muted-foreground italic">Drafts can be saved anytime. Publishing to Mizly requires sanitized approval and a complete checklist.</div>
             </div>
           </label>
 
-          <div className="flex gap-2 justify-end flex-wrap">
-            <button type="button" onClick={() => setDraft(null)} className="h-11 px-4 rounded-xl border border-border text-sm">Cancel</button>
-            <button type="submit" className="h-11 px-4 rounded-xl border border-border text-sm font-medium inline-flex items-center gap-2">
-              <Check className="size-4" /> Save Mizly draft
-            </button>
-            <button
-              type="button"
-              onClick={() => saveDraft(true)}
-              disabled={!draft.sanitized}
-              title={draft.sanitized ? undefined : "Check 'Sanitized approved' to enable publishing"}
-              aria-disabled={!draft.sanitized}
-              className="h-11 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-medium inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ShieldCheck className="size-4" /> Publish to Mizly
-            </button>
-          </div>
+          {(() => {
+            const allDone = PUBLISH_CHECKLIST.every(k => draft.checklist[k]);
+            const canPublish = draft.sanitized && allDone;
+            return (
+              <div className="flex gap-2 justify-end flex-wrap">
+                <button type="button" onClick={() => setDraft(null)} className="h-11 px-4 rounded-xl border border-border text-sm">Cancel</button>
+                <button type="submit" className="h-11 px-4 rounded-xl border border-border text-sm font-medium inline-flex items-center gap-2">
+                  <Check className="size-4" /> Save Mizly draft
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!draft.sanitized) { toast.error("Sanitized approval required to publish."); return; }
+                    if (!allDone) { toast.error("Complete the publish approval checklist."); return; }
+                    saveDraft(true);
+                  }}
+                  disabled={!canPublish}
+                  title={!draft.sanitized ? "Check 'Sanitized approved' to enable publishing"
+                    : !allDone ? "Complete every publish-checklist item to enable publishing"
+                    : undefined}
+                  aria-disabled={!canPublish}
+                  className="h-11 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-medium inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ShieldCheck className="size-4" /> Publish to Mizly
+                </button>
+              </div>
+            );
+          })()}
         </form>
       )}
     </div>
