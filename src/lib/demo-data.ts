@@ -252,6 +252,152 @@ export const SCENARIO_DETAIL: Record<string, ScenarioDetail> = {
   },
 };
 
+// ---------- Scenario recommended responses (per step) ----------
+
+export interface ScenarioRecommend {
+  first90: string;
+  whatToSay: string;
+  whatToCheck: string;
+  escalation: string;
+  debrief: string;
+}
+
+export const SCENARIO_RECOMMEND: Record<string, ScenarioRecommend> = {
+  s1: {
+    first90: "Make eye contact, take one breath, ask 'just you or others?' before touching anything.",
+    whatToSay: "Speak low and slow. The clinician's stress mirrors yours — drop yours first.",
+    whatToCheck: "Scope before severity. Then severity before escalation.",
+    escalation: "Unit-wide + time-sensitive = page within 5 minutes. Don't wait for permission.",
+    debrief: "Write it down inside 10 minutes. Memory rots after handoff.",
+  },
+  s2: {
+    first90: "Move to paper before IT confirms. The clock matters more than the confirmation.",
+    whatToSay: "Name the priority out loud so both desks heard the same plan.",
+    whatToCheck: "Stocked forms + visible clock + named back-loader — those three or you'll bleed time.",
+    escalation: "15 minutes during shift change is your trigger. Don't negotiate with yourself.",
+    debrief: "The back-load completion time is the real KPI here, not the downtime length.",
+  },
+  s3: {
+    first90: "Confirm with command FIRST — never reassure a unit with a guess.",
+    whatToSay: "Lead with the fact, follow with what they're seeing, end with where you'll be.",
+    whatToCheck: "Charge nurse alignment matters more than the message itself.",
+    escalation: "Pull anyone visibly upset aside. Public debate never ends well.",
+    debrief: "Capture the rumor's source and travel path. That's the real lesson.",
+  },
+};
+
+// ---------- Video detail (chapters + transcript + related) ----------
+
+export interface VideoChapter { t: string; title: string; body: string; }
+export interface VideoDetail { chapters: VideoChapter[]; transcript: string; }
+
+export const VIDEO_DETAIL: Record<string, VideoDetail> = {
+  v1: {
+    chapters: [
+      { t: "0:00", title: "Why handoff in 90 seconds", body: "The next shift inherits your unit. Three pieces of context save them 20 minutes." },
+      { t: "0:25", title: "Open issues", body: "Name the issue, the impacted role, and the last action you took." },
+      { t: "0:55", title: "Watch-items", body: "Workflows that haven't broken yet but are wobbling. One sentence each." },
+      { t: "1:20", title: "Unit mood", body: "Tell them what they'll walk into. A tense room needs a calm entry." },
+    ],
+    transcript: "Hand off three things: open issues, watch-items, and unit mood. Open issues are what broke and what you tried. Watch-items are workflows that haven't broken yet but are wobbling. Unit mood is the room they're about to walk into — calm, busy, or tense. Three pieces. Ninety seconds. Done.",
+  },
+  v2: {
+    chapters: [
+      { t: "0:00", title: "Why walk it", body: "Tickets get triaged. Walking it gets context." },
+      { t: "0:20", title: "What to bring", body: "Scope, severity, screenshot policy followed, callback." },
+      { t: "0:50", title: "How to ask", body: "One sentence. Specific ask. Time-bound." },
+      { t: "1:30", title: "How to close the loop", body: "Tell the original requester within 5 minutes." },
+    ],
+    transcript: "Walking a ticket is a two-minute pattern. Confirm scope on the floor. Capture severity in one phrase. Walk to command center with screenshot in hand. Make a specific time-bound ask. Then close the loop with the requester within five minutes so the floor knows it landed.",
+  },
+  v3: {
+    chapters: [
+      { t: "0:00", title: "Open the bag", body: "Everything fits in a small zip bag. Carry it always." },
+      { t: "0:30", title: "Pens + paper forms", body: "Three pens of two colors. Pre-stocked downtime forms." },
+      { t: "1:10", title: "Identity sheet", body: "Templated identity capture. Minimum viable fields only." },
+      { t: "1:45", title: "Wristwatch", body: "Wall clock fails too. Wear a watch." },
+    ],
+    transcript: "The downtime bag has four things: pens in two colors, pre-stocked downtime forms, a templated identity sheet with the minimum viable fields, and a wristwatch. The watch matters most — the wall clock can fail when the system does. Carry the bag every shift.",
+  },
+  v4: {
+    chapters: [
+      { t: "0:00", title: "Stand to the side", body: "Never behind. Side puts you on the same team." },
+      { t: "0:30", title: "Eye level", body: "Match seated height when the user is seated." },
+      { t: "1:00", title: "Listen first", body: "Ten seconds of silence beats ten seconds of advice." },
+    ],
+    transcript: "Posture is the first message. Stand to the side, never behind. Match eye level — if they're sitting, you sit. Then listen for ten seconds before saying anything. Those ten seconds change the entire interaction.",
+  },
+};
+
+// ---------- Checklist items ----------
+
+export interface ChecklistItem { id: string; text: string; }
+
+export const CHECKLIST_ITEMS: Record<string, ChecklistItem[]> = {
+  c1: [
+    { id: "a", text: "Badge visible, lanyard untucked" },
+    { id: "b", text: "Device charged > 80%" },
+    { id: "c", text: "Floor lead contact saved" },
+    { id: "d", text: "Downtime bag in possession" },
+    { id: "e", text: "Wristwatch on" },
+  ],
+  c2: [
+    { id: "a", text: "Downtime forms pre-stocked" },
+    { id: "b", text: "Two pens, two colors" },
+    { id: "c", text: "Identity capture sheet" },
+    { id: "d", text: "Printed contact list" },
+  ],
+  c3: [
+    { id: "a", text: "Scope: how many users affected" },
+    { id: "b", text: "Severity: any patient impact" },
+    { id: "c", text: "Screenshot per org policy" },
+    { id: "d", text: "Requester name + role" },
+    { id: "e", text: "Callback number" },
+  ],
+  c4: [
+    { id: "a", text: "Patient name" },
+    { id: "b", text: "Date of birth" },
+    { id: "c", text: "Arrival time" },
+    { id: "d", text: "Presenting reason" },
+    { id: "e", text: "Photo of insurance card if available" },
+  ],
+};
+
+// ---------- Relationship helpers ----------
+
+export function relatedFor(id: string, types?: ContentType[], limit = 4): ContentItem[] {
+  const it = itemById(id);
+  if (!it) return [];
+  const pool = ITEMS.filter(o => o.id !== id && (!types || types.includes(o.content_type)));
+  return pool
+    .map(o => {
+      let s = 0;
+      if (o.module_id && o.module_id === it.module_id) s += 2;
+      s += o.tags.filter(t => it.tags.includes(t)).length;
+      return { o, s };
+    })
+    .filter(x => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .map(x => x.o)
+    .slice(0, limit);
+}
+
+export function nextLesson(id: string): ContentItem | null {
+  const lessons = ITEMS.filter(i => i.content_type === "lesson");
+  const idx = lessons.findIndex(l => l.id === id);
+  return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1] : null;
+}
+
+export function linkFor(item: { id: string; content_type: ContentType }): { to: string; params?: Record<string, string> } {
+  switch (item.content_type) {
+    case "lesson": return { to: "/lessons/$id", params: { id: item.id } };
+    case "playbook": return { to: "/playbooks/$id", params: { id: item.id } };
+    case "scenario": return { to: "/scenarios/$id", params: { id: item.id } };
+    case "video": return { to: "/videos" };
+    case "checklist": return { to: "/checklists" };
+  }
+}
+
 // ---------- Search / Ask engine ----------
 
 export function searchItems(q: string) {
