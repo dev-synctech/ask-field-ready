@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
-  GripVertical, ListChecks, ClipboardCheck,
+  GripVertical, ListChecks, ClipboardCheck, FolderInput,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -149,7 +149,10 @@ function AdminPage() {
     <div className="max-w-4xl mx-auto px-5 py-8">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <Header title="Admin" subtitle="Create, tag, and publish — preview mode." />
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <Link to="/admin/sources" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
+            <FolderInput className="size-4" /> Source Library
+          </Link>
           <Link to="/admin/users" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <Users className="size-4" /> Users
           </Link>
