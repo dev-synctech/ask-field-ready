@@ -71,8 +71,18 @@ export const getSignedFileUrl = createServerFn({ method: "POST" })
     path: z.string().min(1),
   }).parse)
   .handler(async ({ data, context }) => {
-    const { supabase } = context;
-    const { data: signed, error } = await supabase.storage
+    const { supabase, userId } = context;
+    // Server-side paid/admin gate — independent of storage RLS. Signed URLs
+    // are issued ONLY for callers whose entitlement is `active` or who are admins.
+    const [{ data: ent }, { data: roles }] = await Promise.all([
+      supabase.from('entitlements').select('status').eq('user_id', userId).maybeSingle(),
+      supabase.from('user_roles').select('role').eq('user_id', userId),
+    ]);
+    const isPaid = ent?.status === 'active';
+    const isAdmin = (roles ?? []).some((r: any) => r.role === 'admin');
+    if (!isPaid && !isAdmin) return { url: null, error: 'Forbidden' };
+
+    const { data: signed, error } = await supabaseAdmin.storage
       .from(data.bucket)
       .createSignedUrl(data.path, 60 * 30); // 30 min
     if (error) return { error: error.message, url: null };
