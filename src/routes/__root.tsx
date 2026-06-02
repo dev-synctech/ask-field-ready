@@ -64,6 +64,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Field-ready training for healthcare go-live support professionals." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "At the Elbow Academy" },
+      { name: "twitter:description", content: "Field-ready training for healthcare go-live support professionals." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f4d73aec-9887-47da-b427-88700b90bbe6/id-preview-693c0710--a6d139e4-843f-4f60-ada4-504f47845858.lovable.app-1780406940074.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f4d73aec-9887-47da-b427-88700b90bbe6/id-preview-693c0710--a6d139e4-843f-4f60-ada4-504f47845858.lovable.app-1780406940074.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
