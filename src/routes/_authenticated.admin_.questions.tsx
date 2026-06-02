@@ -8,6 +8,7 @@ import {
   type ImportSummary, type QuestionStatus,
 } from "@/lib/questions-data";
 import { useTaxonomy, labelFor, type TaxonomyCategory } from "@/lib/taxonomy";
+import { GuardrailCard } from "@/components/GuardrailCard";
 
 export const Route = createFileRoute("/_authenticated/admin_/questions")({
   head: () => ({ meta: [{ title: "Question Bank — Mizly" }] }),
