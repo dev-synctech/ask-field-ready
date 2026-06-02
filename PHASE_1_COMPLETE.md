@@ -1,6 +1,6 @@
 # Phase 1 — Complete
 
-Vendor-neutral, PHI-free demo build of **At the Elbow Academy**. No auth,
+Vendor-neutral, PHI-free demo build of **Mizly**. No auth,
 no Stripe, no entitlement gates. Every route is openly accessible.
 
 ## Route checklist

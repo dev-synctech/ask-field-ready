@@ -8,7 +8,7 @@ import {
 } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/scenarios_/$id")({
-  head: () => ({ meta: [{ title: "Scenario — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Scenario — Mizly" }] }),
   component: ScenarioDetailPage,
 });
 

@@ -3,13 +3,13 @@ import { ShieldCheck, UserRound, BadgeCheck, Sparkles } from "lucide-react";
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/account")({
-  head: () => ({ meta: [{ title: "Account — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Account — Mizly" }] }),
   component: AccountPage,
 });
 
 function AccountPage() {
   // TODO: REMOVE BEFORE PRODUCTION LAUNCH — demo profile; replace with Supabase profile in Phase 2.
-  const profile = { display_name: "Demo Consultant", email: "demo@attheelbow.test", role: "Admin (demo)" };
+  const profile = { display_name: "Demo Consultant", email: "demo@mizly.test", role: "Admin (demo)" };
 
   return (
     <div className="max-w-2xl mx-auto px-5 py-8">
@@ -39,7 +39,7 @@ function AccountPage() {
 
       <div className="mt-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
         <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground"><ShieldCheck className="size-3.5" /> Content rules</div>
-        <p className="mt-1 text-sm">No PHI. No vendor or organization names. Everything in the academy is vendor-neutral by design.</p>
+        <p className="mt-1 text-sm">No PHI. No vendor or organization names. Everything in Mizly is vendor-neutral by design.</p>
       </div>
 
       <div className="mt-6 flex justify-end">

@@ -40,8 +40,8 @@ export function AppShell({ children }: { children: ReactNode }) {
         <Link to="/ask" className="flex items-center gap-2 mb-8 px-2">
           <Logo />
           <div className="leading-tight">
-            <div className="font-display font-semibold text-sm">At the Elbow</div>
-            <div className="text-[11px] text-muted-foreground -mt-0.5">Academy</div>
+            <div className="font-display font-semibold text-sm">Mizly</div>
+            <div className="text-[11px] text-muted-foreground -mt-0.5">Go-live support</div>
           </div>
         </Link>
         <nav className="space-y-1">
@@ -72,7 +72,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="flex items-center justify-between px-4 h-14">
           <Link to="/ask" className="flex items-center gap-2">
             <Logo />
-            <span className="font-display font-semibold text-sm">At the Elbow</span>
+            <span className="font-display font-semibold text-sm">Mizly</span>
           </Link>
           <div className="flex items-center gap-1">
             <Link to="/admin" className="size-9 rounded-full bg-secondary flex items-center justify-center" aria-label="Admin">

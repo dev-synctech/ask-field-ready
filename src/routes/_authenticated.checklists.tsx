@@ -5,7 +5,7 @@ import { itemsByType } from "@/lib/demo-data";
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/checklists")({
-  head: () => ({ meta: [{ title: "Checklists — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Checklists — Mizly" }] }),
   component: ChecklistsPage,
 });
 

@@ -3,7 +3,7 @@ import { BookOpen, ChevronRight } from "lucide-react";
 import { MODULES, ITEMS } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/learn")({
-  head: () => ({ meta: [{ title: "Learn — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Learn — Mizly" }] }),
   component: LearnPage,
 });
 

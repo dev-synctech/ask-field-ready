@@ -12,7 +12,7 @@ import {
 import { Header, EmptyState } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Admin — Mizly" }] }),
   component: AdminPage,
 });
 

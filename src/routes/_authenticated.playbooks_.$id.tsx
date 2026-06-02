@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { itemById, PLAYBOOK_DETAIL, relatedFor, linkFor } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/playbooks_/$id")({
-  head: () => ({ meta: [{ title: "Playbook — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Playbook — Mizly" }] }),
   component: PlaybookDetailPage,
 });
 

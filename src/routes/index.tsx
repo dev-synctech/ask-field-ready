@@ -4,10 +4,10 @@ import { ArrowRight, Search, ShieldCheck, BookOpen, ListChecks, Film, Sparkles, 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "At the Elbow Academy — Field-ready training for go-live support" },
-      { name: "description", content: "A vendor-neutral training academy for healthcare go-live consultants and at-the-elbow support. Ask, learn, and ship." },
-      { property: "og:title", content: "At the Elbow Academy" },
-      { property: "og:description", content: "Field-ready training for healthcare go-live support." },
+      { title: "Mizly — Small answers for big go-live moments" },
+      { name: "description", content: "Small answers for big go-live moments. Vendor-neutral training for healthcare go-live and bedside support." },
+      { property: "og:title", content: "Mizly" },
+      { property: "og:description", content: "Small answers for big go-live moments." },
     ],
   }),
   component: Landing,
@@ -20,7 +20,7 @@ function Landing() {
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <LogoMark />
-            <span className="font-display font-semibold tracking-tight">At the Elbow Academy</span>
+            <span className="font-display font-semibold tracking-tight">Mizly</span>
           </Link>
           <Link to="/ask" className="text-sm font-medium px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90">
             Enter Demo
@@ -38,7 +38,7 @@ function Landing() {
             Field-ready training for <span className="text-primary">go-live support.</span>
           </h1>
           <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            A premium, mobile-first academy for healthcare consultants and at-the-elbow support professionals. Ask any question, get a structured answer, and walk the floor with confidence.
+            A premium, mobile-first training app for healthcare consultants and bedside support professionals. Ask any question, get a structured answer, and walk the floor with confidence.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/ask" className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium shadow-elevated hover:shadow-glow transition-shadow">
@@ -106,7 +106,7 @@ function Landing() {
 
       <footer className="border-t border-border">
         <div className="max-w-6xl mx-auto px-5 py-8 text-xs text-muted-foreground flex flex-col md:flex-row items-center justify-between gap-3">
-          <div>© At the Elbow Academy · Vendor-neutral · No PHI</div>
+          <div>© Mizly · Vendor-neutral · No PHI</div>
           <div className="flex gap-4">
             <Link to="/ask" className="hover:text-foreground">Enter Demo</Link>
           </div>

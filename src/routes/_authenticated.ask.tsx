@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { answerFor, type ContentType } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/ask")({
-  head: () => ({ meta: [{ title: "Ask — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
   component: AskPage,
 });
 
@@ -68,7 +68,7 @@ function AskPage() {
     <div className="max-w-2xl mx-auto px-5 py-8 md:py-14">
       <div className="text-center mb-8 md:mb-12">
         <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-3">
-          <Sparkles className="size-3.5 text-primary" /> Ask the academy
+          <Sparkles className="size-3.5 text-primary" /> Ask Mizly
         </div>
         <h1 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">What do you need to know?</h1>
         <p className="mt-2 text-sm text-muted-foreground">Ask a go-live question. Get a short answer, steps, and the exact playbooks to reach for.</p>

@@ -4,7 +4,7 @@ import { itemsByType } from "@/lib/demo-data";
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/playbooks")({
-  head: () => ({ meta: [{ title: "Playbooks — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Playbooks — Mizly" }] }),
   component: PlaybooksPage,
 });
 

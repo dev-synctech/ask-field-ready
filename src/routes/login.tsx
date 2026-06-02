@@ -22,7 +22,7 @@ function DemoEntry() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-[11px] text-muted-foreground mb-5">
             <Sparkles className="size-3 text-primary" /> Demo preview
           </div>
-          <h1 className="text-3xl font-display font-semibold tracking-tight">Enter the academy</h1>
+          <h1 className="text-3xl font-display font-semibold tracking-tight">Enter Mizly</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             No sign-in, no payment. This preview opens the full experience — Ask, Learn, Playbooks, Scenarios, Videos, Checklists, and Admin.
           </p>

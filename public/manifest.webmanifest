@@ -1,7 +1,7 @@
 {
-  "name": "At the Elbow Academy",
-  "short_name": "AtE Academy",
-  "description": "Field-ready training for healthcare go-live support.",
+  "name": "Mizly",
+  "short_name": "Mizly",
+  "description": "Small answers for big go-live moments.",
   "start_url": "/ask",
   "scope": "/",
   "display": "standalone",
