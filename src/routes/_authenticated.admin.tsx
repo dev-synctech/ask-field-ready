@@ -403,7 +403,8 @@ function ItemBuilder({ items, placeholder, onAdd, onRemove }: {
         </ul>
       )}
       <div className="flex gap-2">
-        <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); add(); } }} placeholder={placeholder} className={`${inputCls} h-9`} />
+        <label htmlFor="builder-item-input" className="sr-only">{placeholder}</label>
+        <input id="builder-item-input" value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); add(); } }} placeholder={placeholder} className={`${inputCls} h-9`} />
         <button type="button" onClick={add} className="h-9 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5">
           <Plus className="size-3.5" /> Add
         </button>
