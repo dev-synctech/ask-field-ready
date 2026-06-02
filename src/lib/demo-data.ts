@@ -27,7 +27,7 @@ export interface ContentItem {
 
 export const MODULES: Module[] = [
   { id: "m1", title: "Go-Live Readiness", summary: "Prep checklists, role clarity, and a calm first hour.", sort_order: 1 },
-  { id: "m2", title: "At-the-Elbow Support Basics", summary: "How to show up, listen, and de-escalate at the bedside.", sort_order: 2 },
+  { id: "m2", title: "Bedside Support Basics", summary: "How to show up, listen, and de-escalate at the bedside.", sort_order: 2 },
   { id: "m3", title: "Command Center Escalation", summary: "What to escalate, when, and the words to use.", sort_order: 3 },
   { id: "m4", title: "Registration Support", summary: "Front-desk flow, identity capture, and downtime fallback.", sort_order: 4 },
   { id: "m5", title: "Clinical Documentation Support", summary: "Notes, orders, and signatures without breaking the workflow.", sort_order: 5 },
@@ -459,7 +459,7 @@ export interface DemoUser {
 }
 
 export const DEMO_USERS: DemoUser[] = [
-  { id: "u1", display_name: "Demo Consultant", email: "demo@attheelbow.test", role: "admin", access: "active", joined_at: "2025-09-01", last_active: "2026-06-02" },
+  { id: "u1", display_name: "Demo Consultant", email: "demo@mizly.test", role: "admin", access: "active", joined_at: "2025-09-01", last_active: "2026-06-02" },
   { id: "u2", display_name: "Alex Reyes", email: "alex@example.test", role: "member", access: "active", joined_at: "2025-10-14", last_active: "2026-06-01" },
   { id: "u3", display_name: "Jordan Kim", email: "jordan@example.test", role: "member", access: "active", joined_at: "2025-11-02", last_active: "2026-05-30" },
   { id: "u4", display_name: "Priya Singh", email: "priya@example.test", role: "member", access: "inactive", joined_at: "2025-12-08", last_active: "2026-04-18" },

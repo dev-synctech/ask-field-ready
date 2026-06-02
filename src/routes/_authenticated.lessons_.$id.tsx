@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { itemById, LESSON_DETAIL, nextLesson, relatedFor, linkFor } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/lessons_/$id")({
-  head: () => ({ meta: [{ title: "Lesson — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Lesson — Mizly" }] }),
   component: LessonDetailPage,
 });
 

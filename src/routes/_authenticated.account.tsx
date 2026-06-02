@@ -3,13 +3,13 @@ import { ShieldCheck, UserRound, BadgeCheck, Sparkles } from "lucide-react";
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/account")({
-  head: () => ({ meta: [{ title: "Account — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Account — Mizly" }] }),
   component: AccountPage,
 });
 
 function AccountPage() {
   // TODO: REMOVE BEFORE PRODUCTION LAUNCH — demo profile; replace with Supabase profile in Phase 2.
-  const profile = { display_name: "Demo Consultant", email: "demo@attheelbow.test", role: "Admin (demo)" };
+  const profile = { display_name: "Demo Consultant", email: "demo@mizly.test", role: "Admin (demo)" };
 
   return (
     <div className="max-w-2xl mx-auto px-5 py-8">

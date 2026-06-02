@@ -4,7 +4,7 @@ import { itemsByType } from "@/lib/demo-data";
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/scenarios")({
-  head: () => ({ meta: [{ title: "Scenarios — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Scenarios — Mizly" }] }),
   component: ScenariosPage,
 });
 

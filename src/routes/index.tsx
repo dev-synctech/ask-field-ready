@@ -4,9 +4,9 @@ import { ArrowRight, Search, ShieldCheck, BookOpen, ListChecks, Film, Sparkles, 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "At the Elbow Academy — Field-ready training for go-live support" },
+      { title: "Mizly — Field-ready training for go-live support" },
       { name: "description", content: "A vendor-neutral training academy for healthcare go-live consultants and at-the-elbow support. Ask, learn, and ship." },
-      { property: "og:title", content: "At the Elbow Academy" },
+      { property: "og:title", content: "Mizly" },
       { property: "og:description", content: "Field-ready training for healthcare go-live support." },
     ],
   }),
@@ -20,7 +20,7 @@ function Landing() {
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <LogoMark />
-            <span className="font-display font-semibold tracking-tight">At the Elbow Academy</span>
+            <span className="font-display font-semibold tracking-tight">Mizly</span>
           </Link>
           <Link to="/ask" className="text-sm font-medium px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90">
             Enter Demo
@@ -106,7 +106,7 @@ function Landing() {
 
       <footer className="border-t border-border">
         <div className="max-w-6xl mx-auto px-5 py-8 text-xs text-muted-foreground flex flex-col md:flex-row items-center justify-between gap-3">
-          <div>© At the Elbow Academy · Vendor-neutral · No PHI</div>
+          <div>© Mizly · Vendor-neutral · No PHI</div>
           <div className="flex gap-4">
             <Link to="/ask" className="hover:text-foreground">Enter Demo</Link>
           </div>

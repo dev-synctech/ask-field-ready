@@ -4,7 +4,7 @@ import { ArrowLeft, ShieldCheck, Search, MoreHorizontal, Eye, ShieldPlus, UserMi
 import { DEMO_USERS, type DemoUser } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/admin_/users")({
-  head: () => ({ meta: [{ title: "Admin · Users — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Admin · Users — Mizly" }] }),
   component: AdminUsersPage,
 });
 

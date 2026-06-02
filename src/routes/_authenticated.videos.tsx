@@ -6,7 +6,7 @@ import { itemsByType, VIDEO_DETAIL, relatedFor, linkFor } from "@/lib/demo-data"
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/videos")({
-  head: () => ({ meta: [{ title: "Videos — At the Elbow Academy" }] }),
+  head: () => ({ meta: [{ title: "Videos — Mizly" }] }),
   component: VideosPage,
 });
 
