@@ -2,13 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
-  GripVertical, ListChecks, ClipboardCheck, FolderInput,
+  GripVertical, ListChecks, ClipboardCheck, FolderInput, Tags, Info,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
   ITEMS, MODULES, CHECKLIST_ITEMS, SCENARIO_DETAIL,
   type ContentItem, type ContentType, type ChecklistItem,
 } from "@/lib/demo-data";
+import {
+  useTaxonomy, labelFor,
+  type TaxonomyCategory,
+} from "@/lib/taxonomy";
 import { Header, EmptyState } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -30,6 +34,12 @@ interface EditorForm {
   body_md: string;
   transcript: string;
   sanitized: boolean;
+  role_id: string;
+  domain_id: string;
+  phase_id: string;
+  urgency_id: string;
+  escalation_id: string;
+  frequency_id: string;
   checklistItems: ChecklistItem[];
   scenarioSteps: { title: string; body: string }[];
 }
@@ -39,12 +49,15 @@ const EMPTY_FORM: EditorForm = {
   module_id: "", tags: "", difficulty: "foundational",
   estimated_minutes: 5, body_md: "", transcript: "",
   sanitized: false,
+  role_id: "", domain_id: "", phase_id: "",
+  urgency_id: "", escalation_id: "", frequency_id: "",
   checklistItems: [],
   scenarioSteps: [],
 };
 
 function AdminPage() {
   // TODO: REMOVE BEFORE PRODUCTION LAUNCH — admin uses in-memory mock content.
+  const taxonomy = useTaxonomy();
   const [items, setItems] = useState<ContentItem[]>(ITEMS);
   const [typeFilter, setTypeFilter] = useState<ContentType | "all">("all");
   const [pubFilter, setPubFilter] = useState<PublishFilter>("all");
@@ -59,11 +72,17 @@ function AdminPage() {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.title.trim()) return;
-    if (!form.sanitized) {
-      toast.error("Confirm 'sanitized approved' before saving.");
-      return;
-    }
     const tags = form.tags.split(",").map(t => t.trim()).filter(Boolean);
+
+    const meta = {
+      role_id: form.role_id || undefined,
+      domain_id: form.domain_id || undefined,
+      phase_id: form.phase_id || undefined,
+      urgency_id: form.urgency_id || undefined,
+      escalation_id: form.escalation_id || undefined,
+      frequency_id: form.frequency_id || undefined,
+      sanitized_approved: form.sanitized,
+    };
 
     if (editingId) {
       setItems(prev => prev.map(i => i.id === editingId ? {
@@ -77,8 +96,9 @@ function AdminPage() {
         tags,
         body_md: form.body_md,
         transcript: form.transcript,
+        ...meta,
       } : i));
-      toast.success("Changes saved");
+      toast.success(form.sanitized ? "Changes saved (sanitized approved)" : "Draft saved");
     } else {
       const id = `n_${Date.now()}`;
       setItems(prev => [{
@@ -93,6 +113,7 @@ function AdminPage() {
         publish_status: "draft",
         body_md: form.body_md,
         transcript: form.transcript,
+        ...meta,
       }, ...prev]);
       toast.success("Draft created");
     }
@@ -106,7 +127,13 @@ function AdminPage() {
       module_id: it.module_id ?? "", tags: it.tags.join(", "),
       difficulty: it.difficulty, estimated_minutes: it.estimated_minutes,
       body_md: it.body_md ?? "", transcript: it.transcript ?? "",
-      sanitized: true,
+      sanitized: it.sanitized_approved ?? false,
+      role_id: it.role_id ?? "",
+      domain_id: it.domain_id ?? "",
+      phase_id: it.phase_id ?? "",
+      urgency_id: it.urgency_id ?? "",
+      escalation_id: it.escalation_id ?? "",
+      frequency_id: it.frequency_id ?? "",
       checklistItems: CHECKLIST_ITEMS[it.id] ?? [],
       scenarioSteps: SCENARIO_DETAIL[it.id]?.first90.map((b, i) => ({ title: `Step ${i + 1}`, body: b })) ?? [],
     });
@@ -116,7 +143,15 @@ function AdminPage() {
   }
 
   function togglePublish(id: string) {
-    setItems(prev => prev.map(i => i.id === id ? { ...i, publish_status: i.publish_status === "published" ? "draft" : "published" } : i));
+    setItems(prev => prev.map(i => {
+      if (i.id !== id) return i;
+      // Publishing requires sanitized_approved. Unpublishing is always allowed.
+      if (i.publish_status === "draft" && !i.sanitized_approved) {
+        toast.error("Sanitized approval required to publish. Edit and confirm 'sanitized approved'.");
+        return i;
+      }
+      return { ...i, publish_status: i.publish_status === "published" ? "draft" : "published" };
+    }));
   }
 
   function remove(id: string) {
@@ -153,6 +188,9 @@ function AdminPage() {
           <Link to="/admin/sources" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <FolderInput className="size-4" /> Source Library
           </Link>
+          <Link to="/admin/taxonomy" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
+            <Tags className="size-4" /> Taxonomy
+          </Link>
           <Link to="/admin/users" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <Users className="size-4" /> Users
           </Link>
@@ -168,9 +206,14 @@ function AdminPage() {
         <KPI label="Drafts" value={counts.drafts} tone="muted" />
       </div>
 
-      <div className="mt-6 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
+      <div className="mt-6 rounded-2xl border border-primary/30 bg-primary/5 p-4 text-xs text-foreground/80 flex gap-2">
+        <Info className="size-4 text-primary shrink-0 mt-0.5" />
+        <div>Taxonomy controls how Mizly routes questions, filters content, and later powers Ask retrieval.</div>
+      </div>
+
+      <div className="mt-3 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
         <div className="font-semibold flex items-center gap-2 mb-1"><ShieldCheck className="size-3.5 text-warning" /> Content rules</div>
-        No PHI. No vendor or organization names. No proprietary documentation. Confirm content is sanitized before saving.
+        No PHI. No vendor or organization names. No proprietary documentation. Drafts save anytime — publishing requires sanitized approval.
       </div>
 
       {/* Editor */}
@@ -207,6 +250,12 @@ function AdminPage() {
           </Field>
           <Field label="Tags (comma)"><input value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} placeholder="downtime, registration" className={inputCls} /></Field>
           <Field label="Est. minutes"><input type="number" min={1} value={form.estimated_minutes} onChange={e => setForm({ ...form, estimated_minutes: +e.target.value })} className={inputCls} /></Field>
+          <TaxSelect label="Role" cat="roles" value={form.role_id} onChange={v => setForm({ ...form, role_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Domain" cat="domains" value={form.domain_id} onChange={v => setForm({ ...form, domain_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Phase" cat="phases" value={form.phase_id} onChange={v => setForm({ ...form, phase_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Urgency" cat="urgency" value={form.urgency_id} onChange={v => setForm({ ...form, urgency_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Escalation" cat="escalation" value={form.escalation_id} onChange={v => setForm({ ...form, escalation_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Frequency" cat="frequency" value={form.frequency_id} onChange={v => setForm({ ...form, frequency_id: v })} taxonomy={taxonomy} />
         </div>
         <Field label="Summary"><textarea value={form.summary} onChange={e => setForm({ ...form, summary: e.target.value })} className={`${inputCls} h-20 py-2`} placeholder="One sentence." /></Field>
         <Field label="Body (markdown)"><textarea value={form.body_md} onChange={e => setForm({ ...form, body_md: e.target.value })} className={`${inputCls} h-28 py-2 font-mono text-xs`} placeholder="## Heading&#10;Body…" /></Field>
@@ -249,6 +298,7 @@ function AdminPage() {
           <div className="text-xs">
             <div className="font-medium">Sanitized approved</div>
             <div className="text-muted-foreground">I confirm no PHI, vendor names, or organization names appear in this content.</div>
+            <div className="mt-1 text-[11px] text-muted-foreground italic">Drafts can be saved anytime. Publishing to Mizly requires sanitized approval.</div>
           </div>
         </label>
 
@@ -292,6 +342,7 @@ function AdminPage() {
             <div className="flex-1 min-w-0">
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{it.content_type} · {it.difficulty}</div>
               <div className="text-sm font-medium truncate">{it.title}</div>
+              <TaxBadges item={it} />
               {it.tags.length > 0 && (
                 <div className="mt-1 flex items-center gap-1 flex-wrap">
                   <Tag className="size-3 text-muted-foreground" />
@@ -334,6 +385,7 @@ function AdminPage() {
               </button>
             </div>
             <p className="mt-2 text-sm text-muted-foreground">{preview.summary}</p>
+            <TaxBadges item={preview} className="mt-2" />
             {preview.tags.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {preview.tags.map(t => <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{t}</span>)}
@@ -377,6 +429,43 @@ function AdminPage() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function TaxSelect({ label, cat, value, onChange, taxonomy }: {
+  label: string;
+  cat: TaxonomyCategory;
+  value: string;
+  onChange: (v: string) => void;
+  taxonomy: ReturnType<typeof useTaxonomy>;
+}) {
+  const id = `tax_${cat}`;
+  return (
+    <label htmlFor={id} className="block">
+      <span className="text-[11px] font-medium text-foreground/80 mb-1 block">{label}</span>
+      <select id={id} value={value} onChange={e => onChange(e.target.value)} className={inputCls}>
+        <option value="">— none —</option>
+        {taxonomy[cat].map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
+      </select>
+    </label>
+  );
+}
+
+function TaxBadges({ item, className = "" }: { item: ContentItem; className?: string }) {
+  const pairs: { tone: string; label: string }[] = [];
+  const role = labelFor("roles", item.role_id); if (role) pairs.push({ tone: "bg-primary/10 text-primary", label: role });
+  const domain = labelFor("domains", item.domain_id); if (domain) pairs.push({ tone: "bg-accent/15 text-accent-foreground", label: domain });
+  const phase = labelFor("phases", item.phase_id); if (phase) pairs.push({ tone: "bg-secondary text-secondary-foreground", label: phase });
+  const urgency = labelFor("urgency", item.urgency_id); if (urgency) pairs.push({ tone: "bg-warning/15 text-warning", label: `Urgency ${urgency}` });
+  const escalation = labelFor("escalation", item.escalation_id); if (escalation) pairs.push({ tone: "bg-destructive/10 text-destructive", label: `Escalation ${escalation}` });
+  const freq = labelFor("frequency", item.frequency_id); if (freq) pairs.push({ tone: "bg-secondary text-secondary-foreground", label: `Freq ${freq}` });
+  if (pairs.length === 0) return null;
+  return (
+    <div className={`flex flex-wrap gap-1 ${className}`}>
+      {pairs.map((p, i) => (
+        <span key={i} className={`text-[10px] px-1.5 py-0.5 rounded-full ${p.tone}`}>{p.label}</span>
+      ))}
     </div>
   );
 }

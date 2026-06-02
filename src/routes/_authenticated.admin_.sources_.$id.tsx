@@ -4,10 +4,11 @@ import { ArrowLeft, FileText, AlertTriangle, RotateCw, Archive, ShieldCheck, Spa
 import { toast } from "sonner";
 import {
   useSources, rescanSource, archiveSource, updateSource,
-  STATUSES, STATUS_LABEL, DOMAINS, ROLES,
+  STATUSES, STATUS_LABEL,
   type SourceStatus,
 } from "@/lib/sources-data";
 import { MODULES, type ContentType } from "@/lib/demo-data";
+import { useTaxonomy, type TaxonomyCategory } from "@/lib/taxonomy";
 import { Header } from "./_authenticated.learn";
 import { StatusBadge, RiskBadge } from "./_authenticated.admin_.sources";
 
@@ -41,8 +42,13 @@ function SourceDetailPage() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<ContentType>("lesson");
   const [moduleId, setModuleId] = useState("");
-  const [domain, setDomain] = useState(source.domain ?? "");
-  const [role, setRole] = useState(source.role ?? "");
+  const taxonomy = useTaxonomy();
+  const [roleId, setRoleId] = useState("");
+  const [domainId, setDomainId] = useState("");
+  const [phaseId, setPhaseId] = useState("");
+  const [urgencyId, setUrgencyId] = useState("");
+  const [escalationId, setEscalationId] = useState("");
+  const [frequencyId, setFrequencyId] = useState("");
   const [difficulty, setDifficulty] = useState<"foundational" | "intermediate" | "advanced">("foundational");
   const [minutes, setMinutes] = useState(5);
   const [summary, setSummary] = useState("");
@@ -156,18 +162,12 @@ function SourceDetailPage() {
                 {MODULES.map(m => <option key={m.id} value={m.id}>{m.title}</option>)}
               </select>
             </Field>
-            <Field label="Domain">
-              <select value={domain} onChange={e => setDomain(e.target.value)} className={inputCls}>
-                <option value="">— none —</option>
-                {DOMAINS.map(d => <option key={d} value={d}>{d}</option>)}
-              </select>
-            </Field>
-            <Field label="Role">
-              <select value={role} onChange={e => setRole(e.target.value)} className={inputCls}>
-                <option value="">— none —</option>
-                {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </Field>
+            <TaxField label="Role" cat="roles" value={roleId} onChange={setRoleId} taxonomy={taxonomy} />
+            <TaxField label="Domain" cat="domains" value={domainId} onChange={setDomainId} taxonomy={taxonomy} />
+            <TaxField label="Phase" cat="phases" value={phaseId} onChange={setPhaseId} taxonomy={taxonomy} />
+            <TaxField label="Urgency" cat="urgency" value={urgencyId} onChange={setUrgencyId} taxonomy={taxonomy} />
+            <TaxField label="Escalation" cat="escalation" value={escalationId} onChange={setEscalationId} taxonomy={taxonomy} />
+            <TaxField label="Frequency" cat="frequency" value={frequencyId} onChange={setFrequencyId} taxonomy={taxonomy} />
             <Field label="Difficulty">
               <select value={difficulty} onChange={e => setDifficulty(e.target.value as any)} className={inputCls}>
                 <option value="foundational">foundational</option>
@@ -178,6 +178,10 @@ function SourceDetailPage() {
             <Field label="Estimated minutes"><input type="number" min={1} value={minutes} onChange={e => setMinutes(+e.target.value)} className={inputCls} /></Field>
             <Field label="Tags (comma)"><input value={tags} onChange={e => setTags(e.target.value)} placeholder="downtime, registration" className={inputCls} /></Field>
           </div>
+
+          <p className="text-[11px] text-muted-foreground italic">
+            Taxonomy controls how Mizly routes questions, filters content, and later powers Ask retrieval.
+          </p>
 
           <Field label="Summary">
             <textarea value={summary} onChange={e => setSummary(e.target.value)} rows={2}
@@ -253,6 +257,23 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="text-[11px] font-medium text-foreground/80 mb-1 block">{label}</span>
       <span id={id}>{children}</span>
     </label>
+  );
+}
+
+function TaxField({ label, cat, value, onChange, taxonomy }: {
+  label: string;
+  cat: TaxonomyCategory;
+  value: string;
+  onChange: (v: string) => void;
+  taxonomy: ReturnType<typeof useTaxonomy>;
+}) {
+  return (
+    <Field label={label}>
+      <select value={value} onChange={e => onChange(e.target.value)} className={inputCls}>
+        <option value="">— none —</option>
+        {taxonomy[cat].map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
+      </select>
+    </Field>
   );
 }
 
