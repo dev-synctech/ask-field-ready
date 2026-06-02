@@ -31,19 +31,20 @@ export function DemoModeButton({ variant = "default" }: { variant?: "default" | 
     setLoading(true); setError(null);
     try {
       const res = await enter();
-      if (!res.ok || !res.email || !res.password) {
+      if (!res.ok || !res.access_token || !res.refresh_token) {
         throw new Error(res.error ?? "Demo mode unavailable");
       }
-      // Sign out any current session first to avoid mixed state.
+      // Clear any existing session and install the server-issued one.
       await supabase.auth.signOut().catch(() => {});
-      const { error: signInErr } = await supabase.auth.signInWithPassword({
-        email: res.email, password: res.password,
+      const { error: setErr } = await supabase.auth.setSession({
+        access_token: res.access_token,
+        refresh_token: res.refresh_token,
       });
-      if (signInErr) throw signInErr;
-      // Flag the session for the banner (DEV only; server is the source of truth).
+      if (setErr) throw setErr;
       try { sessionStorage.setItem("demo-mode", "1"); } catch {}
       navigate({ to: "/ask", replace: true });
     } catch (e: any) {
+      console.error("[demo-mode] failed:", e);
       setError(e?.message ?? "Could not enter demo mode");
     } finally {
       setLoading(false);
