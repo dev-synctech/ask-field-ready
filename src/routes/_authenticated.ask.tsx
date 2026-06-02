@@ -93,7 +93,7 @@ function AskPage() {
           )}
 
           {r.lessonId && (
-            <Link to="/learn" className="w-full h-12 rounded-xl bg-foreground text-background font-medium inline-flex items-center justify-center gap-2 hover:opacity-90">
+            <Link to="/lessons/$id" params={{ id: r.lessonId }} className="w-full h-12 rounded-xl bg-foreground text-background font-medium inline-flex items-center justify-center gap-2 hover:opacity-90">
               <BookOpen className="size-4" /> Open full lesson <ArrowRight className="size-4" />
             </Link>
           )}
@@ -112,20 +112,34 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+function linkForType(type: string, id: string): { to: any; params?: any } {
+  switch (type) {
+    case "lesson": return { to: "/lessons/$id", params: { id } };
+    case "playbook": return { to: "/playbooks/$id", params: { id } };
+    case "scenario": return { to: "/scenarios/$id", params: { id } };
+    case "video": return { to: "/videos" };
+    case "checklist": return { to: "/checklists" };
+    default: return { to: "/learn" };
+  }
+}
+
 function RelatedGrid({ icon: Icon, label, items }: { icon: any; label: string; items: { id: string; title: string; summary: string; content_type: string }[] }) {
   if (!items?.length) return null;
   return (
     <Section title={label}>
       <div className="grid sm:grid-cols-2 gap-2">
-        {items.map(it => (
-          <div key={it.id} className="rounded-xl border border-border p-3 hover:border-primary/40 transition-colors cursor-pointer">
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
-              <Icon className="size-3" /> {it.content_type}
-            </div>
-            <div className="mt-1 text-sm font-medium">{it.title}</div>
-            {it.summary && <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{it.summary}</div>}
-          </div>
-        ))}
+        {items.map(it => {
+          const lk = linkForType(it.content_type, it.id);
+          return (
+            <Link key={it.id} to={lk.to} params={lk.params} className="rounded-xl border border-border p-3 hover:border-primary/40 transition-colors block">
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+                <Icon className="size-3" /> {it.content_type}
+              </div>
+              <div className="mt-1 text-sm font-medium">{it.title}</div>
+              {it.summary && <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{it.summary}</div>}
+            </Link>
+          );
+        })}
       </div>
     </Section>
   );

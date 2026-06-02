@@ -26,6 +26,9 @@ import { Route as AuthenticatedChecklistsRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAskRouteImport } from './routes/_authenticated.ask'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated.account'
+import { Route as AuthenticatedScenariosIdRouteImport } from './routes/_authenticated.scenarios.$id'
+import { Route as AuthenticatedPlaybooksIdRouteImport } from './routes/_authenticated.playbooks.$id'
+import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated.lessons.$id'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated.admin.users'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
@@ -113,6 +116,23 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedScenariosIdRoute =
+  AuthenticatedScenariosIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedScenariosRoute,
+  } as any)
+const AuthenticatedPlaybooksIdRoute =
+  AuthenticatedPlaybooksIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedPlaybooksRoute,
+  } as any)
+const AuthenticatedLessonsIdRoute = AuthenticatedLessonsIdRouteImport.update({
+  id: '/lessons/$id',
+  path: '/lessons/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -137,12 +157,15 @@ export interface FileRoutesByFullPath {
   '/ask': typeof AuthenticatedAskRoute
   '/checklists': typeof AuthenticatedChecklistsRoute
   '/learn': typeof AuthenticatedLearnRoute
-  '/playbooks': typeof AuthenticatedPlaybooksRoute
-  '/scenarios': typeof AuthenticatedScenariosRoute
+  '/playbooks': typeof AuthenticatedPlaybooksRouteWithChildren
+  '/scenarios': typeof AuthenticatedScenariosRouteWithChildren
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
+  '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -157,12 +180,15 @@ export interface FileRoutesByTo {
   '/ask': typeof AuthenticatedAskRoute
   '/checklists': typeof AuthenticatedChecklistsRoute
   '/learn': typeof AuthenticatedLearnRoute
-  '/playbooks': typeof AuthenticatedPlaybooksRoute
-  '/scenarios': typeof AuthenticatedScenariosRoute
+  '/playbooks': typeof AuthenticatedPlaybooksRouteWithChildren
+  '/scenarios': typeof AuthenticatedScenariosRouteWithChildren
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
+  '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
@@ -179,12 +205,15 @@ export interface FileRoutesById {
   '/_authenticated/ask': typeof AuthenticatedAskRoute
   '/_authenticated/checklists': typeof AuthenticatedChecklistsRoute
   '/_authenticated/learn': typeof AuthenticatedLearnRoute
-  '/_authenticated/playbooks': typeof AuthenticatedPlaybooksRoute
-  '/_authenticated/scenarios': typeof AuthenticatedScenariosRoute
+  '/_authenticated/playbooks': typeof AuthenticatedPlaybooksRouteWithChildren
+  '/_authenticated/scenarios': typeof AuthenticatedScenariosRouteWithChildren
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/_authenticated/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/_authenticated/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
+  '/_authenticated/scenarios/$id': typeof AuthenticatedScenariosIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -207,6 +236,9 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/checkout/return'
     | '/admin/users'
+    | '/lessons/$id'
+    | '/playbooks/$id'
+    | '/scenarios/$id'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -227,6 +259,9 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/checkout/return'
     | '/admin/users'
+    | '/lessons/$id'
+    | '/playbooks/$id'
+    | '/scenarios/$id'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
@@ -248,6 +283,9 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/checkout/return'
     | '/_authenticated/admin/users'
+    | '/_authenticated/lessons/$id'
+    | '/_authenticated/playbooks/$id'
+    | '/_authenticated/scenarios/$id'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -384,6 +422,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/scenarios/$id': {
+      id: '/_authenticated/scenarios/$id'
+      path: '/$id'
+      fullPath: '/scenarios/$id'
+      preLoaderRoute: typeof AuthenticatedScenariosIdRouteImport
+      parentRoute: typeof AuthenticatedScenariosRoute
+    }
+    '/_authenticated/playbooks/$id': {
+      id: '/_authenticated/playbooks/$id'
+      path: '/$id'
+      fullPath: '/playbooks/$id'
+      preLoaderRoute: typeof AuthenticatedPlaybooksIdRouteImport
+      parentRoute: typeof AuthenticatedPlaybooksRoute
+    }
+    '/_authenticated/lessons/$id': {
+      id: '/_authenticated/lessons/$id'
+      path: '/lessons/$id'
+      fullPath: '/lessons/$id'
+      preLoaderRoute: typeof AuthenticatedLessonsIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/users': {
       id: '/_authenticated/admin/users'
       path: '/users'
@@ -412,15 +471,44 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
 const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
+interface AuthenticatedPlaybooksRouteChildren {
+  AuthenticatedPlaybooksIdRoute: typeof AuthenticatedPlaybooksIdRoute
+}
+
+const AuthenticatedPlaybooksRouteChildren: AuthenticatedPlaybooksRouteChildren =
+  {
+    AuthenticatedPlaybooksIdRoute: AuthenticatedPlaybooksIdRoute,
+  }
+
+const AuthenticatedPlaybooksRouteWithChildren =
+  AuthenticatedPlaybooksRoute._addFileChildren(
+    AuthenticatedPlaybooksRouteChildren,
+  )
+
+interface AuthenticatedScenariosRouteChildren {
+  AuthenticatedScenariosIdRoute: typeof AuthenticatedScenariosIdRoute
+}
+
+const AuthenticatedScenariosRouteChildren: AuthenticatedScenariosRouteChildren =
+  {
+    AuthenticatedScenariosIdRoute: AuthenticatedScenariosIdRoute,
+  }
+
+const AuthenticatedScenariosRouteWithChildren =
+  AuthenticatedScenariosRoute._addFileChildren(
+    AuthenticatedScenariosRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedAskRoute: typeof AuthenticatedAskRoute
   AuthenticatedChecklistsRoute: typeof AuthenticatedChecklistsRoute
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRoute
-  AuthenticatedPlaybooksRoute: typeof AuthenticatedPlaybooksRoute
-  AuthenticatedScenariosRoute: typeof AuthenticatedScenariosRoute
+  AuthenticatedPlaybooksRoute: typeof AuthenticatedPlaybooksRouteWithChildren
+  AuthenticatedScenariosRoute: typeof AuthenticatedScenariosRouteWithChildren
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
+  AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -429,9 +517,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAskRoute: AuthenticatedAskRoute,
   AuthenticatedChecklistsRoute: AuthenticatedChecklistsRoute,
   AuthenticatedLearnRoute: AuthenticatedLearnRoute,
-  AuthenticatedPlaybooksRoute: AuthenticatedPlaybooksRoute,
-  AuthenticatedScenariosRoute: AuthenticatedScenariosRoute,
+  AuthenticatedPlaybooksRoute: AuthenticatedPlaybooksRouteWithChildren,
+  AuthenticatedScenariosRoute: AuthenticatedScenariosRouteWithChildren,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
+  AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
