@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft, FileText, AlertTriangle, RotateCw, Archive, ShieldCheck, Sparkles, Check, X } from "lucide-react";
 import { toast } from "sonner";
