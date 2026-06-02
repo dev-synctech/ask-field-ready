@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { BookOpen } from "lucide-react";
+import { MODULES, ITEMS } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/learn")({
   head: () => ({ meta: [{ title: "Learn — At the Elbow Academy" }] }),
@@ -9,33 +8,12 @@ export const Route = createFileRoute("/_authenticated/learn")({
 });
 
 function LearnPage() {
-  const { data: modules } = useQuery({
-    queryKey: ['modules'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('modules').select('*').order('sort_order');
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
-  const { data: items } = useQuery({
-    queryKey: ['lessons'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('content_items').select('*')
-        .eq('content_type', 'lesson')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
-
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
-      <Header title="Learn" subtitle="Modules and lessons, organized for the floor." />
-      <div className="mt-6 space-y-6">
-        {(modules ?? []).map(m => {
-          const lessons = (items ?? []).filter((i: any) => i.module_id === m.id);
+      <Header title="Learn" subtitle="Ten core modules, organized for the floor." />
+      <div className="mt-6 space-y-4">
+        {MODULES.map(m => {
+          const lessons = ITEMS.filter(i => i.module_id === m.id);
           return (
             <div key={m.id} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
               <div className="flex items-start gap-3">
@@ -44,19 +22,22 @@ function LearnPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-display font-semibold">{m.title}</div>
-                  {m.summary && <div className="text-sm text-muted-foreground mt-0.5">{m.summary}</div>}
+                  <div className="text-sm text-muted-foreground mt-0.5">{m.summary}</div>
                 </div>
-                <div className="text-xs text-muted-foreground shrink-0">{lessons.length} lessons</div>
+                <div className="text-xs text-muted-foreground shrink-0">{lessons.length} items</div>
               </div>
               {lessons.length > 0 && (
                 <ul className="mt-4 divide-y divide-border">
-                  {lessons.map((l: any) => (
+                  {lessons.map(l => (
                     <li key={l.id} className="py-3 flex items-center justify-between gap-3">
                       <div className="min-w-0">
                         <div className="text-sm font-medium truncate">{l.title}</div>
-                        {l.summary && <div className="text-xs text-muted-foreground truncate">{l.summary}</div>}
+                        <div className="text-xs text-muted-foreground truncate">{l.summary}</div>
                       </div>
-                      <div className="text-[11px] text-muted-foreground shrink-0">{l.estimated_minutes ?? 5} min</div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground capitalize">{l.content_type}</span>
+                        <span className="text-[11px] text-muted-foreground">{l.estimated_minutes} min</span>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -64,9 +45,6 @@ function LearnPage() {
             </div>
           );
         })}
-        {(modules ?? []).length === 0 && (
-          <EmptyState title="No modules yet" desc="An admin can add the first modules from the admin dashboard." />
-        )}
       </div>
     </div>
   );

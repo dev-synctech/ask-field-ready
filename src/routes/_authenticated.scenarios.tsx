@@ -1,21 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Header, EmptyState } from "./_authenticated.learn";
-
-function useContent(contentType: string) {
-  return useQuery({
-    queryKey: ['content', contentType],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('content_items').select('*')
-        .eq('content_type', contentType as any)
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
-}
+import { ListChecks, PlayCircle } from "lucide-react";
+import { itemsByType } from "@/lib/demo-data";
+import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/scenarios")({
   head: () => ({ meta: [{ title: "Scenarios — At the Elbow Academy" }] }),
@@ -23,21 +9,30 @@ export const Route = createFileRoute("/_authenticated/scenarios")({
 });
 
 function ScenariosPage() {
-  const { data, isLoading } = useContent('scenario');
+  const scenarios = itemsByType("scenario");
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
-      <Header title="Scenarios" subtitle="Floor situations you'll see — and how to handle them." />
+      <Header title="Scenarios" subtitle="Real moments, replayed without names or PHI. Practice the next 90 seconds." />
       <div className="mt-6 space-y-3">
-        {(data ?? []).map((it: any) => (
-          <div key={it.id} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-            <div className="text-[10px] uppercase tracking-wider text-primary font-medium">Scenario · {it.difficulty}</div>
-            <div className="mt-1 font-display font-semibold text-lg">{it.title}</div>
-            {it.summary && <p className="mt-2 text-sm text-muted-foreground">{it.summary}</p>}
+        {scenarios.map(s => (
+          <div key={s.id} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+            <div className="flex items-start gap-3">
+              <div className="size-9 rounded-lg bg-primary-soft text-primary flex items-center justify-center shrink-0">
+                <ListChecks className="size-4" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Scenario · {s.difficulty}</span>
+                </div>
+                <div className="mt-1 font-display font-semibold">{s.title}</div>
+                <p className="mt-1 text-sm text-muted-foreground">{s.summary}</p>
+              </div>
+              <button className="shrink-0 inline-flex items-center gap-1.5 text-xs h-9 px-3 rounded-lg border border-border bg-surface-elevated hover:bg-secondary">
+                <PlayCircle className="size-3.5" /> Start
+              </button>
+            </div>
           </div>
         ))}
-        {!isLoading && (data ?? []).length === 0 && (
-          <EmptyState title="No scenarios yet" desc="An admin can publish scenarios from the admin dashboard." />
-        )}
       </div>
     </div>
   );
