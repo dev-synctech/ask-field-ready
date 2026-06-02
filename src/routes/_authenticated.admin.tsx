@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check } from "lucide-react";
+import { Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X } from "lucide-react";
 import { ITEMS, MODULES, type ContentItem, type ContentType } from "@/lib/demo-data";
 import { Header, EmptyState } from "./_authenticated.learn";
 
@@ -11,40 +11,81 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 const TYPES: ContentType[] = ["lesson", "playbook", "video", "checklist", "scenario"];
 
+const EMPTY_FORM = {
+  title: "", summary: "", content_type: "lesson" as ContentType,
+  module_id: "", tags: "", difficulty: "foundational" as ContentItem["difficulty"],
+  estimated_minutes: 5, body_md: "", transcript: "",
+};
+
 function AdminPage() {
   // TODO: REMOVE BEFORE PRODUCTION LAUNCH — admin uses in-memory mock content.
   const [items, setItems] = useState<ContentItem[]>(ITEMS);
   const [filter, setFilter] = useState<ContentType | "all">("all");
   const [preview, setPreview] = useState<ContentItem | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<ContentItem | null>(null);
+  const [form, setForm] = useState(EMPTY_FORM);
 
-  const [form, setForm] = useState({
-    title: "", summary: "", content_type: "lesson" as ContentType,
-    module_id: "", tags: "", difficulty: "foundational" as ContentItem["difficulty"],
-    estimated_minutes: 5, body_md: "", transcript: "",
-  });
+  const resetForm = () => { setForm(EMPTY_FORM); setEditingId(null); };
 
-  function create(e: React.FormEvent) {
+  function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.title.trim()) return;
-    const id = `n_${Date.now()}`;
-    setItems(prev => [{
-      id,
-      title: form.title.trim(),
-      summary: form.summary.trim(),
-      content_type: form.content_type,
-      tags: form.tags.split(",").map(t => t.trim()).filter(Boolean),
-      difficulty: form.difficulty,
-      estimated_minutes: form.estimated_minutes,
-      module_id: form.module_id || null,
-      publish_status: "draft",
-      body_md: form.body_md,
-      transcript: form.transcript,
-    }, ...prev]);
-    setForm({ ...form, title: "", summary: "", tags: "", body_md: "", transcript: "" });
+    const tags = form.tags.split(",").map(t => t.trim()).filter(Boolean);
+
+    if (editingId) {
+      setItems(prev => prev.map(i => i.id === editingId ? {
+        ...i,
+        title: form.title.trim(),
+        summary: form.summary.trim(),
+        content_type: form.content_type,
+        module_id: form.module_id || null,
+        difficulty: form.difficulty,
+        estimated_minutes: form.estimated_minutes,
+        tags,
+        body_md: form.body_md,
+        transcript: form.transcript,
+      } : i));
+    } else {
+      const id = `n_${Date.now()}`;
+      setItems(prev => [{
+        id,
+        title: form.title.trim(),
+        summary: form.summary.trim(),
+        content_type: form.content_type,
+        tags,
+        difficulty: form.difficulty,
+        estimated_minutes: form.estimated_minutes,
+        module_id: form.module_id || null,
+        publish_status: "draft",
+        body_md: form.body_md,
+        transcript: form.transcript,
+      }, ...prev]);
+    }
+    resetForm();
+  }
+
+  function startEdit(it: ContentItem) {
+    setEditingId(it.id);
+    setForm({
+      title: it.title, summary: it.summary, content_type: it.content_type,
+      module_id: it.module_id ?? "", tags: it.tags.join(", "),
+      difficulty: it.difficulty, estimated_minutes: it.estimated_minutes,
+      body_md: it.body_md ?? "", transcript: it.transcript ?? "",
+    });
+    if (typeof document !== "undefined") {
+      document.getElementById("editor")?.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   function togglePublish(id: string) {
     setItems(prev => prev.map(i => i.id === id ? { ...i, publish_status: i.publish_status === "published" ? "draft" : "published" } : i));
+  }
+
+  function remove(id: string) {
+    setItems(prev => prev.filter(i => i.id !== id));
+    setConfirmDelete(null);
+    if (editingId === id) resetForm();
   }
 
   const visible = useMemo(() => filter === "all" ? items : items.filter(i => i.content_type === filter), [items, filter]);
@@ -80,8 +121,17 @@ function AdminPage() {
       </div>
 
       {/* Editor */}
-      <form id="editor" onSubmit={create} className="mt-6 rounded-2xl border border-border bg-card p-5 shadow-soft space-y-3">
-        <div className="font-display font-semibold flex items-center gap-2"><Edit3 className="size-4 text-primary" /> Content editor</div>
+      <form id="editor" onSubmit={submit} className="mt-6 rounded-2xl border border-border bg-card p-5 shadow-soft space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="font-display font-semibold flex items-center gap-2">
+            <Edit3 className="size-4 text-primary" /> {editingId ? "Edit content" : "Content editor"}
+          </div>
+          {editingId && (
+            <button type="button" onClick={resetForm} className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
+              <X className="size-3.5" /> Cancel edit
+            </button>
+          )}
+        </div>
         <div className="grid sm:grid-cols-2 gap-3">
           <Field label="Title"><input required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className={inputCls} placeholder="e.g. Escalation in 3 sentences" /></Field>
           <Field label="Type">
@@ -106,13 +156,13 @@ function AdminPage() {
           <Field label="Est. minutes"><input type="number" min={1} value={form.estimated_minutes} onChange={e => setForm({ ...form, estimated_minutes: +e.target.value })} className={inputCls} /></Field>
         </div>
         <Field label="Summary"><textarea value={form.summary} onChange={e => setForm({ ...form, summary: e.target.value })} className={`${inputCls} h-20 py-2`} placeholder="One sentence." /></Field>
-        <Field label="Body (markdown)"><textarea value={form.body_md} onChange={e => setForm({ ...form, body_md: e.target.value })} className={`${inputCls} h-28 py-2 font-mono text-xs`} placeholder="## Heading\nBody…" /></Field>
+        <Field label="Body (markdown)"><textarea value={form.body_md} onChange={e => setForm({ ...form, body_md: e.target.value })} className={`${inputCls} h-28 py-2 font-mono text-xs`} placeholder="## Heading&#10;Body…" /></Field>
         {form.content_type === "video" && (
           <Field label="Transcript"><textarea value={form.transcript} onChange={e => setForm({ ...form, transcript: e.target.value })} className={`${inputCls} h-24 py-2`} /></Field>
         )}
         <div className="flex justify-end gap-2">
           <button type="submit" className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2">
-            <Check className="size-4" /> Save as draft
+            <Check className="size-4" /> {editingId ? "Save changes" : "Save as draft"}
           </button>
         </div>
       </form>
@@ -149,8 +199,14 @@ function AdminPage() {
             <button onClick={() => setPreview(it)} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary inline-flex items-center gap-1.5">
               <Eye className="size-3.5" /> Preview
             </button>
+            <button onClick={() => startEdit(it)} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary inline-flex items-center gap-1.5">
+              <Edit3 className="size-3.5" /> Edit
+            </button>
             <button onClick={() => togglePublish(it.id)} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary">
               {it.publish_status === "published" ? "Unpublish" : "Publish"}
+            </button>
+            <button onClick={() => setConfirmDelete(it)} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-destructive/10 hover:text-destructive inline-flex items-center gap-1.5">
+              <Trash2 className="size-3.5" /> Delete
             </button>
           </div>
         ))}
@@ -159,12 +215,24 @@ function AdminPage() {
 
       {preview && (
         <div className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-sm flex items-end md:items-center justify-center p-4" onClick={() => setPreview(null)}>
-          <div className="bg-card rounded-3xl border border-border shadow-elevated w-full max-w-xl p-6" onClick={e => e.stopPropagation()}>
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{preview.content_type} · {preview.difficulty}</div>
-            <div className="mt-1 font-display font-semibold text-xl">{preview.title}</div>
+          <div className="bg-card rounded-3xl border border-border shadow-elevated w-full max-w-xl p-6 max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{preview.content_type} · {preview.difficulty} · {preview.estimated_minutes} min</div>
+                <div className="mt-1 font-display font-semibold text-xl">{preview.title}</div>
+              </div>
+              <button onClick={() => setPreview(null)} aria-label="Close" className="size-8 rounded-lg hover:bg-secondary inline-flex items-center justify-center">
+                <X className="size-4" />
+              </button>
+            </div>
             <p className="mt-2 text-sm text-muted-foreground">{preview.summary}</p>
+            {preview.tags.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {preview.tags.map(t => <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{t}</span>)}
+              </div>
+            )}
             {preview.body_md && (
-              <div className="mt-4 rounded-xl bg-secondary/60 p-4 text-sm whitespace-pre-wrap font-mono text-xs">
+              <div className="mt-4 rounded-xl bg-secondary/60 p-4 whitespace-pre-wrap font-mono text-xs">
                 <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
                   <FileText className="size-3" /> Body
                 </div>
@@ -179,7 +247,25 @@ function AdminPage() {
                 {preview.transcript}
               </div>
             )}
-            <button onClick={() => setPreview(null)} className="mt-5 w-full h-11 rounded-xl bg-primary text-primary-foreground text-sm font-medium">Close</button>
+            <div className="mt-5 flex gap-2">
+              <button onClick={() => { startEdit(preview); setPreview(null); }} className="flex-1 h-11 rounded-xl border border-border bg-card text-sm font-medium inline-flex items-center justify-center gap-1.5">
+                <Edit3 className="size-4" /> Edit
+              </button>
+              <button onClick={() => setPreview(null)} className="flex-1 h-11 rounded-xl bg-primary text-primary-foreground text-sm font-medium">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setConfirmDelete(null)}>
+          <div className="bg-card rounded-2xl border border-border shadow-elevated w-full max-w-sm p-5" onClick={e => e.stopPropagation()}>
+            <div className="font-display font-semibold">Delete this item?</div>
+            <p className="mt-1 text-sm text-muted-foreground">"{confirmDelete.title}" will be removed from the demo list.</p>
+            <div className="mt-4 flex gap-2">
+              <button onClick={() => setConfirmDelete(null)} className="flex-1 h-10 rounded-xl border border-border text-sm">Cancel</button>
+              <button onClick={() => remove(confirmDelete.id)} className="flex-1 h-10 rounded-xl bg-destructive text-destructive-foreground text-sm font-medium">Delete</button>
+            </div>
           </div>
         </div>
       )}
