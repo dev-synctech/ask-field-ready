@@ -9,9 +9,13 @@ export const Route = createFileRoute("/checkout")({
   beforeLoad: async () => {
     const { data } = await supabase.auth.getUser();
     if (!data.user) throw redirect({ to: '/login', search: { redirect: '/checkout' } });
-    const { data: ent } = await supabase
-      .from('entitlements').select('status').maybeSingle();
-    if (ent?.status === 'active') throw redirect({ to: '/ask' });
+    const [{ data: ent }, { data: roles }] = await Promise.all([
+      supabase.from('entitlements').select('status').maybeSingle(),
+      supabase.from('user_roles').select('role').eq('user_id', data.user.id),
+    ]);
+    const isAdmin = (roles ?? []).some(r => r.role === 'admin');
+    // TODO: REMOVE BEFORE PRODUCTION LAUNCH — admins skip checkout while payments are bypassed for testing.
+    if (ent?.status === 'active' || isAdmin) throw redirect({ to: '/ask' });
   },
   component: CheckoutPage,
 });

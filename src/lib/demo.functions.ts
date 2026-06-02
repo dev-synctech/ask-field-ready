@@ -14,7 +14,9 @@ function assertNonProductionHost() {
   const isPreview =
     host.includes("-preview--") ||
     host.includes("preview--") ||
-    host.endsWith(".lovable.dev");
+    host.endsWith(".lovable.dev") ||
+    host.endsWith(".lovable.app") ||
+    host.endsWith(".lovableproject.com");
   const isLocal =
     host.startsWith("localhost") ||
     host.startsWith("127.0.0.1") ||

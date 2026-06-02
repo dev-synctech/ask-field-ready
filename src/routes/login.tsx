@@ -41,7 +41,8 @@ function AuthPage() {
   // TODO: REMOVE BEFORE PRODUCTION LAUNCH — seed the fixed demo admin once on mount.
   const seedAdmin = useServerFn(seedDemoAdmin);
   const [seedState, setSeedState] = useState<'idle' | 'seeding' | 'ready' | 'error'>('idle');
-  const previewAllowed = isDemoModeAllowed();
+  const [previewAllowed, setPreviewAllowed] = useState(false);
+  useEffect(() => { setPreviewAllowed(isDemoModeAllowed()); }, []);
   useEffect(() => {
     if (!previewAllowed) return;
     let cancelled = false;
