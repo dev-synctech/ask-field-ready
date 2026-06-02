@@ -39,6 +39,8 @@ interface DraftForm {
   frequency_id: string;
   source_notes: string;
   sanitized: boolean;
+  applies_to: AppliesTo[];
+  checklist: Record<string, boolean>;
 }
 
 function QuestionDetailPage() {
