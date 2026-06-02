@@ -62,6 +62,12 @@ function SourceDetailPage() {
   const [tags, setTags] = useState("");
   const [sourceNotes, setSourceNotes] = useState("");
   const [sanitized, setSanitized] = useState(false);
+  const [appliesTo, setAppliesTo] = useState<AppliesTo[]>(source.applies_to as AppliesTo[] ?? ["Vendor-neutral"]);
+  const [checklist, setChecklist] = useState<Record<string, boolean>>({});
+
+  const toggleAppliesTo = (opt: AppliesTo) =>
+    setAppliesTo(arr => arr.includes(opt) ? arr.filter(x => x !== opt) : [...arr, opt]);
+  const allChecklistDone = PUBLISH_CHECKLIST.every(k => checklist[k]);
 
   const src = source;
   const blocked = src.status === "quarantined" || src.status === "archived";
