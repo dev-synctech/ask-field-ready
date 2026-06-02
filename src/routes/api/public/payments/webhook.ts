@@ -37,7 +37,7 @@ async function handleCheckoutCompleted(session: any) {
   );
 }
 
-async function setStatusByPaymentIntent(paymentIntentId: string, status: 'refunded' | 'failed' | 'disputed') {
+async function setStatusByPaymentIntent(paymentIntentId: string, status: 'active' | 'refunded' | 'failed' | 'disputed') {
   await getSupabase()
     .from('entitlements')
     .update({ status, updated_at: new Date().toISOString() })
