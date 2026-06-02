@@ -12,6 +12,7 @@ import {
   type SourceStatus, type RiskLevel, type SourceFileType,
 } from "@/lib/sources-data";
 import { Header } from "./_authenticated.learn";
+import { GuardrailCard } from "@/components/GuardrailCard";
 
 export const Route = createFileRoute("/_authenticated/admin_/sources")({
   head: () => ({ meta: [{ title: "Source Library — Mizly" }] }),
