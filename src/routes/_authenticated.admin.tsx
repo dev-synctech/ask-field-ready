@@ -259,8 +259,9 @@ function AdminPage() {
       {/* Filters + search */}
       <div className="mt-8 flex items-center gap-3 flex-wrap">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
-          <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search title, summary, tag…"
+          <label htmlFor="admin-search" className="sr-only">Search content</label>
+          <Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+          <input id="admin-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search title, summary, tag…"
             className="h-9 w-64 pl-8 pr-3 rounded-lg border border-input bg-surface-elevated text-xs focus:outline-none focus:ring-2 focus:ring-ring" />
         </div>
         <div className="flex items-center gap-1.5">
@@ -402,7 +403,8 @@ function ItemBuilder({ items, placeholder, onAdd, onRemove }: {
         </ul>
       )}
       <div className="flex gap-2">
-        <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); add(); } }} placeholder={placeholder} className={`${inputCls} h-9`} />
+        <label htmlFor="builder-item-input" className="sr-only">{placeholder}</label>
+        <input id="builder-item-input" value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); add(); } }} placeholder={placeholder} className={`${inputCls} h-9`} />
         <button type="button" onClick={add} className="h-9 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5">
           <Plus className="size-3.5" /> Add
         </button>
@@ -437,8 +439,10 @@ function StepBuilder({ steps, onAdd, onRemove }: {
           ))}
         </ol>
       )}
-      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Step title" className={`${inputCls} h-9`} />
-      <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Step body" className={`${inputCls} h-16 py-2`} />
+      <label htmlFor="step-title" className="sr-only">Step title</label>
+      <input id="step-title" value={title} onChange={e => setTitle(e.target.value)} placeholder="Step title" className={`${inputCls} h-9`} />
+      <label htmlFor="step-body" className="sr-only">Step body</label>
+      <textarea id="step-body" value={body} onChange={e => setBody(e.target.value)} placeholder="Step body" className={`${inputCls} h-16 py-2`} />
       <button type="button" onClick={add} className="h-9 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5">
         <Plus className="size-3.5" /> Add step
       </button>
