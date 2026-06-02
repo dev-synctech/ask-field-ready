@@ -117,3 +117,43 @@ export const setEntitlementStatus = createServerFn({ method: "POST" })
       return { ok: false, error: error?.message ?? "Update failed" };
     }
   });
+
+/**
+ * DEV/preview-only bypass: admin grants themselves an active entitlement
+ * without going through Stripe. Refuses to run on production hosts.
+ */
+export const activateTestAccess = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ ok: boolean; error?: string }> => {
+    try {
+      assertNonProductionHost();
+      await assertAdmin(context.supabase, context.userId);
+
+      const { error } = await supabaseAdmin
+        .from("entitlements")
+        .upsert(
+          {
+            user_id: context.userId,
+            status: "active",
+            granted_at: new Date().toISOString(),
+            stripe_session_id: `test_bypass_${Date.now()}`,
+            amount_cents: 0,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "user_id" }
+        );
+      if (error) throw new Error(error.message);
+      return { ok: true };
+    } catch (error: any) {
+      return { ok: false, error: error?.message ?? "Could not activate test access" };
+    }
+  });
+
+export const checkIsAdmin = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ isAdmin: boolean }> => {
+    const { data } = await context.supabase
+      .from("user_roles").select("role").eq("user_id", context.userId);
+    return { isAdmin: (data ?? []).some((r: any) => r.role === "admin") };
+  });
+
