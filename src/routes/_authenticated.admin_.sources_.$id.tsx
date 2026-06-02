@@ -260,6 +260,23 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
+function TaxField({ label, cat, value, onChange, taxonomy }: {
+  label: string;
+  cat: TaxonomyCategory;
+  value: string;
+  onChange: (v: string) => void;
+  taxonomy: ReturnType<typeof useTaxonomy>;
+}) {
+  return (
+    <Field label={label}>
+      <select value={value} onChange={e => onChange(e.target.value)} className={inputCls}>
+        <option value="">— none —</option>
+        {taxonomy[cat].map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
+      </select>
+    </Field>
+  );
+}
+
 function formatKb(kb: number) {
   if (kb < 1024) return `${kb} KB`;
   return `${(kb / 1024).toFixed(1)} MB`;
