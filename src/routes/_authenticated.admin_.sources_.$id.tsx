@@ -20,7 +20,7 @@ const TYPES: ContentType[] = ["lesson", "playbook", "video", "checklist", "scena
 const inputCls = "h-9 w-full rounded-lg border border-input bg-surface-elevated px-3 text-xs focus:outline-none focus:ring-2 focus:ring-ring";
 
 function SourceDetailPage() {
-  const { id } = useParams({ from: "/_authenticated/admin/sources/$id" });
+  const { id } = Route.useParams();
   const sources = useSources();
   const source = useMemo(() => sources.find(s => s.id === id), [sources, id]);
 
