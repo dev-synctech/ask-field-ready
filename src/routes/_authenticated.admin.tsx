@@ -1,7 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X } from "lucide-react";
-import { ITEMS, MODULES, type ContentItem, type ContentType } from "@/lib/demo-data";
+import {
+  Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
+  GripVertical, ListChecks, ClipboardCheck,
+} from "lucide-react";
+import { toast } from "sonner";
+import {
+  ITEMS, MODULES, CHECKLIST_ITEMS, SCENARIO_DETAIL,
+  type ContentItem, type ContentType, type ChecklistItem,
+} from "@/lib/demo-data";
 import { Header, EmptyState } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -10,27 +17,52 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 const TYPES: ContentType[] = ["lesson", "playbook", "video", "checklist", "scenario"];
+type PublishFilter = "all" | "published" | "draft";
 
-const EMPTY_FORM = {
-  title: "", summary: "", content_type: "lesson" as ContentType,
-  module_id: "", tags: "", difficulty: "foundational" as ContentItem["difficulty"],
+interface EditorForm {
+  title: string;
+  summary: string;
+  content_type: ContentType;
+  module_id: string;
+  tags: string;
+  difficulty: ContentItem["difficulty"];
+  estimated_minutes: number;
+  body_md: string;
+  transcript: string;
+  sanitized: boolean;
+  checklistItems: ChecklistItem[];
+  scenarioSteps: { title: string; body: string }[];
+}
+
+const EMPTY_FORM: EditorForm = {
+  title: "", summary: "", content_type: "lesson",
+  module_id: "", tags: "", difficulty: "foundational",
   estimated_minutes: 5, body_md: "", transcript: "",
+  sanitized: false,
+  checklistItems: [],
+  scenarioSteps: [],
 };
 
 function AdminPage() {
   // TODO: REMOVE BEFORE PRODUCTION LAUNCH — admin uses in-memory mock content.
   const [items, setItems] = useState<ContentItem[]>(ITEMS);
-  const [filter, setFilter] = useState<ContentType | "all">("all");
+  const [typeFilter, setTypeFilter] = useState<ContentType | "all">("all");
+  const [pubFilter, setPubFilter] = useState<PublishFilter>("all");
+  const [q, setQ] = useState("");
   const [preview, setPreview] = useState<ContentItem | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<ContentItem | null>(null);
-  const [form, setForm] = useState(EMPTY_FORM);
+  const [form, setForm] = useState<EditorForm>(EMPTY_FORM);
 
   const resetForm = () => { setForm(EMPTY_FORM); setEditingId(null); };
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.title.trim()) return;
+    if (!form.sanitized) {
+      toast.error("Confirm 'sanitized approved' before saving.");
+      return;
+    }
     const tags = form.tags.split(",").map(t => t.trim()).filter(Boolean);
 
     if (editingId) {
@@ -46,6 +78,7 @@ function AdminPage() {
         body_md: form.body_md,
         transcript: form.transcript,
       } : i));
+      toast.success("Changes saved");
     } else {
       const id = `n_${Date.now()}`;
       setItems(prev => [{
@@ -61,6 +94,7 @@ function AdminPage() {
         body_md: form.body_md,
         transcript: form.transcript,
       }, ...prev]);
+      toast.success("Draft created");
     }
     resetForm();
   }
@@ -72,6 +106,9 @@ function AdminPage() {
       module_id: it.module_id ?? "", tags: it.tags.join(", "),
       difficulty: it.difficulty, estimated_minutes: it.estimated_minutes,
       body_md: it.body_md ?? "", transcript: it.transcript ?? "",
+      sanitized: true,
+      checklistItems: CHECKLIST_ITEMS[it.id] ?? [],
+      scenarioSteps: SCENARIO_DETAIL[it.id]?.first90.map((b, i) => ({ title: `Step ${i + 1}`, body: b })) ?? [],
     });
     if (typeof document !== "undefined") {
       document.getElementById("editor")?.scrollIntoView({ behavior: "smooth" });
@@ -86,9 +123,22 @@ function AdminPage() {
     setItems(prev => prev.filter(i => i.id !== id));
     setConfirmDelete(null);
     if (editingId === id) resetForm();
+    toast.success("Content deleted");
   }
 
-  const visible = useMemo(() => filter === "all" ? items : items.filter(i => i.content_type === filter), [items, filter]);
+  const visible = useMemo(() => {
+    const tk = q.trim().toLowerCase();
+    return items.filter(i => {
+      if (typeFilter !== "all" && i.content_type !== typeFilter) return false;
+      if (pubFilter !== "all" && i.publish_status !== pubFilter) return false;
+      if (tk) {
+        const hay = `${i.title} ${i.summary} ${i.tags.join(" ")}`.toLowerCase();
+        if (!hay.includes(tk)) return false;
+      }
+      return true;
+    });
+  }, [items, typeFilter, pubFilter, q]);
+
   const counts = useMemo(() => ({
     total: items.length,
     published: items.filter(i => i.publish_status === "published").length,
@@ -117,7 +167,7 @@ function AdminPage() {
 
       <div className="mt-6 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
         <div className="font-semibold flex items-center gap-2 mb-1"><ShieldCheck className="size-3.5 text-warning" /> Content rules</div>
-        No PHI. No vendor or organization names. No proprietary documentation. Confirm content is sanitized before publishing.
+        No PHI. No vendor or organization names. No proprietary documentation. Confirm content is sanitized before saving.
       </div>
 
       {/* Editor */}
@@ -157,30 +207,84 @@ function AdminPage() {
         </div>
         <Field label="Summary"><textarea value={form.summary} onChange={e => setForm({ ...form, summary: e.target.value })} className={`${inputCls} h-20 py-2`} placeholder="One sentence." /></Field>
         <Field label="Body (markdown)"><textarea value={form.body_md} onChange={e => setForm({ ...form, body_md: e.target.value })} className={`${inputCls} h-28 py-2 font-mono text-xs`} placeholder="## Heading&#10;Body…" /></Field>
+
         {form.content_type === "video" && (
-          <Field label="Transcript"><textarea value={form.transcript} onChange={e => setForm({ ...form, transcript: e.target.value })} className={`${inputCls} h-24 py-2`} /></Field>
+          <Field label="Transcript">
+            <textarea value={form.transcript} onChange={e => setForm({ ...form, transcript: e.target.value })} className={`${inputCls} h-24 py-2`} placeholder="Full spoken transcript — used in transcript search." />
+          </Field>
         )}
+
+        {form.content_type === "checklist" && (
+          <div>
+            <div className="text-[11px] font-medium text-foreground/80 mb-1.5 inline-flex items-center gap-1.5">
+              <ClipboardCheck className="size-3.5 text-primary" /> Checklist items
+            </div>
+            <ItemBuilder
+              items={form.checklistItems}
+              placeholder="e.g. Badge visible"
+              onAdd={(text) => setForm({ ...form, checklistItems: [...form.checklistItems, { id: crypto.randomUUID(), text }] })}
+              onRemove={(id) => setForm({ ...form, checklistItems: form.checklistItems.filter(c => c.id !== id) })}
+            />
+          </div>
+        )}
+
+        {form.content_type === "scenario" && (
+          <div>
+            <div className="text-[11px] font-medium text-foreground/80 mb-1.5 inline-flex items-center gap-1.5">
+              <ListChecks className="size-3.5 text-primary" /> Scenario steps
+            </div>
+            <StepBuilder
+              steps={form.scenarioSteps}
+              onAdd={(title, body) => setForm({ ...form, scenarioSteps: [...form.scenarioSteps, { title, body }] })}
+              onRemove={(i) => setForm({ ...form, scenarioSteps: form.scenarioSteps.filter((_, idx) => idx !== i) })}
+            />
+          </div>
+        )}
+
+        <label className="flex items-start gap-2 rounded-xl border border-border bg-secondary/40 p-3 cursor-pointer">
+          <input type="checkbox" checked={form.sanitized} onChange={e => setForm({ ...form, sanitized: e.target.checked })} className="mt-0.5 size-4 accent-primary" />
+          <div className="text-xs">
+            <div className="font-medium">Sanitized approved</div>
+            <div className="text-muted-foreground">I confirm no PHI, vendor names, or organization names appear in this content.</div>
+          </div>
+        </label>
+
         <div className="flex justify-end gap-2">
-          <button type="submit" className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2">
+          <button type="submit" className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2 disabled:opacity-50">
             <Check className="size-4" /> {editingId ? "Save changes" : "Save as draft"}
           </button>
         </div>
       </form>
 
-      {/* Filters + list */}
-      <div className="mt-8 flex items-center gap-2 flex-wrap">
-        {(["all", ...TYPES] as const).map(t => (
-          <button key={t} onClick={() => setFilter(t as any)}
-            className={`text-xs px-3 py-1.5 rounded-full border ${filter === t ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:bg-secondary'}`}>
-            {t}
-          </button>
-        ))}
+      {/* Filters + search */}
+      <div className="mt-8 flex items-center gap-3 flex-wrap">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+          <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search title, summary, tag…"
+            className="h-9 w-64 pl-8 pr-3 rounded-lg border border-input bg-surface-elevated text-xs focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div className="flex items-center gap-1.5">
+          {(["all", ...TYPES] as const).map(t => (
+            <button key={t} onClick={() => setTypeFilter(t as any)}
+              className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${typeFilter === t ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:bg-secondary'}`}>
+              {t}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5 ml-auto">
+          {(["all", "published", "draft"] as const).map(p => (
+            <button key={p} onClick={() => setPubFilter(p)}
+              className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${pubFilter === p ? 'bg-foreground text-background border-foreground' : 'bg-card border-border hover:bg-secondary'}`}>
+              {p}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="mt-3 font-display font-semibold">Content ({visible.length})</div>
       <div className="mt-2 space-y-2">
         {visible.map(it => (
-          <div key={it.id} className="rounded-xl border border-border bg-card p-4 flex items-center gap-3 flex-wrap">
+          <div key={it.id} className="rounded-xl border border-border bg-card p-4 flex items-center gap-3 flex-wrap hover:shadow-soft transition-shadow">
             <div className="flex-1 min-w-0">
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{it.content_type} · {it.difficulty}</div>
               <div className="text-sm font-medium truncate">{it.title}</div>
@@ -210,7 +314,7 @@ function AdminPage() {
             </button>
           </div>
         ))}
-        {visible.length === 0 && <EmptyState title="No content yet" desc="Use the editor above to create your first item." />}
+        {visible.length === 0 && <EmptyState title="Nothing matches" desc="Try a different search or filter." />}
       </div>
 
       {preview && (
@@ -269,6 +373,75 @@ function AdminPage() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function ItemBuilder({ items, placeholder, onAdd, onRemove }: {
+  items: ChecklistItem[];
+  placeholder: string;
+  onAdd: (text: string) => void;
+  onRemove: (id: string) => void;
+}) {
+  const [text, setText] = useState("");
+  const add = () => { if (text.trim()) { onAdd(text.trim()); setText(""); } };
+  return (
+    <div className="rounded-xl border border-border bg-surface-elevated p-3">
+      {items.length > 0 && (
+        <ul className="space-y-1.5 mb-2">
+          {items.map((c, i) => (
+            <li key={c.id} className="flex items-center gap-2 rounded-lg bg-card border border-border px-3 py-2">
+              <GripVertical className="size-3.5 text-muted-foreground shrink-0" />
+              <span className="text-xs text-muted-foreground shrink-0">{i + 1}.</span>
+              <span className="text-sm flex-1 min-w-0 truncate">{c.text}</span>
+              <button type="button" onClick={() => onRemove(c.id)} aria-label="Remove" className="size-6 rounded-md hover:bg-destructive/10 hover:text-destructive inline-flex items-center justify-center">
+                <X className="size-3.5" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="flex gap-2">
+        <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); add(); } }} placeholder={placeholder} className={`${inputCls} h-9`} />
+        <button type="button" onClick={add} className="h-9 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5">
+          <Plus className="size-3.5" /> Add
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function StepBuilder({ steps, onAdd, onRemove }: {
+  steps: { title: string; body: string }[];
+  onAdd: (title: string, body: string) => void;
+  onRemove: (i: number) => void;
+}) {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const add = () => { if (title.trim() && body.trim()) { onAdd(title.trim(), body.trim()); setTitle(""); setBody(""); } };
+  return (
+    <div className="rounded-xl border border-border bg-surface-elevated p-3 space-y-2">
+      {steps.length > 0 && (
+        <ol className="space-y-1.5">
+          {steps.map((s, i) => (
+            <li key={i} className="rounded-lg bg-card border border-border px-3 py-2 flex items-start gap-2">
+              <div className="size-6 shrink-0 rounded-full bg-primary text-primary-foreground text-[11px] font-semibold flex items-center justify-center mt-0.5">{i + 1}</div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium truncate">{s.title}</div>
+                <div className="text-xs text-muted-foreground line-clamp-2">{s.body}</div>
+              </div>
+              <button type="button" onClick={() => onRemove(i)} aria-label="Remove" className="size-6 rounded-md hover:bg-destructive/10 hover:text-destructive inline-flex items-center justify-center">
+                <X className="size-3.5" />
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
+      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Step title" className={`${inputCls} h-9`} />
+      <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Step body" className={`${inputCls} h-16 py-2`} />
+      <button type="button" onClick={add} className="h-9 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5">
+        <Plus className="size-3.5" /> Add step
+      </button>
     </div>
   );
 }
