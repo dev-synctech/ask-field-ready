@@ -60,10 +60,11 @@ function SourceDetailPage() {
 
   function publish() {
     if (!title.trim()) { toast.error("Title required"); return; }
-    if (!sanitized) { toast.error("Confirm 'sanitized approved' before publishing."); return; }
+    // Drafts can be saved anytime. Publishing to Mizly requires sanitized_approved = true.
     // Demo: do not actually inject into ITEMS — Phase 1 routes stay clean.
-    toast.success(`Draft '${title.trim()}' created from source — pending review.`);
-    updateSource(src.id, { status: "archived", notes: `Rewritten as: ${title.trim()}` });
+    const label = sanitized ? "draft (sanitized approved)" : "draft";
+    toast.success(`Saved ${label}: '${title.trim()}'.`);
+    updateSource(src.id, { notes: `Draft: ${title.trim()}${sanitized ? " · sanitized approved" : ""}` });
   }
 
   function setStatus(s: SourceStatus) {
