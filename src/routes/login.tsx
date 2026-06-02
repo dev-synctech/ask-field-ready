@@ -1,9 +1,12 @@
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { MailCheck } from "lucide-react";
-import { DemoModeButton } from "@/components/DemoModeButton";
+import { MailCheck, FlaskConical } from "lucide-react";
+import { DemoModeButton, isDemoModeAllowed } from "@/components/DemoModeButton";
+// TODO: REMOVE BEFORE PRODUCTION LAUNCH
+import { seedDemoAdmin, DEMO_ADMIN_EMAIL } from "@/lib/seed-demo-admin.functions";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({
@@ -35,6 +38,27 @@ function AuthPage() {
   const [error, setError] = useState('');
   const [checkEmail, setCheckEmail] = useState(false);
   const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  // TODO: REMOVE BEFORE PRODUCTION LAUNCH — seed the fixed demo admin once on mount.
+  const seedAdmin = useServerFn(seedDemoAdmin);
+  const [seedState, setSeedState] = useState<'idle' | 'seeding' | 'ready' | 'error'>('idle');
+  const previewAllowed = isDemoModeAllowed();
+  useEffect(() => {
+    if (!previewAllowed) return;
+    let cancelled = false;
+    setSeedState('seeding');
+    seedAdmin()
+      .then((res) => { if (!cancelled) setSeedState(res?.ok ? 'ready' : 'error'); })
+      .catch(() => { if (!cancelled) setSeedState('error'); });
+    return () => { cancelled = true; };
+  }, [previewAllowed, seedAdmin]);
+
+  function fillDemoCreds() {
+    setMode('signin');
+    setEmail(DEMO_ADMIN_EMAIL);
+    setPassword('ATE-Demo-2026!');
+    setError('');
+  }
+
 
   async function routeAfterAuth() {
     const { data: userData } = await supabase.auth.getUser();
@@ -164,6 +188,32 @@ function AuthPage() {
               {mode === 'signup' ? 'Start with the academy in 30 seconds.' : 'Sign in to continue.'}
             </p>
           </div>
+          {/* TODO: REMOVE BEFORE PRODUCTION LAUNCH — preview-only admin login hint. */}
+          {previewAllowed && (
+            <div className="mb-4 rounded-xl border border-dashed border-warning/60 bg-warning/5 p-3 text-xs">
+              <div className="flex items-center gap-2 font-semibold text-warning uppercase tracking-wider text-[11px]">
+                <FlaskConical className="size-3.5" /> Preview admin login
+              </div>
+              <div className="mt-1 text-foreground/90 break-all">{DEMO_ADMIN_EMAIL}</div>
+              <div className="mt-1 text-muted-foreground">
+                Password: <span className="font-mono text-foreground/80">ATE-Demo-2026!</span>
+              </div>
+              <div className="mt-1 text-muted-foreground">
+                {seedState === 'seeding' && 'Provisioning…'}
+                {seedState === 'ready' && 'Ready — fill the form and sign in.'}
+                {seedState === 'error' && 'Seeding failed. Try refreshing.'}
+                {seedState === 'idle' && '\u00A0'}
+              </div>
+              <button
+                type="button"
+                onClick={fillDemoCreds}
+                disabled={seedState !== 'ready'}
+                className="mt-2 inline-flex h-8 items-center px-3 rounded-lg border border-border bg-card text-[12px] font-medium hover:bg-accent disabled:opacity-60"
+              >
+                Fill credentials
+              </button>
+            </div>
+          )}
           <form onSubmit={submit} className="space-y-3">
             {mode === 'signup' && (
               <Input label="Name" value={displayName} onChange={setName} placeholder="Alex" />
