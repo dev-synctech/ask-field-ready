@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
-  GripVertical, ListChecks, ClipboardCheck, FolderInput, Tags, Info,
+  GripVertical, ListChecks, ClipboardCheck, FolderInput, Tags, Info, HelpCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
