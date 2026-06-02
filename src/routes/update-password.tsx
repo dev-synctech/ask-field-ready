@@ -57,11 +57,8 @@ function UpdatePasswordPage() {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
       setDone(true);
-      // Route by entitlement after a brief confirmation.
-      const { data: ent } = await supabase
-        .from("entitlements").select("status").maybeSingle();
-      const target = ent?.status === "active" ? "/ask" : "/checkout";
-      setTimeout(() => navigate({ to: target as any, replace: true }), 1200);
+      // Phase 1 demo: no entitlements/checkout — always land on /ask.
+      setTimeout(() => navigate({ to: "/ask", replace: true }), 1200);
     } catch (err: any) {
       setError(err?.message ?? "Could not update password.");
     } finally {
