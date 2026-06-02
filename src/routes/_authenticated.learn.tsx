@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { BookOpen } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { BookOpen, ChevronRight } from "lucide-react";
 import { MODULES, ITEMS } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/learn")({
@@ -28,18 +28,34 @@ function LearnPage() {
               </div>
               {lessons.length > 0 && (
                 <ul className="mt-4 divide-y divide-border">
-                  {lessons.map(l => (
-                    <li key={l.id} className="py-3 flex items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="text-sm font-medium truncate">{l.title}</div>
-                        <div className="text-xs text-muted-foreground truncate">{l.summary}</div>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground capitalize">{l.content_type}</span>
-                        <span className="text-[11px] text-muted-foreground">{l.estimated_minutes} min</span>
-                      </div>
-                    </li>
-                  ))}
+                  {lessons.map(l => {
+                    const to =
+                      l.content_type === "lesson" ? "/lessons/$id"
+                      : l.content_type === "playbook" ? "/playbooks/$id"
+                      : l.content_type === "scenario" ? "/scenarios/$id"
+                      : l.content_type === "video" ? "/videos"
+                      : "/checklists";
+                    const params = ["/lessons/$id", "/playbooks/$id", "/scenarios/$id"].includes(to as string) ? { id: l.id } : undefined;
+                    return (
+                      <li key={l.id}>
+                        <Link
+                          to={to as any}
+                          params={params as any}
+                          className="py-3 flex items-center justify-between gap-3 group hover:text-primary transition-colors"
+                        >
+                          <div className="min-w-0">
+                            <div className="text-sm font-medium truncate group-hover:text-primary">{l.title}</div>
+                            <div className="text-xs text-muted-foreground truncate">{l.summary}</div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground capitalize">{l.content_type}</span>
+                            <span className="text-[11px] text-muted-foreground">{l.estimated_minutes} min</span>
+                            <ChevronRight className="size-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+                          </div>
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>

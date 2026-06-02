@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ListChecks, PlayCircle } from "lucide-react";
 import { itemsByType } from "@/lib/demo-data";
 import { Header } from "./_authenticated.learn";
@@ -27,9 +27,13 @@ function ScenariosPage() {
                 <div className="mt-1 font-display font-semibold">{s.title}</div>
                 <p className="mt-1 text-sm text-muted-foreground">{s.summary}</p>
               </div>
-              <button className="shrink-0 inline-flex items-center gap-1.5 text-xs h-9 px-3 rounded-lg border border-border bg-surface-elevated hover:bg-secondary">
+              <Link
+                to="/scenarios/$id"
+                params={{ id: s.id }}
+                className="shrink-0 inline-flex items-center gap-1.5 text-xs h-9 px-3 rounded-lg bg-primary text-primary-foreground hover:opacity-90"
+              >
                 <PlayCircle className="size-3.5" /> Start
-              </button>
+              </Link>
             </div>
           </div>
         ))}
