@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { answerFor, type ContentType } from "@/lib/demo-data";
+import { ASK_SAFETY_LINE } from "@/lib/legal";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
