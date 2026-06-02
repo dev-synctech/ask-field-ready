@@ -16,6 +16,7 @@ export interface QuestionRecord {
   frequency_id?: string;
   workflow_pattern?: string; // neutral pattern wording
   source_notes?: string; // admin-only
+  applies_to?: string[]; // text-only chips, e.g. "Vendor-neutral", "Epic-style workflows"
   status: QuestionStatus;
   imported_from?: string; // taxonomy file / batch name
   created_at: string; // ISO, fixed

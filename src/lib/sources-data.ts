@@ -33,6 +33,8 @@ export interface SourceRecord {
   domain?: string;
   role?: string;
   notes?: string;
+  applies_to?: string[]; // text-only chips, e.g. "Epic-style workflows"
+  sanitized_approved?: boolean;
 }
 
 // --- Risk patterns ---------------------------------------------------------
@@ -42,10 +44,12 @@ interface PatternDef {
   test: (text: string) => string[]; // returns matched terms
 }
 
-const VENDOR_TERMS = ["epic", "cerner", "oracle health", "meditech", "athenahealth", "allscripts", "nextgen"];
+const VENDOR_TERMS = ["epic", "epiccare", "cerner", "oracle health", "meditech", "athenahealth", "allscripts", "nextgen"];
 const ORG_TERMS = ["hospital", "medical center", "health system", "clinic", "memorial", "regional medical"];
 const PHI_TERMS = ["mrn", "medical record number", "dob", "date of birth", "ssn", "patient name", "patient id"];
-const DOC_TERMS = ["tip sheet", "tipsheet", "user manual", "training manual", "screenshot", "screen shot", "proprietary", "confidential"];
+const DOC_TERMS = ["tip sheet", "tipsheet", "user manual", "training manual", "screenshot", "screen shot", "proprietary", "confidential", "vendor logo", "copied manual", "copied tip sheet"];
+const CRED_TERMS = ["password", "passwd", "credential", "credentials", "api key", "api_key", "secret key", "private key", "auth token", "bearer token"];
+const PRIVATE_LINK_HINTS = ["citrix", "vpn", "intranet", ".local/", ".internal/", "sharepoint.com", "onedrive.com"];
 
 const RX_PHONE = /\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g;
 const RX_EMAIL = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
@@ -64,6 +68,8 @@ const PATTERNS: PatternDef[] = [
   { category: "Organization reference detected", test: t => keywordHits(t, ORG_TERMS) },
   { category: "PHI-like term detected", test: t => keywordHits(t, PHI_TERMS) },
   { category: "Proprietary doc language detected", test: t => keywordHits(t, DOC_TERMS) },
+  { category: "Credential / password detected", test: t => keywordHits(t, CRED_TERMS) },
+  { category: "Private link / system detected", test: t => keywordHits(t, PRIVATE_LINK_HINTS) },
   { category: "Phone number detected", test: t => (t.match(RX_PHONE) ?? []).slice(0, 3) },
   { category: "Email address detected", test: t => (t.match(RX_EMAIL) ?? []).slice(0, 3) },
   { category: "MRN-like number detected", test: t => (t.match(RX_MRN) ?? []).filter(s => /\d{6,}/.test(s)).slice(0, 3) },
@@ -92,7 +98,9 @@ export function scanSource(fileName: string, text: string): ScanResult {
     highCats.has("MRN-like number detected") ||
     highCats.has("Vendor term detected") ||
     highCats.has("Email address detected") ||
-    highCats.has("Phone number detected")
+    highCats.has("Phone number detected") ||
+    highCats.has("Credential / password detected") ||
+    highCats.has("Private link / system detected")
   ) risk_level = "high";
   else if (matches.length > 0) risk_level = "medium";
 

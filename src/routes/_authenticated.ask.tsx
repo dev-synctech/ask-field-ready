@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { answerFor, type ContentType } from "@/lib/demo-data";
+import { ASK_SAFETY_LINE } from "@/lib/legal";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
@@ -161,6 +162,10 @@ function AskPage() {
 
           <Section title="Short answer">
             <p className="text-base leading-relaxed">{r.shortAnswer}</p>
+            <p className="mt-3 text-xs text-muted-foreground italic border-l-2 border-warning/60 pl-3">
+              {ASK_SAFETY_LINE}{" "}
+              <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
+            </p>
           </Section>
 
           {r.steps.length > 0 && (

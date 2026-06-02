@@ -8,6 +8,7 @@ import {
   type ImportSummary, type QuestionStatus,
 } from "@/lib/questions-data";
 import { useTaxonomy, labelFor, type TaxonomyCategory } from "@/lib/taxonomy";
+import { GuardrailCard } from "@/components/GuardrailCard";
 
 export const Route = createFileRoute("/_authenticated/admin_/questions")({
   head: () => ({ meta: [{ title: "Question Bank — Mizly" }] }),
@@ -111,6 +112,11 @@ function QuestionsListPage() {
       <div className="mt-6 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
         Vendor-neutral and PHI-free. Use neutral wording like "workflow may vary by site/system." Do not copy raw source text verbatim.
       </div>
+
+      <div className="mt-4">
+        <GuardrailCard />
+      </div>
+
 
       {/* Filters */}
       <div className="mt-6 rounded-2xl border border-border bg-card p-4 space-y-3">

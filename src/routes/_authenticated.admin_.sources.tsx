@@ -12,6 +12,7 @@ import {
   type SourceStatus, type RiskLevel, type SourceFileType,
 } from "@/lib/sources-data";
 import { Header } from "./_authenticated.learn";
+import { GuardrailCard } from "@/components/GuardrailCard";
 
 export const Route = createFileRoute("/_authenticated/admin_/sources")({
   head: () => ({ meta: [{ title: "Source Library — Mizly" }] }),
@@ -74,6 +75,10 @@ function SourcesPage() {
       <div className="mt-6 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
         <div className="font-semibold flex items-center gap-2 mb-1"><ShieldCheck className="size-3.5 text-warning" /> Pipeline rules</div>
         Source files are admin-only inputs. Nothing auto-publishes. Rewrite sources into Mizly-original, vendor-neutral content before publishing.
+      </div>
+
+      <div className="mt-4">
+        <GuardrailCard />
       </div>
 
       {/* Filters */}

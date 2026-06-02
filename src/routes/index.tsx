@@ -109,6 +109,7 @@ function Landing() {
           <div>© Mizly · Vendor-neutral · No PHI</div>
           <div className="flex gap-4">
             <Link to="/ask" className="hover:text-foreground">Enter Demo</Link>
+            <Link to="/legal" className="hover:text-foreground">Trademark &amp; legal notice</Link>
           </div>
         </div>
       </footer>
