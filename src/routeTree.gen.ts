@@ -15,6 +15,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated.videos'
 import { Route as AuthenticatedScenariosRouteImport } from './routes/_authenticated.scenarios'
 import { Route as AuthenticatedPlaybooksRouteImport } from './routes/_authenticated.playbooks'
@@ -54,6 +55,11 @@ const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/return',
   path: '/return',
   getParentRoute: () => CheckoutRoute,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedVideosRoute = AuthenticatedVideosRouteImport.update({
   id: '/videos',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/playbooks': typeof AuthenticatedPlaybooksRoute
   '/scenarios': typeof AuthenticatedScenariosRoute
   '/videos': typeof AuthenticatedVideosRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/playbooks': typeof AuthenticatedPlaybooksRoute
   '/scenarios': typeof AuthenticatedScenariosRoute
   '/videos': typeof AuthenticatedVideosRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -156,6 +164,7 @@ export interface FileRoutesById {
   '/_authenticated/playbooks': typeof AuthenticatedPlaybooksRoute
   '/_authenticated/scenarios': typeof AuthenticatedScenariosRoute
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
     | '/playbooks'
     | '/scenarios'
     | '/videos'
+    | '/auth/callback'
     | '/checkout/return'
     | '/admin/users'
     | '/api/public/payments/webhook'
@@ -192,6 +202,7 @@ export interface FileRouteTypes {
     | '/playbooks'
     | '/scenarios'
     | '/videos'
+    | '/auth/callback'
     | '/checkout/return'
     | '/admin/users'
     | '/api/public/payments/webhook'
@@ -210,6 +221,7 @@ export interface FileRouteTypes {
     | '/_authenticated/playbooks'
     | '/_authenticated/scenarios'
     | '/_authenticated/videos'
+    | '/auth/callback'
     | '/checkout/return'
     | '/_authenticated/admin/users'
     | '/api/public/payments/webhook'
@@ -221,6 +233,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRouteWithChildren
   LoginRoute: typeof LoginRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -267,6 +280,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/checkout/return'
       preLoaderRoute: typeof CheckoutReturnRouteImport
       parentRoute: typeof CheckoutRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/videos': {
       id: '/_authenticated/videos'
@@ -396,8 +416,19 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRouteWithChildren,
   LoginRoute: LoginRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
