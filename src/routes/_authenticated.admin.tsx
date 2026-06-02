@@ -342,6 +342,7 @@ function AdminPage() {
             <div className="flex-1 min-w-0">
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{it.content_type} · {it.difficulty}</div>
               <div className="text-sm font-medium truncate">{it.title}</div>
+              <TaxBadges item={it} />
               {it.tags.length > 0 && (
                 <div className="mt-1 flex items-center gap-1 flex-wrap">
                   <Tag className="size-3 text-muted-foreground" />
