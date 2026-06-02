@@ -1,7 +1,21 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+
+function assertNonProductionHost() {
+  // Allow only on local dev and Lovable preview hosts — never on production.
+  let host = "";
+  try { host = (getRequestHost() ?? "").toLowerCase(); } catch { host = ""; }
+  const isPreview = host.includes("-preview--") || host.includes("preview--") || host.endsWith(".lovable.dev");
+  const isLocal = host.startsWith("localhost") || host.startsWith("127.0.0.1") || host === "";
+  const isProdEnv = process.env.NODE_ENV === "production";
+  if (isProdEnv && !isPreview && !isLocal) {
+    throw new Error("Test access bypass is disabled in production.");
+  }
+}
+
 
 async function assertAdmin(supabase: any, userId: string) {
   const { data: roles, error } = await supabase
