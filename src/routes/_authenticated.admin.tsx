@@ -298,6 +298,7 @@ function AdminPage() {
           <div className="text-xs">
             <div className="font-medium">Sanitized approved</div>
             <div className="text-muted-foreground">I confirm no PHI, vendor names, or organization names appear in this content.</div>
+            <div className="mt-1 text-[11px] text-muted-foreground italic">Drafts can be saved anytime. Publishing to Mizly requires sanitized approval.</div>
           </div>
         </label>
 
