@@ -188,6 +188,9 @@ function AdminPage() {
           <Link to="/admin/sources" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <FolderInput className="size-4" /> Source Library
           </Link>
+          <Link to="/admin/taxonomy" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
+            <Tags className="size-4" /> Taxonomy
+          </Link>
           <Link to="/admin/users" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <Users className="size-4" /> Users
           </Link>
@@ -203,9 +206,14 @@ function AdminPage() {
         <KPI label="Drafts" value={counts.drafts} tone="muted" />
       </div>
 
-      <div className="mt-6 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
+      <div className="mt-6 rounded-2xl border border-primary/30 bg-primary/5 p-4 text-xs text-foreground/80 flex gap-2">
+        <Info className="size-4 text-primary shrink-0 mt-0.5" />
+        <div>Taxonomy controls how Mizly routes questions, filters content, and later powers Ask retrieval.</div>
+      </div>
+
+      <div className="mt-3 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
         <div className="font-semibold flex items-center gap-2 mb-1"><ShieldCheck className="size-3.5 text-warning" /> Content rules</div>
-        No PHI. No vendor or organization names. No proprietary documentation. Confirm content is sanitized before saving.
+        No PHI. No vendor or organization names. No proprietary documentation. Drafts save anytime — publishing requires sanitized approval.
       </div>
 
       {/* Editor */}
