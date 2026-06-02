@@ -106,14 +106,15 @@ export function scanSource(fileName: string, text: string): ScanResult {
 
 // --- Demo data -------------------------------------------------------------
 
-function seed(file_name: string, file_type: SourceFileType, size_kb: number, excerpt: string, daysAgo = 1, overrides: Partial<SourceRecord> = {}): SourceRecord {
+function seed(id: string, file_name: string, file_type: SourceFileType, size_kb: number, excerpt: string, daysAgo = 1, overrides: Partial<SourceRecord> = {}): SourceRecord {
   const scan = scanSource(file_name, excerpt);
   return {
-    id: `src_${Math.random().toString(36).slice(2, 9)}`,
+    id,
     file_name,
     file_type,
     size_kb,
-    uploaded_at: new Date(Date.now() - daysAgo * 86_400_000).toISOString(),
+    // Fixed epoch base so SSR/CSR stay stable and IDs aren't re-shuffled.
+    uploaded_at: new Date(Date.UTC(2026, 5, 1) - daysAgo * 86_400_000).toISOString(),
     status: scan.status,
     risk_level: scan.risk_level,
     matched_terms: scan.matches,
@@ -124,6 +125,7 @@ function seed(file_name: string, file_type: SourceFileType, size_kb: number, exc
 
 const DEMO_SOURCES: SourceRecord[] = [
   seed(
+    "src_go_live_readiness_notes",
     "go-live-readiness-notes.md",
     "md",
     12,
@@ -132,6 +134,7 @@ const DEMO_SOURCES: SourceRecord[] = [
     { domain: "Go-Live Readiness", role: "Floor Consultant" },
   ),
   seed(
+    "src_registration_downtime_draft",
     "registration-downtime-draft.txt",
     "txt",
     8,
@@ -140,6 +143,7 @@ const DEMO_SOURCES: SourceRecord[] = [
     { domain: "Downtime Workflow", role: "Registration" },
   ),
   seed(
+    "src_escalation_script_outline",
     "escalation-script-outline.docx",
     "docx",
     44,
@@ -148,6 +152,7 @@ const DEMO_SOURCES: SourceRecord[] = [
     { domain: "Escalation", role: "Floor Lead" },
   ),
   seed(
+    "src_vendor_document_review",
     "vendor-tipsheet-import.pdf",
     "pdf",
     980,
@@ -156,6 +161,7 @@ const DEMO_SOURCES: SourceRecord[] = [
     { domain: "Clinical Documentation", role: "Floor Consultant" },
   ),
   seed(
+    "src_bedside_coaching",
     "bedside-coaching.mp4",
     "mp4",
     18_400,
@@ -164,6 +170,7 @@ const DEMO_SOURCES: SourceRecord[] = [
     { domain: "Bedside Support", role: "Floor Consultant" },
   ),
   seed(
+    "src_command_center_flow",
     "command-center-flow.pptx",
     "pptx",
     1_240,
@@ -172,6 +179,7 @@ const DEMO_SOURCES: SourceRecord[] = [
     { domain: "Command Center", role: "Command Center" },
   ),
   seed(
+    "src_unit_rumor_recovery",
     "unit-rumor-recovery.md",
     "md",
     6,
