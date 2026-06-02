@@ -33,6 +33,8 @@ export interface SourceRecord {
   domain?: string;
   role?: string;
   notes?: string;
+  applies_to?: string[]; // text-only chips, e.g. "Epic-style workflows"
+  sanitized_approved?: boolean;
 }
 
 // --- Risk patterns ---------------------------------------------------------
