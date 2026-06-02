@@ -165,6 +165,7 @@ function QuestionDetailPage() {
           <div className="font-display font-semibold flex items-center gap-2">
             <FileText className="size-4 text-primary" /> Convert to Mizly Draft
           </div>
+          <GuardrailCard />
           <Field label="Target type">
             <select value={draft.target} onChange={e => setDraft({ ...draft, target: e.target.value as DraftForm["target"] })} className={inputCls}>
               {CONVERT_TYPES.map(t => <option key={t.type} value={t.type}>{t.label}</option>)}
