@@ -162,18 +162,12 @@ function SourceDetailPage() {
                 {MODULES.map(m => <option key={m.id} value={m.id}>{m.title}</option>)}
               </select>
             </Field>
-            <Field label="Domain">
-              <select value={domain} onChange={e => setDomain(e.target.value)} className={inputCls}>
-                <option value="">— none —</option>
-                {DOMAINS.map(d => <option key={d} value={d}>{d}</option>)}
-              </select>
-            </Field>
-            <Field label="Role">
-              <select value={role} onChange={e => setRole(e.target.value)} className={inputCls}>
-                <option value="">— none —</option>
-                {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </Field>
+            <TaxField label="Role" cat="roles" value={roleId} onChange={setRoleId} taxonomy={taxonomy} />
+            <TaxField label="Domain" cat="domains" value={domainId} onChange={setDomainId} taxonomy={taxonomy} />
+            <TaxField label="Phase" cat="phases" value={phaseId} onChange={setPhaseId} taxonomy={taxonomy} />
+            <TaxField label="Urgency" cat="urgency" value={urgencyId} onChange={setUrgencyId} taxonomy={taxonomy} />
+            <TaxField label="Escalation" cat="escalation" value={escalationId} onChange={setEscalationId} taxonomy={taxonomy} />
+            <TaxField label="Frequency" cat="frequency" value={frequencyId} onChange={setFrequencyId} taxonomy={taxonomy} />
             <Field label="Difficulty">
               <select value={difficulty} onChange={e => setDifficulty(e.target.value as any)} className={inputCls}>
                 <option value="foundational">foundational</option>
@@ -184,6 +178,10 @@ function SourceDetailPage() {
             <Field label="Estimated minutes"><input type="number" min={1} value={minutes} onChange={e => setMinutes(+e.target.value)} className={inputCls} /></Field>
             <Field label="Tags (comma)"><input value={tags} onChange={e => setTags(e.target.value)} placeholder="downtime, registration" className={inputCls} /></Field>
           </div>
+
+          <p className="text-[11px] text-muted-foreground italic">
+            Taxonomy controls how Mizly routes questions, filters content, and later powers Ask retrieval.
+          </p>
 
           <Field label="Summary">
             <textarea value={summary} onChange={e => setSummary(e.target.value)} rows={2}
