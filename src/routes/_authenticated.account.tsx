@@ -1,9 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth, useEntitlement, useIsAdmin } from "@/hooks/use-auth";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ShieldCheck, UserRound, BadgeCheck, Sparkles } from "lucide-react";
 import { Header } from "./_authenticated.learn";
-import { LogOut, ShieldCheck, CreditCard } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({ meta: [{ title: "Account — At the Elbow Academy" }] }),
@@ -11,75 +8,56 @@ export const Route = createFileRoute("/_authenticated/account")({
 });
 
 function AccountPage() {
-  const { user } = useAuth();
-  const { data: ent } = useEntitlement(user);
-  const { data: isAdmin } = useIsAdmin(user);
-  const navigate = useNavigate();
-
-  const { data: profile } = useQuery({
-    queryKey: ['profile', user?.id],
-    enabled: !!user,
-    queryFn: async () => {
-      const { data } = await supabase.from('profiles').select('*').maybeSingle();
-      return data;
-    },
-  });
-
-  async function signOut() {
-    await supabase.auth.signOut();
-    navigate({ to: '/' });
-  }
+  // TODO: REMOVE BEFORE PRODUCTION LAUNCH — demo profile; replace with Supabase profile in Phase 2.
+  const profile = { display_name: "Demo Consultant", email: "demo@attheelbow.test", role: "Admin (demo)" };
 
   return (
     <div className="max-w-2xl mx-auto px-5 py-8">
-      <Header title="Account" subtitle="Manage your access." />
+      <Header title="Account" subtitle="Demo preview profile." />
 
       <div className="mt-6 rounded-2xl border border-border bg-card p-5 shadow-soft">
         <div className="flex items-center gap-4">
           <div className="size-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 text-primary-foreground flex items-center justify-center font-display font-semibold text-lg">
-            {(profile?.display_name ?? user?.email ?? '?')[0]?.toUpperCase()}
+            {profile.display_name[0]}
           </div>
           <div className="min-w-0">
-            <div className="font-display font-semibold">{profile?.display_name ?? 'Member'}</div>
-            <div className="text-sm text-muted-foreground truncate">{user?.email}</div>
+            <div className="font-display font-semibold">{profile.display_name}</div>
+            <div className="text-sm text-muted-foreground truncate">{profile.email}</div>
           </div>
         </div>
+      </div>
+
+      <div className="mt-4 grid sm:grid-cols-2 gap-3">
+        <Stat icon={BadgeCheck} label="Access" value="Full (demo)" tone="success" />
+        <Stat icon={UserRound} label="Role" value={profile.role} tone="primary" />
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
+        <div className="font-semibold flex items-center gap-2 mb-1"><Sparkles className="size-3.5 text-warning" /> Preview build</div>
+        Sign-in, billing, and entitlements are intentionally disabled. Phase 2 adds auth, Phase 4 adds payments.
       </div>
 
       <div className="mt-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground"><CreditCard className="size-3.5" /> Access</div>
-        <div className="mt-2 flex items-center justify-between">
-          <div>
-            <div className="font-display font-semibold capitalize">{ent?.status ?? 'inactive'}</div>
-            {ent?.granted_at && (
-              <div className="text-xs text-muted-foreground">Since {new Date(ent.granted_at).toLocaleDateString()}</div>
-            )}
-          </div>
-          {ent?.status !== 'active' && (
-            <button onClick={() => navigate({ to: '/checkout' })}
-              className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-medium">
-              Get access
-            </button>
-          )}
-        </div>
+        <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground"><ShieldCheck className="size-3.5" /> Content rules</div>
+        <p className="mt-1 text-sm">No PHI. No vendor or organization names. Everything in the academy is vendor-neutral by design.</p>
       </div>
 
-      {isAdmin && (
-        <div className="mt-4 rounded-2xl border border-border bg-card p-5 shadow-soft flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <ShieldCheck className="size-5 text-primary" />
-            <div>
-              <div className="font-display font-semibold">Admin access</div>
-              <div className="text-xs text-muted-foreground">You can manage content.</div>
-            </div>
-          </div>
-          <button onClick={() => navigate({ to: '/admin' })} className="text-sm text-primary font-medium">Open</button>
-        </div>
-      )}
+      <div className="mt-6 flex justify-end">
+        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back to landing</Link>
+      </div>
+    </div>
+  );
+}
 
-      <button onClick={signOut} className="mt-6 w-full h-11 rounded-xl border border-border hover:bg-secondary text-sm font-medium inline-flex items-center justify-center gap-2">
-        <LogOut className="size-4" /> Sign out
-      </button>
+function Stat({ icon: Icon, label, value, tone }: { icon: any; label: string; value: string; tone: "success" | "primary" }) {
+  const toneCls = tone === "success" ? "text-success bg-success/10" : "text-primary bg-primary-soft";
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+      <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+        <span className={`size-6 rounded-md flex items-center justify-center ${toneCls}`}><Icon className="size-3.5" /></span>
+        {label}
+      </div>
+      <div className="mt-1.5 font-display font-semibold">{value}</div>
     </div>
   );
 }

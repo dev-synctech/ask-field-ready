@@ -1,9 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { askKnowledgeBase } from "@/lib/content.functions";
-import { Search, ArrowRight, Sparkles, BookOpen, ListChecks, Film, ClipboardCheck } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { Search, ArrowRight, Sparkles, BookOpen, ListChecks, Film, ClipboardCheck, NotebookPen } from "lucide-react";
+import { answerFor } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — At the Elbow Academy" }] }),
@@ -18,20 +16,11 @@ const STARTERS = [
 ];
 
 function AskPage() {
-  const ask = useServerFn(askKnowledgeBase);
-  const [q, setQ] = useState('');
+  const [q, setQ] = useState("");
+  const [submitted, setSubmitted] = useState("");
+  const r = useMemo(() => (submitted.trim().length >= 2 ? answerFor(submitted) : null), [submitted]);
 
-  const mutation = useMutation({
-    mutationFn: (query: string) => ask({ data: { q: query } }),
-  });
-
-  const run = (query: string) => {
-    setQ(query);
-    if (query.trim().length >= 2) mutation.mutate(query);
-  };
-
-  const r = mutation.data;
-  const showEmpty = !mutation.isPending && !r;
+  const run = (query: string) => { setQ(query); setSubmitted(query); };
 
   return (
     <div className="max-w-2xl mx-auto px-5 py-8 md:py-14">
@@ -50,13 +39,13 @@ function AskPage() {
           placeholder="e.g. What if a clinician can't sign an order?"
           className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-base shadow-card focus:outline-none focus:ring-2 focus:ring-ring"
         />
-        <button type="submit" disabled={q.trim().length < 2 || mutation.isPending}
+        <button type="submit" disabled={q.trim().length < 2}
           className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50">
-          {mutation.isPending ? '…' : 'Ask'}
+          Ask
         </button>
       </form>
 
-      {showEmpty && (
+      {!r && (
         <div className="mt-6 grid sm:grid-cols-2 gap-2">
           {STARTERS.map(s => (
             <button key={s} onClick={() => run(s)}
@@ -67,18 +56,16 @@ function AskPage() {
         </div>
       )}
 
-      {mutation.isPending && <Skeleton />}
-
-      {r && !('error' in r && r.error) && (
+      {r && (
         <div className="mt-8 space-y-5">
           <Section title="Short answer">
             <p className="text-base leading-relaxed">{r.shortAnswer}</p>
           </Section>
 
-          {r.steps?.length > 0 && (
+          {r.steps.length > 0 && (
             <Section title="Step-by-step">
               <ol className="space-y-2 text-sm">
-                {r.steps.map((s: string, i: number) => (
+                {r.steps.map((s, i) => (
                   <li key={i} className="flex gap-3">
                     <span className="size-6 shrink-0 rounded-full bg-primary-soft text-primary text-xs font-semibold flex items-center justify-center">{i + 1}</span>
                     <span className="pt-0.5">{s}</span>
@@ -88,15 +75,15 @@ function AskPage() {
             </Section>
           )}
 
-          <RelatedGrid icon={BookOpen} label="Related playbooks" items={r.related.playbooks} />
+          <RelatedGrid icon={NotebookPen} label="Related playbooks" items={r.related.playbooks} />
           <RelatedGrid icon={Film} label="Related videos" items={r.related.videos} />
           <RelatedGrid icon={ClipboardCheck} label="Related checklists" items={r.related.checklists} />
           <RelatedGrid icon={ListChecks} label="Related scenarios" items={r.related.scenarios} />
 
-          {r.sources?.length > 0 && (
+          {r.sources.length > 0 && (
             <Section title="Sources">
               <div className="flex flex-wrap gap-2">
-                {r.sources.map((s: any) => (
+                {r.sources.map(s => (
                   <span key={s.id} className="text-[11px] px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
                     {s.title} <span className="text-muted-foreground">· {s.type}</span>
                   </span>
@@ -106,9 +93,9 @@ function AskPage() {
           )}
 
           {r.lessonId && (
-            <button className="w-full h-12 rounded-xl bg-foreground text-background font-medium inline-flex items-center justify-center gap-2 hover:opacity-90">
-              Open full lesson <ArrowRight className="size-4" />
-            </button>
+            <Link to="/learn" className="w-full h-12 rounded-xl bg-foreground text-background font-medium inline-flex items-center justify-center gap-2 hover:opacity-90">
+              <BookOpen className="size-4" /> Open full lesson <ArrowRight className="size-4" />
+            </Link>
           )}
         </div>
       )}
@@ -125,7 +112,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function RelatedGrid({ icon: Icon, label, items }: { icon: any; label: string; items: any[] }) {
+function RelatedGrid({ icon: Icon, label, items }: { icon: any; label: string; items: { id: string; title: string; summary: string; content_type: string }[] }) {
   if (!items?.length) return null;
   return (
     <Section title={label}>
@@ -141,15 +128,5 @@ function RelatedGrid({ icon: Icon, label, items }: { icon: any; label: string; i
         ))}
       </div>
     </Section>
-  );
-}
-
-function Skeleton() {
-  return (
-    <div className="mt-8 space-y-3 animate-pulse">
-      {[...Array(3)].map((_, i) => (
-        <div key={i} className="h-24 rounded-2xl bg-secondary/60" />
-      ))}
-    </div>
   );
 }

@@ -1,19 +1,28 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Search, BookOpen, ListChecks, PlayCircle, Film, UserRound, Shield } from "lucide-react";
-import { useAuth, useIsAdmin } from "@/hooks/use-auth";
+import {
+  Search, BookOpen, ListChecks, PlayCircle, Film, UserRound, Shield, NotebookPen,
+} from "lucide-react";
 import { ReactNode } from "react";
 
-const nav = [
+const primaryNav = [
   { to: "/ask", label: "Ask", icon: Search },
   { to: "/learn", label: "Learn", icon: BookOpen },
+  { to: "/playbooks", label: "Playbooks", icon: NotebookPen },
   { to: "/scenarios", label: "Scenarios", icon: ListChecks },
   { to: "/videos", label: "Videos", icon: Film },
   { to: "/checklists", label: "Lists", icon: PlayCircle },
 ];
 
+// Mobile bottom nav uses 5 items; "Playbooks" and the rest stay reachable from Ask/Learn.
+const mobileNav = [
+  { to: "/ask", label: "Ask", icon: Search },
+  { to: "/learn", label: "Learn", icon: BookOpen },
+  { to: "/playbooks", label: "Plays", icon: NotebookPen },
+  { to: "/videos", label: "Videos", icon: Film },
+  { to: "/checklists", label: "Lists", icon: PlayCircle },
+];
+
 export function AppShell({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
-  const { data: isAdmin } = useIsAdmin(user);
   const path = useRouterState({ select: s => s.location.pathname });
 
   return (
@@ -28,7 +37,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </Link>
         <nav className="space-y-1">
-          {nav.map(n => {
+          {primaryNav.map(n => {
             const active = path === n.to;
             return (
               <Link key={n.to} to={n.to}
@@ -40,14 +49,13 @@ export function AppShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="mt-auto space-y-1">
-          {isAdmin && (
-            <Link to="/admin" className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${path.startsWith('/admin') ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/70 hover:bg-secondary'}`}>
-              <Shield className="size-4" /> Admin
-            </Link>
-          )}
+          <Link to="/admin" className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${path.startsWith('/admin') ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/70 hover:bg-secondary'}`}>
+            <Shield className="size-4" /> Admin
+          </Link>
           <Link to="/account" className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${path === '/account' ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/70 hover:bg-secondary'}`}>
             <UserRound className="size-4" /> Account
           </Link>
+          <div className="px-3 pt-3 text-[10px] uppercase tracking-wider text-muted-foreground">Demo build</div>
         </div>
       </aside>
 
@@ -58,9 +66,14 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Logo />
             <span className="font-display font-semibold text-sm">At the Elbow</span>
           </Link>
-          <Link to="/account" className="size-9 rounded-full bg-secondary flex items-center justify-center">
-            <UserRound className="size-4" />
-          </Link>
+          <div className="flex items-center gap-1">
+            <Link to="/admin" className="size-9 rounded-full bg-secondary flex items-center justify-center" aria-label="Admin">
+              <Shield className="size-4" />
+            </Link>
+            <Link to="/account" className="size-9 rounded-full bg-secondary flex items-center justify-center" aria-label="Account">
+              <UserRound className="size-4" />
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -69,7 +82,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-background/95 backdrop-blur border-t border-border pb-safe">
         <div className="grid grid-cols-5">
-          {nav.map(n => {
+          {mobileNav.map(n => {
             const active = path === n.to;
             return (
               <Link key={n.to} to={n.to}

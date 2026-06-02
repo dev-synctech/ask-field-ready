@@ -1,59 +1,39 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Header, EmptyState } from "./_authenticated.learn";
+import { NotebookPen, ArrowRight } from "lucide-react";
+import { itemsByType } from "@/lib/demo-data";
+import { Header } from "./_authenticated.learn";
 
-function useContent(contentType: string) {
-  return useQuery({
-    queryKey: ['content', contentType],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('content_items').select('*')
-        .eq('content_type', contentType as any)
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
-}
+export const Route = createFileRoute("/_authenticated/playbooks")({
+  head: () => ({ meta: [{ title: "Playbooks — At the Elbow Academy" }] }),
+  component: PlaybooksPage,
+});
 
-function ContentList({ type, title, subtitle }: { type: string; title: string; subtitle: string }) {
-  const { data, isLoading } = useContent(type);
+function PlaybooksPage() {
+  const playbooks = itemsByType("playbook");
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
-      <Header title={title} subtitle={subtitle} />
+      <Header title="Playbooks" subtitle="Step-by-step references for the moment a unit needs you most." />
       <div className="mt-6 grid sm:grid-cols-2 gap-3">
-        {(data ?? []).map((it: any) => (
-          <div key={it.id} className="rounded-2xl border border-border bg-card p-4 shadow-soft hover:border-primary/40 transition-colors cursor-pointer">
+        {playbooks.map(p => (
+          <article key={p.id} className="group rounded-2xl border border-border bg-card p-5 shadow-soft hover:border-primary/40 transition-colors">
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
-              <span>{it.difficulty}</span>
-              <span>·</span>
-              <span>{it.estimated_minutes ?? 5} min</span>
+              <NotebookPen className="size-3 text-primary" /> Playbook · {p.difficulty}
             </div>
-            <div className="mt-2 font-display font-semibold">{it.title}</div>
-            {it.summary && <div className="mt-1 text-sm text-muted-foreground line-clamp-3">{it.summary}</div>}
-            {(it.tags ?? []).length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1">
-                {it.tags.slice(0, 4).map((t: string) => (
-                  <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{t}</span>
+            <div className="mt-2 font-display font-semibold">{p.title}</div>
+            <p className="mt-1 text-sm text-muted-foreground">{p.summary}</p>
+            <div className="mt-4 flex items-center justify-between text-xs">
+              <div className="flex flex-wrap gap-1.5">
+                {p.tags.slice(0, 3).map(t => (
+                  <span key={t} className="px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{t}</span>
                 ))}
               </div>
-            )}
-          </div>
+              <span className="text-muted-foreground inline-flex items-center gap-1">
+                {p.estimated_minutes} min <ArrowRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
+              </span>
+            </div>
+          </article>
         ))}
-        {!isLoading && (data ?? []).length === 0 && (
-          <div className="sm:col-span-2">
-            <EmptyState title={`No ${title.toLowerCase()} yet`} desc="An admin can publish the first ones from the admin dashboard." />
-          </div>
-        )}
       </div>
     </div>
   );
 }
-
-export const PlaybooksRoute = createFileRoute("/_authenticated/playbooks")({
-  head: () => ({ meta: [{ title: "Playbooks — At the Elbow Academy" }] }),
-  component: () => <ContentList type="playbook" title="Playbooks" subtitle="Repeatable plays for the moments that matter." />,
-});
-
-export { PlaybooksRoute as Route };
