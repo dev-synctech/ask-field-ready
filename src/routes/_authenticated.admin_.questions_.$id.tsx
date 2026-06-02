@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { useQuestions, updateQuestion, type QuestionRecord } from "@/lib/questions-data";
 import { useTaxonomy, labelFor, type TaxonomyCategory } from "@/lib/taxonomy";
 import type { ContentType } from "@/lib/demo-data";
+import { GuardrailCard } from "@/components/GuardrailCard";
+import { APPLIES_TO_OPTIONS, PUBLISH_CHECKLIST, type AppliesTo } from "@/lib/legal";
 
 export const Route = createFileRoute("/_authenticated/admin_/questions_/$id")({
   head: () => ({ meta: [{ title: "Question — Mizly" }] }),
