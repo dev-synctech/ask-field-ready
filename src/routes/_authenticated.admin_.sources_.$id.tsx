@@ -55,18 +55,19 @@ function SourceDetailPage() {
   const [sourceNotes, setSourceNotes] = useState("");
   const [sanitized, setSanitized] = useState(false);
 
-  const blocked = source.status === "quarantined" || source.status === "archived";
+  const src = source;
+  const blocked = src.status === "quarantined" || src.status === "archived";
 
   function publish() {
     if (!title.trim()) { toast.error("Title required"); return; }
     if (!sanitized) { toast.error("Confirm 'sanitized approved' before publishing."); return; }
     // Demo: do not actually inject into ITEMS — Phase 1 routes stay clean.
     toast.success(`Draft '${title.trim()}' created from source — pending review.`);
-    updateSource(source.id, { status: "archived", notes: `Rewritten as: ${title.trim()}` });
+    updateSource(src.id, { status: "archived", notes: `Rewritten as: ${title.trim()}` });
   }
 
   function setStatus(s: SourceStatus) {
-    updateSource(source.id, { status: s });
+    updateSource(src.id, { status: s });
     toast.success(`Status: ${STATUS_LABEL[s]}`);
   }
 
