@@ -6,6 +6,7 @@ import { FlaskConical, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { enterDemoMode } from "@/lib/demo.functions";
 
+// TODO: REMOVE BEFORE PRODUCTION LAUNCH — staging/preview gate, includes Lovable published URL during testing.
 export function isDemoModeAllowed() {
   if (typeof window === "undefined") return false;
   const h = window.location.hostname.toLowerCase();
@@ -15,7 +16,9 @@ export function isDemoModeAllowed() {
     h.startsWith("127.0.0.1") ||
     h.includes("-preview--") ||
     h.includes("preview--") ||
-    h.endsWith(".lovable.dev")
+    h.endsWith(".lovable.dev") ||
+    h.endsWith(".lovable.app") ||
+    h.endsWith(".lovableproject.com")
   );
 }
 
