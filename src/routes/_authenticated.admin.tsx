@@ -2,13 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
-  GripVertical, ListChecks, ClipboardCheck, FolderInput,
+  ListChecks, ClipboardCheck, FolderInput, Tags, Info,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
   ITEMS, MODULES, CHECKLIST_ITEMS, SCENARIO_DETAIL,
   type ContentItem, type ContentType, type ChecklistItem,
 } from "@/lib/demo-data";
+import {
+  useTaxonomy, labelFor,
+  type TaxonomyCategory,
+} from "@/lib/taxonomy";
 import { Header, EmptyState } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/admin")({
