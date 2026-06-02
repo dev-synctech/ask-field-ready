@@ -98,7 +98,9 @@ export function scanSource(fileName: string, text: string): ScanResult {
     highCats.has("MRN-like number detected") ||
     highCats.has("Vendor term detected") ||
     highCats.has("Email address detected") ||
-    highCats.has("Phone number detected")
+    highCats.has("Phone number detected") ||
+    highCats.has("Credential / password detected") ||
+    highCats.has("Private link / system detected")
   ) risk_level = "high";
   else if (matches.length > 0) risk_level = "medium";
 
