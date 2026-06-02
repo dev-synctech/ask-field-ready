@@ -433,7 +433,43 @@ function AdminPage() {
   );
 }
 
-function ItemBuilder({ items, placeholder, onAdd, onRemove }: {
+function TaxSelect({ label, cat, value, onChange, taxonomy }: {
+  label: string;
+  cat: TaxonomyCategory;
+  value: string;
+  onChange: (v: string) => void;
+  taxonomy: ReturnType<typeof useTaxonomy>;
+}) {
+  const id = `tax_${cat}`;
+  return (
+    <label htmlFor={id} className="block">
+      <span className="text-[11px] font-medium text-foreground/80 mb-1 block">{label}</span>
+      <select id={id} value={value} onChange={e => onChange(e.target.value)} className={inputCls}>
+        <option value="">— none —</option>
+        {taxonomy[cat].map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
+      </select>
+    </label>
+  );
+}
+
+function TaxBadges({ item, className = "" }: { item: ContentItem; className?: string }) {
+  const pairs: { tone: string; label: string }[] = [];
+  const role = labelFor("roles", item.role_id); if (role) pairs.push({ tone: "bg-primary/10 text-primary", label: role });
+  const domain = labelFor("domains", item.domain_id); if (domain) pairs.push({ tone: "bg-accent/15 text-accent-foreground", label: domain });
+  const phase = labelFor("phases", item.phase_id); if (phase) pairs.push({ tone: "bg-secondary text-secondary-foreground", label: phase });
+  const urgency = labelFor("urgency", item.urgency_id); if (urgency) pairs.push({ tone: "bg-warning/15 text-warning", label: `Urgency ${urgency}` });
+  const escalation = labelFor("escalation", item.escalation_id); if (escalation) pairs.push({ tone: "bg-destructive/10 text-destructive", label: `Escalation ${escalation}` });
+  const freq = labelFor("frequency", item.frequency_id); if (freq) pairs.push({ tone: "bg-secondary text-secondary-foreground", label: `Freq ${freq}` });
+  if (pairs.length === 0) return null;
+  return (
+    <div className={`flex flex-wrap gap-1 ${className}`}>
+      {pairs.map((p, i) => (
+        <span key={i} className={`text-[10px] px-1.5 py-0.5 rounded-full ${p.tone}`}>{p.label}</span>
+      ))}
+    </div>
+  );
+}
+
   items: ChecklistItem[];
   placeholder: string;
   onAdd: (text: string) => void;
