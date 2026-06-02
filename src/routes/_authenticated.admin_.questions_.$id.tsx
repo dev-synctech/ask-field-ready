@@ -86,6 +86,8 @@ function QuestionDetailPage() {
       frequency_id: question.frequency_id ?? "",
       source_notes: question.source_notes ?? "",
       sanitized: false,
+      applies_to: (question.applies_to as AppliesTo[]) ?? ["Vendor-neutral"],
+      checklist: {},
     });
     setTimeout(() => document.getElementById("convert-form")?.scrollIntoView({ behavior: "smooth" }), 50);
   }
