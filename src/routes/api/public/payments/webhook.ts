@@ -37,10 +37,10 @@ async function handleCheckoutCompleted(session: any) {
   );
 }
 
-async function handleRefund(paymentIntentId: string) {
+async function setStatusByPaymentIntent(paymentIntentId: string, status: 'active' | 'refunded' | 'failed' | 'disputed') {
   await getSupabase()
     .from('entitlements')
-    .update({ status: 'refunded', updated_at: new Date().toISOString() })
+    .update({ status, updated_at: new Date().toISOString() })
     .eq('stripe_payment_intent', paymentIntentId);
 }
 
@@ -60,11 +60,33 @@ export const Route = createFileRoute('/api/public/payments/webhook')({
             case 'transaction.completed':
               await handleCheckoutCompleted(event.data.object);
               break;
-            case 'charge.refunded':
-            case 'transaction.payment_failed': {
+            case 'charge.refunded': {
               const obj = event.data.object;
               const pi = typeof obj.payment_intent === 'string' ? obj.payment_intent : obj.payment_intent?.id;
-              if (pi) await handleRefund(pi);
+              if (pi) await setStatusByPaymentIntent(pi, 'refunded');
+              break;
+            }
+            case 'payment_intent.payment_failed':
+            case 'transaction.payment_failed': {
+              const obj = event.data.object;
+              const pi = typeof obj.id === 'string' && obj.object === 'payment_intent'
+                ? obj.id
+                : (typeof obj.payment_intent === 'string' ? obj.payment_intent : obj.payment_intent?.id);
+              if (pi) await setStatusByPaymentIntent(pi, 'failed');
+              break;
+            }
+            case 'charge.dispute.created':
+            case 'charge.dispute.funds_withdrawn': {
+              const obj = event.data.object;
+              const pi = typeof obj.payment_intent === 'string' ? obj.payment_intent : obj.payment_intent?.id;
+              if (pi) await setStatusByPaymentIntent(pi, 'disputed');
+              break;
+            }
+            case 'charge.dispute.closed': {
+              // If dispute won, restore entitlement; if lost, leave as disputed.
+              const obj = event.data.object;
+              const pi = typeof obj.payment_intent === 'string' ? obj.payment_intent : obj.payment_intent?.id;
+              if (pi && obj.status === 'won') await setStatusByPaymentIntent(pi, 'active');
               break;
             }
             default:

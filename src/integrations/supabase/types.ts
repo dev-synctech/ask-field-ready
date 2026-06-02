@@ -217,7 +217,12 @@ export type Database = {
       app_role: "admin" | "member"
       content_type: "lesson" | "playbook" | "video" | "checklist" | "scenario"
       difficulty: "foundational" | "intermediate" | "advanced"
-      entitlement_status: "active" | "inactive" | "refunded"
+      entitlement_status:
+        | "active"
+        | "inactive"
+        | "refunded"
+        | "failed"
+        | "disputed"
       publish_status: "draft" | "published"
     }
     CompositeTypes: {
@@ -349,7 +354,13 @@ export const Constants = {
       app_role: ["admin", "member"],
       content_type: ["lesson", "playbook", "video", "checklist", "scenario"],
       difficulty: ["foundational", "intermediate", "advanced"],
-      entitlement_status: ["active", "inactive", "refunded"],
+      entitlement_status: [
+        "active",
+        "inactive",
+        "refunded",
+        "failed",
+        "disputed",
+      ],
       publish_status: ["draft", "published"],
     },
   },

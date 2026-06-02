@@ -1,9 +1,9 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header, EmptyState } from "./_authenticated.learn";
-import { Plus, ShieldCheck } from "lucide-react";
+import { Plus, ShieldCheck, Users } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — At the Elbow Academy" }] }),
@@ -79,11 +79,19 @@ function AdminPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-5 py-8">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <Header title="Admin" subtitle="Create, review, publish." />
-        <div className="rounded-xl border border-border bg-card px-3 py-2 text-sm">
-          <span className="text-muted-foreground">Paid members: </span>
-          <span className="font-display font-semibold">{paidCount ?? 0}</span>
+        <div className="flex items-center gap-3">
+          <div className="rounded-xl border border-border bg-card px-3 py-2 text-sm">
+            <span className="text-muted-foreground">Paid members: </span>
+            <span className="font-display font-semibold">{paidCount ?? 0}</span>
+          </div>
+          <Link
+            to="/admin/users"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90"
+          >
+            <Users className="size-4" /> Manage users
+          </Link>
         </div>
       </div>
 
