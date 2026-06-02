@@ -1,0 +1,16 @@
+{
+  "name": "At the Elbow Academy",
+  "short_name": "AtE Academy",
+  "description": "Field-ready training for healthcare go-live support.",
+  "start_url": "/ask",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fcfdff",
+  "theme_color": "#3b82f6",
+  "icons": [
+    { "src": "/icon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any maskable" }
+  ]
+}
