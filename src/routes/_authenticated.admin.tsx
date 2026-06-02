@@ -385,6 +385,7 @@ function AdminPage() {
               </button>
             </div>
             <p className="mt-2 text-sm text-muted-foreground">{preview.summary}</p>
+            <TaxBadges item={preview} className="mt-2" />
             {preview.tags.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {preview.tags.map(t => <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{t}</span>)}
