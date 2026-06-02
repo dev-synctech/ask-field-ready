@@ -77,6 +77,10 @@ function SourcesPage() {
         Source files are admin-only inputs. Nothing auto-publishes. Rewrite sources into Mizly-original, vendor-neutral content before publishing.
       </div>
 
+      <div className="mt-4">
+        <GuardrailCard />
+      </div>
+
       {/* Filters */}
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2">
         <div className="relative sm:col-span-2">
