@@ -9,7 +9,7 @@ function useContent(contentType: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('content_items').select('*')
-        .eq('content_type', contentType)
+        .eq('content_type', contentType as any)
         .order('created_at', { ascending: false });
       if (error) throw error;
       return data ?? [];
