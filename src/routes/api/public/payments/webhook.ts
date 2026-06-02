@@ -37,10 +37,10 @@ async function handleCheckoutCompleted(session: any) {
   );
 }
 
-async function handleRefund(paymentIntentId: string) {
+async function setStatusByPaymentIntent(paymentIntentId: string, status: 'refunded' | 'failed' | 'disputed') {
   await getSupabase()
     .from('entitlements')
-    .update({ status: 'refunded', updated_at: new Date().toISOString() })
+    .update({ status, updated_at: new Date().toISOString() })
     .eq('stripe_payment_intent', paymentIntentId);
 }
 
