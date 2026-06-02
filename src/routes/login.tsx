@@ -1,260 +1,42 @@
-import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect, FormEvent } from "react";
-import { useServerFn } from "@tanstack/react-start";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
-import { MailCheck, FlaskConical } from "lucide-react";
-import { DemoModeButton, isDemoModeAllowed } from "@/components/DemoModeButton";
-// TODO: REMOVE BEFORE PRODUCTION LAUNCH
-import { seedDemoAdmin, DEMO_ADMIN_EMAIL } from "@/lib/seed-demo-admin.functions";
+import { ArrowRight, Sparkles } from "lucide-react";
 
+// TODO: REMOVE BEFORE PRODUCTION LAUNCH — demo build replaces sign-in with one-tap Enter Demo.
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({
     mode: z.enum(['signin', 'signup']).optional(),
     redirect: z.string().optional(),
   }).parse,
-  beforeLoad: async ({ search }) => {
-    // Use getUser() — re-validates the JWT; getSession() can return stale cached tokens.
-    const { data, error } = await supabase.auth.getUser();
-    if (!error && data.user) {
-      // Already signed in → route by entitlement (paid → /ask, otherwise → /checkout).
-      const { data: ent } = await supabase
-        .from('entitlements').select('status').maybeSingle();
-      const target = search.redirect || (ent?.status === 'active' ? '/ask' : '/checkout');
-      throw redirect({ to: target as any });
-    }
-  },
-  component: AuthPage,
+  component: DemoEntry,
 });
 
-function AuthPage() {
-  const search = Route.useSearch();
-  const navigate = useNavigate();
-  const [mode, setMode] = useState<'signin' | 'signup'>(search.mode ?? 'signin');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [displayName, setName] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [checkEmail, setCheckEmail] = useState(false);
-  const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  // TODO: REMOVE BEFORE PRODUCTION LAUNCH — seed the fixed demo admin once on mount.
-  const seedAdmin = useServerFn(seedDemoAdmin);
-  const [seedState, setSeedState] = useState<'idle' | 'seeding' | 'ready' | 'error'>('idle');
-  const [previewAllowed, setPreviewAllowed] = useState(false);
-  useEffect(() => { setPreviewAllowed(isDemoModeAllowed()); }, []);
-  useEffect(() => {
-    if (!previewAllowed) return;
-    let cancelled = false;
-    setSeedState('seeding');
-    seedAdmin()
-      .then((res) => { if (!cancelled) setSeedState(res?.ok ? 'ready' : 'error'); })
-      .catch(() => { if (!cancelled) setSeedState('error'); });
-    return () => { cancelled = true; };
-  }, [previewAllowed, seedAdmin]);
-
-  function fillDemoCreds() {
-    setMode('signin');
-    setEmail(DEMO_ADMIN_EMAIL);
-    setPassword('ATE-Demo-2026!');
-    setError('');
-  }
-
-
-  async function routeAfterAuth() {
-    const { data: userData } = await supabase.auth.getUser();
-    if (import.meta.env.DEV) console.debug('[auth] post-auth current user:', userData.user?.id ?? null);
-    const { data: ent } = await supabase
-      .from('entitlements').select('status').maybeSingle();
-    if (import.meta.env.DEV) console.debug('[auth] post-auth entitlement:', ent);
-    const target = search.redirect || (ent?.status === 'active' ? '/ask' : '/checkout');
-    if (import.meta.env.DEV) console.debug('[auth] routing to:', target);
-    navigate({ to: target as any, replace: true });
-  }
-
-  async function submit(e: FormEvent) {
-    e.preventDefault();
-    setError(''); setLoading(true);
-    try {
-      if (mode === 'signup') {
-        const { data, error } = await supabase.auth.signUp({
-          email, password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-            data: { display_name: displayName || email.split('@')[0] },
-          },
-        });
-        if (import.meta.env.DEV) {
-          console.debug('[auth] signup response:', {
-            userExists: !!data?.user,
-            sessionExists: !!data?.session,
-            errorCode: (error as any)?.code,
-            errorMsg: error?.message,
-          });
-        }
-        if (error) {
-          // Supabase returns "User already registered" → guide them to sign-in.
-          if ((error as any).code === 'user_already_exists' || /already registered/i.test(error.message)) {
-            setMode('signin');
-            setError('An account with this email already exists. Please sign in instead.');
-            return;
-          }
-          throw error;
-        }
-        // No session means email confirmation is required.
-        if (!data.session) {
-          if (import.meta.env.DEV) console.debug('[auth] signup requires email confirmation');
-          setCheckEmail(true);
-          return;
-        }
-        await routeAfterAuth();
-      } else {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (import.meta.env.DEV) {
-          console.debug('[auth] login response:', {
-            sessionExists: !!data?.session,
-            errorCode: (error as any)?.code,
-            errorMsg: error?.message,
-          });
-        }
-        if (error) throw error;
-        await routeAfterAuth();
-      }
-    } catch (err: any) {
-      if (import.meta.env.DEV) console.debug('[auth] error surfaced:', err);
-      setError(err?.message ?? 'Authentication failed');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-
-  async function resend() {
-    setResendState('sending');
-    const { error } = await supabase.auth.resend({
-      type: 'signup',
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-    });
-    setResendState(error ? 'error' : 'sent');
-  }
-
-  if (checkEmail) {
-    return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <header className="px-5 h-16 flex items-center">
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Home</Link>
-        </header>
-        <div className="flex-1 flex items-center justify-center px-5 pb-12">
-          <div className="w-full max-w-sm text-center">
-            <div className="size-14 mx-auto rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-              <MailCheck className="size-7" />
-            </div>
-            <h1 className="mt-5 text-2xl font-display font-semibold">Check your email</h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              We sent a confirmation link to <span className="text-foreground font-medium">{email}</span>. Click it to finish setting up your account.
-            </p>
-            <button
-              onClick={resend}
-              disabled={resendState === 'sending' || resendState === 'sent'}
-              className="mt-6 inline-flex h-11 px-5 rounded-xl border border-border bg-card text-sm font-medium hover:bg-accent disabled:opacity-60"
-            >
-              {resendState === 'sending' ? 'Sending…'
-                : resendState === 'sent' ? 'Email sent ✓'
-                : resendState === 'error' ? 'Try again'
-                : 'Resend confirmation email'}
-            </button>
-            <div className="mt-6 text-xs text-muted-foreground">
-              Wrong address?{' '}
-              <button onClick={() => { setCheckEmail(false); setResendState('idle'); }} className="text-primary font-medium">
-                Use a different email
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+function DemoEntry() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="px-5 h-16 flex items-center">
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Home</Link>
       </header>
       <div className="flex-1 flex items-center justify-center px-5 pb-12">
-        <div className="w-full max-w-sm">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-display font-semibold">{mode === 'signup' ? 'Create your account' : 'Welcome back'}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {mode === 'signup' ? 'Start with the academy in 30 seconds.' : 'Sign in to continue.'}
-            </p>
+        <div className="w-full max-w-sm text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-[11px] text-muted-foreground mb-5">
+            <Sparkles className="size-3 text-primary" /> Demo preview
           </div>
-          {/* TODO: REMOVE BEFORE PRODUCTION LAUNCH — preview-only admin login hint. */}
-          {previewAllowed && (
-            <div className="mb-4 rounded-xl border border-dashed border-warning/60 bg-warning/5 p-3 text-xs">
-              <div className="flex items-center gap-2 font-semibold text-warning uppercase tracking-wider text-[11px]">
-                <FlaskConical className="size-3.5" /> Preview admin login
-              </div>
-              <div className="mt-1 text-foreground/90 break-all">{DEMO_ADMIN_EMAIL}</div>
-              <div className="mt-1 text-muted-foreground">
-                Password: <span className="font-mono text-foreground/80">ATE-Demo-2026!</span>
-              </div>
-              <div className="mt-1 text-muted-foreground">
-                {seedState === 'seeding' && 'Provisioning…'}
-                {seedState === 'ready' && 'Ready — fill the form and sign in.'}
-                {seedState === 'error' && 'Seeding failed. Try refreshing.'}
-                {seedState === 'idle' && '\u00A0'}
-              </div>
-              <button
-                type="button"
-                onClick={fillDemoCreds}
-                disabled={seedState !== 'ready'}
-                className="mt-2 inline-flex h-8 items-center px-3 rounded-lg border border-border bg-card text-[12px] font-medium hover:bg-accent disabled:opacity-60"
-              >
-                Fill credentials
-              </button>
-            </div>
-          )}
-          <form onSubmit={submit} className="space-y-3">
-            {mode === 'signup' && (
-              <Input label="Name" value={displayName} onChange={setName} placeholder="Alex" />
-            )}
-            <Input type="email" label="Email" value={email} onChange={setEmail} placeholder="you@hospital-system.com" required />
-            <Input type="password" label="Password" value={password} onChange={setPassword} placeholder="••••••••" required minLength={8} />
-            {error && <div className="text-xs text-destructive bg-destructive/10 border border-destructive/30 rounded-lg px-3 py-2">{error}</div>}
-            <button disabled={loading} className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 disabled:opacity-60">
-              {loading ? 'Working…' : (mode === 'signup' ? 'Create account' : 'Sign in')}
-            </button>
-            {mode === 'signin' && (
-              <div className="text-right">
-                <Link to="/reset-password" className="text-xs text-muted-foreground hover:text-foreground">Forgot password?</Link>
-              </div>
-            )}
-          </form>
-          <div className="text-center mt-6 text-sm text-muted-foreground">
-            {mode === 'signup' ? (
-              <>Already have an account? <button onClick={() => { setMode('signin'); setError(''); }} className="text-primary font-medium">Sign in</button></>
-            ) : (
-              <>New here? <button onClick={() => { setMode('signup'); setError(''); }} className="text-primary font-medium">Create account</button></>
-            )}
+          <h1 className="text-3xl font-display font-semibold tracking-tight">Enter the academy</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            No sign-in, no payment. This preview opens the full experience — Ask, Learn, Playbooks, Scenarios, Videos, Checklists, and Admin.
+          </p>
+          <Link
+            to="/ask"
+            className="mt-7 inline-flex w-full items-center justify-center gap-2 h-12 rounded-xl bg-primary text-primary-foreground font-medium shadow-elevated hover:shadow-glow transition-shadow"
+          >
+            Enter Demo <ArrowRight className="size-4" />
+          </Link>
+          <div className="mt-3 text-[11px] text-muted-foreground">
+            Phase 2 will reintroduce sign-in. Phase 4 adds payment. Not now.
           </div>
-          <DemoModeButton variant="compact" />
         </div>
       </div>
     </div>
-  );
-}
-
-function Input({ label, value, onChange, type = 'text', ...rest }: any) {
-  return (
-    <label className="block">
-      <span className="text-xs font-medium text-foreground/80">{label}</span>
-      <input
-        type={type} value={value}
-        onChange={e => onChange(e.target.value)}
-        className="mt-1 w-full h-11 rounded-xl border border-input bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-        {...rest}
-      />
-    </label>
   );
 }
