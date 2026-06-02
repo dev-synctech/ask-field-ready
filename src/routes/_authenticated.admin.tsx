@@ -470,6 +470,7 @@ function TaxBadges({ item, className = "" }: { item: ContentItem; className?: st
   );
 }
 
+function ItemBuilder({ items, placeholder, onAdd, onRemove }: {
   items: ChecklistItem[];
   placeholder: string;
   onAdd: (text: string) => void;
