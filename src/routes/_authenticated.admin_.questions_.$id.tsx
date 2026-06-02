@@ -216,7 +216,14 @@ function QuestionDetailPage() {
             <button type="submit" className="h-11 px-4 rounded-xl border border-border text-sm font-medium inline-flex items-center gap-2">
               <Check className="size-4" /> Save Mizly draft
             </button>
-            <button type="button" onClick={() => saveDraft(true)} className="h-11 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-medium inline-flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => saveDraft(true)}
+              disabled={!draft.sanitized}
+              title={draft.sanitized ? undefined : "Check 'Sanitized approved' to enable publishing"}
+              aria-disabled={!draft.sanitized}
+              className="h-11 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-medium inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <ShieldCheck className="size-4" /> Publish to Mizly
             </button>
           </div>
