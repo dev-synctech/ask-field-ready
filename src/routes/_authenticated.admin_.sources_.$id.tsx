@@ -231,11 +231,12 @@ function SourceDetailPage() {
             <div className="text-xs">
               <div className="font-medium flex items-center gap-1.5"><ShieldCheck className="size-3.5 text-success" /> Sanitized approved</div>
               <div className="text-muted-foreground">I confirm no PHI, vendor names, organization names, or proprietary documentation appears in this content.</div>
+              <div className="mt-1 text-[11px] text-muted-foreground italic">Drafts can be saved anytime. Publishing to Mizly requires sanitized approval.</div>
             </div>
           </label>
 
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={publish} className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2 disabled:opacity-50" disabled={blocked}>
+            <button type="button" onClick={publish} className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2">
               <Check className="size-4" /> Save Mizly draft
             </button>
           </div>
