@@ -173,6 +173,11 @@ function AuthPage() {
             <button disabled={loading} className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 disabled:opacity-60">
               {loading ? 'Working…' : (mode === 'signup' ? 'Create account' : 'Sign in')}
             </button>
+            {mode === 'signin' && (
+              <div className="text-right">
+                <Link to="/reset-password" className="text-xs text-muted-foreground hover:text-foreground">Forgot password?</Link>
+              </div>
+            )}
           </form>
           <div className="text-center mt-6 text-sm text-muted-foreground">
             {mode === 'signup' ? (
