@@ -71,11 +71,17 @@ function AdminPage() {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.title.trim()) return;
-    if (!form.sanitized) {
-      toast.error("Confirm 'sanitized approved' before saving.");
-      return;
-    }
     const tags = form.tags.split(",").map(t => t.trim()).filter(Boolean);
+
+    const meta = {
+      role_id: form.role_id || undefined,
+      domain_id: form.domain_id || undefined,
+      phase_id: form.phase_id || undefined,
+      urgency_id: form.urgency_id || undefined,
+      escalation_id: form.escalation_id || undefined,
+      frequency_id: form.frequency_id || undefined,
+      sanitized_approved: form.sanitized,
+    };
 
     if (editingId) {
       setItems(prev => prev.map(i => i.id === editingId ? {
@@ -89,8 +95,9 @@ function AdminPage() {
         tags,
         body_md: form.body_md,
         transcript: form.transcript,
+        ...meta,
       } : i));
-      toast.success("Changes saved");
+      toast.success(form.sanitized ? "Changes saved (sanitized approved)" : "Draft saved");
     } else {
       const id = `n_${Date.now()}`;
       setItems(prev => [{
@@ -105,6 +112,7 @@ function AdminPage() {
         publish_status: "draft",
         body_md: form.body_md,
         transcript: form.transcript,
+        ...meta,
       }, ...prev]);
       toast.success("Draft created");
     }
@@ -118,7 +126,13 @@ function AdminPage() {
       module_id: it.module_id ?? "", tags: it.tags.join(", "),
       difficulty: it.difficulty, estimated_minutes: it.estimated_minutes,
       body_md: it.body_md ?? "", transcript: it.transcript ?? "",
-      sanitized: true,
+      sanitized: it.sanitized_approved ?? false,
+      role_id: it.role_id ?? "",
+      domain_id: it.domain_id ?? "",
+      phase_id: it.phase_id ?? "",
+      urgency_id: it.urgency_id ?? "",
+      escalation_id: it.escalation_id ?? "",
+      frequency_id: it.frequency_id ?? "",
       checklistItems: CHECKLIST_ITEMS[it.id] ?? [],
       scenarioSteps: SCENARIO_DETAIL[it.id]?.first90.map((b, i) => ({ title: `Step ${i + 1}`, body: b })) ?? [],
     });
