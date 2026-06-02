@@ -166,18 +166,6 @@ const AuthenticatedAdminSourcesIdRoute =
     path: '/admin/sources/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminQuestionsRoute =
-  AuthenticatedAdminQuestionsRouteImport.update({
-    id: '/admin_/questions',
-    path: '/admin/questions',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminQuestionsIdRoute =
-  AuthenticatedAdminQuestionsIdRouteImport.update({
-    id: '/admin_/questions_/$id',
-    path: '/admin/questions/$id',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedAdminQuestionsIdRoute =
   AuthenticatedAdminQuestionsIdRouteImport.update({
     id: '/admin_/questions_/$id',
