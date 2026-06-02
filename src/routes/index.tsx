@@ -4,10 +4,10 @@ import { ArrowRight, Search, ShieldCheck, BookOpen, ListChecks, Film, Sparkles, 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mizly — Field-ready training for go-live support" },
+      { title: "Mizly — Small answers for big go-live moments" },
       { name: "description", content: "A vendor-neutral training academy for healthcare go-live consultants and at-the-elbow support. Ask, learn, and ship." },
       { property: "og:title", content: "Mizly" },
-      { property: "og:description", content: "Field-ready training for healthcare go-live support." },
+      { property: "og:description", content: "Small answers for big go-live moments." },
     ],
   }),
   component: Landing,

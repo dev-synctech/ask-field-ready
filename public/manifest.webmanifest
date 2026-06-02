@@ -1,7 +1,7 @@
 {
   "name": "Mizly",
   "short_name": "Mizly",
-  "description": "Field-ready training for healthcare go-live support.",
+  "description": "Small answers for big go-live moments.",
   "start_url": "/ask",
   "scope": "/",
   "display": "standalone",
