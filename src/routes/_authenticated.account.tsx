@@ -39,7 +39,7 @@ function AccountPage() {
 
       <div className="mt-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
         <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground"><ShieldCheck className="size-3.5" /> Content rules</div>
-        <p className="mt-1 text-sm">No PHI. No vendor or organization names. Everything in the academy is vendor-neutral by design.</p>
+        <p className="mt-1 text-sm">No PHI. No vendor or organization names. Everything in Mizly is vendor-neutral by design.</p>
       </div>
 
       <div className="mt-6 flex justify-end">

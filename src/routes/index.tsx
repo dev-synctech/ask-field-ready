@@ -5,7 +5,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Mizly — Small answers for big go-live moments" },
-      { name: "description", content: "A vendor-neutral training academy for healthcare go-live consultants and at-the-elbow support. Ask, learn, and ship." },
+      { name: "description", content: "Small answers for big go-live moments. Vendor-neutral training for healthcare go-live and bedside support." },
       { property: "og:title", content: "Mizly" },
       { property: "og:description", content: "Small answers for big go-live moments." },
     ],
@@ -38,7 +38,7 @@ function Landing() {
             Field-ready training for <span className="text-primary">go-live support.</span>
           </h1>
           <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            A premium, mobile-first academy for healthcare consultants and at-the-elbow support professionals. Ask any question, get a structured answer, and walk the floor with confidence.
+            A premium, mobile-first training app for healthcare consultants and bedside support professionals. Ask any question, get a structured answer, and walk the floor with confidence.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/ask" className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium shadow-elevated hover:shadow-glow transition-shadow">
