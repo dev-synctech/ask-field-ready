@@ -11,6 +11,8 @@ import { MODULES, type ContentType } from "@/lib/demo-data";
 import { useTaxonomy, type TaxonomyCategory } from "@/lib/taxonomy";
 import { Header } from "./_authenticated.learn";
 import { StatusBadge, RiskBadge } from "./_authenticated.admin_.sources";
+import { GuardrailCard } from "@/components/GuardrailCard";
+import { APPLIES_TO_OPTIONS, PUBLISH_CHECKLIST, type AppliesTo } from "@/lib/legal";
 
 export const Route = createFileRoute("/_authenticated/admin_/sources_/$id")({
   head: () => ({ meta: [{ title: "Source — Mizly" }] }),
