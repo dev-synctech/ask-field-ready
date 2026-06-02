@@ -88,11 +88,11 @@ export function scanSource(fileName: string, text: string): ScanResult {
   let risk_level: RiskLevel = "low";
   const highCats = new Set(matches.map(m => m.category));
   if (
-    highCats.has("PHI-like term") ||
-    highCats.has("MRN-like number") ||
-    highCats.has("Vendor name") ||
-    highCats.has("Email address") ||
-    highCats.has("Phone number")
+    highCats.has("PHI-like term detected") ||
+    highCats.has("MRN-like number detected") ||
+    highCats.has("Vendor term detected") ||
+    highCats.has("Email address detected") ||
+    highCats.has("Phone number detected")
   ) risk_level = "high";
   else if (matches.length > 0) risk_level = "medium";
 
