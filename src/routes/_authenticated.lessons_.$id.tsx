@@ -2,7 +2,7 @@ import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { ArrowLeft, BookOpen, CheckCircle2 } from "lucide-react";
 import { itemById, LESSON_DETAIL } from "@/lib/demo-data";
 
-export const Route = createFileRoute("/_authenticated/lessons/$id")({
+export const Route = createFileRoute("/_authenticated/lessons_/$id")({
   head: () => ({ meta: [{ title: "Lesson — At the Elbow Academy" }] }),
   component: LessonDetailPage,
 });

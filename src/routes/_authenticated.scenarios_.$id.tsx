@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ArrowLeft, ArrowRight, ListChecks, RotateCcw, CheckCircle2 } from "lucide-react";
 import { itemById, SCENARIO_DETAIL, type ScenarioDetail } from "@/lib/demo-data";
 
-export const Route = createFileRoute("/_authenticated/scenarios/$id")({
+export const Route = createFileRoute("/_authenticated/scenarios_/$id")({
   head: () => ({ meta: [{ title: "Scenario — At the Elbow Academy" }] }),
   component: ScenarioDetailPage,
 });
