@@ -439,8 +439,10 @@ function StepBuilder({ steps, onAdd, onRemove }: {
           ))}
         </ol>
       )}
-      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Step title" className={`${inputCls} h-9`} />
-      <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Step body" className={`${inputCls} h-16 py-2`} />
+      <label htmlFor="step-title" className="sr-only">Step title</label>
+      <input id="step-title" value={title} onChange={e => setTitle(e.target.value)} placeholder="Step title" className={`${inputCls} h-9`} />
+      <label htmlFor="step-body" className="sr-only">Step body</label>
+      <textarea id="step-body" value={body} onChange={e => setBody(e.target.value)} placeholder="Step body" className={`${inputCls} h-16 py-2`} />
       <button type="button" onClick={add} className="h-9 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5">
         <Plus className="size-3.5" /> Add step
       </button>
