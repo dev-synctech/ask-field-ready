@@ -144,6 +144,10 @@ function SourceDetailPage() {
         </div>
       </div>
 
+      <div className="mt-6">
+        <GuardrailCard />
+      </div>
+
       {/* Rewrite Workspace */}
       <div className="mt-8 rounded-2xl border border-border bg-card p-5 shadow-soft">
         <div className="flex items-center gap-2 font-display font-semibold">
