@@ -23,6 +23,14 @@ export interface ContentItem {
   publish_status: "draft" | "published";
   body_md?: string;
   transcript?: string;
+  // Taxonomy metadata (Phase 2). All optional.
+  role_id?: string;
+  domain_id?: string;
+  phase_id?: string;
+  urgency_id?: string;
+  escalation_id?: string;
+  frequency_id?: string;
+  sanitized_approved?: boolean;
 }
 
 export const MODULES: Module[] = [
