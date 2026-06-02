@@ -250,6 +250,12 @@ function AdminPage() {
           </Field>
           <Field label="Tags (comma)"><input value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} placeholder="downtime, registration" className={inputCls} /></Field>
           <Field label="Est. minutes"><input type="number" min={1} value={form.estimated_minutes} onChange={e => setForm({ ...form, estimated_minutes: +e.target.value })} className={inputCls} /></Field>
+          <TaxSelect label="Role" cat="roles" value={form.role_id} onChange={v => setForm({ ...form, role_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Domain" cat="domains" value={form.domain_id} onChange={v => setForm({ ...form, domain_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Phase" cat="phases" value={form.phase_id} onChange={v => setForm({ ...form, phase_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Urgency" cat="urgency" value={form.urgency_id} onChange={v => setForm({ ...form, urgency_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Escalation" cat="escalation" value={form.escalation_id} onChange={v => setForm({ ...form, escalation_id: v })} taxonomy={taxonomy} />
+          <TaxSelect label="Frequency" cat="frequency" value={form.frequency_id} onChange={v => setForm({ ...form, frequency_id: v })} taxonomy={taxonomy} />
         </div>
         <Field label="Summary"><textarea value={form.summary} onChange={e => setForm({ ...form, summary: e.target.value })} className={`${inputCls} h-20 py-2`} placeholder="One sentence." /></Field>
         <Field label="Body (markdown)"><textarea value={form.body_md} onChange={e => setForm({ ...form, body_md: e.target.value })} className={`${inputCls} h-28 py-2 font-mono text-xs`} placeholder="## Heading&#10;Body…" /></Field>
