@@ -38,6 +38,27 @@ function AuthPage() {
   const [error, setError] = useState('');
   const [checkEmail, setCheckEmail] = useState(false);
   const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  // TODO: REMOVE BEFORE PRODUCTION LAUNCH — seed the fixed demo admin once on mount.
+  const seedAdmin = useServerFn(seedDemoAdmin);
+  const [seedState, setSeedState] = useState<'idle' | 'seeding' | 'ready' | 'error'>('idle');
+  const previewAllowed = isDemoModeAllowed();
+  useEffect(() => {
+    if (!previewAllowed) return;
+    let cancelled = false;
+    setSeedState('seeding');
+    seedAdmin()
+      .then((res) => { if (!cancelled) setSeedState(res?.ok ? 'ready' : 'error'); })
+      .catch(() => { if (!cancelled) setSeedState('error'); });
+    return () => { cancelled = true; };
+  }, [previewAllowed, seedAdmin]);
+
+  function fillDemoCreds() {
+    setMode('signin');
+    setEmail(DEMO_ADMIN_EMAIL);
+    setPassword('ATE-Demo-2026!');
+    setError('');
+  }
+
 
   async function routeAfterAuth() {
     const { data: userData } = await supabase.auth.getUser();
