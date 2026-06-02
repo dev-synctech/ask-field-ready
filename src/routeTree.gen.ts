@@ -34,6 +34,8 @@ import { Route as AuthenticatedAdminTaxonomyRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authenticated.admin_.sources'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
 import { Route as AuthenticatedAdminSourcesIdRouteImport } from './routes/_authenticated.admin_.sources_.$id'
+import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
+import { Route as AuthenticatedAdminQuestionsIdRouteImport } from './routes/_authenticated.admin_.questions_.$id'
 import { Route as AuthenticatedAdminQuestionsIdRouteImport } from './routes/_authenticated.admin_.questions_.$id'
 
 const UpdatePasswordRoute = UpdatePasswordRouteImport.update({
