@@ -245,20 +245,76 @@ function SourceDetailPage() {
               placeholder="Why this source, what was stripped, what to revisit." />
           </Field>
 
+          <div className="rounded-xl border border-border bg-secondary/30 p-3">
+            <div className="text-[11px] font-medium text-foreground/80 mb-2">Applies to</div>
+            <div className="flex flex-wrap gap-1.5">
+              {APPLIES_TO_OPTIONS.map(opt => {
+                const on = appliesTo.includes(opt);
+                return (
+                  <button type="button" key={opt} onClick={() => toggleAppliesTo(opt)}
+                    className={`text-[11px] px-2.5 py-1 rounded-full border transition-colors ${on ? "bg-primary text-primary-foreground border-primary" : "border-border bg-card hover:bg-secondary"}`}>
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-2 text-[11px] text-muted-foreground">
+              Text-only labels — never use vendor logos or screenshots.{" "}
+              <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-3">
+            <div className="text-[11px] font-medium text-foreground/80 mb-2">Publish approval checklist</div>
+            <ul className="space-y-1.5">
+              {PUBLISH_CHECKLIST.map(item => (
+                <li key={item}>
+                  <label className="flex items-start gap-2 text-xs cursor-pointer">
+                    <input type="checkbox" checked={!!checklist[item]}
+                      onChange={e => setChecklist(s => ({ ...s, [item]: e.target.checked }))}
+                      className="mt-0.5 size-3.5 accent-primary" />
+                    <span>{item}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <label className="flex items-start gap-2 rounded-xl border border-border bg-secondary/40 p-3 cursor-pointer">
             <input type="checkbox" checked={sanitized} onChange={e => setSanitized(e.target.checked)} className="mt-0.5 size-4 accent-primary" />
             <div className="text-xs">
               <div className="font-medium flex items-center gap-1.5"><ShieldCheck className="size-3.5 text-success" /> Sanitized approved</div>
-              <div className="text-muted-foreground">I confirm no PHI, vendor names, organization names, or proprietary documentation appears in this content.</div>
-              <div className="mt-1 text-[11px] text-muted-foreground italic">Drafts can be saved anytime. Publishing to Mizly requires sanitized approval.</div>
+              <div className="text-muted-foreground">I confirm no PHI, vendor names, organization names, or proprietary documentation appears in this content. All publish-checklist items above are satisfied.</div>
+              <div className="mt-1 text-[11px] text-muted-foreground italic">Drafts can be saved anytime. Publishing to Mizly requires sanitized approval and a complete checklist.</div>
             </div>
           </label>
 
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={publish} className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2">
+          <div className="flex justify-end gap-2 flex-wrap">
+            <button type="button" onClick={publish} className="h-11 px-5 rounded-xl border border-border bg-card font-medium inline-flex items-center gap-2">
               <Check className="size-4" /> Save Mizly draft
             </button>
+            <button
+              type="button"
+              disabled={!sanitized || !allChecklistDone}
+              onClick={() => {
+                if (!sanitized) { toast.error("Sanitized approval required to publish."); return; }
+                if (!allChecklistDone) { toast.error("Complete the publish approval checklist."); return; }
+                if (!title.trim()) { toast.error("Title required"); return; }
+                updateSource(src.id, {
+                  notes: `Published: ${title.trim()} · sanitized approved`,
+                  applies_to: appliesTo,
+                  sanitized_approved: true,
+                });
+                toast.success(`Published to Mizly (mock): '${title.trim()}'.`);
+              }}
+              title={!sanitized ? "Check 'Sanitized approved' to enable publishing"
+                : !allChecklistDone ? "Complete every publish-checklist item to enable publishing"
+                : undefined}
+              className="h-11 px-5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              <ShieldCheck className="size-4" /> Publish to Mizly
+            </button>
           </div>
+
         </fieldset>
       </div>
     </div>
