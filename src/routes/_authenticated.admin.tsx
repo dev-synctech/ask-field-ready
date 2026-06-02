@@ -142,7 +142,15 @@ function AdminPage() {
   }
 
   function togglePublish(id: string) {
-    setItems(prev => prev.map(i => i.id === id ? { ...i, publish_status: i.publish_status === "published" ? "draft" : "published" } : i));
+    setItems(prev => prev.map(i => {
+      if (i.id !== id) return i;
+      // Publishing requires sanitized_approved. Unpublishing is always allowed.
+      if (i.publish_status === "draft" && !i.sanitized_approved) {
+        toast.error("Sanitized approval required to publish. Edit and confirm 'sanitized approved'.");
+        return i;
+      }
+      return { ...i, publish_status: i.publish_status === "published" ? "draft" : "published" };
+    }));
   }
 
   function remove(id: string) {
