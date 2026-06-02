@@ -34,6 +34,12 @@ interface EditorForm {
   body_md: string;
   transcript: string;
   sanitized: boolean;
+  role_id: string;
+  domain_id: string;
+  phase_id: string;
+  urgency_id: string;
+  escalation_id: string;
+  frequency_id: string;
   checklistItems: ChecklistItem[];
   scenarioSteps: { title: string; body: string }[];
 }
@@ -43,6 +49,8 @@ const EMPTY_FORM: EditorForm = {
   module_id: "", tags: "", difficulty: "foundational",
   estimated_minutes: 5, body_md: "", transcript: "",
   sanitized: false,
+  role_id: "", domain_id: "", phase_id: "",
+  urgency_id: "", escalation_id: "", frequency_id: "",
   checklistItems: [],
   scenarioSteps: [],
 };
