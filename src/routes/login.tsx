@@ -187,6 +187,7 @@ function AuthPage() {
               <>New here? <button onClick={() => { setMode('signup'); setError(''); }} className="text-primary font-medium">Create account</button></>
             )}
           </div>
+          <DemoModeButton variant="compact" />
         </div>
       </div>
     </div>
