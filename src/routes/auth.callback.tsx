@@ -32,10 +32,8 @@ function AuthCallback() {
           throw userErr ?? new Error("Could not complete sign-in.");
         }
 
-        const { data: ent } = await supabase
-          .from("entitlements").select("status").maybeSingle();
-        const target = ent?.status === "active" ? "/ask" : "/checkout";
-        if (!cancelled) navigate({ to: target, replace: true });
+        // Phase 1 demo: no entitlements/checkout — always land on /ask.
+        if (!cancelled) navigate({ to: "/ask", replace: true });
       } catch (e: any) {
         if (!cancelled) setError(e?.message ?? "Sign-in could not be completed.");
       }
