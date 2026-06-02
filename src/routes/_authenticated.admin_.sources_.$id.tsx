@@ -4,10 +4,11 @@ import { ArrowLeft, FileText, AlertTriangle, RotateCw, Archive, ShieldCheck, Spa
 import { toast } from "sonner";
 import {
   useSources, rescanSource, archiveSource, updateSource,
-  STATUSES, STATUS_LABEL, DOMAINS, ROLES,
+  STATUSES, STATUS_LABEL,
   type SourceStatus,
 } from "@/lib/sources-data";
 import { MODULES, type ContentType } from "@/lib/demo-data";
+import { useTaxonomy, type TaxonomyCategory } from "@/lib/taxonomy";
 import { Header } from "./_authenticated.learn";
 import { StatusBadge, RiskBadge } from "./_authenticated.admin_.sources";
 
