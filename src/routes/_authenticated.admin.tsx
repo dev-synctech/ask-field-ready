@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
-  GripVertical, ListChecks, ClipboardCheck, FolderInput, Tags, Info,
+  GripVertical, ListChecks, ClipboardCheck, FolderInput, Tags, Info, HelpCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -187,6 +187,9 @@ function AdminPage() {
         <div className="flex items-center gap-2 flex-wrap">
           <Link to="/admin/sources" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <FolderInput className="size-4" /> Source Library
+          </Link>
+          <Link to="/admin/questions" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
+            <HelpCircle className="size-4" /> Question Bank
           </Link>
           <Link to="/admin/taxonomy" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <Tags className="size-4" /> Taxonomy
