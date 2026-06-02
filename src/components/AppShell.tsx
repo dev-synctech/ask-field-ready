@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Logo />
           <div className="leading-tight">
             <div className="font-display font-semibold text-sm">Mizly</div>
-            <div className="text-[11px] text-muted-foreground -mt-0.5">Academy</div>
+            <div className="text-[11px] text-muted-foreground -mt-0.5">Go-live support</div>
           </div>
         </Link>
         <nav className="space-y-1">
