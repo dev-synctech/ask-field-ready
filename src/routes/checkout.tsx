@@ -2,6 +2,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { StripeEmbeddedCheckoutForm } from "@/components/StripeEmbeddedCheckout";
 import { TestAccessBypass } from "@/components/TestAccessBypass";
+import { DemoModeButton } from "@/components/DemoModeButton";
 import { ShieldCheck, CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/checkout")({
@@ -48,6 +49,7 @@ function CheckoutPage() {
         </section>
         <section>
           <StripeEmbeddedCheckoutForm />
+          <DemoModeButton />
           <TestAccessBypass />
         </section>
       </main>

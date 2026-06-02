@@ -3,6 +3,7 @@ import { useState, FormEvent } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { MailCheck } from "lucide-react";
+import { DemoModeButton } from "@/components/DemoModeButton";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({
@@ -186,6 +187,7 @@ function AuthPage() {
               <>New here? <button onClick={() => { setMode('signup'); setError(''); }} className="text-primary font-medium">Create account</button></>
             )}
           </div>
+          <DemoModeButton variant="compact" />
         </div>
       </div>
     </div>
