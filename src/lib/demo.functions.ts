@@ -4,7 +4,7 @@
 // DemoModeButton, and the DemoModeBanner before going live.
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+
 
 const DEMO_EMAIL = "demo+admin@lovable.test";
 
@@ -39,6 +39,7 @@ export const enterDemoMode = createServerFn({ method: "POST" }).handler(
   async (): Promise<{ ok: boolean; email?: string; password?: string; error?: string }> => {
     try {
       assertNonProductionHost();
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
       const password = randomPassword();
 
