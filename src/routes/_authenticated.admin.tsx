@@ -57,6 +57,7 @@ const EMPTY_FORM: EditorForm = {
 
 function AdminPage() {
   // TODO: REMOVE BEFORE PRODUCTION LAUNCH — admin uses in-memory mock content.
+  const taxonomy = useTaxonomy();
   const [items, setItems] = useState<ContentItem[]>(ITEMS);
   const [typeFilter, setTypeFilter] = useState<ContentType | "all">("all");
   const [pubFilter, setPubFilter] = useState<PublishFilter>("all");
