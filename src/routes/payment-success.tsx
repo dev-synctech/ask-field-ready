@@ -40,13 +40,19 @@ function PaymentSuccessPage() {
   });
 
   useEffect(() => {
-    const t = setTimeout(() => setTimedOut(true), TIMEOUT_MS);
+    if (import.meta.env.DEV) console.debug("[payment-success] mount, polling entitlement");
+    const t = setTimeout(() => {
+      if (import.meta.env.DEV) console.debug("[payment-success] poll timeout reached");
+      setTimedOut(true);
+    }, TIMEOUT_MS);
     return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
+    if (import.meta.env.DEV) console.debug("[payment-success] entitlement status:", status);
     if (status === "active" && !redirectedRef.current) {
       redirectedRef.current = true;
+      if (import.meta.env.DEV) console.debug("[payment-success] active → navigating to /ask");
       navigate({ to: "/ask", replace: true });
     }
   }, [status, navigate]);
