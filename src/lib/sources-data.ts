@@ -60,16 +60,16 @@ function keywordHits(haystack: string, list: string[]): string[] {
 }
 
 const PATTERNS: PatternDef[] = [
-  { category: "Vendor name", test: t => keywordHits(t, VENDOR_TERMS) },
-  { category: "Organization / hospital", test: t => keywordHits(t, ORG_TERMS) },
-  { category: "PHI-like term", test: t => keywordHits(t, PHI_TERMS) },
-  { category: "Proprietary doc language", test: t => keywordHits(t, DOC_TERMS) },
-  { category: "Phone number", test: t => (t.match(RX_PHONE) ?? []).slice(0, 3) },
-  { category: "Email address", test: t => (t.match(RX_EMAIL) ?? []).slice(0, 3) },
-  { category: "MRN-like number", test: t => (t.match(RX_MRN) ?? []).filter(s => /\d{6,}/.test(s)).slice(0, 3) },
-  { category: "Date / DOB", test: t => (t.match(RX_DATE) ?? []).slice(0, 3) },
-  { category: "Proprietary link", test: t => (t.match(RX_URL) ?? []).slice(0, 3) },
-  { category: "Street address", test: t => (t.match(RX_ADDR) ?? []).slice(0, 3) },
+  { category: "Vendor term detected", test: t => keywordHits(t, VENDOR_TERMS) },
+  { category: "Organization reference detected", test: t => keywordHits(t, ORG_TERMS) },
+  { category: "PHI-like term detected", test: t => keywordHits(t, PHI_TERMS) },
+  { category: "Proprietary doc language detected", test: t => keywordHits(t, DOC_TERMS) },
+  { category: "Phone number detected", test: t => (t.match(RX_PHONE) ?? []).slice(0, 3) },
+  { category: "Email address detected", test: t => (t.match(RX_EMAIL) ?? []).slice(0, 3) },
+  { category: "MRN-like number detected", test: t => (t.match(RX_MRN) ?? []).filter(s => /\d{6,}/.test(s)).slice(0, 3) },
+  { category: "Date / DOB detected", test: t => (t.match(RX_DATE) ?? []).slice(0, 3) },
+  { category: "External link detected", test: t => (t.match(RX_URL) ?? []).slice(0, 3) },
+  { category: "Street address detected", test: t => (t.match(RX_ADDR) ?? []).slice(0, 3) },
 ];
 
 export interface ScanResult {
@@ -88,11 +88,11 @@ export function scanSource(fileName: string, text: string): ScanResult {
   let risk_level: RiskLevel = "low";
   const highCats = new Set(matches.map(m => m.category));
   if (
-    highCats.has("PHI-like term") ||
-    highCats.has("MRN-like number") ||
-    highCats.has("Vendor name") ||
-    highCats.has("Email address") ||
-    highCats.has("Phone number")
+    highCats.has("PHI-like term detected") ||
+    highCats.has("MRN-like number detected") ||
+    highCats.has("Vendor term detected") ||
+    highCats.has("Email address detected") ||
+    highCats.has("Phone number detected")
   ) risk_level = "high";
   else if (matches.length > 0) risk_level = "medium";
 

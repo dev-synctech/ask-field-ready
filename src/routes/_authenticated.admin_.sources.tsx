@@ -120,7 +120,7 @@ function SourcesPage() {
                     <AlertTriangle className="size-3 text-warning" />
                     {s.matched_terms.slice(0, 5).map((m, i) => (
                       <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-warning/15 text-warning">
-                        {m.category}: {m.term}
+                        {m.category}
                       </span>
                     ))}
                     {s.matched_terms.length > 5 && (
