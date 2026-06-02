@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, ShieldCheck, Search, MoreHorizontal, Eye, ShieldPlus, UserMinus, UserCheck } from "lucide-react";
 import { DEMO_USERS, type DemoUser } from "@/lib/demo-data";
 
-export const Route = createFileRoute("/_authenticated/admin/users")({
+export const Route = createFileRoute("/_authenticated/admin_/users")({
   head: () => ({ meta: [{ title: "Admin · Users — At the Elbow Academy" }] }),
   component: AdminUsersPage,
 });

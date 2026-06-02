@@ -2,13 +2,13 @@ import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { ArrowLeft, NotebookPen, AlertTriangle, ArrowUpRight } from "lucide-react";
 import { itemById, PLAYBOOK_DETAIL } from "@/lib/demo-data";
 
-export const Route = createFileRoute("/_authenticated/playbooks/$id")({
+export const Route = createFileRoute("/_authenticated/playbooks_/$id")({
   head: () => ({ meta: [{ title: "Playbook — At the Elbow Academy" }] }),
   component: PlaybookDetailPage,
 });
 
 function PlaybookDetailPage() {
-  const { id } = useParams({ from: "/_authenticated/playbooks/$id" });
+  const { id } = useParams({ from: "/_authenticated/playbooks_/$id" });
   const item = itemById(id);
   const detail = PLAYBOOK_DETAIL[id];
 

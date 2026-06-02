@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ArrowLeft, ArrowRight, ListChecks, RotateCcw, CheckCircle2 } from "lucide-react";
 import { itemById, SCENARIO_DETAIL, type ScenarioDetail } from "@/lib/demo-data";
 
-export const Route = createFileRoute("/_authenticated/scenarios/$id")({
+export const Route = createFileRoute("/_authenticated/scenarios_/$id")({
   head: () => ({ meta: [{ title: "Scenario — At the Elbow Academy" }] }),
   component: ScenarioDetailPage,
 });
@@ -20,7 +20,7 @@ const STEPS: { key: StepKey; label: string }[] = [
 ];
 
 function ScenarioDetailPage() {
-  const { id } = useParams({ from: "/_authenticated/scenarios/$id" });
+  const { id } = useParams({ from: "/_authenticated/scenarios_/$id" });
   const item = itemById(id);
   const detail: ScenarioDetail | undefined = SCENARIO_DETAIL[id];
   const [step, setStep] = useState(0);

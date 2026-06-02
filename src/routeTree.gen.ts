@@ -26,10 +26,10 @@ import { Route as AuthenticatedChecklistsRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAskRouteImport } from './routes/_authenticated.ask'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated.account'
-import { Route as AuthenticatedScenariosIdRouteImport } from './routes/_authenticated.scenarios.$id'
-import { Route as AuthenticatedPlaybooksIdRouteImport } from './routes/_authenticated.playbooks.$id'
-import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated.lessons.$id'
-import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated.admin.users'
+import { Route as AuthenticatedScenariosIdRouteImport } from './routes/_authenticated.scenarios_.$id'
+import { Route as AuthenticatedPlaybooksIdRouteImport } from './routes/_authenticated.playbooks_.$id'
+import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated.lessons_.$id'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated.admin_.users'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const UpdatePasswordRoute = UpdatePasswordRouteImport.update({
@@ -118,25 +118,25 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
 } as any)
 const AuthenticatedScenariosIdRoute =
   AuthenticatedScenariosIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AuthenticatedScenariosRoute,
+    id: '/scenarios_/$id',
+    path: '/scenarios/$id',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedPlaybooksIdRoute =
   AuthenticatedPlaybooksIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AuthenticatedPlaybooksRoute,
+    id: '/playbooks_/$id',
+    path: '/playbooks/$id',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedLessonsIdRoute = AuthenticatedLessonsIdRouteImport.update({
-  id: '/lessons/$id',
+  id: '/lessons_/$id',
   path: '/lessons/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AuthenticatedAdminRoute,
+  id: '/admin_/users',
+  path: '/admin/users',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
@@ -153,12 +153,12 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/update-password': typeof UpdatePasswordRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRoute
   '/ask': typeof AuthenticatedAskRoute
   '/checklists': typeof AuthenticatedChecklistsRoute
   '/learn': typeof AuthenticatedLearnRoute
-  '/playbooks': typeof AuthenticatedPlaybooksRouteWithChildren
-  '/scenarios': typeof AuthenticatedScenariosRouteWithChildren
+  '/playbooks': typeof AuthenticatedPlaybooksRoute
+  '/scenarios': typeof AuthenticatedScenariosRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -176,12 +176,12 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/update-password': typeof UpdatePasswordRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRoute
   '/ask': typeof AuthenticatedAskRoute
   '/checklists': typeof AuthenticatedChecklistsRoute
   '/learn': typeof AuthenticatedLearnRoute
-  '/playbooks': typeof AuthenticatedPlaybooksRouteWithChildren
-  '/scenarios': typeof AuthenticatedScenariosRouteWithChildren
+  '/playbooks': typeof AuthenticatedPlaybooksRoute
+  '/scenarios': typeof AuthenticatedScenariosRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -201,19 +201,19 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/update-password': typeof UpdatePasswordRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/ask': typeof AuthenticatedAskRoute
   '/_authenticated/checklists': typeof AuthenticatedChecklistsRoute
   '/_authenticated/learn': typeof AuthenticatedLearnRoute
-  '/_authenticated/playbooks': typeof AuthenticatedPlaybooksRouteWithChildren
-  '/_authenticated/scenarios': typeof AuthenticatedScenariosRouteWithChildren
+  '/_authenticated/playbooks': typeof AuthenticatedPlaybooksRoute
+  '/_authenticated/scenarios': typeof AuthenticatedScenariosRoute
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
-  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
-  '/_authenticated/lessons/$id': typeof AuthenticatedLessonsIdRoute
-  '/_authenticated/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
-  '/_authenticated/scenarios/$id': typeof AuthenticatedScenariosIdRoute
+  '/_authenticated/admin_/users': typeof AuthenticatedAdminUsersRoute
+  '/_authenticated/lessons_/$id': typeof AuthenticatedLessonsIdRoute
+  '/_authenticated/playbooks_/$id': typeof AuthenticatedPlaybooksIdRoute
+  '/_authenticated/scenarios_/$id': typeof AuthenticatedScenariosIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -282,10 +282,10 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/auth/callback'
     | '/checkout/return'
-    | '/_authenticated/admin/users'
-    | '/_authenticated/lessons/$id'
-    | '/_authenticated/playbooks/$id'
-    | '/_authenticated/scenarios/$id'
+    | '/_authenticated/admin_/users'
+    | '/_authenticated/lessons_/$id'
+    | '/_authenticated/playbooks_/$id'
+    | '/_authenticated/scenarios_/$id'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -422,33 +422,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/scenarios/$id': {
-      id: '/_authenticated/scenarios/$id'
-      path: '/$id'
+    '/_authenticated/scenarios_/$id': {
+      id: '/_authenticated/scenarios_/$id'
+      path: '/scenarios/$id'
       fullPath: '/scenarios/$id'
       preLoaderRoute: typeof AuthenticatedScenariosIdRouteImport
-      parentRoute: typeof AuthenticatedScenariosRoute
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/playbooks/$id': {
-      id: '/_authenticated/playbooks/$id'
-      path: '/$id'
+    '/_authenticated/playbooks_/$id': {
+      id: '/_authenticated/playbooks_/$id'
+      path: '/playbooks/$id'
       fullPath: '/playbooks/$id'
       preLoaderRoute: typeof AuthenticatedPlaybooksIdRouteImport
-      parentRoute: typeof AuthenticatedPlaybooksRoute
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/lessons/$id': {
-      id: '/_authenticated/lessons/$id'
+    '/_authenticated/lessons_/$id': {
+      id: '/_authenticated/lessons_/$id'
       path: '/lessons/$id'
       fullPath: '/lessons/$id'
       preLoaderRoute: typeof AuthenticatedLessonsIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/users': {
-      id: '/_authenticated/admin/users'
-      path: '/users'
+    '/_authenticated/admin_/users': {
+      id: '/_authenticated/admin_/users'
+      path: '/admin/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
+      parentRoute: typeof AuthenticatedRoute
     }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
@@ -460,67 +460,34 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedAdminRouteChildren {
-  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
-}
-
-const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
-  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
-}
-
-const AuthenticatedAdminRouteWithChildren =
-  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
-
-interface AuthenticatedPlaybooksRouteChildren {
-  AuthenticatedPlaybooksIdRoute: typeof AuthenticatedPlaybooksIdRoute
-}
-
-const AuthenticatedPlaybooksRouteChildren: AuthenticatedPlaybooksRouteChildren =
-  {
-    AuthenticatedPlaybooksIdRoute: AuthenticatedPlaybooksIdRoute,
-  }
-
-const AuthenticatedPlaybooksRouteWithChildren =
-  AuthenticatedPlaybooksRoute._addFileChildren(
-    AuthenticatedPlaybooksRouteChildren,
-  )
-
-interface AuthenticatedScenariosRouteChildren {
-  AuthenticatedScenariosIdRoute: typeof AuthenticatedScenariosIdRoute
-}
-
-const AuthenticatedScenariosRouteChildren: AuthenticatedScenariosRouteChildren =
-  {
-    AuthenticatedScenariosIdRoute: AuthenticatedScenariosIdRoute,
-  }
-
-const AuthenticatedScenariosRouteWithChildren =
-  AuthenticatedScenariosRoute._addFileChildren(
-    AuthenticatedScenariosRouteChildren,
-  )
-
 interface AuthenticatedRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAskRoute: typeof AuthenticatedAskRoute
   AuthenticatedChecklistsRoute: typeof AuthenticatedChecklistsRoute
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRoute
-  AuthenticatedPlaybooksRoute: typeof AuthenticatedPlaybooksRouteWithChildren
-  AuthenticatedScenariosRoute: typeof AuthenticatedScenariosRouteWithChildren
+  AuthenticatedPlaybooksRoute: typeof AuthenticatedPlaybooksRoute
+  AuthenticatedScenariosRoute: typeof AuthenticatedScenariosRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
+  AuthenticatedPlaybooksIdRoute: typeof AuthenticatedPlaybooksIdRoute
+  AuthenticatedScenariosIdRoute: typeof AuthenticatedScenariosIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
-  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAskRoute: AuthenticatedAskRoute,
   AuthenticatedChecklistsRoute: AuthenticatedChecklistsRoute,
   AuthenticatedLearnRoute: AuthenticatedLearnRoute,
-  AuthenticatedPlaybooksRoute: AuthenticatedPlaybooksRouteWithChildren,
-  AuthenticatedScenariosRoute: AuthenticatedScenariosRouteWithChildren,
+  AuthenticatedPlaybooksRoute: AuthenticatedPlaybooksRoute,
+  AuthenticatedScenariosRoute: AuthenticatedScenariosRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
+  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
+  AuthenticatedPlaybooksIdRoute: AuthenticatedPlaybooksIdRoute,
+  AuthenticatedScenariosIdRoute: AuthenticatedScenariosIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -553,3 +520,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
