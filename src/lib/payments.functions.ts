@@ -66,9 +66,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         return_url: data.returnUrl,
         customer: customerId,
         payment_intent_data: { description: product.name },
-        managed_payments: { enabled: true },
         metadata: { userId, managed_payments: 'true' },
-      });
+        ...({ managed_payments: { enabled: true } } as object),
+      } as Parameters<typeof stripe.checkout.sessions.create>[0]);
 
       return { clientSecret: session.client_secret ?? '' };
     } catch (error) {
