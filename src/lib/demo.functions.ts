@@ -36,10 +36,17 @@ function randomPassword() {
  * never trusted from the client.
  */
 export const enterDemoMode = createServerFn({ method: "POST" }).handler(
-  async (): Promise<{ ok: boolean; email?: string; password?: string; error?: string }> => {
+  async (): Promise<{
+    ok: boolean;
+    email?: string;
+    access_token?: string;
+    refresh_token?: string;
+    error?: string;
+  }> => {
     try {
       assertNonProductionHost();
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { createClient } = await import("@supabase/supabase-js");
 
       const password = randomPassword();
 
@@ -96,7 +103,27 @@ export const enterDemoMode = createServerFn({ method: "POST" }).handler(
         );
       if (entErr) throw new Error(entErr.message);
 
-      return { ok: true, email: DEMO_EMAIL, password };
+      // 4. Sign in server-side to obtain a real session, then hand tokens to
+      // the client. This avoids preview-environment fetch-proxy issues that
+      // can intercept client-side signInWithPassword POSTs.
+      const url = process.env.SUPABASE_URL!;
+      const anon = process.env.SUPABASE_PUBLISHABLE_KEY!;
+      const ephemeral = createClient(url, anon, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+      });
+      const { data: signIn, error: signInErr } = await ephemeral.auth.signInWithPassword({
+        email: DEMO_EMAIL, password,
+      });
+      if (signInErr || !signIn.session) {
+        throw new Error(signInErr?.message ?? "Failed to create demo session.");
+      }
+
+      return {
+        ok: true,
+        email: DEMO_EMAIL,
+        access_token: signIn.session.access_token,
+        refresh_token: signIn.session.refresh_token,
+      };
     } catch (error: any) {
       return { ok: false, error: error?.message ?? "Could not enter demo mode" };
     }
