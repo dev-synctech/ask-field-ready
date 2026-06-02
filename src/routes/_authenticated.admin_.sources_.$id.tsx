@@ -42,8 +42,13 @@ function SourceDetailPage() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<ContentType>("lesson");
   const [moduleId, setModuleId] = useState("");
-  const [domain, setDomain] = useState(source.domain ?? "");
-  const [role, setRole] = useState(source.role ?? "");
+  const taxonomy = useTaxonomy();
+  const [roleId, setRoleId] = useState("");
+  const [domainId, setDomainId] = useState("");
+  const [phaseId, setPhaseId] = useState("");
+  const [urgencyId, setUrgencyId] = useState("");
+  const [escalationId, setEscalationId] = useState("");
+  const [frequencyId, setFrequencyId] = useState("");
   const [difficulty, setDifficulty] = useState<"foundational" | "intermediate" | "advanced">("foundational");
   const [minutes, setMinutes] = useState(5);
   const [summary, setSummary] = useState("");
