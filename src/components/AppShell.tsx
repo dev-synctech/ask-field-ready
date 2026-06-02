@@ -1,8 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Search, BookOpen, ListChecks, PlayCircle, Film, UserRound, Shield, NotebookPen,
+  Search, BookOpen, ListChecks, Film, UserRound, Shield, NotebookPen, ClipboardCheck, MoreHorizontal, X,
 } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 const primaryNav = [
   { to: "/ask", label: "Ask", icon: Search },
@@ -10,20 +10,28 @@ const primaryNav = [
   { to: "/playbooks", label: "Playbooks", icon: NotebookPen },
   { to: "/scenarios", label: "Scenarios", icon: ListChecks },
   { to: "/videos", label: "Videos", icon: Film },
-  { to: "/checklists", label: "Lists", icon: PlayCircle },
+  { to: "/checklists", label: "Lists", icon: ClipboardCheck },
 ];
 
-// Mobile bottom nav uses 5 items; "Playbooks" and the rest stay reachable from Ask/Learn.
+// Mobile bottom nav: Ask is first/default. More opens a sheet with everything else.
 const mobileNav = [
   { to: "/ask", label: "Ask", icon: Search },
   { to: "/learn", label: "Learn", icon: BookOpen },
   { to: "/playbooks", label: "Plays", icon: NotebookPen },
+  { to: "/scenarios", label: "Scenarios", icon: ListChecks },
+];
+
+const moreItems = [
   { to: "/videos", label: "Videos", icon: Film },
-  { to: "/checklists", label: "Lists", icon: PlayCircle },
+  { to: "/checklists", label: "Checklists", icon: ClipboardCheck },
+  { to: "/admin", label: "Admin", icon: Shield },
+  { to: "/account", label: "Account", icon: UserRound },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: s => s.location.pathname });
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreActive = moreItems.some(i => path === i.to || path.startsWith(i.to + "/"));
 
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row">
@@ -38,7 +46,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </Link>
         <nav className="space-y-1">
           {primaryNav.map(n => {
-            const active = path === n.to;
+            const active = path === n.to || path.startsWith(n.to + "/");
             return (
               <Link key={n.to} to={n.to}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${active ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/70 hover:bg-secondary hover:text-foreground'}`}>
@@ -83,7 +91,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-background/95 backdrop-blur border-t border-border pb-safe">
         <div className="grid grid-cols-5">
           {mobileNav.map(n => {
-            const active = path === n.to;
+            const active = path === n.to || path.startsWith(n.to + "/");
             return (
               <Link key={n.to} to={n.to}
                 className={`flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-medium ${active ? 'text-primary' : 'text-muted-foreground'}`}>
@@ -92,8 +100,39 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Link>
             );
           })}
+          <button
+            type="button"
+            onClick={() => setMoreOpen(true)}
+            className={`flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-medium ${moreActive ? 'text-primary' : 'text-muted-foreground'}`}
+          >
+            <MoreHorizontal className="size-5" />
+            More
+          </button>
         </div>
       </nav>
+
+      {/* More sheet */}
+      {moreOpen && (
+        <div className="md:hidden fixed inset-0 z-40 bg-foreground/40 backdrop-blur-sm flex items-end" onClick={() => setMoreOpen(false)}>
+          <div className="w-full bg-card rounded-t-3xl border-t border-border p-5 pb-safe animate-in slide-in-from-bottom" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="font-display font-semibold">More</div>
+              <button onClick={() => setMoreOpen(false)} aria-label="Close" className="size-8 rounded-lg hover:bg-secondary inline-flex items-center justify-center">
+                <X className="size-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {moreItems.map(i => (
+                <Link key={i.to} to={i.to} onClick={() => setMoreOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border hover:bg-secondary text-sm font-medium">
+                  <i.icon className="size-4 text-primary" /> {i.label}
+                </Link>
+              ))}
+            </div>
+            <div className="mt-3 text-[10px] uppercase tracking-wider text-muted-foreground text-center">Demo build</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

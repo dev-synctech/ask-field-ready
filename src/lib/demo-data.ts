@@ -73,6 +73,186 @@ export const ITEMS: ContentItem[] = [
 ];
 
 export const itemsByType = (type: ContentType) => ITEMS.filter(i => i.content_type === type);
+export const itemById = (id: string) => ITEMS.find(i => i.id === id);
+
+// ---------- Detail content (vendor-neutral mock) ----------
+
+export interface LessonDetail {
+  sections: { heading: string; body: string }[];
+  takeaways: string[];
+}
+
+export const LESSON_DETAIL: Record<string, LessonDetail> = {
+  l1: {
+    sections: [
+      { heading: "Land calmly", body: "Walk in slowly. Find the charge nurse, introduce yourself by first name and role. Ask which workflow is the most stressful right now." },
+      { heading: "Watch before you touch", body: "Stand to the side of a workstation. Observe two full workflows before offering input. Most issues are muscle-memory drift, not system failure." },
+      { heading: "Set the first signal", body: "Tell the unit how to reach you: a single short sentence. 'I'll be at this nurses' station for the next hour — wave me over.'" },
+    ],
+    takeaways: ["Posture beats expertise in the first hour.", "Find the charge nurse first.", "Watch twice before you speak."],
+  },
+  l2: {
+    sections: [
+      { heading: "Stand to the side", body: "Never reach across someone's keyboard. Side-by-side puts you on the same team and keeps the user in control." },
+      { heading: "Narrate, don't drive", body: "Say what you're seeing, not what to click. 'Looks like the order form opened in a new tab — try the one behind it.'" },
+      { heading: "Hand back control", body: "End every assist by stepping back half a pace. The user must finish the workflow themselves to retain it." },
+    ],
+    takeaways: ["Side, not over.", "Words, not hands.", "Always hand it back."],
+  },
+  l3: {
+    sections: [
+      { heading: "Sentence 1: what broke", body: "One factual sentence. 'Order signature is failing for three providers on Unit 4 since 8:12.'" },
+      { heading: "Sentence 2: scope and severity", body: "Quantify. 'Roughly 12 pending orders. No patient harm yet. Workaround possible for 10.'" },
+      { heading: "Sentence 3: what you need", body: "Specific ask, with a callback. 'Need a clinical engineer on the floor within 15 minutes. Callback: ext. 4421.'" },
+    ],
+    takeaways: ["Three sentences. No filler.", "Quantify scope.", "Always offer a callback."],
+  },
+  l4: {
+    sections: [
+      { heading: "Switch fast", body: "If the system isn't back in 3 minutes, switch to paper. Don't wait for confirmation." },
+      { heading: "Capture the minimum", body: "Name, DOB, arrival time, presenting reason. Everything else can be back-loaded." },
+      { heading: "Timestamp everything", body: "Wall clock, not memory. The recovery team will thank you in hour two." },
+    ],
+    takeaways: ["3-minute switch rule.", "Minimum viable capture.", "Timestamps over guesses."],
+  },
+  l5: {
+    sections: [
+      { heading: "Badge forward", body: "Clinicians scan for trust in under a second. Visible badge, lanyard untucked, name readable." },
+      { heading: "Open posture", body: "Hands visible, shoulders down, voice low. You are a guest on their unit." },
+      { heading: "First-name introductions", body: "Use first names. Skip the company. 'Hi, I'm Sam, I'm here to help with the system today.'" },
+    ],
+    takeaways: ["Visible badge, open hands.", "First names only.", "You are a guest."],
+  },
+};
+
+export interface PlaybookDetail {
+  whenToUse: string;
+  steps: { title: string; body: string }[];
+  pitfalls: string[];
+  escalation: string;
+}
+
+export const PLAYBOOK_DETAIL: Record<string, PlaybookDetail> = {
+  p1: {
+    whenToUse: "Registration system is unresponsive for more than 3 minutes during open hours.",
+    steps: [
+      { title: "Switch to paper", body: "Pull the downtime registration form. Start a new patient line with arrival time." },
+      { title: "Capture identity", body: "Name, DOB, presenting reason. Photo of insurance card if available. Nothing else." },
+      { title: "Timestamp + queue", body: "Write arrival time at top of each form. Stack in arrival order at the front desk." },
+      { title: "Notify clinical", body: "Tell triage nurse the system is down and to expect paper handoffs." },
+      { title: "Log to command center", body: "One short message: scope, start time, headcount, contact." },
+    ],
+    pitfalls: ["Waiting too long to switch.", "Capturing too many fields on paper.", "Forgetting to timestamp."],
+    escalation: "If downtime exceeds 15 minutes, escalate to command center with patient headcount.",
+  },
+  p2: {
+    whenToUse: "A clinician reports their order or note signature is failing.",
+    steps: [
+      { title: "Confirm scope", body: "Same workstation only, or unit-wide? Ask the clinician to try a different machine if safe." },
+      { title: "Check policy", body: "Confirm screenshot policy. If allowed, capture the error with no patient info visible." },
+      { title: "Workaround first", body: "If a verbal-order workaround exists for this org, offer it before escalating." },
+      { title: "Escalate by severity", body: "Patient-impact: page on-call immediately. No impact: ticket with screenshot." },
+    ],
+    pitfalls: ["Screenshotting PHI.", "Skipping the workaround.", "Vague severity wording."],
+    escalation: "Page on-call clinical informatics if any pending order touches a time-sensitive workflow.",
+  },
+  p3: {
+    whenToUse: "First shift of a go-live on a new unit.",
+    steps: [
+      { title: "Greet the charge", body: "Introduce yourself within five minutes of arrival. Ask for the day's anxieties, not the night's." },
+      { title: "Map the floor", body: "Walk the unit once. Note workstation locations, printer status, and the busiest two roles." },
+      { title: "Watch two workflows", body: "Stand near, don't intervene. Note where users hesitate." },
+      { title: "Step in once", body: "Offer one small assist early. Sets the tone that you're approachable." },
+    ],
+    pitfalls: ["Talking too much in the first hour.", "Standing behind a clinician.", "Skipping the charge handshake."],
+    escalation: "If a workflow stalls more than two clinicians in 15 minutes, escalate to the unit lead.",
+  },
+  p4: {
+    whenToUse: "You need to brief an entire unit on a change or status in under two minutes.",
+    steps: [
+      { title: "Pick the spot", body: "Stand where the most workstations can hear you. Don't shout from the door." },
+      { title: "One sentence: what", body: "'The signature tool is back up as of right now.'" },
+      { title: "One sentence: action", body: "'Please retry any pending orders from the last hour.'" },
+      { title: "One sentence: support", body: "'I'll be at the central station — wave me over if it fails again.'" },
+    ],
+    pitfalls: ["Apologizing too much.", "Explaining cause instead of action.", "Forgetting to say where you'll be."],
+    escalation: "If a clinician shows distress or anger, pull them aside — never debate publicly.",
+  },
+};
+
+export interface ScenarioDetail {
+  situation: string;
+  first90: string[];
+  whatToSay: string[];
+  whatToCheck: string[];
+  escalation: string;
+  debrief: string;
+}
+
+export const SCENARIO_DETAIL: Record<string, ScenarioDetail> = {
+  s1: {
+    situation: "A clinician at a busy workstation says they can't sign an order. Two more orders are queued behind it. The unit is at full census.",
+    first90: [
+      "Walk to the workstation. Stand to the side. Make eye contact with the clinician first.",
+      "Ask one question: 'Is this signature failing for just you, or are others seeing it too?'",
+      "If others: this is unit-wide — start the escalation timer immediately.",
+    ],
+    whatToSay: [
+      "'I'll stay right here with you while we figure this out.'",
+      "'Try one more order on a different workstation — I'll watch.'",
+      "'If this is happening unit-wide I'll page clinical informatics now.'",
+    ],
+    whatToCheck: [
+      "Is the user signed in with their own credentials?",
+      "Is the workstation locked or in a stale session?",
+      "Are pending orders time-sensitive (meds, blood, imaging prep)?",
+    ],
+    escalation: "If unit-wide AND any pending order is time-sensitive: page on-call clinical informatics within 5 minutes. Provide scope, headcount, severity, and a callback number.",
+    debrief: "Capture: when did it start, how many clinicians, how many orders impacted, what unblocked it. Share with the next shift in handoff.",
+  },
+  s2: {
+    situation: "Registration freezes during a shift change. Two waiting-room units share one functional workstation. Three different workflows need it.",
+    first90: [
+      "Switch to paper for new arrivals immediately. Don't wait for IT confirmation.",
+      "Designate the working device for the highest-acuity workflow only.",
+      "Tell both desks out loud what you decided and why.",
+    ],
+    whatToSay: [
+      "'Paper for new arrivals starting now. I'll take the front of the line.'",
+      "'This workstation is for triage only until the system is back.'",
+      "'We'll back-load everything when we're up — keep your timestamps.'",
+    ],
+    whatToCheck: [
+      "Are downtime forms stocked at both desks?",
+      "Is the clock visible to the team capturing times?",
+      "Is there a designated person to back-load when the system returns?",
+    ],
+    escalation: "If downtime exceeds 15 minutes during shift change, escalate to command center and request additional registration support.",
+    debrief: "Note total downtime, number of paper registrations, and back-load completion time. Identify whether the right workstation was prioritized.",
+  },
+  s3: {
+    situation: "A rumor spreads on the unit that patient data was lost. Three clinicians are visibly anxious. Nothing has actually been lost.",
+    first90: [
+      "Move to the most visible spot on the unit.",
+      "Use a calm, low voice — your tone will reset the room.",
+      "Speak before any clinician asks — get ahead of the question.",
+    ],
+    whatToSay: [
+      "'I just checked with command — no data has been lost.'",
+      "'What you're seeing is a display issue, not a save issue.'",
+      "'I'll stand here for the next ten minutes — any questions, find me.'",
+    ],
+    whatToCheck: [
+      "Are you sure the data isn't actually lost? Confirm with command first.",
+      "Is the charge nurse aligned on the message?",
+      "Are there clinicians who need a 1:1 reassurance after?",
+    ],
+    escalation: "If a clinician escalates publicly, ask them to step aside with you. Never debate in front of the unit.",
+    debrief: "Note who started the rumor source, how it traveled, and how long it took to settle. Recommend a unit-wide message template for next time.",
+  },
+};
+
+// ---------- Search / Ask engine ----------
 
 export function searchItems(q: string) {
   const tokens = q.toLowerCase().split(/\s+/).filter(t => t.length > 2);
@@ -119,3 +299,25 @@ export function answerFor(q: string) {
     lessonId: top.find(t => t.content_type === "lesson")?.id ?? best?.id ?? null,
   };
 }
+
+// ---------- Mock users (admin) ----------
+
+export interface DemoUser {
+  id: string;
+  display_name: string;
+  email: string;
+  role: "admin" | "member";
+  access: "active" | "inactive";
+  joined_at: string; // ISO date
+  last_active: string; // ISO date
+}
+
+export const DEMO_USERS: DemoUser[] = [
+  { id: "u1", display_name: "Demo Consultant", email: "demo@attheelbow.test", role: "admin", access: "active", joined_at: "2025-09-01", last_active: "2026-06-02" },
+  { id: "u2", display_name: "Alex Reyes", email: "alex@example.test", role: "member", access: "active", joined_at: "2025-10-14", last_active: "2026-06-01" },
+  { id: "u3", display_name: "Jordan Kim", email: "jordan@example.test", role: "member", access: "active", joined_at: "2025-11-02", last_active: "2026-05-30" },
+  { id: "u4", display_name: "Priya Singh", email: "priya@example.test", role: "member", access: "inactive", joined_at: "2025-12-08", last_active: "2026-04-18" },
+  { id: "u5", display_name: "Sam Okafor", email: "sam@example.test", role: "member", access: "active", joined_at: "2026-01-22", last_active: "2026-06-02" },
+  { id: "u6", display_name: "Riya Patel", email: "riya@example.test", role: "admin", access: "active", joined_at: "2025-08-10", last_active: "2026-05-29" },
+  { id: "u7", display_name: "Marcus Lee", email: "marcus@example.test", role: "member", access: "inactive", joined_at: "2026-02-05", last_active: "2026-03-11" },
+];

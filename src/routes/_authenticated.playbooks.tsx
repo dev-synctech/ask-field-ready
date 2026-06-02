@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { NotebookPen, ArrowRight } from "lucide-react";
 import { itemsByType } from "@/lib/demo-data";
 import { Header } from "./_authenticated.learn";
@@ -15,7 +15,12 @@ function PlaybooksPage() {
       <Header title="Playbooks" subtitle="Step-by-step references for the moment a unit needs you most." />
       <div className="mt-6 grid sm:grid-cols-2 gap-3">
         {playbooks.map(p => (
-          <article key={p.id} className="group rounded-2xl border border-border bg-card p-5 shadow-soft hover:border-primary/40 transition-colors">
+          <Link
+            key={p.id}
+            to="/playbooks/$id"
+            params={{ id: p.id }}
+            className="group rounded-2xl border border-border bg-card p-5 shadow-soft hover:border-primary/40 hover:shadow-card transition-all block"
+          >
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
               <NotebookPen className="size-3 text-primary" /> Playbook · {p.difficulty}
             </div>
@@ -31,7 +36,7 @@ function PlaybooksPage() {
                 {p.estimated_minutes} min <ArrowRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
               </span>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </div>
