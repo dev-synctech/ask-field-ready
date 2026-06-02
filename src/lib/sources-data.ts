@@ -68,6 +68,8 @@ const PATTERNS: PatternDef[] = [
   { category: "Organization reference detected", test: t => keywordHits(t, ORG_TERMS) },
   { category: "PHI-like term detected", test: t => keywordHits(t, PHI_TERMS) },
   { category: "Proprietary doc language detected", test: t => keywordHits(t, DOC_TERMS) },
+  { category: "Credential / password detected", test: t => keywordHits(t, CRED_TERMS) },
+  { category: "Private link / system detected", test: t => keywordHits(t, PRIVATE_LINK_HINTS) },
   { category: "Phone number detected", test: t => (t.match(RX_PHONE) ?? []).slice(0, 3) },
   { category: "Email address detected", test: t => (t.match(RX_EMAIL) ?? []).slice(0, 3) },
   { category: "MRN-like number detected", test: t => (t.match(RX_MRN) ?? []).filter(s => /\d{6,}/.test(s)).slice(0, 3) },
