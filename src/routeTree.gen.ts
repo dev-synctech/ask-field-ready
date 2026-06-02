@@ -13,6 +13,7 @@ import { Route as UpdatePasswordRouteImport } from './routes/update-password'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LegalRouteImport } from './routes/legal'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -54,6 +55,11 @@ const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -176,6 +182,7 @@ const AuthenticatedAdminQuestionsIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRouteWithChildren
+  '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -203,6 +210,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRouteWithChildren
+  '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/checkout': typeof CheckoutRouteWithChildren
+  '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/checkout'
+    | '/legal'
     | '/login'
     | '/payment-success'
     | '/reset-password'
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/checkout'
+    | '/legal'
     | '/login'
     | '/payment-success'
     | '/reset-password'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/checkout'
+    | '/legal'
     | '/login'
     | '/payment-success'
     | '/reset-password'
@@ -345,6 +357,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   CheckoutRoute: typeof CheckoutRouteWithChildren
+  LegalRoute: typeof LegalRoute
   LoginRoute: typeof LoginRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -380,6 +393,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -599,6 +619,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   CheckoutRoute: CheckoutRouteWithChildren,
+  LegalRoute: LegalRoute,
   LoginRoute: LoginRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ResetPasswordRoute: ResetPasswordRoute,
@@ -608,3 +629,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
