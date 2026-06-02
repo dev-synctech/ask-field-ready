@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_authenticated/playbooks_/$id")({
 });
 
 function PlaybookDetailPage() {
-  const { id } = useParams({ from: "/_authenticated/playbooks/$id" });
+  const { id } = useParams({ from: "/_authenticated/playbooks_/$id" });
   const item = itemById(id);
   const detail = PLAYBOOK_DETAIL[id];
 

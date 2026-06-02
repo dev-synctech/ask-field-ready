@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_authenticated/lessons_/$id")({
 });
 
 function LessonDetailPage() {
-  const { id } = useParams({ from: "/_authenticated/lessons/$id" });
+  const { id } = useParams({ from: "/_authenticated/lessons_/$id" });
   const item = itemById(id);
   const detail = LESSON_DETAIL[id];
 

@@ -20,7 +20,7 @@ const STEPS: { key: StepKey; label: string }[] = [
 ];
 
 function ScenarioDetailPage() {
-  const { id } = useParams({ from: "/_authenticated/scenarios/$id" });
+  const { id } = useParams({ from: "/_authenticated/scenarios_/$id" });
   const item = itemById(id);
   const detail: ScenarioDetail | undefined = SCENARIO_DETAIL[id];
   const [step, setStep] = useState(0);
