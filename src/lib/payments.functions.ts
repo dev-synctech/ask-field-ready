@@ -66,7 +66,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         return_url: data.returnUrl,
         customer: customerId,
         payment_intent_data: { description: product.name },
-        metadata: { userId },
+        managed_payments: { enabled: true },
+        metadata: { userId, managed_payments: 'true' },
       });
 
       return { clientSecret: session.client_secret ?? '' };
