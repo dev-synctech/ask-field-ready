@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { DemoModeBanner } from "@/components/DemoModeBanner";
 
 function NotFoundComponent() {
   return (
@@ -97,6 +98,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthSync />
       <PaymentTestModeBanner />
+      <DemoModeBanner />
       <Outlet />
     </QueryClientProvider>
   );
