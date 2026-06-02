@@ -36,10 +36,13 @@ function AuthPage() {
   const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
   async function routeAfterAuth() {
-    // Decide destination based on entitlement status.
+    const { data: userData } = await supabase.auth.getUser();
+    if (import.meta.env.DEV) console.debug('[auth] post-auth current user:', userData.user?.id ?? null);
     const { data: ent } = await supabase
       .from('entitlements').select('status').maybeSingle();
+    if (import.meta.env.DEV) console.debug('[auth] post-auth entitlement:', ent);
     const target = search.redirect || (ent?.status === 'active' ? '/ask' : '/checkout');
+    if (import.meta.env.DEV) console.debug('[auth] routing to:', target);
     navigate({ to: target as any, replace: true });
   }
 
@@ -55,24 +58,50 @@ function AuthPage() {
             data: { display_name: displayName || email.split('@')[0] },
           },
         });
-        if (error) throw error;
-        // If email confirmation is required, no session is returned.
+        if (import.meta.env.DEV) {
+          console.debug('[auth] signup response:', {
+            userExists: !!data?.user,
+            sessionExists: !!data?.session,
+            errorCode: (error as any)?.code,
+            errorMsg: error?.message,
+          });
+        }
+        if (error) {
+          // Supabase returns "User already registered" → guide them to sign-in.
+          if ((error as any).code === 'user_already_exists' || /already registered/i.test(error.message)) {
+            setMode('signin');
+            setError('An account with this email already exists. Please sign in instead.');
+            return;
+          }
+          throw error;
+        }
+        // No session means email confirmation is required.
         if (!data.session) {
+          if (import.meta.env.DEV) console.debug('[auth] signup requires email confirmation');
           setCheckEmail(true);
           return;
         }
         await routeAfterAuth();
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (import.meta.env.DEV) {
+          console.debug('[auth] login response:', {
+            sessionExists: !!data?.session,
+            errorCode: (error as any)?.code,
+            errorMsg: error?.message,
+          });
+        }
         if (error) throw error;
         await routeAfterAuth();
       }
     } catch (err: any) {
+      if (import.meta.env.DEV) console.debug('[auth] error surfaced:', err);
       setError(err?.message ?? 'Authentication failed');
     } finally {
       setLoading(false);
     }
   }
+
 
   async function resend() {
     setResendState('sending');
