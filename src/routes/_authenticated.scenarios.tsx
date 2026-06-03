@@ -12,7 +12,7 @@ function ScenariosPage() {
   const scenarios = itemsByType("scenario");
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
-      <Header title="Scenarios" subtitle="Real moments, replayed without names or PHI. Practice the next 90 seconds." />
+      <Header title="Scenarios" subtitle="Practice the next 90 seconds before it happens live." />
       <div className="mt-6 space-y-3">
         {scenarios.map(s => (
           <div key={s.id} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
