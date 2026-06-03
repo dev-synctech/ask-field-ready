@@ -144,10 +144,10 @@ function Landing() {
         <div className="max-w-6xl mx-auto px-5 py-16 md:py-20">
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
-              Everything you need, right when you need it.
+              Ask one question. Get the next move.
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Mizly gives go-live consultants a structured training library and a fast answer experience in one mobile place.
+              Ask one question. Get the first 90 seconds, the words to use, the checks to run, and the point where you escalate.
             </p>
           </div>
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
