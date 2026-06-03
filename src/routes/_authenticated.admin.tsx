@@ -259,7 +259,7 @@ function AdminPage() {
 
       <div className="mt-3 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
         <div className="font-semibold flex items-center gap-2 mb-1"><ShieldCheck className="size-3.5 text-warning" /> Content rules</div>
-        No PHI. No vendor or organization names. No proprietary documentation. Drafts save anytime — publishing requires sanitized approval.
+        No PHI. No learner-facing vendor names or organization names. No vendor screenshots or logos. No copied proprietary training text. Drafts save anytime — publishing requires sanitized approval.
       </div>
 
       {/* Editor */}
