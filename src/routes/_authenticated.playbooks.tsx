@@ -12,7 +12,7 @@ function PlaybooksPage() {
   const playbooks = itemsByType("playbook");
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
-      <Header title="Playbooks" subtitle="Step-by-step references for the moment a unit needs you most." />
+      <Header title="Playbooks" subtitle="Step-by-step support for the moments a unit needs you most." />
       <div className="mt-6 grid sm:grid-cols-2 gap-3">
         {playbooks.map(p => (
           <Link
