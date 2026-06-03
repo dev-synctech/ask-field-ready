@@ -391,9 +391,14 @@ export const SCENARIO_RECOMMEND: Record<string, ScenarioRecommend> = {
     escalation: "Pull anyone visibly upset aside. Public debate never ends well.",
     debrief: "Capture the rumor's source and travel path. That's the real lesson.",
   },
+  s10: {
+    first90: "Strip the PHI from the request before you repeat it. 'One placement is unclear' is enough.",
+    whatToSay: "Name the three things you're confirming out loud — request, status, owner. Then move.",
+    whatToCheck: "Status field tells you whether to escalate or wait. Don't escalate a missing field as a system problem.",
+    escalation: "If the next owner is unclear after the three checks, that's your escalation trigger.",
+    debrief: "Note where ownership broke down. The fix is almost always in the handoff, not the assignment.",
+  },
 };
-
-// ---------- Video detail (chapters + transcript + related) ----------
 
 export interface VideoChapter { t: string; title: string; body: string; }
 export interface VideoDetail { chapters: VideoChapter[]; transcript: string; }
