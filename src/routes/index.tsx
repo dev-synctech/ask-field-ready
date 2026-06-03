@@ -128,26 +128,26 @@ function Landing() {
                 </div>
 
                 {/* Ask header + starters (scroll area) */}
-                <div className="flex-1 px-3.5 pt-3 pb-2 overflow-hidden">
-                  <div className="inline-flex items-center gap-1 text-[7.5px] uppercase tracking-wider text-muted-foreground font-semibold">
+                <div className="flex-1 px-4 pt-4 pb-2 overflow-hidden">
+                  <div className="inline-flex items-center gap-1 text-[8px] uppercase tracking-wider text-muted-foreground font-semibold">
                     <Sparkles className="size-2.5 text-teal" /> Ask Mizly
                   </div>
-                  <h3 className="mt-1 text-[13px] leading-tight font-display font-semibold text-foreground">
+                  <h3 className="mt-1.5 text-[15px] leading-[1.15] font-display font-semibold tracking-tight text-foreground">
                     What just happened on the floor?
                   </h3>
-                  <p className="mt-1 text-[9px] leading-snug text-muted-foreground">
+                  <p className="mt-1.5 text-[9.5px] leading-snug text-muted-foreground">
                     Short answer, first 90 seconds, what to say, what to check, and when to escalate.
                   </p>
 
-                  <div className="mt-3 text-[7.5px] uppercase tracking-wider text-muted-foreground font-semibold">Try one of these</div>
-                  <div className="mt-1.5 space-y-1.5">
+                  <div className="mt-4 text-[8px] uppercase tracking-wider text-muted-foreground font-semibold">Try one of these</div>
+                  <div className="mt-2 space-y-1.5">
                     {[
                       "I can't log in — my password is not working.",
                       "The printer is not printing.",
                       "Where do I find my patient list?",
                     ].map(s => (
-                      <div key={s} className="relative rounded-lg border border-border bg-card pl-2.5 pr-2.5 py-1.5 text-[9.5px] leading-snug text-foreground/85 overflow-hidden">
-                        <span className="absolute left-0 top-1.5 bottom-1.5 w-[2px] rounded-r bg-teal/60" />
+                      <div key={s} className="relative rounded-[10px] border border-border bg-card pl-3 pr-3 py-2 text-[9.5px] leading-snug text-foreground/85 overflow-hidden">
+                        <span className="absolute left-0 top-2 bottom-2 w-[2px] rounded-r bg-teal/60" />
                         {s}
                       </div>
                     ))}
@@ -155,13 +155,13 @@ function Landing() {
                 </div>
 
                 {/* Sticky composer */}
-                <div className="px-2.5 pt-2 pb-1.5 border-t border-border bg-background/95 backdrop-blur shrink-0">
+                <div className="px-2.5 pt-2 pb-2 border-t border-border bg-background/95 backdrop-blur shrink-0">
                   <div className="relative">
-                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-2.5 text-muted-foreground" />
-                    <div className="h-7 pl-6 pr-12 rounded-lg border border-border bg-surface-elevated flex items-center text-[9px] text-muted-foreground">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-2.5 text-muted-foreground" />
+                    <div className="h-8 pl-7 pr-14 rounded-[14px] border border-border bg-surface-elevated flex items-center text-[9.5px] text-muted-foreground">
                       Ask Mizly…
                     </div>
-                    <div className="absolute right-1 top-1/2 -translate-y-1/2 h-5 px-2 rounded-md bg-primary text-primary-foreground text-[8.5px] font-semibold flex items-center shadow-soft">
+                    <div className="absolute right-1 top-1/2 -translate-y-1/2 h-6 px-2.5 rounded-[10px] bg-primary text-primary-foreground text-[9px] font-semibold flex items-center shadow-soft">
                       Ask
                     </div>
                   </div>
