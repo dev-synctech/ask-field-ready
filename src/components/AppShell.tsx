@@ -3,6 +3,7 @@ import {
   Search, BookOpen, ListChecks, Film, UserRound, Shield, NotebookPen, ClipboardCheck, MoreHorizontal, X,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
+import mizlyLogo from "@/assets/mizly-logo.png.asset.json";
 
 const primaryNav = [
   { to: "/ask", label: "Ask", icon: Search },
