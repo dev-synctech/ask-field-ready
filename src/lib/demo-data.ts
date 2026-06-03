@@ -439,9 +439,16 @@ export const VIDEO_DETAIL: Record<string, VideoDetail> = {
     ],
     transcript: "Posture is the first message. Stand to the side, never behind. Match eye level — if they're sitting, you sit. Then listen for ten seconds before saying anything. Those ten seconds change the entire interaction.",
   },
+  v13: {
+    chapters: [
+      { t: "0:00", title: "Identify the issue", body: "Name the placement issue without PHI. 'One bed assignment is unclear on a med-surg unit.'" },
+      { t: "0:25", title: "Confirm scope", body: "One patient or several? Which unit is waiting? Which unit is the destination?" },
+      { t: "0:55", title: "State the handoff", body: "Who owns the next step? What do you need from command? When will you check back?" },
+      { t: "1:20", title: "Close the loop", body: "Tell the requester within five minutes — even if you don't have an answer yet." },
+    ],
+    transcript: "Three pieces in ninety seconds. One: name the issue without PHI — 'one bed assignment is unclear on a med-surg unit.' Two: confirm scope — one patient or several, and which unit is waiting. Three: state the handoff — who owns the next step, what you need from command, and when you'll check back. Close the loop with the requester within five minutes so the floor knows it landed.",
+  },
 };
-
-// ---------- Checklist items ----------
 
 export interface ChecklistItem { id: string; text: string; }
 
