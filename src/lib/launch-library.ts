@@ -705,6 +705,39 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     related_ids: ["ll_registration_downtime", "ll_wristband_label", "p1"],
     sanitized_approved: true, status: "published",
   },
+  {
+    id: "ll_bed_control",
+    title: "Patient placement / bed control issue",
+    type: "playbook",
+    summary: "A bed assignment is unclear or a placement is stalled. Confirm request, status, and owner before escalating.",
+    roles: k("bed control", "inpatient nurse", "registration", "all roles"),
+    domains: k("transfer", "patient placement", "handoff"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3, escalation: 2,
+    first90: [
+      "Restate the request without PHI: 'one placement is unclear on this unit.'",
+      "Confirm the patient's current location and the destination unit.",
+      "Check whether a placement order or status exists — and who owns the next step.",
+    ],
+    whatToSay: [
+      "'Before we escalate, let's confirm the request, the status, and the next owner.'",
+      "'I'll hold here with you until we know who owns the next step.'",
+      "'I'll close the loop with the requester in five minutes either way.'",
+    ],
+    whatToCheck: [
+      "Is the placement request active, on hold, or missing?",
+      "Is this one patient or several waiting on the same bed?",
+      "Did the request come from the right role on the right unit?",
+    ],
+    whenToEscalate: "If ownership is unclear after the request + status + owner check, OR a time-critical workflow (ED holding, ICU transfer, post-op recovery) is waiting > 15 minutes, escalate to command center with scope, severity, and callback.",
+    keywords: k(
+      "bed", "bed assignment", "bed control", "placement", "patient placement",
+      "transfer", "move", "cannot move", "stalls", "shift change",
+      "who owns", "waiting on placement", "without phi", "handoff",
+    ),
+    related_ids: ["p17", "c11", "l16", "s10", "v13"],
+    sanitized_approved: true, status: "published",
+  },
 ];
 
 // --- Match engine -------------------------------------------------------

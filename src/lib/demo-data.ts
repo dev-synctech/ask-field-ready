@@ -44,6 +44,7 @@ export const MODULES: Module[] = [
   { id: "m8", title: "Issue Triage", summary: "Severity, scope, and the right channel — fast.", sort_order: 8 },
   { id: "m9", title: "Floor Support Scenarios", summary: "Real moments, replayed without names or PHI.", sort_order: 9 },
   { id: "m10", title: "Consultant Professionalism", summary: "Badge, posture, and trust at the bedside.", sort_order: 10 },
+  { id: "m11", title: "Patient Placement & Bed Control", summary: "Bed assignment requests, transfer flow, and shift-change handoffs.", sort_order: 11 },
 ];
 
 const t = (...xs: string[]) => xs;
@@ -131,6 +132,13 @@ export const ITEMS: ContentItem[] = [
   { id: "s7", module_id: "m9", title: "A provider walks out mid-shift", summary: "What to escalate and what to leave alone.", content_type: "scenario", tags: t("escalation","communication"), difficulty: "advanced", estimated_minutes: 6, publish_status: "published", sanitized_approved: true },
   { id: "s8", module_id: "m9", title: "A new consultant freezes at the bedside", summary: "Coach in real time without taking over.", content_type: "scenario", tags: t("ate","professionalism"), difficulty: "intermediate", estimated_minutes: 5, publish_status: "published", sanitized_approved: true },
   { id: "s9", module_id: "m9", title: "A unit blames the system for a workflow they skipped", summary: "Defend the system without losing the unit.", content_type: "scenario", tags: t("communication","de-escalation"), difficulty: "advanced", estimated_minutes: 6, publish_status: "published", sanitized_approved: true },
+
+  // ---------- Converted Pack 01: Bed control / patient placement ----------
+  { id: "l16", module_id: "m11", title: "Bed control basics for go-live support", summary: "How patient placement questions usually move from request to assignment to handoff.", content_type: "lesson", tags: t("bed-control","placement","handoff"), difficulty: "foundational", estimated_minutes: 5, publish_status: "published", sanitized_approved: true },
+  { id: "p17", module_id: "m11", title: "Patient placement question — first 90 seconds", summary: "Confirm the request, location, order/status, and who owns the next step before escalating.", content_type: "playbook", tags: t("bed-control","placement","escalation"), difficulty: "intermediate", estimated_minutes: 5, publish_status: "published", sanitized_approved: true },
+  { id: "c11", module_id: "m11", title: "Before escalating a bed assignment issue", summary: "Scope, location, status, requester, and next owner.", content_type: "checklist", tags: t("bed-control","placement","escalation"), difficulty: "foundational", estimated_minutes: 2, publish_status: "published", sanitized_approved: true },
+  { id: "s10", module_id: "m11", title: "Bed assignment stalls during shift change", summary: "A unit says a patient cannot move because the bed assignment is unclear.", content_type: "scenario", tags: t("bed-control","placement","handoff"), difficulty: "intermediate", estimated_minutes: 6, publish_status: "published", sanitized_approved: true },
+  { id: "v13", module_id: "m11", title: "Bed control handoff in 90 seconds", summary: "How to summarize a placement issue without adding PHI.", content_type: "video", tags: t("bed-control","handoff","communication"), difficulty: "foundational", estimated_minutes: 2, publish_status: "published", sanitized_approved: true, transcript: "Three pieces in ninety seconds. One: name the issue without PHI — 'one bed assignment is unclear on a med-surg unit.' Two: confirm scope — one patient or several, and which unit is waiting. Three: state the handoff — who owns the next step, what you need from command, and when you'll check back. Close the loop with the requester within five minutes so the floor knows it landed." },
 ];
 
 export const itemsByType = (type: ContentType) => ITEMS.filter(i => i.content_type === type);
@@ -183,6 +191,14 @@ export const LESSON_DETAIL: Record<string, LessonDetail> = {
       { heading: "First-name introductions", body: "Use first names. Skip the company. 'Hi, I'm Sam, I'm here to help with the system today.'" },
     ],
     takeaways: ["Visible badge, open hands.", "First names only.", "You are a guest."],
+  },
+  l16: {
+    sections: [
+      { heading: "Where placement starts", body: "Most placement questions begin with a request: a unit needs a bed, or a patient needs to move. The request lands somewhere — bed control, a charge nurse, or a coordinator — and waits on a status check before anyone moves." },
+      { heading: "The three things to confirm", body: "Confirm the current location of the patient, the destination unit or service, and whether a placement order or status already exists. Without all three, no one can act." },
+      { heading: "Who owns the next step", body: "Placement issues stall when ownership is unclear. Name the next owner out loud: 'Bed control owns the assignment; the sending unit owns transport.' Hand off with a callback time." },
+    ],
+    takeaways: ["Request → status → owner. In that order.", "Location and destination before anything else.", "Name the next owner out loud."],
   },
 };
 
@@ -238,6 +254,18 @@ export const PLAYBOOK_DETAIL: Record<string, PlaybookDetail> = {
     ],
     pitfalls: ["Apologizing too much.", "Explaining cause instead of action.", "Forgetting to say where you'll be."],
     escalation: "If a clinician shows distress or anger, pull them aside — never debate publicly.",
+  },
+  p17: {
+    whenToUse: "A unit, nurse, or coordinator is asking about a stalled bed assignment or transfer.",
+    steps: [
+      { title: "First 90 seconds", body: "Restate what they asked in one sentence, without PHI. Confirm which unit is waiting and where the patient is now." },
+      { title: "What to say", body: "'Let me confirm the request, the status, and who owns the next step before we escalate.'" },
+      { title: "What to check", body: "Is there an active placement order or status? Is bed control aware? Is this one patient or several?" },
+      { title: "When to escalate", body: "If the placement is unclear after the request + status + owner check, or any time-critical workflow is waiting, escalate to command center with scope and severity." },
+      { title: "Command center handoff", body: "Three sentences: what is stalled, scope and severity, what you need with a callback. Close the loop with the requester within 5 minutes." },
+    ],
+    pitfalls: ["Escalating before confirming ownership.", "Sharing patient identifiers on the floor.", "Repeating a request without timestamping it."],
+    escalation: "Time-critical placement (ED holding, ICU transfer, post-op recovery) waiting > 15 minutes: page command center with scope, severity, callback.",
   },
 };
 
@@ -311,9 +339,27 @@ export const SCENARIO_DETAIL: Record<string, ScenarioDetail> = {
     escalation: "If a clinician escalates publicly, ask them to step aside with you. Never debate in front of the unit.",
     debrief: "Note who started the rumor source, how it traveled, and how long it took to settle. Recommend a unit-wide message template for next time.",
   },
+  s10: {
+    situation: "A unit says a patient cannot move because the bed assignment is unclear. Shift change is mid-handoff. Bed control is on a call.",
+    first90: [
+      "Restate the request without PHI: 'One placement is unclear on this unit.'",
+      "Confirm the patient's current location and the destination unit.",
+      "Check whether a placement order or status exists — and who entered it.",
+    ],
+    whatToSay: [
+      "'Before we escalate, let's confirm the request, the status, and the next owner.'",
+      "'I'll hold here with you until we know who owns the next step.'",
+      "'I'll close the loop with the requester in five minutes either way.'",
+    ],
+    whatToCheck: [
+      "Is the placement request active, on hold, or missing?",
+      "Is this one patient or several waiting on the same bed?",
+      "Did the request come from the right role on the right unit?",
+    ],
+    escalation: "If placement is unclear after the request + status + owner check, OR a time-critical workflow is waiting, escalate to command center with scope, severity, and callback.",
+    debrief: "Note the time the request was made, the time it stalled, where ownership broke down, and what the next-shift consultant should watch for.",
+  },
 };
-
-// ---------- Scenario recommended responses (per step) ----------
 
 export interface ScenarioRecommend {
   first90: string;
@@ -345,9 +391,14 @@ export const SCENARIO_RECOMMEND: Record<string, ScenarioRecommend> = {
     escalation: "Pull anyone visibly upset aside. Public debate never ends well.",
     debrief: "Capture the rumor's source and travel path. That's the real lesson.",
   },
+  s10: {
+    first90: "Strip the PHI from the request before you repeat it. 'One placement is unclear' is enough.",
+    whatToSay: "Name the three things you're confirming out loud — request, status, owner. Then move.",
+    whatToCheck: "Status field tells you whether to escalate or wait. Don't escalate a missing field as a system problem.",
+    escalation: "If the next owner is unclear after the three checks, that's your escalation trigger.",
+    debrief: "Note where ownership broke down. The fix is almost always in the handoff, not the assignment.",
+  },
 };
-
-// ---------- Video detail (chapters + transcript + related) ----------
 
 export interface VideoChapter { t: string; title: string; body: string; }
 export interface VideoDetail { chapters: VideoChapter[]; transcript: string; }
@@ -388,9 +439,16 @@ export const VIDEO_DETAIL: Record<string, VideoDetail> = {
     ],
     transcript: "Posture is the first message. Stand to the side, never behind. Match eye level — if they're sitting, you sit. Then listen for ten seconds before saying anything. Those ten seconds change the entire interaction.",
   },
+  v13: {
+    chapters: [
+      { t: "0:00", title: "Identify the issue", body: "Name the placement issue without PHI. 'One bed assignment is unclear on a med-surg unit.'" },
+      { t: "0:25", title: "Confirm scope", body: "One patient or several? Which unit is waiting? Which unit is the destination?" },
+      { t: "0:55", title: "State the handoff", body: "Who owns the next step? What do you need from command? When will you check back?" },
+      { t: "1:20", title: "Close the loop", body: "Tell the requester within five minutes — even if you don't have an answer yet." },
+    ],
+    transcript: "Three pieces in ninety seconds. One: name the issue without PHI — 'one bed assignment is unclear on a med-surg unit.' Two: confirm scope — one patient or several, and which unit is waiting. Three: state the handoff — who owns the next step, what you need from command, and when you'll check back. Close the loop with the requester within five minutes so the floor knows it landed.",
+  },
 };
-
-// ---------- Checklist items ----------
 
 export interface ChecklistItem { id: string; text: string; }
 
@@ -421,6 +479,14 @@ export const CHECKLIST_ITEMS: Record<string, ChecklistItem[]> = {
     { id: "c", text: "Arrival time" },
     { id: "d", text: "Presenting reason" },
     { id: "e", text: "Photo of insurance card if available" },
+  ],
+  c11: [
+    { id: "a", text: "Confirm current unit/location context" },
+    { id: "b", text: "Confirm the request came from the right role" },
+    { id: "c", text: "Confirm patient placement status/order exists" },
+    { id: "d", text: "Confirm whether this is one patient or multiple patients" },
+    { id: "e", text: "Capture the caller/requester and callback path" },
+    { id: "f", text: "Escalate with scope, severity, and timing" },
   ],
 };
 

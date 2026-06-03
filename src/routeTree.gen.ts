@@ -36,8 +36,10 @@ import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated.admin_.feedback'
 import { Route as AuthenticatedAdminCoverageRouteImport } from './routes/_authenticated.admin_.coverage'
+import { Route as AuthenticatedAdminConversionsRouteImport } from './routes/_authenticated.admin_.conversions'
 import { Route as AuthenticatedAdminSourcesIdRouteImport } from './routes/_authenticated.admin_.sources_.$id'
 import { Route as AuthenticatedAdminQuestionsIdRouteImport } from './routes/_authenticated.admin_.questions_.$id'
+import { Route as AuthenticatedAdminConversionsIdRouteImport } from './routes/_authenticated.admin_.conversions_.$id'
 
 const UpdatePasswordRoute = UpdatePasswordRouteImport.update({
   id: '/update-password',
@@ -180,6 +182,12 @@ const AuthenticatedAdminCoverageRoute =
     path: '/admin/coverage',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminConversionsRoute =
+  AuthenticatedAdminConversionsRouteImport.update({
+    id: '/admin_/conversions',
+    path: '/admin/conversions',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminSourcesIdRoute =
   AuthenticatedAdminSourcesIdRouteImport.update({
     id: '/admin_/sources_/$id',
@@ -190,6 +198,12 @@ const AuthenticatedAdminQuestionsIdRoute =
   AuthenticatedAdminQuestionsIdRouteImport.update({
     id: '/admin_/questions_/$id',
     path: '/admin/questions/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminConversionsIdRoute =
+  AuthenticatedAdminConversionsIdRouteImport.update({
+    id: '/admin_/conversions_/$id',
+    path: '/admin/conversions/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -211,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/admin/conversions': typeof AuthenticatedAdminConversionsRoute
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
@@ -220,6 +235,7 @@ export interface FileRoutesByFullPath {
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
   '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
+  '/admin/conversions/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/admin/questions/$id': typeof AuthenticatedAdminQuestionsIdRoute
   '/admin/sources/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
@@ -241,6 +257,7 @@ export interface FileRoutesByTo {
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/admin/conversions': typeof AuthenticatedAdminConversionsRoute
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
@@ -250,6 +267,7 @@ export interface FileRoutesByTo {
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
   '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
+  '/admin/conversions/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/admin/questions/$id': typeof AuthenticatedAdminQuestionsIdRoute
   '/admin/sources/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
@@ -273,6 +291,7 @@ export interface FileRoutesById {
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/_authenticated/admin_/conversions': typeof AuthenticatedAdminConversionsRoute
   '/_authenticated/admin_/coverage': typeof AuthenticatedAdminCoverageRoute
   '/_authenticated/admin_/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin_/questions': typeof AuthenticatedAdminQuestionsRoute
@@ -282,6 +301,7 @@ export interface FileRoutesById {
   '/_authenticated/lessons_/$id': typeof AuthenticatedLessonsIdRoute
   '/_authenticated/playbooks_/$id': typeof AuthenticatedPlaybooksIdRoute
   '/_authenticated/scenarios_/$id': typeof AuthenticatedScenariosIdRoute
+  '/_authenticated/admin_/conversions_/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/_authenticated/admin_/questions_/$id': typeof AuthenticatedAdminQuestionsIdRoute
   '/_authenticated/admin_/sources_/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
@@ -305,6 +325,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/admin/conversions'
     | '/admin/coverage'
     | '/admin/feedback'
     | '/admin/questions'
@@ -314,6 +335,7 @@ export interface FileRouteTypes {
     | '/lessons/$id'
     | '/playbooks/$id'
     | '/scenarios/$id'
+    | '/admin/conversions/$id'
     | '/admin/questions/$id'
     | '/admin/sources/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -335,6 +357,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/admin/conversions'
     | '/admin/coverage'
     | '/admin/feedback'
     | '/admin/questions'
@@ -344,6 +367,7 @@ export interface FileRouteTypes {
     | '/lessons/$id'
     | '/playbooks/$id'
     | '/scenarios/$id'
+    | '/admin/conversions/$id'
     | '/admin/questions/$id'
     | '/admin/sources/$id'
   id:
@@ -366,6 +390,7 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/_authenticated/admin_/conversions'
     | '/_authenticated/admin_/coverage'
     | '/_authenticated/admin_/feedback'
     | '/_authenticated/admin_/questions'
@@ -375,6 +400,7 @@ export interface FileRouteTypes {
     | '/_authenticated/lessons_/$id'
     | '/_authenticated/playbooks_/$id'
     | '/_authenticated/scenarios_/$id'
+    | '/_authenticated/admin_/conversions_/$id'
     | '/_authenticated/admin_/questions_/$id'
     | '/_authenticated/admin_/sources_/$id'
   fileRoutesById: FileRoutesById
@@ -582,6 +608,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCoverageRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/conversions': {
+      id: '/_authenticated/admin_/conversions'
+      path: '/admin/conversions'
+      fullPath: '/admin/conversions'
+      preLoaderRoute: typeof AuthenticatedAdminConversionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/sources_/$id': {
       id: '/_authenticated/admin_/sources_/$id'
       path: '/admin/sources/$id'
@@ -596,6 +629,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminQuestionsIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/conversions_/$id': {
+      id: '/_authenticated/admin_/conversions_/$id'
+      path: '/admin/conversions/$id'
+      fullPath: '/admin/conversions/$id'
+      preLoaderRoute: typeof AuthenticatedAdminConversionsIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -608,6 +648,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPlaybooksRoute: typeof AuthenticatedPlaybooksRoute
   AuthenticatedScenariosRoute: typeof AuthenticatedScenariosRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
+  AuthenticatedAdminConversionsRoute: typeof AuthenticatedAdminConversionsRoute
   AuthenticatedAdminCoverageRoute: typeof AuthenticatedAdminCoverageRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
@@ -617,6 +658,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
   AuthenticatedPlaybooksIdRoute: typeof AuthenticatedPlaybooksIdRoute
   AuthenticatedScenariosIdRoute: typeof AuthenticatedScenariosIdRoute
+  AuthenticatedAdminConversionsIdRoute: typeof AuthenticatedAdminConversionsIdRoute
   AuthenticatedAdminQuestionsIdRoute: typeof AuthenticatedAdminQuestionsIdRoute
   AuthenticatedAdminSourcesIdRoute: typeof AuthenticatedAdminSourcesIdRoute
 }
@@ -630,6 +672,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPlaybooksRoute: AuthenticatedPlaybooksRoute,
   AuthenticatedScenariosRoute: AuthenticatedScenariosRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
+  AuthenticatedAdminConversionsRoute: AuthenticatedAdminConversionsRoute,
   AuthenticatedAdminCoverageRoute: AuthenticatedAdminCoverageRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
@@ -639,6 +682,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
   AuthenticatedPlaybooksIdRoute: AuthenticatedPlaybooksIdRoute,
   AuthenticatedScenariosIdRoute: AuthenticatedScenariosIdRoute,
+  AuthenticatedAdminConversionsIdRoute: AuthenticatedAdminConversionsIdRoute,
   AuthenticatedAdminQuestionsIdRoute: AuthenticatedAdminQuestionsIdRoute,
   AuthenticatedAdminSourcesIdRoute: AuthenticatedAdminSourcesIdRoute,
 }
