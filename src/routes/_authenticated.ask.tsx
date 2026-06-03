@@ -4,6 +4,7 @@ import {
   Search, Sparkles, BookOpen, ListChecks, Film, ClipboardCheck,
   NotebookPen, Copy, Bookmark, Loader2, Clock, X, ShieldCheck,
   ThumbsUp, ThumbsDown, MessageSquarePlus, FileQuestion, CheckCircle2, AlertTriangle,
+  ImageIcon, MousePointerClick,
 } from "lucide-react";
 import { toast } from "sonner";
 import { askLaunch, STARTER_QUESTIONS, badgeForLaunchType, type AskAnswer, type MatchQuality } from "@/lib/launch-library";
@@ -72,7 +73,7 @@ function AskPage() {
           What just happened on the floor?
         </h1>
         <p className="mt-2 text-[13px] md:text-sm text-muted-foreground max-w-lg md:mx-auto">
-          Short answer, first 90 seconds, what to say, what to check, and when to escalate.
+          No greeting. No theory. Get the exact next move, what to try if it fails, and when to escalate.
         </p>
       </div>
 
@@ -180,7 +181,10 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => {
-              const text = `${query}\n\nShort answer: ${r.shortAnswer}\n\nFirst 90 seconds:\n${r.first90.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nWhat to say:\n${r.whatToSay.map(s=>`- ${s}`).join("\n")}\n\nWhat to check:\n${r.whatToCheck.map(s=>`- ${s}`).join("\n")}\n\nWhen to escalate: ${r.whenToEscalate}`;
+              const visualGuide = r.visualAids.length
+                ? `\n\nVisual guide:\n${r.visualAids.map(a => `- ${a.title}: ${a.note}${a.callouts?.length ? `\n  ${a.callouts.join("\n  ")}` : ""}`).join("\n")}`
+                : "";
+              const text = `${query}\n\nShort answer: ${r.shortAnswer}\n\nDo this now:\n${r.walkthrough.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nIf that fails:\n${r.ifThatFails.map(s=>`- ${s}`).join("\n")}${visualGuide}\n\nFirst 90 seconds:\n${r.first90.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nWhat to say:\n${r.whatToSay.map(s=>`- ${s}`).join("\n")}\n\nWhat to check:\n${r.whatToCheck.map(s=>`- ${s}`).join("\n")}\n\nWhen to escalate: ${r.whenToEscalate}`;
               navigator.clipboard?.writeText(text);
               toast.success("Answer copied to clipboard");
             }}
@@ -221,7 +225,10 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
       </div>
 
 
-      {/* 2-4 */}
+      <WalkthroughSection answer={r} />
+      <VisualGuideSection answer={r} />
+
+      {/* Existing field-support sections */}
       <ListSection title="FIRST 90 SECONDS" items={r.first90} ordered />
       <ListSection title="WHAT TO SAY" items={r.whatToSay} />
       <ListSection title="WHAT TO CHECK" items={r.whatToCheck} />
@@ -274,6 +281,121 @@ function MatchBadge({ q, label }: { q: MatchQuality; label: string }) {
     <span className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full border ${cls}`}>
       <Icon className="size-3" /> {label}
     </span>
+  );
+}
+
+function WalkthroughSection({ answer }: { answer: AskAnswer }) {
+  const video = answer.related.videos[0];
+  return (
+    <div className="rounded-2xl border border-primary/20 bg-primary-soft/35 p-5 shadow-soft">
+      <div className="text-[10px] uppercase tracking-wider text-primary font-medium mb-3">DO THIS NOW</div>
+      <ol className="space-y-2 text-sm">
+        {answer.walkthrough.map((step, i) => (
+          <li key={i} className="flex gap-3">
+            <span className="size-6 shrink-0 rounded-full bg-primary text-primary-foreground text-xs font-semibold flex items-center justify-center">{i + 1}</span>
+            <span className="pt-0.5 leading-relaxed">{step}</span>
+          </li>
+        ))}
+      </ol>
+
+      {answer.ifThatFails.length > 0 && (
+        <div className="mt-4 rounded-xl border border-border bg-card p-4">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">IF THAT FAILS</div>
+          <ul className="space-y-2 text-sm">
+            {answer.ifThatFails.map((step, i) => (
+              <li key={i} className="flex gap-2">
+                <span className="text-primary font-semibold">Then</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {video && !answer.visualAids.length && (
+        <Link
+          to="/videos"
+          className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-4 py-3 text-sm hover:border-primary/30 hover:shadow-soft transition"
+        >
+          <span className="min-w-0">
+            <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Training video instead</span>
+            <span className="mt-0.5 block font-medium truncate">{video.title}</span>
+          </span>
+          <Film className="size-4 text-primary shrink-0" />
+        </Link>
+      )}
+    </div>
+  );
+}
+
+function VisualGuideSection({ answer }: { answer: AskAnswer }) {
+  if (!answer.visualAids.length) return null;
+
+  const iconFor = (kind: string) => {
+    if (kind === "screenshot") return ImageIcon;
+    if (kind === "tasklet") return MousePointerClick;
+    return Film;
+  };
+
+  const labelFor = (kind: string) => {
+    if (kind === "screenshot") return "Sanitized screenshot";
+    if (kind === "tasklet") return "Click path";
+    return "Training video";
+  };
+
+  return (
+    <Section title="VISUAL GUIDE">
+      <div className="space-y-3">
+        {answer.visualAids.map((aid, i) => {
+          const Icon = iconFor(aid.kind);
+          const body = (
+            <>
+              <div className="flex items-start gap-3">
+                <span className="size-9 shrink-0 rounded-xl bg-primary-soft text-primary flex items-center justify-center">
+                  <Icon className="size-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{labelFor(aid.kind)}</span>
+                  <span className="mt-0.5 block text-sm font-semibold text-foreground">{aid.title}</span>
+                  <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{aid.note}</span>
+                </span>
+              </div>
+              {aid.callouts?.length ? (
+                <ul className="mt-3 grid gap-1.5 text-xs text-foreground/80">
+                  {aid.callouts.map((callout, j) => (
+                    <li key={j} className="flex gap-2">
+                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-teal" />
+                      <span>{callout}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </>
+          );
+
+          if (aid.href === "/videos") {
+            return (
+              <Link
+                key={`${aid.kind}-${i}`}
+                to="/videos"
+                className="block rounded-xl border border-border bg-card p-4 hover:border-primary/35 hover:shadow-soft transition-all"
+              >
+                {body}
+              </Link>
+            );
+          }
+
+          return (
+            <div key={`${aid.kind}-${i}`} className="rounded-xl border border-border bg-card p-4">
+              {body}
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+        Mizly visuals must be recreated, sanitized, and vendor-neutral. Do not upload screenshots with patient data, vendor branding, private URLs, or organization names.
+      </p>
+    </Section>
   );
 }
 
