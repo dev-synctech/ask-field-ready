@@ -131,7 +131,7 @@ function FeedbackPage() {
                     <div className="mt-1.5 text-xs text-foreground/80 rounded-lg bg-secondary/60 px-3 py-2">"{f.note}"</div>
                   )}
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                <div className="flex flex-wrap gap-1.5 w-full min-w-0 max-w-full sm:w-auto sm:shrink-0">
                   {f.status === "new" && (
                     <button onClick={() => setStatus(f.id, "triaged")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary">Review</button>
                   )}
