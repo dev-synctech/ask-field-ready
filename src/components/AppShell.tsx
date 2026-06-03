@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Search, BookOpen, ListChecks, Film, UserRound, Shield, NotebookPen, ClipboardCheck, MoreHorizontal, X,
+  Search, BookOpen, ListChecks, Film, UserRound, Shield, NotebookPen, ClipboardCheck, MoreHorizontal, X, Scale,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import mizlyLogo from "@/assets/mizly-logo.png.asset.json";
@@ -18,15 +18,16 @@ const primaryNav = [
 const mobileNav = [
   { to: "/ask", label: "Ask", icon: Search },
   { to: "/learn", label: "Learn", icon: BookOpen },
-  { to: "/playbooks", label: "Playbooks", icon: NotebookPen },
+  { to: "/playbooks", label: "Plays", icon: NotebookPen },
   { to: "/scenarios", label: "Scenarios", icon: ListChecks },
 ];
 
 const moreItems = [
   { to: "/videos", label: "Videos", icon: Film },
   { to: "/checklists", label: "Checklists", icon: ClipboardCheck },
-  { to: "/admin", label: "Admin", icon: Shield },
   { to: "/account", label: "Account", icon: UserRound },
+  { to: "/legal", label: "Legal", icon: Scale },
+  { to: "/admin", label: "Admin", icon: Shield },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
