@@ -480,6 +480,14 @@ export const CHECKLIST_ITEMS: Record<string, ChecklistItem[]> = {
     { id: "d", text: "Presenting reason" },
     { id: "e", text: "Photo of insurance card if available" },
   ],
+  c11: [
+    { id: "a", text: "Confirm current unit/location context" },
+    { id: "b", text: "Confirm the request came from the right role" },
+    { id: "c", text: "Confirm patient placement status/order exists" },
+    { id: "d", text: "Confirm whether this is one patient or multiple patients" },
+    { id: "e", text: "Capture the caller/requester and callback path" },
+    { id: "f", text: "Escalate with scope, severity, and timing" },
+  ],
 };
 
 // ---------- Relationship helpers ----------
