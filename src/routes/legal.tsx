@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { TRADEMARK_NOTICE } from "@/lib/legal";
+import mizlyLogo from "@/assets/mizly-logo.png.asset.json";
 
 export const Route = createFileRoute("/legal")({
   head: () => ({
