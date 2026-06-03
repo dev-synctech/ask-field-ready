@@ -72,8 +72,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Mizly" },
       { name: "twitter:description", content: "Small answers for big go-live moments." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f4d73aec-9887-47da-b427-88700b90bbe6/id-preview-693c0710--a6d139e4-843f-4f60-ada4-504f47845858.lovable.app-1780406940074.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f4d73aec-9887-47da-b427-88700b90bbe6/id-preview-693c0710--a6d139e4-843f-4f60-ada4-504f47845858.lovable.app-1780406940074.png" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/OFoMQqtIWwbfTTddNluQ9ERVIPA3/social-images/social-1780450795945-mizly_logo_.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/OFoMQqtIWwbfTTddNluQ9ERVIPA3/social-images/social-1780450795945-mizly_logo_.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
