@@ -71,8 +71,7 @@ function Landing() {
               Small answers for big go-live moments.
             </p>
             <p className="mt-5 text-base text-muted-foreground max-w-lg">
-              The field-support academy and answer engine built for healthcare go-live consultants.
-              Get fast answers, practical workflows, and confidence when the floor gets busy.
+              The field-support academy and answer engine built for healthcare go-live consultants. Ask what just happened on the floor and get the first 90 seconds, what to say, what to check, and when to escalate.
             </p>
             <div className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <button
