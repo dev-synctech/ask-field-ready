@@ -48,8 +48,8 @@ export function AppShell({ children }: { children: ReactNode }) {
             const active = path === n.to || path.startsWith(n.to + "/");
             return (
               <Link key={n.to} to={n.to}
-                className={`group flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] transition-colors ${active ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
-                <n.icon className={`size-[15px] ${active ? 'text-teal' : 'text-muted-foreground group-hover:text-foreground'}`} />
+                className={`group flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] transition-colors ${active ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+                <n.icon className={`size-[15px] ${active ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'}`} />
                 {n.label}
               </Link>
             );
