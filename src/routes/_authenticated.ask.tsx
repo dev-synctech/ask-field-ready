@@ -296,9 +296,15 @@ function linkForType(type: string, id: string): { to: any; params?: any } {
 }
 
 function RelatedGrid({ label, type, items }: { label: string; type: ContentType; items: ContentItem[] }) {
-  if (!items?.length) return null;
   const meta = TYPE_META[type];
   const Icon = meta.icon;
+  if (!items?.length) {
+    return (
+      <Section title={label}>
+        <p className="text-sm text-muted-foreground">No direct Mizly match yet.</p>
+      </Section>
+    );
+  }
   return (
     <Section title={label}>
       <div className="grid sm:grid-cols-2 gap-3">
