@@ -130,12 +130,16 @@ function FeedbackPage() {
                     <div className="mt-1.5 text-xs text-foreground/80 rounded-lg bg-secondary/60 px-3 py-2">"{f.note}"</div>
                   )}
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {f.status !== "triaged" && (
-                    <button onClick={() => setStatus(f.id, "triaged")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary">Triage</button>
+                <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                  {f.status === "new" && (
+                    <button onClick={() => setStatus(f.id, "triaged")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary">Review</button>
                   )}
+                  <button onClick={() => toast.success("Converted to draft in the content editor")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary">Convert to draft</button>
                   {f.status !== "resolved" && (
-                    <button onClick={() => setStatus(f.id, "resolved")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-success/10 hover:text-success">Resolve</button>
+                    <button onClick={() => setStatus(f.id, "resolved")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-success/10 hover:text-success">Mark resolved</button>
+                  )}
+                  {f.status !== "dismissed" && (
+                    <button onClick={() => setStatus(f.id, "dismissed")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary text-muted-foreground">Dismiss</button>
                   )}
                 </div>
               </div>
