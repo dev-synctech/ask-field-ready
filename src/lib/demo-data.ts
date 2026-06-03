@@ -339,9 +339,27 @@ export const SCENARIO_DETAIL: Record<string, ScenarioDetail> = {
     escalation: "If a clinician escalates publicly, ask them to step aside with you. Never debate in front of the unit.",
     debrief: "Note who started the rumor source, how it traveled, and how long it took to settle. Recommend a unit-wide message template for next time.",
   },
+  s10: {
+    situation: "A unit says a patient cannot move because the bed assignment is unclear. Shift change is mid-handoff. Bed control is on a call.",
+    first90: [
+      "Restate the request without PHI: 'One placement is unclear on this unit.'",
+      "Confirm the patient's current location and the destination unit.",
+      "Check whether a placement order or status exists — and who entered it.",
+    ],
+    whatToSay: [
+      "'Before we escalate, let's confirm the request, the status, and the next owner.'",
+      "'I'll hold here with you until we know who owns the next step.'",
+      "'I'll close the loop with the requester in five minutes either way.'",
+    ],
+    whatToCheck: [
+      "Is the placement request active, on hold, or missing?",
+      "Is this one patient or several waiting on the same bed?",
+      "Did the request come from the right role on the right unit?",
+    ],
+    escalation: "If placement is unclear after the request + status + owner check, OR a time-critical workflow is waiting, escalate to command center with scope, severity, and callback.",
+    debrief: "Note the time the request was made, the time it stalled, where ownership broke down, and what the next-shift consultant should watch for.",
+  },
 };
-
-// ---------- Scenario recommended responses (per step) ----------
 
 export interface ScenarioRecommend {
   first90: string;
