@@ -17,7 +17,7 @@ const primaryNav = [
 const mobileNav = [
   { to: "/ask", label: "Ask", icon: Search },
   { to: "/learn", label: "Learn", icon: BookOpen },
-  { to: "/playbooks", label: "Plays", icon: NotebookPen },
+  { to: "/playbooks", label: "Playbooks", icon: NotebookPen },
   { to: "/scenarios", label: "Scenarios", icon: ListChecks },
 ];
 
