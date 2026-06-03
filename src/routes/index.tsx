@@ -6,9 +6,11 @@ import {
   ChevronDown, X, Mail, PlayCircle, Volume2,
 } from "lucide-react";
 import { MizlyLogo } from "@/components/MizlyLogo";
+import previewVideoAsset from "@/assets/mizly-social-music-only.mp4.asset.json";
+import previewPosterAsset from "@/assets/mizly-social-music-only-poster.jpg.asset.json";
 
-const LANDING_PREVIEW_VIDEO_SRC = "/videos/mizly-social-music-only.mp4";
-const LANDING_PREVIEW_POSTER_SRC = "/videos/mizly-social-music-only-poster.jpg";
+const LANDING_PREVIEW_VIDEO_SRC = previewVideoAsset.url;
+const LANDING_PREVIEW_POSTER_SRC = previewPosterAsset.url;
 
 type WaitlistForm = {
   name: string;
