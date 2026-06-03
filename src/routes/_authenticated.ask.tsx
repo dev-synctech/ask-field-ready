@@ -347,7 +347,7 @@ function FeedbackBar({ query }: { query: string }) {
 
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-      <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-3">Was this helpful?</div>
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-3">WAS THIS HELPFUL?</div>
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => send("up")}
