@@ -63,36 +63,61 @@ function AskPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-5 py-8 md:py-14">
-      <div className="text-center mb-8 md:mb-12">
-        <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-3">
-          <Sparkles className="size-3.5 text-primary" /> Ask Mizly
+    <div className="max-w-2xl mx-auto px-5 pt-6 md:pt-12 pb-40 md:pb-10">
+      <div className="md:text-center mb-6 md:mb-10">
+        <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">
+          <Sparkles className="size-3 text-teal" /> Ask Mizly
         </div>
-        <h1 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">Type what the user just asked you on the floor.</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Mizly returns a short answer, first 90 seconds, what to say, what to check, when to escalate, and related playbooks.</p>
+        <h1 className="text-[22px] md:text-[34px] leading-tight font-display font-semibold tracking-tight text-foreground">
+          What just happened on the floor?
+        </h1>
+        <p className="mt-2 text-[13px] md:text-sm text-muted-foreground max-w-lg md:mx-auto">
+          Short answer, first 90 seconds, what to say, what to check, and when to escalate.
+        </p>
       </div>
 
-      <form onSubmit={e => { e.preventDefault(); run(q); }} className="relative">
+      {/* Desktop inline composer */}
+      <form onSubmit={e => { e.preventDefault(); run(q); }} className="relative hidden md:block">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
         <input
           value={q} onChange={e => setQ(e.target.value)}
           placeholder="e.g. The printer is not printing. What do I check first?"
-          className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-base shadow-card focus:outline-none focus:ring-2 focus:ring-ring"
+          className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring/40 transition"
         />
         <button type="submit" disabled={q.trim().length < 2 || loading}
-          className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50 inline-flex items-center gap-1.5">
+          className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-foreground text-background text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:opacity-90 transition">
           {loading ? <><Loader2 className="size-3.5 animate-spin" /> Thinking</> : "Ask"}
         </button>
       </form>
 
+      {/* Mobile sticky bottom composer (above bottom nav) */}
+      <form
+        onSubmit={e => { e.preventDefault(); run(q); }}
+        className="md:hidden fixed left-0 right-0 z-20 px-3 pt-2 pb-2 bg-background/95 backdrop-blur-md border-t border-border"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 60px)' }}
+      >
+        <div className="relative">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <input
+            value={q} onChange={e => setQ(e.target.value)}
+            placeholder="Ask Mizly…"
+            className="w-full h-12 pl-10 pr-24 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring/40"
+          />
+          <button type="submit" disabled={q.trim().length < 2 || loading}
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 h-9 min-w-[68px] px-3 rounded-xl bg-foreground text-background text-[13px] font-medium disabled:opacity-40 inline-flex items-center justify-center gap-1.5">
+            {loading ? <Loader2 className="size-3.5 animate-spin" /> : "Ask"}
+          </button>
+        </div>
+      </form>
+
       {!r && !loading && (
-        <div className="mt-6 space-y-6 animate-in fade-in duration-300">
+        <div className="mt-5 md:mt-6 space-y-6 animate-in fade-in duration-300">
           <div>
             <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">Try one of these</div>
             <div className="grid sm:grid-cols-2 gap-2">
               {STARTER_QUESTIONS.map(s => (
                 <button key={s} onClick={() => run(s)}
-                  className="text-left rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-soft px-4 py-3 text-sm transition-all">
+                  className="text-left rounded-xl border border-border bg-card hover:border-border-strong hover:shadow-soft px-4 py-3 text-[13px] leading-snug transition-all">
                   {s}
                 </button>
               ))}
@@ -107,8 +132,8 @@ function AskPage() {
               <ul className="space-y-1.5">
                 {recent.map(item => (
                   <li key={item} className="group flex items-center gap-2 rounded-lg border border-border bg-card hover:bg-secondary/60 transition-colors">
-                    <button onClick={() => run(item)} className="flex-1 text-left text-sm px-3 py-2 truncate">{item}</button>
-                    <button onClick={() => removeRecent(item)} aria-label="Remove" className="px-2 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => run(item)} className="flex-1 text-left text-[13px] px-3 py-2.5 truncate">{item}</button>
+                    <button onClick={() => removeRecent(item)} aria-label="Remove" className="px-3 py-2 text-muted-foreground opacity-60 group-hover:opacity-100 transition-opacity">
                       <X className="size-3.5" />
                     </button>
                   </li>
@@ -120,12 +145,13 @@ function AskPage() {
       )}
 
       {loading && (
-        <div className="mt-8 space-y-3 animate-in fade-in duration-200">
+        <div className="mt-6 md:mt-8 space-y-3 animate-in fade-in duration-200">
           {[0, 1, 2].map(i => (
             <div key={i} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-              <div className="h-3 rounded bg-secondary animate-pulse w-2/3" />
-              <div className="mt-3 h-3 rounded bg-secondary animate-pulse w-full" />
+              <div className="h-2.5 rounded bg-secondary animate-pulse w-1/3" />
+              <div className="mt-4 h-3 rounded bg-secondary animate-pulse w-full" />
               <div className="mt-2 h-3 rounded bg-secondary animate-pulse w-5/6" />
+              <div className="mt-2 h-3 rounded bg-secondary animate-pulse w-2/3" />
             </div>
           ))}
         </div>
@@ -230,10 +256,10 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
 
 function MatchBadge({ q, label }: { q: MatchQuality; label: string }) {
   const cls = q === "strong"
-    ? "bg-success/15 text-success border-success/30"
+    ? "bg-teal-soft text-teal border-teal/25"
     : q === "related"
-    ? "bg-primary-soft text-primary border-primary/30"
-    : "bg-warning/15 text-warning border-warning/30";
+    ? "bg-primary-soft text-primary border-primary/20"
+    : "bg-warning/12 text-warning border-warning/25";
   const Icon = q === "strong" ? CheckCircle2 : q === "related" ? Sparkles : AlertTriangle;
   return (
     <span className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full border ${cls}`}>
