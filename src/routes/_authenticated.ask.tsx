@@ -117,12 +117,13 @@ function AskPage() {
             <div className="grid sm:grid-cols-2 gap-2">
               {STARTER_QUESTIONS.map(s => (
                 <button key={s} onClick={() => run(s)}
-                  className="group relative text-left rounded-xl border border-border bg-card hover:border-primary/30 hover:bg-primary-soft/40 hover:shadow-soft pl-4 pr-4 py-3 text-[13px] leading-snug transition-all overflow-hidden">
+                  className="press group relative text-left rounded-xl border border-border bg-card hover:border-primary/30 hover:bg-primary-soft/40 hover:shadow-soft pl-4 pr-4 py-3 text-[13px] leading-snug overflow-hidden">
                   <span className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r bg-teal/0 group-hover:bg-teal transition-colors" />
                   {s}
                 </button>
               ))}
             </div>
+
           </div>
 
           {recent.length > 0 && (
