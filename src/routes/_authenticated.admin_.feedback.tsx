@@ -95,7 +95,7 @@ function FeedbackPage() {
           </button>
         ))}
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium ml-3">Status</span>
-        {(["all", "new", "triaged", "resolved"] as const).map(s => (
+        {(["all", "new", "triaged", "resolved", "dismissed"] as const).map(s => (
           <button key={s} onClick={() => setStatusFilter(s)}
             className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${statusFilter === s ? 'bg-foreground text-background border-foreground' : 'bg-card border-border hover:bg-secondary'}`}>
             {s}
