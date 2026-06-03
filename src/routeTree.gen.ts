@@ -39,6 +39,7 @@ import { Route as AuthenticatedAdminCoverageRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminConversionsRouteImport } from './routes/_authenticated.admin_.conversions'
 import { Route as AuthenticatedAdminSourcesIdRouteImport } from './routes/_authenticated.admin_.sources_.$id'
 import { Route as AuthenticatedAdminQuestionsIdRouteImport } from './routes/_authenticated.admin_.questions_.$id'
+import { Route as AuthenticatedAdminConversionsIdRouteImport } from './routes/_authenticated.admin_.conversions_.$id'
 
 const UpdatePasswordRoute = UpdatePasswordRouteImport.update({
   id: '/update-password',
@@ -199,6 +200,12 @@ const AuthenticatedAdminQuestionsIdRoute =
     path: '/admin/questions/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminConversionsIdRoute =
+  AuthenticatedAdminConversionsIdRouteImport.update({
+    id: '/admin_/conversions_/$id',
+    path: '/admin/conversions/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -228,6 +235,7 @@ export interface FileRoutesByFullPath {
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
   '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
+  '/admin/conversions/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/admin/questions/$id': typeof AuthenticatedAdminQuestionsIdRoute
   '/admin/sources/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
@@ -259,6 +267,7 @@ export interface FileRoutesByTo {
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
   '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
+  '/admin/conversions/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/admin/questions/$id': typeof AuthenticatedAdminQuestionsIdRoute
   '/admin/sources/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
@@ -292,6 +301,7 @@ export interface FileRoutesById {
   '/_authenticated/lessons_/$id': typeof AuthenticatedLessonsIdRoute
   '/_authenticated/playbooks_/$id': typeof AuthenticatedPlaybooksIdRoute
   '/_authenticated/scenarios_/$id': typeof AuthenticatedScenariosIdRoute
+  '/_authenticated/admin_/conversions_/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/_authenticated/admin_/questions_/$id': typeof AuthenticatedAdminQuestionsIdRoute
   '/_authenticated/admin_/sources_/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
@@ -325,6 +335,7 @@ export interface FileRouteTypes {
     | '/lessons/$id'
     | '/playbooks/$id'
     | '/scenarios/$id'
+    | '/admin/conversions/$id'
     | '/admin/questions/$id'
     | '/admin/sources/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -356,6 +367,7 @@ export interface FileRouteTypes {
     | '/lessons/$id'
     | '/playbooks/$id'
     | '/scenarios/$id'
+    | '/admin/conversions/$id'
     | '/admin/questions/$id'
     | '/admin/sources/$id'
   id:
@@ -388,6 +400,7 @@ export interface FileRouteTypes {
     | '/_authenticated/lessons_/$id'
     | '/_authenticated/playbooks_/$id'
     | '/_authenticated/scenarios_/$id'
+    | '/_authenticated/admin_/conversions_/$id'
     | '/_authenticated/admin_/questions_/$id'
     | '/_authenticated/admin_/sources_/$id'
   fileRoutesById: FileRoutesById
@@ -616,6 +629,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminQuestionsIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/conversions_/$id': {
+      id: '/_authenticated/admin_/conversions_/$id'
+      path: '/admin/conversions/$id'
+      fullPath: '/admin/conversions/$id'
+      preLoaderRoute: typeof AuthenticatedAdminConversionsIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -638,6 +658,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
   AuthenticatedPlaybooksIdRoute: typeof AuthenticatedPlaybooksIdRoute
   AuthenticatedScenariosIdRoute: typeof AuthenticatedScenariosIdRoute
+  AuthenticatedAdminConversionsIdRoute: typeof AuthenticatedAdminConversionsIdRoute
   AuthenticatedAdminQuestionsIdRoute: typeof AuthenticatedAdminQuestionsIdRoute
   AuthenticatedAdminSourcesIdRoute: typeof AuthenticatedAdminSourcesIdRoute
 }
@@ -661,6 +682,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
   AuthenticatedPlaybooksIdRoute: AuthenticatedPlaybooksIdRoute,
   AuthenticatedScenariosIdRoute: AuthenticatedScenariosIdRoute,
+  AuthenticatedAdminConversionsIdRoute: AuthenticatedAdminConversionsIdRoute,
   AuthenticatedAdminQuestionsIdRoute: AuthenticatedAdminQuestionsIdRoute,
   AuthenticatedAdminSourcesIdRoute: AuthenticatedAdminSourcesIdRoute,
 }
