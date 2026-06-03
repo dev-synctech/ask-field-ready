@@ -402,8 +402,8 @@ function AdminPage() {
                 </div>
               )}
             </div>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full ${it.publish_status === "published" ? "bg-success/15 text-success" : "bg-secondary text-secondary-foreground"}`}>
-              {it.publish_status}
+            <span className={`text-[10px] px-2 py-0.5 rounded-full ${STATUS_CLS[editorialStatus(it)]}`}>
+              {editorialStatus(it)}
             </span>
             <button onClick={() => setPreview(it)} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary inline-flex items-center gap-1.5">
               <Eye className="size-3.5" /> Preview
