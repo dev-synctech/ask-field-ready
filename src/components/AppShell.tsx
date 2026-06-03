@@ -92,9 +92,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             const active = path === n.to || path.startsWith(n.to + "/");
             return (
               <Link key={n.to} to={n.to}
-                className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium transition-colors ${active ? 'text-foreground' : 'text-muted-foreground'}`}>
-                {active && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-teal" />}
-                <n.icon className={`size-[20px] ${active ? 'text-teal' : ''}`} strokeWidth={active ? 2.2 : 1.8} />
+                className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium transition-colors ${active ? 'text-primary' : 'text-muted-foreground'}`}>
+                {active && <span className="absolute top-0 h-[3px] w-10 rounded-full bg-teal" />}
+                <n.icon className={`size-[20px] ${active ? 'text-primary' : ''}`} strokeWidth={active ? 2.2 : 1.8} />
                 {n.label}
               </Link>
             );
@@ -102,10 +102,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button
             type="button"
             onClick={() => setMoreOpen(true)}
-            className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium ${moreActive ? 'text-foreground' : 'text-muted-foreground'}`}
+            className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium ${moreActive ? 'text-primary' : 'text-muted-foreground'}`}
           >
-            {moreActive && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-teal" />}
-            <MoreHorizontal className={`size-[20px] ${moreActive ? 'text-teal' : ''}`} strokeWidth={moreActive ? 2.2 : 1.8} />
+            {moreActive && <span className="absolute top-0 h-[3px] w-10 rounded-full bg-teal" />}
+            <MoreHorizontal className={`size-[20px] ${moreActive ? 'text-primary' : ''}`} strokeWidth={moreActive ? 2.2 : 1.8} />
             More
           </button>
         </div>
