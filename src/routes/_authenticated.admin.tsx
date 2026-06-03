@@ -354,7 +354,7 @@ function AdminPage() {
           <input id="admin-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search title, summary, tag…"
             className="h-9 w-64 pl-8 pr-3 rounded-lg border border-input bg-surface-elevated text-xs focus:outline-none focus:ring-2 focus:ring-ring" />
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap gap-1.5 w-full min-w-0 max-w-full sm:w-auto">
           {(["all", ...TYPES] as const).map(t => (
             <button key={t} onClick={() => setTypeFilter(t as any)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${typeFilter === t ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:bg-secondary'}`}>
@@ -362,7 +362,7 @@ function AdminPage() {
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-1.5 ml-auto">
+        <div className="flex flex-wrap gap-1.5 w-full min-w-0 max-w-full sm:w-auto sm:ml-auto">
           {(["all", "published", "draft"] as const).map(p => (
             <button key={p} onClick={() => setPubFilter(p)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${pubFilter === p ? 'bg-foreground text-background border-foreground' : 'bg-card border-border hover:bg-secondary'}`}>
