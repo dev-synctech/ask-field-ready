@@ -43,9 +43,10 @@ const KIND_META: Record<FeedbackKind, { label: string; cls: string; icon: typeof
 };
 
 const STATUS_CLS: Record<Status, string> = {
-  new:      "bg-primary-soft text-primary",
-  triaged:  "bg-warning/15 text-warning",
-  resolved: "bg-success/15 text-success",
+  new:       "bg-primary-soft text-primary",
+  triaged:   "bg-warning/15 text-warning",
+  resolved:  "bg-success/15 text-success",
+  dismissed: "bg-muted text-muted-foreground",
 };
 
 function FeedbackPage() {
