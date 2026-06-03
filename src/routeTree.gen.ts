@@ -36,6 +36,7 @@ import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated.admin_.feedback'
 import { Route as AuthenticatedAdminCoverageRouteImport } from './routes/_authenticated.admin_.coverage'
+import { Route as AuthenticatedAdminConversionsRouteImport } from './routes/_authenticated.admin_.conversions'
 import { Route as AuthenticatedAdminSourcesIdRouteImport } from './routes/_authenticated.admin_.sources_.$id'
 import { Route as AuthenticatedAdminQuestionsIdRouteImport } from './routes/_authenticated.admin_.questions_.$id'
 
@@ -180,6 +181,12 @@ const AuthenticatedAdminCoverageRoute =
     path: '/admin/coverage',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminConversionsRoute =
+  AuthenticatedAdminConversionsRouteImport.update({
+    id: '/admin_/conversions',
+    path: '/admin/conversions',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminSourcesIdRoute =
   AuthenticatedAdminSourcesIdRouteImport.update({
     id: '/admin_/sources_/$id',
@@ -211,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/admin/conversions': typeof AuthenticatedAdminConversionsRoute
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
@@ -241,6 +249,7 @@ export interface FileRoutesByTo {
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/admin/conversions': typeof AuthenticatedAdminConversionsRoute
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
@@ -273,6 +282,7 @@ export interface FileRoutesById {
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/_authenticated/admin_/conversions': typeof AuthenticatedAdminConversionsRoute
   '/_authenticated/admin_/coverage': typeof AuthenticatedAdminCoverageRoute
   '/_authenticated/admin_/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin_/questions': typeof AuthenticatedAdminQuestionsRoute
@@ -305,6 +315,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/admin/conversions'
     | '/admin/coverage'
     | '/admin/feedback'
     | '/admin/questions'
@@ -335,6 +346,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/admin/conversions'
     | '/admin/coverage'
     | '/admin/feedback'
     | '/admin/questions'
@@ -366,6 +378,7 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/_authenticated/admin_/conversions'
     | '/_authenticated/admin_/coverage'
     | '/_authenticated/admin_/feedback'
     | '/_authenticated/admin_/questions'
@@ -582,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCoverageRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/conversions': {
+      id: '/_authenticated/admin_/conversions'
+      path: '/admin/conversions'
+      fullPath: '/admin/conversions'
+      preLoaderRoute: typeof AuthenticatedAdminConversionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/sources_/$id': {
       id: '/_authenticated/admin_/sources_/$id'
       path: '/admin/sources/$id'
@@ -608,6 +628,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPlaybooksRoute: typeof AuthenticatedPlaybooksRoute
   AuthenticatedScenariosRoute: typeof AuthenticatedScenariosRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
+  AuthenticatedAdminConversionsRoute: typeof AuthenticatedAdminConversionsRoute
   AuthenticatedAdminCoverageRoute: typeof AuthenticatedAdminCoverageRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
@@ -630,6 +651,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPlaybooksRoute: AuthenticatedPlaybooksRoute,
   AuthenticatedScenariosRoute: AuthenticatedScenariosRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
+  AuthenticatedAdminConversionsRoute: AuthenticatedAdminConversionsRoute,
   AuthenticatedAdminCoverageRoute: AuthenticatedAdminCoverageRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
@@ -673,3 +695,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
