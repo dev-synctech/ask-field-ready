@@ -220,7 +220,7 @@ function AdminPage() {
   return (
     <div className="max-w-4xl mx-auto px-5 py-8">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <Header title="Admin" subtitle="Create, tag, and publish — preview mode." />
+        <Header title="Admin" subtitle="Create, sanitize, tag, and publish Mizly-original support content." />
         <div className="flex items-center gap-2 flex-wrap">
           <Link to="/admin/coverage" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <BarChart3 className="size-4" /> Coverage
