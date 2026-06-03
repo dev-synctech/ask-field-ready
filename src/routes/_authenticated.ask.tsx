@@ -82,10 +82,10 @@ function AskPage() {
         <input
           value={q} onChange={e => setQ(e.target.value)}
           placeholder="e.g. The printer is not printing. What do I check first?"
-          className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring/40 transition"
+          className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition"
         />
         <button type="submit" disabled={q.trim().length < 2 || loading}
-          className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-foreground text-background text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:opacity-90 transition">
+          className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:bg-primary/90 transition shadow-soft">
           {loading ? <><Loader2 className="size-3.5 animate-spin" /> Thinking</> : "Ask"}
         </button>
       </form>
@@ -101,10 +101,10 @@ function AskPage() {
           <input
             value={q} onChange={e => setQ(e.target.value)}
             placeholder="Ask Mizly…"
-            className="w-full h-12 pl-10 pr-24 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring/40"
+            className="w-full h-12 pl-10 pr-24 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
           />
           <button type="submit" disabled={q.trim().length < 2 || loading}
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 h-9 min-w-[68px] px-3 rounded-xl bg-foreground text-background text-[13px] font-medium disabled:opacity-40 inline-flex items-center justify-center gap-1.5">
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 h-9 min-w-[68px] px-3 rounded-xl bg-primary text-primary-foreground text-[13px] font-medium disabled:opacity-40 inline-flex items-center justify-center gap-1.5 shadow-soft">
             {loading ? <Loader2 className="size-3.5 animate-spin" /> : "Ask"}
           </button>
         </div>
