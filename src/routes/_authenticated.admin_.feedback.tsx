@@ -4,7 +4,7 @@ import { ArrowLeft, MessageSquare, ThumbsDown, ThumbsUp, FileQuestion, Sparkles,
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/admin_/feedback")({
-  head: () => ({ meta: [{ title: "Feedback — Mizly Admin" }] }),
+  head: () => ({ meta: [{ title: "Ask Feedback Inbox — Mizly Admin" }] }),
   component: FeedbackPage,
 });
 
