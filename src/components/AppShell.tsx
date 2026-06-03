@@ -68,9 +68,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Mobile top bar */}
       <header className="md:hidden sticky top-0 z-30 bg-background/85 backdrop-blur border-b border-border pt-safe">
         <div className="flex items-center justify-between px-4 h-14">
-          <Link to="/ask" className="flex items-center gap-2">
-            <Logo />
-            <span className="font-display font-semibold text-sm">Mizly</span>
+          <Link to="/ask" className="flex items-center gap-2" aria-label="Mizly home">
+            <img src={mizlyLogo.url} alt="Mizly" className="h-7 w-auto" />
           </Link>
           <div className="flex items-center gap-1">
             <Link to="/admin" className="size-9 rounded-full bg-secondary flex items-center justify-center" aria-label="Admin">
