@@ -610,3 +610,17 @@ function KPI({ label, value, tone }: { label: string; value: number; tone?: "suc
     </div>
   );
 }
+
+function AdminTile({ to, icon: Icon, title, desc }: { to: string; icon: any; title: string; desc: string }) {
+  return (
+    <Link to={to as any} className="group flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-border-strong hover:shadow-soft transition-all">
+      <div className="size-9 rounded-lg bg-secondary text-foreground/70 flex items-center justify-center group-hover:text-teal shrink-0">
+        <Icon className="size-4" />
+      </div>
+      <div className="min-w-0">
+        <div className="text-sm font-medium">{title}</div>
+        <div className="text-xs text-muted-foreground mt-0.5 leading-snug">{desc}</div>
+      </div>
+    </Link>
+  );
+}
