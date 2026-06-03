@@ -221,32 +221,9 @@ function AdminPage() {
     <div className="max-w-4xl mx-auto px-5 py-8">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <Header title="Admin" subtitle="Create, sanitize, tag, and publish Mizly-original support content." />
-        <div className="flex items-center gap-2 flex-wrap">
-          <Link to="/admin/coverage" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
-            <BarChart3 className="size-4" /> Coverage
-          </Link>
-          <Link to="/admin/feedback" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
-            <MessageSquare className="size-4" /> Feedback
-          </Link>
-          <Link to="/admin/sources" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
-            <FolderInput className="size-4" /> Source Library
-          </Link>
-          <Link to="/admin/conversions" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
-            <GitBranch className="size-4" /> Source Conversion Queue
-          </Link>
-          <Link to="/admin/questions" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
-            <HelpCircle className="size-4" /> Question Bank
-          </Link>
-          <Link to="/admin/taxonomy" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
-            <Tags className="size-4" /> Taxonomy
-          </Link>
-          <Link to="/admin/users" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
-            <Users className="size-4" /> Users
-          </Link>
-          <a href="#editor" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90">
-            <Plus className="size-4" /> New content
-          </a>
-        </div>
+        <a href="#editor" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90">
+          <Plus className="size-4" /> New content
+        </a>
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
@@ -254,6 +231,17 @@ function AdminPage() {
         <KPI label="Published" value={counts.published} tone="success" />
         <KPI label="Drafts" value={counts.drafts} tone="muted" />
       </div>
+
+      <div className="mt-6 grid sm:grid-cols-2 gap-2.5">
+        <AdminTile to="/admin/conversions" icon={GitBranch} title="Source conversion queue" desc="Sanitize and route raw sources into Mizly content." />
+        <AdminTile to="/admin/feedback" icon={MessageSquare} title="Feedback" desc="Answers learners marked unhelpful or missing." />
+        <AdminTile to="/admin/coverage" icon={BarChart3} title="Coverage" desc="Where the library is thin across roles and phases." />
+        <AdminTile to="/admin/sources" icon={FolderInput} title="Source library" desc="Admin-only raw source material." />
+        <AdminTile to="/admin/questions" icon={HelpCircle} title="Question bank" desc="Curated questions and their routed answers." />
+        <AdminTile to="/admin/taxonomy" icon={Tags} title="Taxonomy" desc="Roles, domains, phases, urgency, escalation." />
+        <AdminTile to="/admin/users" icon={Users} title="Users" desc="Roles and access." />
+      </div>
+
 
       <div className="mt-6 rounded-2xl border border-primary/30 bg-primary/5 p-4 text-xs text-foreground/80 flex gap-2">
         <Info className="size-4 text-primary shrink-0 mt-0.5" />
