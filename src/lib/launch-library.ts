@@ -4,6 +4,7 @@
 // TODO: REMOVE BEFORE PRODUCTION LAUNCH — replace with Supabase-backed content.
 
 import { ITEMS, itemById, type ContentItem, type ContentType } from "./demo-data";
+import { retrieveKbSupport, type KbSupport } from "./kb-retrieval";
 
 export type LaunchType = ContentType | "ask_answer_seed";
 export type VisualAidKind = "screenshot" | "video" | "tasklet";
@@ -907,6 +908,7 @@ export interface AskAnswer {
   walkthrough: string[];
   ifThatFails: string[];
   visualAids: VisualAid[];
+  kbSupport: KbSupport;
   first90: string[];
   whatToSay: string[];
   whatToCheck: string[];
@@ -985,6 +987,16 @@ function visualAidsFor(entry: LaunchEntry, relatedItems: ContentItem[]): VisualA
     : [];
 }
 
+function dedupeVisualAids(aids: VisualAid[]): VisualAid[] {
+  const seen = new Set<string>();
+  return aids.filter(aid => {
+    const key = `${aid.kind}:${aid.title}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 export function askLaunch(query: string): AskAnswer {
   const tokens = tokenize(query).filter(t => t.length > 2 && !STOP_TOKENS.has(t));
   const queryText = query.toLowerCase();
@@ -1015,6 +1027,11 @@ export function askLaunch(query: string): AskAnswer {
   const relatedItems = (entry.related_ids
     .map(id => itemById(id))
     .filter(Boolean) as ContentItem[]);
+  const kbSupport = retrieveKbSupport(query, entry, relatedItems, matchQuality);
+  const visualAids = dedupeVisualAids([
+    ...visualAidsFor(entry, relatedItems),
+    ...kbSupport.visualAids,
+  ]);
 
   const pickType = (t: ContentType) => relatedItems.filter(i => i.content_type === t).slice(0, 3);
 
@@ -1035,7 +1052,11 @@ export function askLaunch(query: string): AskAnswer {
       : `I couldn't find an exact match in the Mizly library for that question. Here is the closest playbook — confirm with your floor lead before acting.`,
     walkthrough: walkthroughFor(entry),
     ifThatFails: ifThatFailsFor(entry),
-    visualAids: visualAidsFor(entry, relatedItems),
+    visualAids,
+    kbSupport: {
+      ...kbSupport,
+      visualAids,
+    },
     first90: entry.first90,
     whatToSay: entry.whatToSay,
     whatToCheck: entry.whatToCheck,

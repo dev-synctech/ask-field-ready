@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/ask")({
 
 const RECENT_KEY = "ate.ask.recent";
 const SAVED_KEY = "ate.ask.saved";
+const CONTENT_GAP_KEY = "mizly.ask.content_gaps";
 
 const TYPE_META: Record<ContentType, { label: string; icon: any; cls: string }> = {
   lesson:    { label: "Lesson",    icon: BookOpen,       cls: "bg-primary-soft text-primary" },
@@ -173,6 +174,29 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
   const r = answer;
   const sourceBadge = r.sourceEntry ? badgeForLaunchType(r.sourceEntry.type) : null;
 
+  useEffect(() => {
+    if (typeof window === "undefined" || r.kbSupport.gaps.length === 0) return;
+    try {
+      const prev = JSON.parse(localStorage.getItem(CONTENT_GAP_KEY) ?? "[]");
+      const next = [
+        ...prev,
+        {
+          query,
+          answerTitle: r.title,
+          gaps: r.kbSupport.gaps.map(gap => ({
+            kind: gap.kind,
+            label: gap.label,
+            priority: gap.priority,
+          })),
+          ts: Date.now(),
+        },
+      ];
+      localStorage.setItem(CONTENT_GAP_KEY, JSON.stringify(next.slice(-80)));
+    } catch {
+      // Local gap logging is best-effort in the preview build.
+    }
+  }, [query, r.title, r.kbSupport.gaps]);
+
   return (
     <div className="mt-8 space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-400">
       {/* Match quality bar */}
@@ -183,8 +207,14 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             onClick={async () => {
               const visualGuide = r.visualAids.length
                 ? `\n\nVisual guide:\n${r.visualAids.map(a => `- ${a.title}: ${a.note}${a.callouts?.length ? `\n  ${a.callouts.join("\n  ")}` : ""}`).join("\n")}`
+                : `\n\nVisual guide:\nNo sanitized screenshot/video yet. Written walkthrough only for now.`;
+              const kbMatches = r.kbSupport.matches.length
+                ? `\n\nMizly KB match:\n${r.kbSupport.matches.slice(0, 6).map(m => `- ${m.title} (${m.reason})`).join("\n")}`
                 : "";
-              const text = `${query}\n\nShort answer: ${r.shortAnswer}\n\nDo this now:\n${r.walkthrough.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nIf that fails:\n${r.ifThatFails.map(s=>`- ${s}`).join("\n")}${visualGuide}\n\nFirst 90 seconds:\n${r.first90.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nWhat to say:\n${r.whatToSay.map(s=>`- ${s}`).join("\n")}\n\nWhat to check:\n${r.whatToCheck.map(s=>`- ${s}`).join("\n")}\n\nWhen to escalate: ${r.whenToEscalate}`;
+              const gaps = r.kbSupport.gaps.length
+                ? `\n\nContent gaps:\n${r.kbSupport.gaps.map(g => `- ${g.label}: ${g.prompt}`).join("\n")}`
+                : "";
+              const text = `${query}\n\nShort answer: ${r.shortAnswer}\n\nDo this now:\n${r.walkthrough.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nIf that fails:\n${r.ifThatFails.map(s=>`- ${s}`).join("\n")}${visualGuide}${kbMatches}${gaps}\n\nFirst 90 seconds:\n${r.first90.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nWhat to say:\n${r.whatToSay.map(s=>`- ${s}`).join("\n")}\n\nWhat to check:\n${r.whatToCheck.map(s=>`- ${s}`).join("\n")}\n\nWhen to escalate: ${r.whenToEscalate}`;
               try {
                 await navigator.clipboard?.writeText(text);
                 toast.success("Answer copied to clipboard");
@@ -233,6 +263,8 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
 
       <WalkthroughSection answer={r} />
       <VisualGuideSection answer={r} />
+      <KbMatchSection answer={r} />
+      <ContentGapSection answer={r} />
 
       {/* Existing field-support sections */}
       <ListSection title="FIRST 90 SECONDS" items={r.first90} ordered />
@@ -335,8 +367,6 @@ function WalkthroughSection({ answer }: { answer: AskAnswer }) {
 }
 
 function VisualGuideSection({ answer }: { answer: AskAnswer }) {
-  if (!answer.visualAids.length) return null;
-
   const iconFor = (kind: string) => {
     if (kind === "screenshot") return ImageIcon;
     if (kind === "tasklet") return MousePointerClick;
@@ -348,6 +378,30 @@ function VisualGuideSection({ answer }: { answer: AskAnswer }) {
     if (kind === "tasklet") return "Click path";
     return "Training video";
   };
+
+  if (!answer.visualAids.length) {
+    const topGap = answer.kbSupport.gaps[0];
+    return (
+      <Section title="VISUAL GUIDE">
+        <div className="rounded-xl border border-dashed border-border bg-secondary/45 p-4">
+          <div className="flex items-start gap-3">
+            <span className="size-9 shrink-0 rounded-xl bg-primary-soft text-primary flex items-center justify-center">
+              <ImageIcon className="size-4" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">No visual guide yet</span>
+              <span className="mt-0.5 block text-sm font-semibold text-foreground">
+                {topGap?.label ?? "Written walkthrough only for now"}
+              </span>
+              <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                Mizly has the written workflow. The content factory should add a sanitized screenshot, click path, or short training clip next.
+              </span>
+            </span>
+          </div>
+        </div>
+      </Section>
+    );
+  }
 
   return (
     <Section title="VISUAL GUIDE">
@@ -401,6 +455,94 @@ function VisualGuideSection({ answer }: { answer: AskAnswer }) {
       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
         Mizly visuals must be recreated, sanitized, and vendor-neutral. Do not upload screenshots with patient data, vendor branding, private URLs, or organization names.
       </p>
+    </Section>
+  );
+}
+
+function isContentKind(kind: string): kind is ContentType {
+  return ["lesson", "playbook", "video", "checklist", "scenario"].includes(kind);
+}
+
+function KbMatchSection({ answer }: { answer: AskAnswer }) {
+  const matches = answer.kbSupport.matches.slice(0, 6);
+  if (!matches.length) return null;
+
+  const iconFor = (kind: string) => {
+    if (isContentKind(kind)) return TYPE_META[kind].icon;
+    if (kind === "screenshot") return ImageIcon;
+    if (kind === "tasklet") return MousePointerClick;
+    if (kind === "video") return Film;
+    return ShieldCheck;
+  };
+
+  const card = (match: (typeof matches)[number]) => {
+    const Icon = iconFor(match.kind);
+    return (
+      <div className="rounded-xl border border-border bg-card p-3.5 hover:border-primary/35 hover:shadow-soft transition-all">
+        <div className="flex items-start gap-3">
+          <span className="size-8 shrink-0 rounded-lg bg-primary-soft text-primary flex items-center justify-center">
+            <Icon className="size-3.5" />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{match.kind}</span>
+            <span className="mt-0.5 block text-sm font-medium text-foreground line-clamp-2">{match.title}</span>
+            <span className="mt-1 block text-xs text-muted-foreground">{match.reason}</span>
+          </span>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <Section title="MIZLY KB MATCH">
+      <p className="text-xs leading-relaxed text-muted-foreground mb-3">
+        {answer.kbSupport.retrievalNote}
+      </p>
+      <div className="grid sm:grid-cols-2 gap-2.5">
+        {matches.map(match => {
+          if (isContentKind(match.kind)) {
+            const lk = linkForType(match.kind, match.id);
+            return (
+              <Link key={match.id} to={lk.to} params={lk.params} className="block">
+                {card(match)}
+              </Link>
+            );
+          }
+          if (match.href === "/videos") {
+            return (
+              <Link key={match.id} to="/videos" className="block">
+                {card(match)}
+              </Link>
+            );
+          }
+          return <div key={match.id}>{card(match)}</div>;
+        })}
+      </div>
+    </Section>
+  );
+}
+
+function ContentGapSection({ answer }: { answer: AskAnswer }) {
+  const gaps = answer.kbSupport.gaps;
+  if (!gaps.length) return null;
+
+  return (
+    <Section title="CONTENT GAP LOGGED">
+      <div className="space-y-2">
+        {gaps.map(gap => (
+          <div key={gap.id} className="rounded-xl border border-border bg-secondary/35 p-3">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-sm font-medium text-foreground">{gap.label}</div>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{gap.prompt}</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-card px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground border border-border">
+                {gap.priority}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
     </Section>
   );
 }
