@@ -195,6 +195,45 @@ function Landing() {
         </div>
       </section>
 
+      {/* Video Preview */}
+      <section className="border-t border-border bg-surface">
+        <div className="max-w-6xl mx-auto px-5 py-16 md:py-20">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+            <div className="order-1">
+              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-teal">
+                <span className="size-1.5 rounded-full bg-teal" /> 24-second preview
+              </div>
+              <h2 className="mt-4 text-3xl md:text-4xl font-display font-semibold tracking-tight">
+                See Mizly in 24 seconds.
+              </h2>
+              <p className="mt-3 text-muted-foreground">
+                A quick look at how Mizly turns go-live noise into clear next steps, playbooks, checklists, and practice moments.
+              </p>
+              <p className="mt-6 text-sm font-medium text-foreground">Music-only preview</p>
+              <p className="mt-1 text-xs text-muted-foreground">Autoplays muted. Tap controls to hear the music.</p>
+            </div>
+            <div className="order-2 flex justify-center md:justify-end">
+              <div className="relative w-full max-w-[300px]">
+                <div className="absolute -inset-6 -z-10 rounded-[2.4rem] bg-gradient-to-br from-primary-soft/60 via-transparent to-teal-soft/60 blur-2xl" />
+                <div className="rounded-[1.75rem] border border-border bg-surface-elevated p-2 shadow-elevated ring-brand">
+                  <video
+                    src={videoAsset.url}
+                    poster={posterAsset.url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                    preload="metadata"
+                    aria-label="Mizly 24-second product preview"
+                    className="block w-full aspect-[9/16] rounded-[1.4rem] bg-foreground object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Section 1: Pillars */}
       <section className="border-t border-border bg-surface">
