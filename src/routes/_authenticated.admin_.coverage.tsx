@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { ArrowLeft, BarChart3, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, BarChart3, AlertTriangle, CheckCircle2, GitBranch } from "lucide-react";
 import { ITEMS, MODULES, type ContentType } from "@/lib/demo-data";
+import { useConversions, STATUS_LABEL, RISK_LABEL } from "@/lib/conversions-data";
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/admin_/coverage")({
