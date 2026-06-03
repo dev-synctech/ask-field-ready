@@ -6,6 +6,8 @@ import {
   ChevronDown, X, Mail,
 } from "lucide-react";
 import logoAsset from "@/assets/mizly-logo.png.asset.json";
+import videoAsset from "@/assets/mizly-social-music-only.mp4.asset.json";
+import posterAsset from "@/assets/mizly-social-music-only-poster.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
