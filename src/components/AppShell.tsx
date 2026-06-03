@@ -37,46 +37,46 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row">
       {/* Desktop side rail */}
-      <aside className="hidden md:flex md:w-64 md:flex-col border-r border-border bg-surface px-4 py-6 sticky top-0 h-screen">
-        <Link to="/ask" className="flex items-center gap-2 mb-8 px-2">
-          <img src={mizlyLogo.url} alt="Mizly" className="h-7 w-auto" />
-          <div className="text-[11px] text-muted-foreground ml-1">Go-live support</div>
+      <aside className="hidden md:flex md:w-60 md:flex-col border-r border-border bg-surface px-3 py-5 sticky top-0 h-screen">
+        <Link to="/ask" className="flex items-center gap-2 mb-7 px-2 py-1">
+          <img src={mizlyLogo.url} alt="Mizly" className="h-6 w-auto" />
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground ml-auto">Field</div>
         </Link>
-        <nav className="space-y-1">
+        <nav className="space-y-0.5">
           {primaryNav.map(n => {
             const active = path === n.to || path.startsWith(n.to + "/");
             return (
               <Link key={n.to} to={n.to}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${active ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/70 hover:bg-secondary hover:text-foreground'}`}>
-                <n.icon className="size-4" />
+                className={`group flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] transition-colors ${active ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+                <n.icon className={`size-[15px] ${active ? 'text-teal' : 'text-muted-foreground group-hover:text-foreground'}`} />
                 {n.label}
               </Link>
             );
           })}
         </nav>
-        <div className="mt-auto space-y-1">
-          <Link to="/admin" className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${path.startsWith('/admin') ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/70 hover:bg-secondary'}`}>
-            <Shield className="size-4" /> Admin
+        <div className="mt-auto space-y-0.5 pt-4 border-t border-border">
+          <Link to="/admin" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path.startsWith('/admin') ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+            <Shield className={`size-[15px] ${path.startsWith('/admin') ? 'text-teal' : 'text-muted-foreground'}`} /> Admin
           </Link>
-          <Link to="/account" className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${path === '/account' ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/70 hover:bg-secondary'}`}>
-            <UserRound className="size-4" /> Account
+          <Link to="/account" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path === '/account' ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+            <UserRound className={`size-[15px] ${path === '/account' ? 'text-teal' : 'text-muted-foreground'}`} /> Account
           </Link>
-          <div className="px-3 pt-3 text-[10px] uppercase tracking-wider text-muted-foreground">Demo build</div>
+          <div className="px-3 pt-3 text-[10px] uppercase tracking-wider text-muted-foreground/70">Demo build</div>
         </div>
       </aside>
 
       {/* Mobile top bar */}
       <header className="md:hidden sticky top-0 z-30 bg-background/85 backdrop-blur border-b border-border pt-safe">
-        <div className="flex items-center justify-between px-4 h-14">
+        <div className="flex items-center justify-between px-4 h-13" style={{ height: 52 }}>
           <Link to="/ask" className="flex items-center gap-2" aria-label="Mizly home">
-            <img src={mizlyLogo.url} alt="Mizly" className="h-7 w-auto" />
+            <img src={mizlyLogo.url} alt="Mizly" className="h-6 w-auto" />
           </Link>
           <div className="flex items-center gap-1">
-            <Link to="/admin" className="size-9 rounded-full bg-secondary flex items-center justify-center" aria-label="Admin">
-              <Shield className="size-4" />
+            <Link to="/admin" className="size-10 rounded-full hover:bg-secondary flex items-center justify-center text-foreground/70" aria-label="Admin">
+              <Shield className="size-[18px]" />
             </Link>
-            <Link to="/account" className="size-9 rounded-full bg-secondary flex items-center justify-center" aria-label="Account">
-              <UserRound className="size-4" />
+            <Link to="/account" className="size-10 rounded-full hover:bg-secondary flex items-center justify-center text-foreground/70" aria-label="Account">
+              <UserRound className="size-[18px]" />
             </Link>
           </div>
         </div>
@@ -91,8 +91,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             const active = path === n.to || path.startsWith(n.to + "/");
             return (
               <Link key={n.to} to={n.to}
-                className={`flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-medium ${active ? 'text-primary' : 'text-muted-foreground'}`}>
-                <n.icon className="size-5" />
+                className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium transition-colors ${active ? 'text-foreground' : 'text-muted-foreground'}`}>
+                {active && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-teal" />}
+                <n.icon className={`size-[20px] ${active ? 'text-teal' : ''}`} strokeWidth={active ? 2.2 : 1.8} />
                 {n.label}
               </Link>
             );
@@ -100,9 +101,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button
             type="button"
             onClick={() => setMoreOpen(true)}
-            className={`flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-medium ${moreActive ? 'text-primary' : 'text-muted-foreground'}`}
+            className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium ${moreActive ? 'text-foreground' : 'text-muted-foreground'}`}
           >
-            <MoreHorizontal className="size-5" />
+            {moreActive && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-teal" />}
+            <MoreHorizontal className={`size-[20px] ${moreActive ? 'text-teal' : ''}`} strokeWidth={moreActive ? 2.2 : 1.8} />
             More
           </button>
         </div>
@@ -112,17 +114,18 @@ export function AppShell({ children }: { children: ReactNode }) {
       {moreOpen && (
         <div className="md:hidden fixed inset-0 z-40 bg-foreground/40 backdrop-blur-sm flex items-end" onClick={() => setMoreOpen(false)}>
           <div className="w-full bg-card rounded-t-3xl border-t border-border p-5 pb-safe animate-in slide-in-from-bottom" onClick={e => e.stopPropagation()}>
+            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-border-strong" />
             <div className="flex items-center justify-between mb-3">
               <div className="font-display font-semibold">More</div>
-              <button onClick={() => setMoreOpen(false)} aria-label="Close" className="size-8 rounded-lg hover:bg-secondary inline-flex items-center justify-center">
+              <button onClick={() => setMoreOpen(false)} aria-label="Close" className="size-10 rounded-lg hover:bg-secondary inline-flex items-center justify-center">
                 <X className="size-4" />
               </button>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {moreItems.map(i => (
                 <Link key={i.to} to={i.to} onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border hover:bg-secondary text-sm font-medium">
-                  <i.icon className="size-4 text-primary" /> {i.label}
+                  className="flex items-center gap-3 px-4 min-h-12 rounded-xl border border-border hover:bg-secondary text-sm font-medium">
+                  <i.icon className="size-[18px] text-teal" /> {i.label}
                 </Link>
               ))}
             </div>
