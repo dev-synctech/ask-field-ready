@@ -10,14 +10,14 @@ const primaryNav = [
   { to: "/playbooks", label: "Playbooks", icon: NotebookPen },
   { to: "/scenarios", label: "Scenarios", icon: ListChecks },
   { to: "/videos", label: "Videos", icon: Film },
-  { to: "/checklists", label: "Lists", icon: ClipboardCheck },
+  { to: "/checklists", label: "Checklists", icon: ClipboardCheck },
 ];
 
 // Mobile bottom nav: Ask is first/default. More opens a sheet with everything else.
 const mobileNav = [
   { to: "/ask", label: "Ask", icon: Search },
   { to: "/learn", label: "Learn", icon: BookOpen },
-  { to: "/playbooks", label: "Plays", icon: NotebookPen },
+  { to: "/playbooks", label: "Playbooks", icon: NotebookPen },
   { to: "/scenarios", label: "Scenarios", icon: ListChecks },
 ];
 

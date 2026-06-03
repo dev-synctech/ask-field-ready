@@ -220,7 +220,7 @@ function AdminPage() {
   return (
     <div className="max-w-4xl mx-auto px-5 py-8">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <Header title="Admin" subtitle="Create, tag, and publish — preview mode." />
+        <Header title="Admin" subtitle="Create, sanitize, tag, and publish Mizly-original support content." />
         <div className="flex items-center gap-2 flex-wrap">
           <Link to="/admin/coverage" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <BarChart3 className="size-4" /> Coverage
@@ -259,7 +259,7 @@ function AdminPage() {
 
       <div className="mt-3 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
         <div className="font-semibold flex items-center gap-2 mb-1"><ShieldCheck className="size-3.5 text-warning" /> Content rules</div>
-        No PHI. No vendor or organization names. No proprietary documentation. Drafts save anytime — publishing requires sanitized approval.
+        No PHI. No learner-facing vendor names or organization names. No vendor screenshots or logos. No copied proprietary training text. Drafts save anytime — publishing requires sanitized approval.
       </div>
 
       {/* Editor */}

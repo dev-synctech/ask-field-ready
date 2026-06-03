@@ -68,15 +68,15 @@ function AskPage() {
         <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-3">
           <Sparkles className="size-3.5 text-primary" /> Ask Mizly
         </div>
-        <h1 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">What do you need to know?</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Ask a go-live question. Get a short answer, the first 90 seconds, what to say, what to check, and when to escalate.</p>
+        <h1 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">Type what the user just asked you on the floor.</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Mizly returns a short answer, first 90 seconds, what to say, what to check, when to escalate, and related playbooks.</p>
       </div>
 
       <form onSubmit={e => { e.preventDefault(); run(q); }} className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
         <input
           value={q} onChange={e => setQ(e.target.value)}
-          placeholder="e.g. A user cannot print a wristband. What should I check?"
+          placeholder="e.g. The printer is not printing. What do I check first?"
           className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-base shadow-card focus:outline-none focus:ring-2 focus:ring-ring"
         />
         <button type="submit" disabled={q.trim().length < 2 || loading}

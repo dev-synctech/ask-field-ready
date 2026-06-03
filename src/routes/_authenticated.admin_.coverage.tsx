@@ -44,7 +44,7 @@ function CoveragePage() {
       </div>
 
       <div className="mt-8 font-display font-semibold flex items-center gap-2">
-        <BarChart3 className="size-4 text-primary" /> Coverage by module
+        <BarChart3 className="size-4 text-primary" /> Coverage Matrix
       </div>
       <p className="text-xs text-muted-foreground mt-1">
         Target: at least {TARGET_PER_TYPE} published items per type per module.
@@ -79,9 +79,13 @@ function CoveragePage() {
                 <td className="px-2 py-2.5 text-center font-medium">{row.total}</td>
                 <td className="px-2 py-2.5 text-center">
                   {row.gaps.length === 0 ? (
-                    <span className="inline-flex items-center gap-1 text-success"><CheckCircle2 className="size-3.5" /> Covered</span>
+                    row.total >= 5 ? (
+                      <span className="inline-flex items-center gap-1 text-success"><CheckCircle2 className="size-3.5" /> Strong coverage</span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-warning"><AlertTriangle className="size-3.5" /> Thin area</span>
+                    )
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-warning"><AlertTriangle className="size-3.5" /> {row.gaps.length} gap{row.gaps.length === 1 ? "" : "s"}</span>
+                    <span className="inline-flex items-center gap-1 text-warning"><AlertTriangle className="size-3.5" /> Needs content · {row.gaps.length} gap{row.gaps.length === 1 ? "" : "s"}</span>
                   )}
                 </td>
               </tr>

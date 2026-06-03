@@ -29,7 +29,7 @@ function ChecklistsPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
-      <Header title="Checklists" subtitle="Quick, carry-the-pager references for the moments that matter." />
+      <Header title="Checklists" subtitle="Carry-the-shift tools for readiness, downtime, escalation, and handoff." />
       <div className="mt-6 grid md:grid-cols-[260px_1fr] gap-4">
         <div className="space-y-2">
           {checklists.map(c => {

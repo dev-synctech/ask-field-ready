@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated/learn")({
 function LearnPage() {
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
-      <Header title="Learn" subtitle="Ten core modules, organized for the floor." />
+      <Header title="Learn" subtitle="Short lessons organized by role, domain, and go-live phase." />
       <div className="mt-6 space-y-4">
         {MODULES.map(m => {
           const lessons = ITEMS.filter(i => i.module_id === m.id);

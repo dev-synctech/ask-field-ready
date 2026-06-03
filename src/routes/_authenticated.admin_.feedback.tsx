@@ -2,14 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft, MessageSquare, ThumbsDown, ThumbsUp, FileQuestion, Sparkles, Filter } from "lucide-react";
 import { Header } from "./_authenticated.learn";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin_/feedback")({
-  head: () => ({ meta: [{ title: "Feedback — Mizly Admin" }] }),
+  head: () => ({ meta: [{ title: "Ask Feedback Inbox — Mizly Admin" }] }),
   component: FeedbackPage,
 });
 
 type FeedbackKind = "helpful" | "not_helpful" | "missing" | "request_playbook";
-type Status = "new" | "triaged" | "resolved";
+type Status = "new" | "triaged" | "resolved" | "dismissed";
 
 interface FeedbackItem {
   id: string;
@@ -43,9 +44,10 @@ const KIND_META: Record<FeedbackKind, { label: string; cls: string; icon: typeof
 };
 
 const STATUS_CLS: Record<Status, string> = {
-  new:      "bg-primary-soft text-primary",
-  triaged:  "bg-warning/15 text-warning",
-  resolved: "bg-success/15 text-success",
+  new:       "bg-primary-soft text-primary",
+  triaged:   "bg-warning/15 text-warning",
+  resolved:  "bg-success/15 text-success",
+  dismissed: "bg-muted text-muted-foreground",
 };
 
 function FeedbackPage() {
@@ -74,7 +76,7 @@ function FeedbackPage() {
       <Link to="/admin" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-3">
         <ArrowLeft className="size-3.5" /> Back to Admin
       </Link>
-      <Header title="Feedback" subtitle="What learners said about Ask answers — and what they're asking for next." />
+      <Header title="Ask Feedback Inbox" subtitle="What learners said after using Ask, and what the library should cover next." />
 
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
         <KPI label="Total" value={counts.total} />
@@ -94,7 +96,7 @@ function FeedbackPage() {
           </button>
         ))}
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium ml-3">Status</span>
-        {(["all", "new", "triaged", "resolved"] as const).map(s => (
+        {(["all", "new", "triaged", "resolved", "dismissed"] as const).map(s => (
           <button key={s} onClick={() => setStatusFilter(s)}
             className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${statusFilter === s ? 'bg-foreground text-background border-foreground' : 'bg-card border-border hover:bg-secondary'}`}>
             {s}
@@ -129,12 +131,16 @@ function FeedbackPage() {
                     <div className="mt-1.5 text-xs text-foreground/80 rounded-lg bg-secondary/60 px-3 py-2">"{f.note}"</div>
                   )}
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {f.status !== "triaged" && (
-                    <button onClick={() => setStatus(f.id, "triaged")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary">Triage</button>
+                <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                  {f.status === "new" && (
+                    <button onClick={() => setStatus(f.id, "triaged")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary">Review</button>
                   )}
+                  <button onClick={() => toast.success("Converted to draft in the content editor")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary">Convert to draft</button>
                   {f.status !== "resolved" && (
-                    <button onClick={() => setStatus(f.id, "resolved")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-success/10 hover:text-success">Resolve</button>
+                    <button onClick={() => setStatus(f.id, "resolved")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-success/10 hover:text-success">Mark resolved</button>
+                  )}
+                  {f.status !== "dismissed" && (
+                    <button onClick={() => setStatus(f.id, "dismissed")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary text-muted-foreground">Dismiss</button>
                   )}
                 </div>
               </div>

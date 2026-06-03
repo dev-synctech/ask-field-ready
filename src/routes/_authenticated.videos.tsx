@@ -32,7 +32,7 @@ function VideosPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
-      <Header title="Videos" subtitle="Under three minutes. Chapters and transcripts included. No filler." />
+      <Header title="Videos" subtitle="Short walkthroughs for high-pressure support moments." />
       <div className="mt-6 grid sm:grid-cols-2 gap-3">
         {videos.map(v => (
           <button key={v.id} onClick={() => setActive(v.id)}

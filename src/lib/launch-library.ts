@@ -809,12 +809,12 @@ export function askLaunch(query: string): AskAnswer {
 }
 
 export const STARTER_QUESTIONS = [
-  "Registration is down. What do I do first?",
-  "A user cannot print a wristband. What should I check?",
-  "A provider is frustrated and says the system is broken. What do I say?",
-  "A nurse asks if a missing option is a build issue. How do I triage?",
-  "The floor is giving conflicting guidance. How do I escalate?",
-  "What should I carry before my first go-live shift?",
+  "I can't log in - my password is not working.",
+  "The printer is not printing.",
+  "Where do I find my patient list?",
+  "My barcode scanner is not reading.",
+  "The provider cannot sign. What do I check first?",
+  "The unit is getting conflicting instructions. What do I say?",
 ];
 
 // Expose library content types for badges
