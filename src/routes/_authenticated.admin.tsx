@@ -201,13 +201,14 @@ function AdminPage() {
     return items.filter(i => {
       if (typeFilter !== "all" && i.content_type !== typeFilter) return false;
       if (pubFilter !== "all" && i.publish_status !== pubFilter) return false;
+      if (statusFilter !== "all" && editorialStatus(i) !== statusFilter) return false;
       if (tk) {
         const hay = `${i.title} ${i.summary} ${i.tags.join(" ")}`.toLowerCase();
         if (!hay.includes(tk)) return false;
       }
       return true;
     });
-  }, [items, typeFilter, pubFilter, q]);
+  }, [items, typeFilter, pubFilter, statusFilter, q]);
 
   const counts = useMemo(() => ({
     total: items.length,
