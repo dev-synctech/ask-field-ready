@@ -48,19 +48,19 @@ export function AppShell({ children }: { children: ReactNode }) {
             const active = path === n.to || path.startsWith(n.to + "/");
             return (
               <Link key={n.to} to={n.to}
-                className={`group flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] transition-colors ${active ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
-                <n.icon className={`size-[15px] ${active ? 'text-teal' : 'text-muted-foreground group-hover:text-foreground'}`} />
+                className={`group flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] transition-colors ${active ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+                <n.icon className={`size-[15px] ${active ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'}`} />
                 {n.label}
               </Link>
             );
           })}
         </nav>
         <div className="mt-auto space-y-0.5 pt-4 border-t border-border">
-          <Link to="/admin" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path.startsWith('/admin') ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
-            <Shield className={`size-[15px] ${path.startsWith('/admin') ? 'text-teal' : 'text-muted-foreground'}`} /> Admin
+          <Link to="/admin" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path.startsWith('/admin') ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+            <Shield className={`size-[15px] ${path.startsWith('/admin') ? 'text-primary' : 'text-muted-foreground'}`} /> Admin
           </Link>
-          <Link to="/account" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path === '/account' ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
-            <UserRound className={`size-[15px] ${path === '/account' ? 'text-teal' : 'text-muted-foreground'}`} /> Account
+          <Link to="/account" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path === '/account' ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+            <UserRound className={`size-[15px] ${path === '/account' ? 'text-primary' : 'text-muted-foreground'}`} /> Account
           </Link>
           <div className="px-3 pt-3 text-[10px] uppercase tracking-wider text-muted-foreground/70">Demo build</div>
         </div>
@@ -92,9 +92,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             const active = path === n.to || path.startsWith(n.to + "/");
             return (
               <Link key={n.to} to={n.to}
-                className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium transition-colors ${active ? 'text-foreground' : 'text-muted-foreground'}`}>
-                {active && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-teal" />}
-                <n.icon className={`size-[20px] ${active ? 'text-teal' : ''}`} strokeWidth={active ? 2.2 : 1.8} />
+                className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium transition-colors ${active ? 'text-primary' : 'text-muted-foreground'}`}>
+                {active && <span className="absolute top-0 h-[3px] w-10 rounded-full bg-teal" />}
+                <n.icon className={`size-[20px] ${active ? 'text-primary' : ''}`} strokeWidth={active ? 2.2 : 1.8} />
                 {n.label}
               </Link>
             );
@@ -102,10 +102,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button
             type="button"
             onClick={() => setMoreOpen(true)}
-            className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium ${moreActive ? 'text-foreground' : 'text-muted-foreground'}`}
+            className={`relative flex flex-col items-center justify-center gap-0.5 min-h-12 py-2 text-[10px] font-medium ${moreActive ? 'text-primary' : 'text-muted-foreground'}`}
           >
-            {moreActive && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-teal" />}
-            <MoreHorizontal className={`size-[20px] ${moreActive ? 'text-teal' : ''}`} strokeWidth={moreActive ? 2.2 : 1.8} />
+            {moreActive && <span className="absolute top-0 h-[3px] w-10 rounded-full bg-teal" />}
+            <MoreHorizontal className={`size-[20px] ${moreActive ? 'text-primary' : ''}`} strokeWidth={moreActive ? 2.2 : 1.8} />
             More
           </button>
         </div>

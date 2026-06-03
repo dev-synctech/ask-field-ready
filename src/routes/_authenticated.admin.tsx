@@ -221,14 +221,14 @@ function AdminPage() {
     <div className="max-w-4xl mx-auto px-5 py-8">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <Header title="Admin" subtitle="Create, sanitize, tag, and publish Mizly-original support content." />
-        <a href="#editor" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90">
+        <a href="#editor" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 shadow-soft">
           <Plus className="size-4" /> New content
         </a>
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
         <KPI label="Total content" value={counts.total} />
-        <KPI label="Published" value={counts.published} tone="success" />
+        <KPI label="Published" value={counts.published} tone="teal" />
         <KPI label="Drafts" value={counts.drafts} tone="muted" />
       </div>
 
@@ -601,8 +601,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-function KPI({ label, value, tone }: { label: string; value: number; tone?: "success" | "muted" }) {
-  const cls = tone === "success" ? "text-success" : tone === "muted" ? "text-muted-foreground" : "text-primary";
+function KPI({ label, value, tone }: { label: string; value: number; tone?: "success" | "teal" | "muted" }) {
+  const cls = tone === "success" ? "text-success" : tone === "teal" ? "text-teal" : tone === "muted" ? "text-foreground/80" : "text-primary";
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
       <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
@@ -613,8 +613,8 @@ function KPI({ label, value, tone }: { label: string; value: number; tone?: "suc
 
 function AdminTile({ to, icon: Icon, title, desc }: { to: string; icon: any; title: string; desc: string }) {
   return (
-    <Link to={to as any} className="group flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-border-strong hover:shadow-soft transition-all">
-      <div className="size-9 rounded-lg bg-secondary text-foreground/70 flex items-center justify-center group-hover:text-teal shrink-0">
+    <Link to={to as any} className="group flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/30 hover:shadow-soft transition-all">
+      <div className="size-9 rounded-lg bg-primary-soft text-primary flex items-center justify-center shrink-0 group-hover:bg-teal-soft group-hover:text-teal transition-colors">
         <Icon className="size-4" />
       </div>
       <div className="min-w-0">
