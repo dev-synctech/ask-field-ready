@@ -221,7 +221,7 @@ function AdminPage() {
     <div className="max-w-4xl mx-auto px-5 py-8">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <Header title="Admin" subtitle="Create, sanitize, tag, and publish Mizly-original support content." />
-        <a href="#editor" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-90">
+        <a href="#editor" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 shadow-soft">
           <Plus className="size-4" /> New content
         </a>
       </div>
