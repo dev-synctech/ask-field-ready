@@ -95,6 +95,7 @@ function AdminPage() {
   const [items, setItems] = useState<ContentItem[]>(ITEMS);
   const [typeFilter, setTypeFilter] = useState<ContentType | "all">("all");
   const [pubFilter, setPubFilter] = useState<PublishFilter>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | EditorialStatus>("all");
   const [q, setQ] = useState("");
   const [preview, setPreview] = useState<ContentItem | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
