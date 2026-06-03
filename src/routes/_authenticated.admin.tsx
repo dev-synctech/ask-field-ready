@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import {
   Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
   GripVertical, ListChecks, ClipboardCheck, FolderInput, Tags, Info, HelpCircle,
-  BarChart3, MessageSquare,
+  BarChart3, MessageSquare, GitBranch,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
