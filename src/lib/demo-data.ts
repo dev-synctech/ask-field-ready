@@ -255,9 +255,19 @@ export const PLAYBOOK_DETAIL: Record<string, PlaybookDetail> = {
     pitfalls: ["Apologizing too much.", "Explaining cause instead of action.", "Forgetting to say where you'll be."],
     escalation: "If a clinician shows distress or anger, pull them aside — never debate publicly.",
   },
+  p17: {
+    whenToUse: "A unit, nurse, or coordinator is asking about a stalled bed assignment or transfer.",
+    steps: [
+      { title: "First 90 seconds", body: "Restate what they asked in one sentence, without PHI. Confirm which unit is waiting and where the patient is now." },
+      { title: "What to say", body: "'Let me confirm the request, the status, and who owns the next step before we escalate.'" },
+      { title: "What to check", body: "Is there an active placement order or status? Is bed control aware? Is this one patient or several?" },
+      { title: "When to escalate", body: "If the placement is unclear after the request + status + owner check, or any time-critical workflow is waiting, escalate to command center with scope and severity." },
+      { title: "Command center handoff", body: "Three sentences: what is stalled, scope and severity, what you need with a callback. Close the loop with the requester within 5 minutes." },
+    ],
+    pitfalls: ["Escalating before confirming ownership.", "Sharing patient identifiers on the floor.", "Repeating a request without timestamping it."],
+    escalation: "Time-critical placement (ED holding, ICU transfer, post-op recovery) waiting > 15 minutes: page command center with scope, severity, callback.",
+  },
 };
-
-export interface ScenarioDetail {
   situation: string;
   first90: string[];
   whatToSay: string[];
