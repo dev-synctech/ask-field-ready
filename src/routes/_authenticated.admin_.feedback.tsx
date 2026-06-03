@@ -74,7 +74,7 @@ function FeedbackPage() {
       <Link to="/admin" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-3">
         <ArrowLeft className="size-3.5" /> Back to Admin
       </Link>
-      <Header title="Feedback" subtitle="What learners said about Ask answers — and what they're asking for next." />
+      <Header title="Ask Feedback Inbox" subtitle="What learners said after using Ask, and what the library should cover next." />
 
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
         <KPI label="Total" value={counts.total} />
