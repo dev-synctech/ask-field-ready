@@ -256,10 +256,10 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
 
 function MatchBadge({ q, label }: { q: MatchQuality; label: string }) {
   const cls = q === "strong"
-    ? "bg-success/15 text-success border-success/30"
+    ? "bg-teal-soft text-teal border-teal/25"
     : q === "related"
-    ? "bg-primary-soft text-primary border-primary/30"
-    : "bg-warning/15 text-warning border-warning/30";
+    ? "bg-primary-soft text-primary border-primary/20"
+    : "bg-warning/12 text-warning border-warning/25";
   const Icon = q === "strong" ? CheckCircle2 : q === "related" ? Sparkles : AlertTriangle;
   return (
     <span className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full border ${cls}`}>
