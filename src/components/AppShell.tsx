@@ -56,11 +56,11 @@ export function AppShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="mt-auto space-y-0.5 pt-4 border-t border-border">
-          <Link to="/admin" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path.startsWith('/admin') ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
-            <Shield className={`size-[15px] ${path.startsWith('/admin') ? 'text-teal' : 'text-muted-foreground'}`} /> Admin
+          <Link to="/admin" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path.startsWith('/admin') ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+            <Shield className={`size-[15px] ${path.startsWith('/admin') ? 'text-primary' : 'text-muted-foreground'}`} /> Admin
           </Link>
-          <Link to="/account" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path === '/account' ? 'bg-card text-foreground font-medium shadow-soft' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
-            <UserRound className={`size-[15px] ${path === '/account' ? 'text-teal' : 'text-muted-foreground'}`} /> Account
+          <Link to="/account" className={`flex items-center gap-3 px-3 h-10 rounded-lg text-[13px] ${path === '/account' ? 'bg-primary-soft text-primary font-medium' : 'text-foreground/65 hover:bg-card/60 hover:text-foreground'}`}>
+            <UserRound className={`size-[15px] ${path === '/account' ? 'text-primary' : 'text-muted-foreground'}`} /> Account
           </Link>
           <div className="px-3 pt-3 text-[10px] uppercase tracking-wider text-muted-foreground/70">Demo build</div>
         </div>
