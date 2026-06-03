@@ -169,40 +169,47 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
         </div>
       </div>
 
-      {/* Title + source */}
-      {sourceBadge && (
-        <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-          <div className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${sourceBadge.cls}`}>
+      {/* 1. SHORT ANSWER */}
+      <Section title="SHORT ANSWER">
+        {sourceBadge && (
+          <div className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${sourceBadge.cls} mb-2`}>
             <ShieldCheck className="size-3" /> {sourceBadge.label} · Mizly library
           </div>
-          <div className="mt-2 text-base font-display font-semibold">{r.title}</div>
-          <p className="mt-2 text-sm leading-relaxed">{r.shortAnswer}</p>
-          <p className="mt-3 text-xs text-muted-foreground italic border-l-2 border-warning/60 pl-3">
-            {ASK_SAFETY_LINE}{" "}
-            <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
-          </p>
-        </div>
-      )}
+        )}
+        <div className="text-base font-display font-semibold">{r.title}</div>
+        <p className="mt-2 text-sm leading-relaxed">
+          {r.shortAnswer?.trim() ? r.shortAnswer : "No direct Mizly match yet."}
+        </p>
+        <p className="mt-3 text-xs text-muted-foreground italic border-l-2 border-warning/60 pl-3">
+          {ASK_SAFETY_LINE}{" "}
+          <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
+        </p>
+      </Section>
 
-      <ListSection title="First 90 seconds" items={r.first90} ordered />
-      <ListSection title="What to say" items={r.whatToSay} />
-      <ListSection title="What to check" items={r.whatToCheck} />
+      {/* 2-4 */}
+      <ListSection title="FIRST 90 SECONDS" items={r.first90} ordered />
+      <ListSection title="WHAT TO SAY" items={r.whatToSay} />
+      <ListSection title="WHAT TO CHECK" items={r.whatToCheck} />
 
+      {/* 5. WHEN TO ESCALATE */}
       <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5">
         <div className="text-[10px] uppercase tracking-wider text-warning font-medium mb-2 inline-flex items-center gap-1.5">
-          <AlertTriangle className="size-3" /> When to escalate
+          <AlertTriangle className="size-3" /> WHEN TO ESCALATE
         </div>
-        <p className="text-sm leading-relaxed">{r.whenToEscalate}</p>
+        <p className="text-sm leading-relaxed">
+          {r.whenToEscalate?.trim() ? r.whenToEscalate : "No direct Mizly match yet."}
+        </p>
       </div>
 
-      <RelatedGrid label="Related playbooks" type="playbook" items={r.related.playbooks} />
-      <RelatedGrid label="Related checklists" type="checklist" items={r.related.checklists} />
-      <RelatedGrid label="Related lessons" type="lesson" items={r.related.lessons} />
-      <RelatedGrid label="Related scenarios" type="scenario" items={r.related.scenarios} />
-      <RelatedGrid label="Related videos" type="video" items={r.related.videos} />
+      {/* 6-9. Related sections — always render */}
+      <RelatedGrid label="RELATED PLAYBOOKS" type="playbook" items={r.related.playbooks} />
+      <RelatedGrid label="RELATED CHECKLISTS" type="checklist" items={r.related.checklists} />
+      <RelatedGrid label="RELATED LESSONS" type="lesson" items={r.related.lessons} />
+      <RelatedGrid label="RELATED SCENARIOS" type="scenario" items={r.related.scenarios} />
 
-      {r.sources.length > 0 && (
-        <Section title="Based on Mizly library">
+      {/* 10. SOURCES / BASED ON MIZLY LIBRARY */}
+      <Section title="SOURCES / BASED ON MIZLY LIBRARY">
+        {r.sources.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {r.sources.map(s => (
               <span key={s.id} className="text-[11px] px-2 py-1 rounded-full inline-flex items-center gap-1.5 bg-primary-soft text-primary">
@@ -210,9 +217,12 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
               </span>
             ))}
           </div>
-        </Section>
-      )}
+        ) : (
+          <p className="text-sm text-muted-foreground">No direct Mizly match yet.</p>
+        )}
+      </Section>
 
+      {/* 11. WAS THIS HELPFUL? */}
       <FeedbackBar query={query} />
     </div>
   );
