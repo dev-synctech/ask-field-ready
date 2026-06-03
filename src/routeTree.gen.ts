@@ -34,6 +34,8 @@ import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminTaxonomyRouteImport } from './routes/_authenticated.admin_.taxonomy'
 import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authenticated.admin_.sources'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
+import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated.admin_.feedback'
+import { Route as AuthenticatedAdminCoverageRouteImport } from './routes/_authenticated.admin_.coverage'
 import { Route as AuthenticatedAdminSourcesIdRouteImport } from './routes/_authenticated.admin_.sources_.$id'
 import { Route as AuthenticatedAdminQuestionsIdRouteImport } from './routes/_authenticated.admin_.questions_.$id'
 
@@ -166,6 +168,18 @@ const AuthenticatedAdminQuestionsRoute =
     path: '/admin/questions',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminFeedbackRoute =
+  AuthenticatedAdminFeedbackRouteImport.update({
+    id: '/admin_/feedback',
+    path: '/admin/feedback',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminCoverageRoute =
+  AuthenticatedAdminCoverageRouteImport.update({
+    id: '/admin_/coverage',
+    path: '/admin/coverage',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminSourcesIdRoute =
   AuthenticatedAdminSourcesIdRouteImport.update({
     id: '/admin_/sources_/$id',
@@ -197,6 +211,8 @@ export interface FileRoutesByFullPath {
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
+  '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
@@ -225,6 +241,8 @@ export interface FileRoutesByTo {
   '/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
+  '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
@@ -255,6 +273,8 @@ export interface FileRoutesById {
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/_authenticated/admin_/coverage': typeof AuthenticatedAdminCoverageRoute
+  '/_authenticated/admin_/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin_/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/admin_/sources': typeof AuthenticatedAdminSourcesRoute
   '/_authenticated/admin_/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
@@ -285,6 +305,8 @@ export interface FileRouteTypes {
     | '/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/admin/coverage'
+    | '/admin/feedback'
     | '/admin/questions'
     | '/admin/sources'
     | '/admin/taxonomy'
@@ -313,6 +335,8 @@ export interface FileRouteTypes {
     | '/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/admin/coverage'
+    | '/admin/feedback'
     | '/admin/questions'
     | '/admin/sources'
     | '/admin/taxonomy'
@@ -342,6 +366,8 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/auth/callback'
     | '/checkout/return'
+    | '/_authenticated/admin_/coverage'
+    | '/_authenticated/admin_/feedback'
     | '/_authenticated/admin_/questions'
     | '/_authenticated/admin_/sources'
     | '/_authenticated/admin_/taxonomy'
@@ -542,6 +568,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminQuestionsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/feedback': {
+      id: '/_authenticated/admin_/feedback'
+      path: '/admin/feedback'
+      fullPath: '/admin/feedback'
+      preLoaderRoute: typeof AuthenticatedAdminFeedbackRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin_/coverage': {
+      id: '/_authenticated/admin_/coverage'
+      path: '/admin/coverage'
+      fullPath: '/admin/coverage'
+      preLoaderRoute: typeof AuthenticatedAdminCoverageRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/sources_/$id': {
       id: '/_authenticated/admin_/sources_/$id'
       path: '/admin/sources/$id'
@@ -568,6 +608,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPlaybooksRoute: typeof AuthenticatedPlaybooksRoute
   AuthenticatedScenariosRoute: typeof AuthenticatedScenariosRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
+  AuthenticatedAdminCoverageRoute: typeof AuthenticatedAdminCoverageRoute
+  AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
   AuthenticatedAdminSourcesRoute: typeof AuthenticatedAdminSourcesRoute
   AuthenticatedAdminTaxonomyRoute: typeof AuthenticatedAdminTaxonomyRoute
@@ -588,6 +630,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPlaybooksRoute: AuthenticatedPlaybooksRoute,
   AuthenticatedScenariosRoute: AuthenticatedScenariosRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
+  AuthenticatedAdminCoverageRoute: AuthenticatedAdminCoverageRoute,
+  AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
   AuthenticatedAdminSourcesRoute: AuthenticatedAdminSourcesRoute,
   AuthenticatedAdminTaxonomyRoute: AuthenticatedAdminTaxonomyRoute,

@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import {
   Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
   GripVertical, ListChecks, ClipboardCheck, FolderInput, Tags, Info, HelpCircle,
+  BarChart3, MessageSquare,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -221,6 +222,12 @@ function AdminPage() {
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <Header title="Admin" subtitle="Create, tag, and publish — preview mode." />
         <div className="flex items-center gap-2 flex-wrap">
+          <Link to="/admin/coverage" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
+            <BarChart3 className="size-4" /> Coverage
+          </Link>
+          <Link to="/admin/feedback" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
+            <MessageSquare className="size-4" /> Feedback
+          </Link>
           <Link to="/admin/sources" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium hover:bg-secondary">
             <FolderInput className="size-4" /> Source Library
           </Link>
