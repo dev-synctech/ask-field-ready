@@ -68,8 +68,8 @@ function AskPage() {
         <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-3">
           <Sparkles className="size-3.5 text-primary" /> Ask Mizly
         </div>
-        <h1 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">What do you need to know?</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Ask a go-live question. Get a short answer, the first 90 seconds, what to say, what to check, and when to escalate.</p>
+        <h1 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">Type what the user just asked you on the floor.</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Mizly returns a short answer, first 90 seconds, what to say, what to check, when to escalate, and related playbooks.</p>
       </div>
 
       <form onSubmit={e => { e.preventDefault(); run(q); }} className="relative">
