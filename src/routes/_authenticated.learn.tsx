@@ -68,9 +68,9 @@ function LearnPage() {
 
 export function Header({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
-    <div>
-      <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight">{title}</h1>
-      {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
+    <div className="min-w-0">
+      <h1 className="text-2xl md:text-3xl font-display font-semibold tracking-tight break-words">{title}</h1>
+      {subtitle && <p className="mt-1 text-sm text-muted-foreground break-words">{subtitle}</p>}
     </div>
   );
 }

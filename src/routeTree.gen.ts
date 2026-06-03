@@ -33,11 +33,13 @@ import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated.admin_.users'
 import { Route as AuthenticatedAdminTaxonomyRouteImport } from './routes/_authenticated.admin_.taxonomy'
 import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authenticated.admin_.sources'
+import { Route as AuthenticatedAdminSourcePacksRouteImport } from './routes/_authenticated.admin_.source-packs'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated.admin_.feedback'
 import { Route as AuthenticatedAdminCoverageRouteImport } from './routes/_authenticated.admin_.coverage'
 import { Route as AuthenticatedAdminConversionsRouteImport } from './routes/_authenticated.admin_.conversions'
 import { Route as AuthenticatedAdminSourcesIdRouteImport } from './routes/_authenticated.admin_.sources_.$id'
+import { Route as AuthenticatedAdminSourcePacksIdRouteImport } from './routes/_authenticated.admin_.source-packs_.$id'
 import { Route as AuthenticatedAdminQuestionsIdRouteImport } from './routes/_authenticated.admin_.questions_.$id'
 import { Route as AuthenticatedAdminConversionsIdRouteImport } from './routes/_authenticated.admin_.conversions_.$id'
 
@@ -164,6 +166,12 @@ const AuthenticatedAdminSourcesRoute =
     path: '/admin/sources',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminSourcePacksRoute =
+  AuthenticatedAdminSourcePacksRouteImport.update({
+    id: '/admin_/source-packs',
+    path: '/admin/source-packs',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminQuestionsRoute =
   AuthenticatedAdminQuestionsRouteImport.update({
     id: '/admin_/questions',
@@ -192,6 +200,12 @@ const AuthenticatedAdminSourcesIdRoute =
   AuthenticatedAdminSourcesIdRouteImport.update({
     id: '/admin_/sources_/$id',
     path: '/admin/sources/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSourcePacksIdRoute =
+  AuthenticatedAdminSourcePacksIdRouteImport.update({
+    id: '/admin_/source-packs_/$id',
+    path: '/admin/source-packs/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminQuestionsIdRoute =
@@ -229,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
@@ -237,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
   '/admin/conversions/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/admin/questions/$id': typeof AuthenticatedAdminQuestionsIdRoute
+  '/admin/source-packs/$id': typeof AuthenticatedAdminSourcePacksIdRoute
   '/admin/sources/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
 export interface FileRoutesByTo {
@@ -261,6 +277,7 @@ export interface FileRoutesByTo {
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
@@ -269,6 +286,7 @@ export interface FileRoutesByTo {
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
   '/admin/conversions/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/admin/questions/$id': typeof AuthenticatedAdminQuestionsIdRoute
+  '/admin/source-packs/$id': typeof AuthenticatedAdminSourcePacksIdRoute
   '/admin/sources/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
 export interface FileRoutesById {
@@ -295,6 +313,7 @@ export interface FileRoutesById {
   '/_authenticated/admin_/coverage': typeof AuthenticatedAdminCoverageRoute
   '/_authenticated/admin_/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin_/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/_authenticated/admin_/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/_authenticated/admin_/sources': typeof AuthenticatedAdminSourcesRoute
   '/_authenticated/admin_/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/_authenticated/admin_/users': typeof AuthenticatedAdminUsersRoute
@@ -303,6 +322,7 @@ export interface FileRoutesById {
   '/_authenticated/scenarios_/$id': typeof AuthenticatedScenariosIdRoute
   '/_authenticated/admin_/conversions_/$id': typeof AuthenticatedAdminConversionsIdRoute
   '/_authenticated/admin_/questions_/$id': typeof AuthenticatedAdminQuestionsIdRoute
+  '/_authenticated/admin_/source-packs_/$id': typeof AuthenticatedAdminSourcePacksIdRoute
   '/_authenticated/admin_/sources_/$id': typeof AuthenticatedAdminSourcesIdRoute
 }
 export interface FileRouteTypes {
@@ -329,6 +349,7 @@ export interface FileRouteTypes {
     | '/admin/coverage'
     | '/admin/feedback'
     | '/admin/questions'
+    | '/admin/source-packs'
     | '/admin/sources'
     | '/admin/taxonomy'
     | '/admin/users'
@@ -337,6 +358,7 @@ export interface FileRouteTypes {
     | '/scenarios/$id'
     | '/admin/conversions/$id'
     | '/admin/questions/$id'
+    | '/admin/source-packs/$id'
     | '/admin/sources/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -361,6 +383,7 @@ export interface FileRouteTypes {
     | '/admin/coverage'
     | '/admin/feedback'
     | '/admin/questions'
+    | '/admin/source-packs'
     | '/admin/sources'
     | '/admin/taxonomy'
     | '/admin/users'
@@ -369,6 +392,7 @@ export interface FileRouteTypes {
     | '/scenarios/$id'
     | '/admin/conversions/$id'
     | '/admin/questions/$id'
+    | '/admin/source-packs/$id'
     | '/admin/sources/$id'
   id:
     | '__root__'
@@ -394,6 +418,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin_/coverage'
     | '/_authenticated/admin_/feedback'
     | '/_authenticated/admin_/questions'
+    | '/_authenticated/admin_/source-packs'
     | '/_authenticated/admin_/sources'
     | '/_authenticated/admin_/taxonomy'
     | '/_authenticated/admin_/users'
@@ -402,6 +427,7 @@ export interface FileRouteTypes {
     | '/_authenticated/scenarios_/$id'
     | '/_authenticated/admin_/conversions_/$id'
     | '/_authenticated/admin_/questions_/$id'
+    | '/_authenticated/admin_/source-packs_/$id'
     | '/_authenticated/admin_/sources_/$id'
   fileRoutesById: FileRoutesById
 }
@@ -587,6 +613,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSourcesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/source-packs': {
+      id: '/_authenticated/admin_/source-packs'
+      path: '/admin/source-packs'
+      fullPath: '/admin/source-packs'
+      preLoaderRoute: typeof AuthenticatedAdminSourcePacksRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/questions': {
       id: '/_authenticated/admin_/questions'
       path: '/admin/questions'
@@ -622,6 +655,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSourcesIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/source-packs_/$id': {
+      id: '/_authenticated/admin_/source-packs_/$id'
+      path: '/admin/source-packs/$id'
+      fullPath: '/admin/source-packs/$id'
+      preLoaderRoute: typeof AuthenticatedAdminSourcePacksIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/questions_/$id': {
       id: '/_authenticated/admin_/questions_/$id'
       path: '/admin/questions/$id'
@@ -652,6 +692,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminCoverageRoute: typeof AuthenticatedAdminCoverageRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
+  AuthenticatedAdminSourcePacksRoute: typeof AuthenticatedAdminSourcePacksRoute
   AuthenticatedAdminSourcesRoute: typeof AuthenticatedAdminSourcesRoute
   AuthenticatedAdminTaxonomyRoute: typeof AuthenticatedAdminTaxonomyRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
@@ -660,6 +701,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedScenariosIdRoute: typeof AuthenticatedScenariosIdRoute
   AuthenticatedAdminConversionsIdRoute: typeof AuthenticatedAdminConversionsIdRoute
   AuthenticatedAdminQuestionsIdRoute: typeof AuthenticatedAdminQuestionsIdRoute
+  AuthenticatedAdminSourcePacksIdRoute: typeof AuthenticatedAdminSourcePacksIdRoute
   AuthenticatedAdminSourcesIdRoute: typeof AuthenticatedAdminSourcesIdRoute
 }
 
@@ -676,6 +718,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminCoverageRoute: AuthenticatedAdminCoverageRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
+  AuthenticatedAdminSourcePacksRoute: AuthenticatedAdminSourcePacksRoute,
   AuthenticatedAdminSourcesRoute: AuthenticatedAdminSourcesRoute,
   AuthenticatedAdminTaxonomyRoute: AuthenticatedAdminTaxonomyRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
@@ -684,6 +727,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedScenariosIdRoute: AuthenticatedScenariosIdRoute,
   AuthenticatedAdminConversionsIdRoute: AuthenticatedAdminConversionsIdRoute,
   AuthenticatedAdminQuestionsIdRoute: AuthenticatedAdminQuestionsIdRoute,
+  AuthenticatedAdminSourcePacksIdRoute: AuthenticatedAdminSourcePacksIdRoute,
   AuthenticatedAdminSourcesIdRoute: AuthenticatedAdminSourcesIdRoute,
 }
 

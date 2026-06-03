@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import {
   Plus, ShieldCheck, Users, Tag, Edit3, Eye, FileText, Check, Trash2, X, Search,
   GripVertical, ListChecks, ClipboardCheck, FolderInput, Tags, Info, HelpCircle,
-  BarChart3, MessageSquare, GitBranch,
+  BarChart3, MessageSquare, GitBranch, FileArchive,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -233,6 +233,7 @@ function AdminPage() {
       </div>
 
       <div className="mt-6 grid sm:grid-cols-2 gap-2.5">
+        <AdminTile to="/admin/source-packs" icon={FileArchive} title="Source packs" desc="Register full KB bundles and manage quarantined intake." />
         <AdminTile to="/admin/conversions" icon={GitBranch} title="Source conversion queue" desc="Sanitize and route raw sources into Mizly content." />
         <AdminTile to="/admin/feedback" icon={MessageSquare} title="Feedback" desc="Answers learners marked unhelpful or missing." />
         <AdminTile to="/admin/coverage" icon={BarChart3} title="Coverage" desc="Where the library is thin across roles and phases." />
