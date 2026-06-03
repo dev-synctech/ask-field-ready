@@ -76,7 +76,7 @@ function LessonDetailPage() {
         </Link>
 
         {/* Polished header */}
-        <div className="mt-4 rounded-3xl border border-border bg-gradient-to-br from-primary-soft via-card to-card p-6 md:p-7 shadow-soft">
+        <div className="mt-4 rounded-3xl border border-border bg-card p-6 md:p-7 shadow-soft">
           <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground"><BookOpen className="size-3" /> Lesson</span>
             <span className="text-muted-foreground inline-flex items-center gap-1"><Clock className="size-3" /> {item.estimated_minutes} min</span>
