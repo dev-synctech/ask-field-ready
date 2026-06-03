@@ -374,7 +374,18 @@ function AdminPage() {
         </div>
       </div>
 
+      <div className="mt-3 flex items-center gap-1.5 flex-wrap">
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mr-1">Status</span>
+        {STATUS_FILTERS.map(s => (
+          <button key={s} onClick={() => setStatusFilter(s as any)}
+            className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${statusFilter === s ? 'bg-foreground text-background border-foreground' : 'bg-card border-border hover:bg-secondary'}`}>
+            {s}
+          </button>
+        ))}
+      </div>
+
       <div className="mt-3 font-display font-semibold">Content ({visible.length})</div>
+
       <div className="mt-2 space-y-2">
         {visible.map(it => (
           <div key={it.id} className="rounded-xl border border-border bg-card p-4 flex items-center gap-3 flex-wrap hover:shadow-soft transition-shadow">
