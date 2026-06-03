@@ -136,15 +136,6 @@ export function AppShell({ children }: { children: ReactNode }) {
 
 export function Logo({ size = 28 }: { size?: number }) {
   return (
-    <div
-      className="rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground shadow-soft"
-      style={{ width: size, height: size }}
-    >
-      <svg viewBox="0 0 24 24" width={size * 0.6} height={size * 0.6} fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7 17l-3 4V7a2 2 0 0 1 2-2h3" />
-        <path d="M17 7l3-4v14a2 2 0 0 1-2 2h-3" />
-        <path d="M9 13l3-3 3 3" />
-      </svg>
-    </div>
+    <img src={mizlyLogo.url} alt="Mizly" style={{ height: size, width: "auto" }} className="block" />
   );
 }
