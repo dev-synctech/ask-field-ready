@@ -3,11 +3,21 @@ import { useState } from "react";
 import {
   ArrowRight, Search, BookOpen, ListChecks, NotebookPen, ShieldCheck,
   Sparkles, Clock, MessageSquare, CheckCircle2, AlertTriangle, Layers,
-  ChevronDown, X, Mail,
+  ChevronDown, X, Mail, PlayCircle, Volume2,
 } from "lucide-react";
-import logoAsset from "@/assets/mizly-logo.png.asset.json";
-import videoAsset from "@/assets/mizly-social-music-only.mp4.asset.json";
-import posterAsset from "@/assets/mizly-social-music-only-poster.jpg.asset.json";
+import { MizlyLogo } from "@/components/MizlyLogo";
+import previewVideoAsset from "@/assets/mizly-social-music-only.mp4.asset.json";
+import previewPosterAsset from "@/assets/mizly-social-music-only-poster.jpg.asset.json";
+
+const LANDING_PREVIEW_VIDEO_SRC = previewVideoAsset.url;
+const LANDING_PREVIEW_POSTER_SRC = previewPosterAsset.url;
+
+type WaitlistForm = {
+  name: string;
+  email: string;
+  role: string;
+  interest: string;
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,10 +33,25 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [waitlistForm, setWaitlistForm] = useState<WaitlistForm>({
+    name: "",
+    email: "",
+    role: "",
+    interest: "Independent consultant",
+  });
 
   function scrollToPricing(e: React.MouseEvent) {
     e.preventDefault();
     document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function updateWaitlistField(field: keyof WaitlistForm, value: string) {
+    setWaitlistForm(current => ({ ...current, [field]: value }));
+  }
+
+  function submitWaitlist(e: React.FormEvent) {
+    e.preventDefault();
+    window.location.href = buildWaitlistHref(waitlistForm);
   }
 
   return (
@@ -35,7 +60,7 @@ function Landing() {
       <header className="sticky top-0 z-30 bg-background/85 backdrop-blur border-b border-border">
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logoAsset.url} alt="Mizly" className="h-7 w-auto" />
+            <MizlyLogo size={28} />
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm text-foreground/70">
             <Link to="/ask" className="hover:text-foreground">Ask</Link>
@@ -45,15 +70,15 @@ function Landing() {
             <a href="#safety" className="hover:text-foreground">Safety</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Link to="/ask" className="hidden sm:inline-flex text-sm font-medium text-foreground/80 hover:text-foreground px-3 py-2">
-              Open demo
-            </Link>
             <button
               onClick={scrollToPricing}
-              className="text-sm font-medium px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+              className="hidden sm:inline-flex text-sm font-medium text-foreground/80 hover:text-foreground px-3 py-2 rounded-md border border-transparent hover:border-border"
             >
-              Join founding access
+              Founding access
             </button>
+            <Link to="/ask" className="inline-flex items-center justify-center text-sm font-medium px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft">
+              Open demo
+            </Link>
           </div>
         </div>
       </header>
@@ -83,22 +108,30 @@ function Landing() {
               The field-support academy and answer engine built for healthcare go-live consultants. Ask what just happened on the floor and get the first 90 seconds, what to say, what to check, and when to escalate.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <button
-                onClick={scrollToPricing}
-                className="press inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl bg-primary text-primary-foreground font-medium shadow-elevated hover:shadow-glow"
-              >
-                Join founding access
-                <ArrowRight className="size-4" />
-              </button>
               <Link
                 to="/ask"
-                className="press inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl border border-border bg-surface-elevated text-foreground font-medium hover:border-primary/30"
+                className="press inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl bg-primary text-primary-foreground font-medium shadow-elevated hover:shadow-glow"
               >
                 Open demo
+                <ArrowRight className="size-4" />
               </Link>
+              <button
+                onClick={scrollToPricing}
+                className="press inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl border border-border bg-surface-elevated text-foreground font-medium hover:border-primary/30"
+              >
+                Join founding access
+              </button>
+            </div>
+            <div className="mt-6 grid grid-cols-3 gap-2 max-w-lg">
+              {["Ask", "Get the next move", "Open the right playbook"].map((step, index) => (
+                <div key={step} className="rounded-lg border border-border bg-card px-3 py-2 shadow-soft">
+                  <div className="text-[10px] font-mono text-primary">0{index + 1}</div>
+                  <div className="mt-1 text-xs font-medium leading-snug text-foreground/85">{step}</div>
+                </div>
+              ))}
             </div>
             <p className="mt-5 text-xs text-muted-foreground max-w-md">
-              Built for training, field support, and workflow confidence. Not a substitute for local policy or clinical judgment.
+              No payment needed to try the live demo. Built for training, field support, and workflow confidence.
             </p>
           </div>
 
@@ -118,7 +151,7 @@ function Landing() {
 
                 {/* Top app bar */}
                 <div className="px-3.5 h-9 flex items-center gap-2 border-b border-border shrink-0">
-                  <img src={logoAsset.url} alt="" className="h-3.5 w-auto" />
+                  <MizlyLogo size={14} decorative />
                   <div className="ml-auto flex items-center gap-1">
                     <div className="size-6 rounded-md border border-border bg-card flex items-center justify-center">
                       <ShieldCheck className="size-3 text-muted-foreground" />
@@ -197,45 +230,7 @@ function Landing() {
         </div>
       </section>
 
-      {/* Video Preview */}
-      <section className="border-t border-border bg-surface">
-        <div className="max-w-6xl mx-auto px-5 py-16 md:py-20">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
-            <div className="order-1">
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-teal">
-                <span className="size-1.5 rounded-full bg-teal" /> 24-second preview
-              </div>
-              <h2 className="mt-4 text-3xl md:text-4xl font-display font-semibold tracking-tight">
-                See Mizly in 24 seconds.
-              </h2>
-              <p className="mt-3 text-muted-foreground">
-                A quick look at how Mizly turns go-live noise into clear next steps, playbooks, checklists, and practice moments.
-              </p>
-              <p className="mt-6 text-sm font-medium text-foreground">Music-only preview</p>
-              <p className="mt-1 text-xs text-muted-foreground">Autoplays muted. Tap controls to hear the music.</p>
-            </div>
-            <div className="order-2 flex justify-center md:justify-end">
-              <div className="relative w-full max-w-[300px]">
-                <div className="absolute -inset-6 -z-10 rounded-[2.4rem] bg-gradient-to-br from-primary-soft/60 via-transparent to-teal-soft/60 blur-2xl" />
-                <div className="rounded-[1.75rem] border border-border bg-surface-elevated p-2 shadow-elevated ring-brand">
-                  <video
-                    src={videoAsset.url}
-                    poster={posterAsset.url}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    controls
-                    preload="metadata"
-                    aria-label="Mizly 24-second product preview"
-                    className="block w-full aspect-[9/16] rounded-[1.4rem] bg-foreground object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <LandingVideoPreview onJoin={() => setWaitlistOpen(true)} />
 
       {/* Section 1: Pillars */}
       <section className="border-t border-border bg-surface">
@@ -397,12 +392,12 @@ function Landing() {
               onClick={() => setWaitlistOpen(true)}
               className="mt-6 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90"
             >
-              Join founding access
+              Request founding access
               <ArrowRight className="size-4" />
             </button>
             <p className="mt-3 text-[11px] text-muted-foreground text-center">
-              Founding pricing is an early-access offer and may change as Mizly adds team plans,
-              monthly plans, and expanded AI usage.
+              No checkout is active yet. Founding pricing is an early-access offer and may change
+              as Mizly adds team plans, monthly plans, and expanded AI usage.
             </p>
           </div>
         </div>
@@ -440,7 +435,7 @@ function Landing() {
       <footer className="border-t border-border bg-surface">
         <div className="max-w-6xl mx-auto px-5 py-10">
           <div className="flex items-center gap-2 mb-4">
-            <img src={logoAsset.url} alt="Mizly" className="h-6 w-auto" />
+            <MizlyLogo size={24} />
           </div>
           <p className="text-xs text-muted-foreground max-w-3xl leading-relaxed">
             Mizly is an independent training and field-support product. Other product names are
@@ -478,17 +473,63 @@ function Landing() {
             <div className="size-10 rounded-md bg-primary-soft text-primary flex items-center justify-center mb-3">
               <Mail className="size-5" />
             </div>
-            <h3 className="text-lg font-display font-semibold">Join founding access</h3>
+            <h3 className="text-lg font-display font-semibold">Request founding access</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Founding access isn't open for purchase yet. Email us to be first in line when
-              Mizly opens enrollment.
+              Founding access is not open for purchase yet. Send a quick request and we will use it
+              to prioritize early users, roles, and team needs.
             </p>
-            <a
-              href="mailto:hello@mizly.app?subject=Mizly%20founding%20access"
-              className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90"
-            >
-              Email hello@mizly.app
-            </a>
+            <form onSubmit={submitWaitlist} className="mt-5 space-y-3">
+              <label className="block text-xs font-medium text-foreground/80">
+                Name
+                <input
+                  value={waitlistForm.name}
+                  onChange={e => updateWaitlistField("name", e.target.value)}
+                  className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                  placeholder="Your name"
+                  required
+                />
+              </label>
+              <label className="block text-xs font-medium text-foreground/80">
+                Email
+                <input
+                  value={waitlistForm.email}
+                  onChange={e => updateWaitlistField("email", e.target.value)}
+                  className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                  placeholder="you@example.com"
+                  type="email"
+                  required
+                />
+              </label>
+              <label className="block text-xs font-medium text-foreground/80">
+                Role
+                <input
+                  value={waitlistForm.role}
+                  onChange={e => updateWaitlistField("role", e.target.value)}
+                  className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                  placeholder="Go-live consultant, trainer, lead..."
+                />
+              </label>
+              <label className="block text-xs font-medium text-foreground/80">
+                Best fit
+                <select
+                  value={waitlistForm.interest}
+                  onChange={e => updateWaitlistField("interest", e.target.value)}
+                  className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                >
+                  <option>Independent consultant</option>
+                  <option>Agency or staffing team</option>
+                  <option>Training lead</option>
+                  <option>Healthcare operations team</option>
+                </select>
+              </label>
+              <button
+                type="submit"
+                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90"
+              >
+                Send request
+                <ArrowRight className="size-4" />
+              </button>
+            </form>
             <p className="mt-3 text-[11px] text-muted-foreground text-center">
               You can also <Link to="/ask" className="underline hover:text-foreground" onClick={() => setWaitlistOpen(false)}>open the demo</Link> in the meantime.
             </p>
@@ -497,6 +538,94 @@ function Landing() {
       )}
     </div>
   );
+}
+
+function LandingVideoPreview({ onJoin }: { onJoin: () => void }) {
+  return (
+    <section aria-labelledby="mizly-preview-title" className="overflow-hidden border-t border-border bg-background">
+      <div className="max-w-6xl mx-auto px-5 py-16 md:py-20 grid lg:grid-cols-[0.9fr_1.1fr] gap-10 md:gap-14 items-center">
+        <div>
+          <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-4">
+            <PlayCircle className="size-3.5 text-primary" />
+            Music-only preview
+          </div>
+          <h2 id="mizly-preview-title" className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
+            See Mizly in 24 seconds.
+          </h2>
+          <p className="mt-4 text-muted-foreground leading-relaxed max-w-lg">
+            A quick look at how Mizly turns go-live noise into clear next steps,
+            playbooks, checklists, and practice moments.
+          </p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <Link
+              to="/ask"
+              className="press inline-flex items-center justify-center gap-2 px-5 h-11 rounded-xl bg-primary text-primary-foreground text-sm font-medium shadow-soft hover:bg-primary/90"
+            >
+              Open demo
+              <ArrowRight className="size-4" />
+            </Link>
+            <button
+              onClick={onJoin}
+              className="press inline-flex items-center justify-center gap-2 px-5 h-11 rounded-xl border border-border bg-card text-sm font-medium hover:border-primary/30"
+            >
+              Request access
+            </button>
+          </div>
+          <div className="mt-6 rounded-lg border border-border bg-card p-5 shadow-soft">
+            <div className="flex items-start gap-3">
+              <div className="size-9 rounded-md bg-primary-soft text-primary flex items-center justify-center shrink-0">
+                <Volume2 className="size-4" />
+              </div>
+              <div>
+                <div className="font-display font-semibold text-sm">Built for quiet confidence</div>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Autoplays muted. Tap the video controls to hear the music.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative mx-auto w-full max-w-[360px] lg:max-w-[390px]">
+          <div className="absolute -inset-6 rounded-[2rem] bg-primary/5 blur-2xl" aria-hidden="true" />
+          <div className="relative rounded-[2rem] border border-border bg-card p-3 shadow-elevated">
+            <video
+              className="block w-full aspect-[9/16] rounded-[1.45rem] border border-border bg-surface object-cover"
+              src={LANDING_PREVIEW_VIDEO_SRC}
+              poster={LANDING_PREVIEW_POSTER_SRC}
+              autoPlay
+              muted
+              loop
+              playsInline
+              controls
+              preload="metadata"
+              aria-label="Mizly 24-second product preview"
+            >
+              <a href={LANDING_PREVIEW_VIDEO_SRC}>Download the Mizly product preview video.</a>
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function buildWaitlistHref(form: WaitlistForm) {
+  const subject = "Mizly founding access request";
+  const body = [
+    "Hi Mizly team,",
+    "",
+    "I would like to join founding access.",
+    "",
+    `Name: ${form.name}`,
+    `Email: ${form.email}`,
+    `Role: ${form.role || "Not provided"}`,
+    `Best fit: ${form.interest}`,
+    "",
+    "Sent from the Mizly landing page.",
+  ].join("\n");
+
+  return `mailto:hello@mizly.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 function FAQItem({ q, children }: { q: string; children: React.ReactNode }) {

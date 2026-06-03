@@ -3,7 +3,7 @@ import {
   Search, BookOpen, ListChecks, Film, UserRound, Shield, NotebookPen, ClipboardCheck, MoreHorizontal, X, Scale,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
-import mizlyLogo from "@/assets/mizly-logo.png.asset.json";
+import { MizlyLogo } from "@/components/MizlyLogo";
 
 const primaryNav = [
   { to: "/ask", label: "Ask", icon: Search },
@@ -40,7 +40,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Desktop side rail */}
       <aside className="hidden md:flex md:w-60 md:flex-col border-r border-border bg-surface px-3 py-5 sticky top-0 h-screen">
         <Link to="/ask" className="flex items-center gap-2 mb-7 px-2 py-1">
-          <img src={mizlyLogo.url} alt="Mizly" className="h-6 w-auto" />
+          <MizlyLogo size={24} />
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground ml-auto">Field</div>
         </Link>
         <nav className="space-y-0.5">
@@ -70,7 +70,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <header className="md:hidden sticky top-0 z-30 bg-background/85 backdrop-blur border-b border-border pt-safe">
         <div className="flex items-center justify-between px-4 h-13" style={{ height: 52 }}>
           <Link to="/ask" className="flex items-center gap-2" aria-label="Mizly home">
-            <img src={mizlyLogo.url} alt="Mizly" className="h-6 w-auto" />
+            <MizlyLogo size={24} />
           </Link>
           <div className="flex items-center gap-1">
             <Link to="/admin" className="size-10 rounded-full hover:bg-secondary flex items-center justify-center text-foreground/70" aria-label="Admin">
@@ -139,7 +139,5 @@ export function AppShell({ children }: { children: ReactNode }) {
 }
 
 export function Logo({ size = 28 }: { size?: number }) {
-  return (
-    <img src={mizlyLogo.url} alt="Mizly" style={{ height: size, width: "auto" }} className="block" />
-  );
+  return <MizlyLogo size={size} />;
 }
