@@ -243,7 +243,13 @@ function MatchBadge({ q, label }: { q: MatchQuality; label: string }) {
 }
 
 function ListSection({ title, items, ordered }: { title: string; items: string[]; ordered?: boolean }) {
-  if (!items?.length) return null;
+  if (!items?.length) {
+    return (
+      <Section title={title}>
+        <p className="text-sm text-muted-foreground">No direct Mizly match yet.</p>
+      </Section>
+    );
+  }
   return (
     <Section title={title}>
       {ordered ? (
