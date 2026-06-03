@@ -23,6 +23,40 @@ export const Route = createFileRoute("/_authenticated/admin")({
 const TYPES: ContentType[] = ["lesson", "playbook", "video", "checklist", "scenario"];
 type PublishFilter = "all" | "published" | "draft";
 
+type EditorialStatus =
+  | "Draft"
+  | "Needs sanitized approval"
+  | "Ready to publish"
+  | "Published"
+  | "Needs rewrite"
+  | "Needs review";
+
+const STATUS_FILTERS: ("all" | EditorialStatus)[] = [
+  "all",
+  "Draft",
+  "Needs sanitized approval",
+  "Ready to publish",
+  "Published",
+  "Needs rewrite",
+  "Needs review",
+];
+
+function editorialStatus(it: ContentItem): EditorialStatus {
+  if (it.publish_status === "published") return "Published";
+  if (!it.sanitized_approved) return "Needs sanitized approval";
+  return "Ready to publish";
+}
+
+const STATUS_CLS: Record<EditorialStatus, string> = {
+  "Draft":                       "bg-secondary text-secondary-foreground",
+  "Needs sanitized approval":    "bg-warning/15 text-warning",
+  "Ready to publish":            "bg-primary-soft text-primary",
+  "Published":                   "bg-success/15 text-success",
+  "Needs rewrite":               "bg-destructive/15 text-destructive",
+  "Needs review":                "bg-accent text-accent-foreground",
+};
+
+
 interface EditorForm {
   title: string;
   summary: string;
@@ -61,6 +95,7 @@ function AdminPage() {
   const [items, setItems] = useState<ContentItem[]>(ITEMS);
   const [typeFilter, setTypeFilter] = useState<ContentType | "all">("all");
   const [pubFilter, setPubFilter] = useState<PublishFilter>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | EditorialStatus>("all");
   const [q, setQ] = useState("");
   const [preview, setPreview] = useState<ContentItem | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -166,13 +201,14 @@ function AdminPage() {
     return items.filter(i => {
       if (typeFilter !== "all" && i.content_type !== typeFilter) return false;
       if (pubFilter !== "all" && i.publish_status !== pubFilter) return false;
+      if (statusFilter !== "all" && editorialStatus(i) !== statusFilter) return false;
       if (tk) {
         const hay = `${i.title} ${i.summary} ${i.tags.join(" ")}`.toLowerCase();
         if (!hay.includes(tk)) return false;
       }
       return true;
     });
-  }, [items, typeFilter, pubFilter, q]);
+  }, [items, typeFilter, pubFilter, statusFilter, q]);
 
   const counts = useMemo(() => ({
     total: items.length,
@@ -338,7 +374,18 @@ function AdminPage() {
         </div>
       </div>
 
+      <div className="mt-3 flex items-center gap-1.5 flex-wrap">
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mr-1">Status</span>
+        {STATUS_FILTERS.map(s => (
+          <button key={s} onClick={() => setStatusFilter(s as any)}
+            className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${statusFilter === s ? 'bg-foreground text-background border-foreground' : 'bg-card border-border hover:bg-secondary'}`}>
+            {s}
+          </button>
+        ))}
+      </div>
+
       <div className="mt-3 font-display font-semibold">Content ({visible.length})</div>
+
       <div className="mt-2 space-y-2">
         {visible.map(it => (
           <div key={it.id} className="rounded-xl border border-border bg-card p-4 flex items-center gap-3 flex-wrap hover:shadow-soft transition-shadow">
@@ -355,8 +402,8 @@ function AdminPage() {
                 </div>
               )}
             </div>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full ${it.publish_status === "published" ? "bg-success/15 text-success" : "bg-secondary text-secondary-foreground"}`}>
-              {it.publish_status}
+            <span className={`text-[10px] px-2 py-0.5 rounded-full ${STATUS_CLS[editorialStatus(it)]}`}>
+              {editorialStatus(it)}
             </span>
             <button onClick={() => setPreview(it)} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary inline-flex items-center gap-1.5">
               <Eye className="size-3.5" /> Preview
