@@ -180,13 +180,19 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
         <MatchBadge q={r.matchQuality} label={r.matchLabel} />
         <div className="flex items-center gap-2">
           <button
-            onClick={() => {
+            onClick={async () => {
               const visualGuide = r.visualAids.length
                 ? `\n\nVisual guide:\n${r.visualAids.map(a => `- ${a.title}: ${a.note}${a.callouts?.length ? `\n  ${a.callouts.join("\n  ")}` : ""}`).join("\n")}`
                 : "";
               const text = `${query}\n\nShort answer: ${r.shortAnswer}\n\nDo this now:\n${r.walkthrough.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nIf that fails:\n${r.ifThatFails.map(s=>`- ${s}`).join("\n")}${visualGuide}\n\nFirst 90 seconds:\n${r.first90.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nWhat to say:\n${r.whatToSay.map(s=>`- ${s}`).join("\n")}\n\nWhat to check:\n${r.whatToCheck.map(s=>`- ${s}`).join("\n")}\n\nWhen to escalate: ${r.whenToEscalate}`;
-              navigator.clipboard?.writeText(text);
-              toast.success("Answer copied to clipboard");
+              try {
+                await navigator.clipboard?.writeText(text);
+                toast.success("Answer copied to clipboard");
+              } catch {
+                toast.error("Copy blocked by browser", {
+                  description: "Select the answer text and copy manually.",
+                });
+              }
             }}
             className="text-xs px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-secondary inline-flex items-center gap-1.5">
             <Copy className="size-3.5" /> Copy
