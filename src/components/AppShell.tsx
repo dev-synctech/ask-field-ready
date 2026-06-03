@@ -39,11 +39,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Desktop side rail */}
       <aside className="hidden md:flex md:w-64 md:flex-col border-r border-border bg-surface px-4 py-6 sticky top-0 h-screen">
         <Link to="/ask" className="flex items-center gap-2 mb-8 px-2">
-          <Logo />
-          <div className="leading-tight">
-            <div className="font-display font-semibold text-sm">Mizly</div>
-            <div className="text-[11px] text-muted-foreground -mt-0.5">Go-live support</div>
-          </div>
+          <img src={mizlyLogo.url} alt="Mizly" className="h-7 w-auto" />
+          <div className="text-[11px] text-muted-foreground ml-1">Go-live support</div>
         </Link>
         <nav className="space-y-1">
           {primaryNav.map(n => {
