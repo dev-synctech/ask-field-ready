@@ -17,7 +17,7 @@ function AccountPage() {
 
       <div className="mt-6 rounded-2xl border border-border bg-card p-5 shadow-soft">
         <div className="flex items-center gap-4">
-          <div className="size-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 text-primary-foreground flex items-center justify-center font-display font-semibold text-lg">
+          <div className="size-14 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center font-display font-semibold text-lg">
             {profile.display_name[0]}
           </div>
           <div className="min-w-0">

@@ -83,7 +83,7 @@ function AdminUsersPage() {
               <tr key={u.id} className="hover:bg-secondary/40">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="size-9 rounded-xl bg-gradient-to-br from-primary to-primary/60 text-primary-foreground flex items-center justify-center font-display font-semibold">
+                    <div className="size-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-display font-semibold">
                       {u.display_name[0]}
                     </div>
                     <div className="min-w-0">
@@ -129,7 +129,7 @@ function AdminUsersPage() {
         {visible.map(u => (
           <div key={u.id} className="rounded-2xl border border-border bg-card p-4 shadow-soft">
             <div className="flex items-center gap-3">
-              <div className="size-10 rounded-xl bg-gradient-to-br from-primary to-primary/60 text-primary-foreground flex items-center justify-center font-display font-semibold">
+              <div className="size-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-display font-semibold">
                 {u.display_name[0]}
               </div>
               <div className="flex-1 min-w-0">
@@ -161,7 +161,7 @@ function AdminUsersPage() {
         <div className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-sm flex items-end md:items-center justify-center p-4" onClick={() => setView(null)}>
           <div className="bg-card rounded-3xl border border-border shadow-elevated w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center gap-3">
-              <div className="size-12 rounded-2xl bg-gradient-to-br from-primary to-primary/60 text-primary-foreground flex items-center justify-center font-display font-semibold text-lg">
+              <div className="size-12 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center font-display font-semibold text-lg">
                 {view.display_name[0]}
               </div>
               <div>

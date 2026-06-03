@@ -37,7 +37,7 @@ function VideosPage() {
         {videos.map(v => (
           <button key={v.id} onClick={() => setActive(v.id)}
             className="text-left group rounded-2xl border border-border bg-card overflow-hidden shadow-soft hover:border-primary/40 hover:-translate-y-0.5 transition-all">
-            <div className="aspect-video relative bg-gradient-to-br from-primary-soft via-accent to-surface-elevated flex items-center justify-center">
+            <div className="aspect-video relative bg-secondary flex items-center justify-center">
               <div className="size-14 rounded-full bg-background/90 backdrop-blur flex items-center justify-center shadow-elevated group-hover:scale-105 transition-transform">
                 <PlayCircle className="size-7 text-primary" />
               </div>
@@ -64,7 +64,7 @@ function VideosPage() {
       {active && (
         <div className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4" onClick={close}>
           <div className="bg-card md:rounded-3xl rounded-t-3xl border border-border shadow-elevated w-full max-w-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-4 duration-300" onClick={e => e.stopPropagation()}>
-            <div className="relative aspect-video bg-gradient-to-br from-primary-soft via-accent to-surface-elevated flex items-center justify-center shrink-0">
+            <div className="relative aspect-video bg-secondary flex items-center justify-center shrink-0">
               <PlayCircle className="size-16 text-primary/70" />
               <button onClick={close} aria-label="Close" className="absolute top-3 right-3 size-9 rounded-full bg-background/90 inline-flex items-center justify-center hover:bg-background">
                 <X className="size-4" />
