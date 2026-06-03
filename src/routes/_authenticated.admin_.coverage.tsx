@@ -79,9 +79,13 @@ function CoveragePage() {
                 <td className="px-2 py-2.5 text-center font-medium">{row.total}</td>
                 <td className="px-2 py-2.5 text-center">
                   {row.gaps.length === 0 ? (
-                    <span className="inline-flex items-center gap-1 text-success"><CheckCircle2 className="size-3.5" /> Covered</span>
+                    row.total >= 5 ? (
+                      <span className="inline-flex items-center gap-1 text-success"><CheckCircle2 className="size-3.5" /> Strong coverage</span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-warning"><AlertTriangle className="size-3.5" /> Thin area</span>
+                    )
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-warning"><AlertTriangle className="size-3.5" /> {row.gaps.length} gap{row.gaps.length === 1 ? "" : "s"}</span>
+                    <span className="inline-flex items-center gap-1 text-warning"><AlertTriangle className="size-3.5" /> Needs content · {row.gaps.length} gap{row.gaps.length === 1 ? "" : "s"}</span>
                   )}
                 </td>
               </tr>
