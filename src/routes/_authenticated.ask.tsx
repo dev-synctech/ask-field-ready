@@ -76,7 +76,7 @@ function AskPage() {
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
         <input
           value={q} onChange={e => setQ(e.target.value)}
-          placeholder="e.g. A user cannot print a wristband. What should I check?"
+          placeholder="e.g. The printer is not printing. What do I check first?"
           className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-base shadow-card focus:outline-none focus:ring-2 focus:ring-ring"
         />
         <button type="submit" disabled={q.trim().length < 2 || loading}
