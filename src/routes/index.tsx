@@ -57,76 +57,122 @@ function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="relative">
-        <div className="max-w-6xl mx-auto px-5 pt-12 md:pt-20 pb-10 md:pb-14 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-[11px] text-muted-foreground mb-5">
-              <Sparkles className="size-3 text-primary" />
+      <section className="relative overflow-hidden">
+        {/* Subtle brand wash */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -top-32 -right-24 h-[520px] w-[520px] rounded-full opacity-[0.07] bg-primary blur-3xl" />
+          <div className="absolute top-40 -left-32 h-[360px] w-[360px] rounded-full opacity-[0.05] bg-teal blur-3xl" />
+        </div>
+
+        <div className="max-w-6xl mx-auto px-5 pt-12 md:pt-24 pb-12 md:pb-20 grid md:grid-cols-[1.05fr_0.95fr] gap-12 md:gap-16 items-center">
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface-elevated text-[11px] text-muted-foreground mb-6 shadow-soft">
+              <span className="size-1.5 rounded-full bg-teal" />
               For healthcare go-live consultants
             </div>
-            <h1 className="text-5xl md:text-6xl font-display font-semibold tracking-tight text-foreground">
+            <h1 className="text-[44px] md:text-[68px] leading-[1.02] font-display font-semibold tracking-tight text-foreground">
               Mizly
             </h1>
-            <p className="mt-3 text-xl md:text-2xl font-display text-foreground/85">
+            <div className="mt-2 h-[3px] w-14 rounded-full accent-rule" />
+            <p className="mt-5 text-xl md:text-2xl font-display text-foreground/85 max-w-xl">
               Small answers for big go-live moments.
             </p>
-            <p className="mt-5 text-base text-muted-foreground max-w-lg">
+            <p className="mt-5 text-[15px] md:text-base text-muted-foreground max-w-lg leading-relaxed">
               The field-support academy and answer engine built for healthcare go-live consultants. Ask what just happened on the floor and get the first 90 seconds, what to say, what to check, and when to escalate.
             </p>
-            <div className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <button
                 onClick={scrollToPricing}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground font-medium shadow-elevated hover:shadow-glow transition-shadow"
+                className="press inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl bg-primary text-primary-foreground font-medium shadow-elevated hover:shadow-glow"
               >
                 Join founding access
                 <ArrowRight className="size-4" />
               </button>
               <Link
                 to="/ask"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md border border-border bg-surface-elevated text-foreground font-medium hover:bg-surface"
+                className="press inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl border border-border bg-surface-elevated text-foreground font-medium hover:border-primary/30"
               >
                 Open demo
               </Link>
             </div>
-            <p className="mt-4 text-xs text-muted-foreground max-w-md">
+            <p className="mt-5 text-xs text-muted-foreground max-w-md">
               Built for training, field support, and workflow confidence. Not a substitute for local policy or clinical judgment.
             </p>
           </div>
 
-          {/* Phone mockup */}
-          <div className="relative mx-auto md:mx-0 w-full max-w-sm">
-            <div className="relative aspect-[9/18] rounded-[2rem] border border-border-strong bg-foreground/[0.04] shadow-elevated overflow-hidden">
-              <div className="absolute top-0 inset-x-0 h-6 flex justify-center">
-                <div className="mt-1.5 h-4 w-24 rounded-full bg-foreground/80" />
-              </div>
-              <div className="absolute inset-x-3 top-9 bottom-3 rounded-[1.5rem] bg-surface-elevated border border-border overflow-hidden flex flex-col">
-                <div className="px-4 py-3 border-b border-border flex items-center gap-2">
-                  <img src={logoAsset.url} alt="" className="h-4 w-auto" />
-                  <span className="text-[10px] text-muted-foreground ml-auto">Ask</span>
+          {/* Phone mockup — refined */}
+          <div className="relative mx-auto md:mx-0 w-full max-w-[320px] animate-in fade-in zoom-in-95 duration-700">
+            {/* Soft brand glow behind */}
+            <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-gradient-to-br from-primary/8 via-transparent to-teal/8 blur-2xl" />
+            <div className="relative aspect-[9/19] rounded-[2.4rem] bg-foreground p-[3px] shadow-elevated ring-brand">
+              <div className="relative h-full w-full rounded-[2.2rem] bg-surface-elevated overflow-hidden flex flex-col">
+                {/* Notch */}
+                <div className="absolute top-0 inset-x-0 h-7 flex justify-center pointer-events-none">
+                  <div className="mt-1.5 h-5 w-28 rounded-full bg-foreground" />
                 </div>
-                <div className="p-4 space-y-3 text-xs flex-1 overflow-hidden">
-                  <div className="rounded-lg bg-secondary px-3 py-2 text-foreground/80 text-[11px]">
-                    Registration system is slow this morning. What do I do first?
+                {/* Status bar */}
+                <div className="h-7 flex items-center justify-between px-6 text-[9px] font-medium text-foreground/70">
+                  <span>9:41</span>
+                  <span className="opacity-0">.</span>
+                </div>
+                {/* App header */}
+                <div className="px-4 pt-2 pb-3 flex items-center gap-2 border-b border-border/70">
+                  <img src={logoAsset.url} alt="" className="h-4 w-auto" />
+                  <span className="ml-auto text-[9px] uppercase tracking-wider text-muted-foreground">Ask</span>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 px-4 py-3 space-y-2.5 overflow-hidden">
+                  {/* Question */}
+                  <div className="flex justify-end">
+                    <div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary-soft px-3 py-2 text-[10.5px] leading-snug text-foreground/85">
+                      Registration is slow this morning. What do I do first?
+                    </div>
                   </div>
-                  <div className="rounded-lg border border-border bg-card p-3 shadow-soft">
-                    <div className="text-[10px] uppercase tracking-wider text-primary font-medium">First 90 seconds</div>
-                    <p className="mt-1 text-[11px] text-foreground/85">
-                      Capture patient identity on paper. Note start time. Flag the unit lead.
-                    </p>
+                  {/* Match badge */}
+                  <div className="inline-flex items-center gap-1 text-[8.5px] font-medium px-1.5 py-0.5 rounded-full bg-teal-soft text-teal border border-teal/25">
+                    <CheckCircle2 className="size-2.5" /> Strong match
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  {/* Answer card */}
+                  <div className="rounded-xl border border-border bg-card p-3 shadow-soft">
+                    <div className="text-[8.5px] uppercase tracking-wider text-primary font-semibold">First 90 seconds</div>
+                    <ol className="mt-1.5 space-y-1 text-[10px] text-foreground/85">
+                      {["Capture identity on paper.", "Note the start time.", "Flag the unit lead."].map((s, i) => (
+                        <li key={i} className="flex gap-1.5">
+                          <span className="size-3.5 shrink-0 rounded-full bg-primary-soft text-primary text-[8px] font-semibold flex items-center justify-center">{i + 1}</span>
+                          <span className="leading-tight">{s}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  {/* Related chips */}
+                  <div className="grid grid-cols-2 gap-1.5">
                     {[
                       { l: "Playbook", t: "Slow registration" },
                       { l: "Checklist", t: "Downtime kit" },
-                      { l: "Scenario", t: "First-shift triage" },
-                      { l: "Lesson", t: "Escalation paths" },
                     ].map(x => (
-                      <div key={x.t} className="rounded-md border border-border bg-surface-elevated p-2">
-                        <div className="text-[9px] uppercase tracking-wider text-muted-foreground">{x.l}</div>
-                        <div className="text-[11px] text-foreground mt-0.5">{x.t}</div>
+                      <div key={x.t} className="rounded-lg border border-border bg-surface px-2 py-1.5">
+                        <div className="text-[7.5px] uppercase tracking-wider text-muted-foreground">{x.l}</div>
+                        <div className="text-[9.5px] text-foreground mt-0.5 leading-tight">{x.t}</div>
                       </div>
                     ))}
                   </div>
+                </div>
+
+                {/* Bottom nav */}
+                <div className="border-t border-border bg-background/80 backdrop-blur px-2 py-1.5 grid grid-cols-4 gap-1">
+                  {[
+                    { l: "Ask", active: true },
+                    { l: "Learn" },
+                    { l: "Plays" },
+                    { l: "More" },
+                  ].map(n => (
+                    <div key={n.l} className="flex flex-col items-center gap-0.5 py-1 relative">
+                      {n.active && <span className="absolute top-0 h-[2px] w-6 rounded-full bg-teal" />}
+                      <div className={`size-3.5 rounded ${n.active ? "bg-primary" : "bg-foreground/15"}`} />
+                      <span className={`text-[7.5px] ${n.active ? "text-primary font-semibold" : "text-muted-foreground"}`}>{n.l}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -134,10 +180,11 @@ function Landing() {
         </div>
 
         {/* Below-the-fold hint */}
-        <div className="flex justify-center pb-6 text-muted-foreground">
+        <div className="flex justify-center pb-6 text-muted-foreground/60">
           <ChevronDown className="size-5 animate-bounce" />
         </div>
       </section>
+
 
       {/* Section 1: Pillars */}
       <section className="border-t border-border bg-surface">

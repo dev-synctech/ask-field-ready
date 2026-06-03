@@ -85,9 +85,10 @@ function AskPage() {
           className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition"
         />
         <button type="submit" disabled={q.trim().length < 2 || loading}
-          className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:bg-primary/90 transition shadow-soft">
+          className="press absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:bg-primary/90 shadow-soft">
           {loading ? <><Loader2 className="size-3.5 animate-spin" /> Thinking</> : "Ask"}
         </button>
+
       </form>
 
       {/* Mobile sticky bottom composer (above bottom nav) */}
@@ -104,9 +105,10 @@ function AskPage() {
             className="w-full h-12 pl-10 pr-24 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
           />
           <button type="submit" disabled={q.trim().length < 2 || loading}
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 h-9 min-w-[68px] px-3 rounded-xl bg-primary text-primary-foreground text-[13px] font-medium disabled:opacity-40 inline-flex items-center justify-center gap-1.5 shadow-soft">
+            className="press absolute right-1.5 top-1/2 -translate-y-1/2 h-9 min-w-[68px] px-3 rounded-xl bg-primary text-primary-foreground text-[13px] font-medium disabled:opacity-40 inline-flex items-center justify-center gap-1.5 shadow-soft">
             {loading ? <Loader2 className="size-3.5 animate-spin" /> : "Ask"}
           </button>
+
         </div>
       </form>
 
@@ -117,12 +119,13 @@ function AskPage() {
             <div className="grid sm:grid-cols-2 gap-2">
               {STARTER_QUESTIONS.map(s => (
                 <button key={s} onClick={() => run(s)}
-                  className="group relative text-left rounded-xl border border-border bg-card hover:border-primary/30 hover:bg-primary-soft/40 hover:shadow-soft pl-4 pr-4 py-3 text-[13px] leading-snug transition-all overflow-hidden">
+                  className="press group relative text-left rounded-xl border border-border bg-card hover:border-primary/30 hover:bg-primary-soft/40 hover:shadow-soft pl-4 pr-4 py-3 text-[13px] leading-snug overflow-hidden">
                   <span className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r bg-teal/0 group-hover:bg-teal transition-colors" />
                   {s}
                 </button>
               ))}
             </div>
+
           </div>
 
           {recent.length > 0 && (
@@ -197,21 +200,26 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
       </div>
 
       {/* 1. SHORT ANSWER */}
-      <Section title="SHORT ANSWER">
-        {sourceBadge && (
-          <div className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${sourceBadge.cls} mb-2`}>
-            <ShieldCheck className="size-3" /> {sourceBadge.label} · Mizly library
-          </div>
-        )}
-        <div className="text-base font-display font-semibold">{r.title}</div>
-        <p className="mt-2 text-sm leading-relaxed">
+      <div className="relative rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card overflow-hidden">
+        <span className="absolute left-0 top-4 bottom-4 w-[3px] rounded-r accent-rule-v" />
+        <div className="flex items-center gap-2 mb-3">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Short answer</div>
+          {sourceBadge && (
+            <span className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${sourceBadge.cls}`}>
+              <ShieldCheck className="size-3" /> {sourceBadge.label} · Mizly library
+            </span>
+          )}
+        </div>
+        <div className="text-[17px] md:text-lg font-display font-semibold leading-snug text-foreground">{r.title}</div>
+        <p className="mt-2.5 text-[14px] leading-relaxed text-foreground/85">
           {r.shortAnswer?.trim() ? r.shortAnswer : "No direct Mizly match yet."}
         </p>
-        <p className="mt-3 text-xs text-muted-foreground italic border-l-2 border-warning/60 pl-3">
+        <p className="mt-4 text-[11.5px] text-muted-foreground italic border-l-2 border-border pl-3">
           {ASK_SAFETY_LINE}{" "}
           <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
         </p>
-      </Section>
+      </div>
+
 
       {/* 2-4 */}
       <ListSection title="FIRST 90 SECONDS" items={r.first90} ordered />
