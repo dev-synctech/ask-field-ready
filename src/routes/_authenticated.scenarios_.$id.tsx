@@ -68,7 +68,7 @@ function ScenarioDetailPage() {
         <ArrowLeft className="size-3.5" /> Back to Scenarios
       </Link>
 
-      <div className="mt-4 rounded-3xl border border-border bg-gradient-to-br from-secondary/60 via-card to-card p-6 shadow-soft">
+      <div className="mt-4 rounded-3xl border border-border bg-card p-6 shadow-soft">
         <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider">
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-foreground text-background"><ListChecks className="size-3" /> Scenario</span>
           <span className="text-muted-foreground inline-flex items-center gap-1"><Clock className="size-3" /> {item.estimated_minutes} min</span>

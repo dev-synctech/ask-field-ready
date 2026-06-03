@@ -68,9 +68,9 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.190 0.020 250);
 
-  --primary: oklch(0.520 0.150 248);             /* restrained blue */
+  --primary: oklch(0.430 0.165 260);             /* Mizly deep blue */
   --primary-foreground: oklch(0.99 0.005 247);
-  --primary-soft: oklch(0.960 0.022 248);
+  --primary-soft: oklch(0.958 0.022 258);
 
   --secondary: oklch(0.965 0.006 245);
   --secondary-foreground: oklch(0.240 0.025 250);
@@ -78,13 +78,14 @@
   --muted: oklch(0.962 0.006 245);
   --muted-foreground: oklch(0.510 0.018 250);
 
-  --accent: oklch(0.955 0.030 220);
-  --accent-foreground: oklch(0.260 0.060 220);
+  /* Accent mirrors the teal operational tone — no stray cyan/sky */
+  --accent: oklch(0.955 0.025 200);
+  --accent-foreground: oklch(0.300 0.060 210);
 
-  /* Operational accents */
-  --teal: oklch(0.620 0.085 200);                /* calm teal */
+  /* Operational accents — Mizly teal */
+  --teal: oklch(0.585 0.090 205);
   --teal-foreground: oklch(0.99 0.005 200);
-  --teal-soft: oklch(0.955 0.030 200);
+  --teal-soft: oklch(0.955 0.025 205);
 
   --success: oklch(0.620 0.115 165);
   --success-foreground: oklch(0.99 0.005 247);
@@ -93,10 +94,11 @@
   --destructive: oklch(0.580 0.215 27);
   --destructive-foreground: oklch(0.99 0.005 247);
 
-  --border: oklch(0.928 0.008 245);
-  --border-strong: oklch(0.880 0.012 245);
-  --input: oklch(0.928 0.008 245);
-  --ring: oklch(0.520 0.150 248);
+  --border: oklch(0.925 0.006 245);
+  --border-strong: oklch(0.875 0.010 245);
+  --input: oklch(0.925 0.006 245);
+  --ring: oklch(0.430 0.165 260);
+
 }
 
 .dark {
