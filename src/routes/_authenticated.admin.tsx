@@ -228,7 +228,7 @@ function AdminPage() {
 
       <div className="mt-6 grid grid-cols-3 gap-3">
         <KPI label="Total content" value={counts.total} />
-        <KPI label="Published" value={counts.published} tone="success" />
+        <KPI label="Published" value={counts.published} tone="teal" />
         <KPI label="Drafts" value={counts.drafts} tone="muted" />
       </div>
 
