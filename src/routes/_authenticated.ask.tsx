@@ -85,9 +85,10 @@ function AskPage() {
           className="w-full h-14 pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition"
         />
         <button type="submit" disabled={q.trim().length < 2 || loading}
-          className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:bg-primary/90 transition shadow-soft">
+          className="press absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:bg-primary/90 shadow-soft">
           {loading ? <><Loader2 className="size-3.5 animate-spin" /> Thinking</> : "Ask"}
         </button>
+
       </form>
 
       {/* Mobile sticky bottom composer (above bottom nav) */}
