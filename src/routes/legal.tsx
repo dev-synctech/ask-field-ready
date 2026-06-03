@@ -20,7 +20,9 @@ function LegalPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
-          <Link to="/" className="font-display font-semibold tracking-tight">Mizly</Link>
+          <Link to="/" className="flex items-center gap-2" aria-label="Mizly home">
+            <img src={mizlyLogo.url} alt="Mizly" className="h-7 w-auto" />
+          </Link>
           <Link to="/" className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
             <ArrowLeft className="size-3.5" /> Home
           </Link>
