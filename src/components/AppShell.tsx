@@ -3,6 +3,7 @@ import {
   Search, BookOpen, ListChecks, Film, UserRound, Shield, NotebookPen, ClipboardCheck, MoreHorizontal, X,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
+import mizlyLogo from "@/assets/mizly-logo.png.asset.json";
 
 const primaryNav = [
   { to: "/ask", label: "Ask", icon: Search },
@@ -38,11 +39,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Desktop side rail */}
       <aside className="hidden md:flex md:w-64 md:flex-col border-r border-border bg-surface px-4 py-6 sticky top-0 h-screen">
         <Link to="/ask" className="flex items-center gap-2 mb-8 px-2">
-          <Logo />
-          <div className="leading-tight">
-            <div className="font-display font-semibold text-sm">Mizly</div>
-            <div className="text-[11px] text-muted-foreground -mt-0.5">Go-live support</div>
-          </div>
+          <img src={mizlyLogo.url} alt="Mizly" className="h-7 w-auto" />
+          <div className="text-[11px] text-muted-foreground ml-1">Go-live support</div>
         </Link>
         <nav className="space-y-1">
           {primaryNav.map(n => {
@@ -70,9 +68,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Mobile top bar */}
       <header className="md:hidden sticky top-0 z-30 bg-background/85 backdrop-blur border-b border-border pt-safe">
         <div className="flex items-center justify-between px-4 h-14">
-          <Link to="/ask" className="flex items-center gap-2">
-            <Logo />
-            <span className="font-display font-semibold text-sm">Mizly</span>
+          <Link to="/ask" className="flex items-center gap-2" aria-label="Mizly home">
+            <img src={mizlyLogo.url} alt="Mizly" className="h-7 w-auto" />
           </Link>
           <div className="flex items-center gap-1">
             <Link to="/admin" className="size-9 rounded-full bg-secondary flex items-center justify-center" aria-label="Admin">
@@ -139,15 +136,6 @@ export function AppShell({ children }: { children: ReactNode }) {
 
 export function Logo({ size = 28 }: { size?: number }) {
   return (
-    <div
-      className="rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground shadow-soft"
-      style={{ width: size, height: size }}
-    >
-      <svg viewBox="0 0 24 24" width={size * 0.6} height={size * 0.6} fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7 17l-3 4V7a2 2 0 0 1 2-2h3" />
-        <path d="M17 7l3-4v14a2 2 0 0 1-2 2h-3" />
-        <path d="M9 13l3-3 3 3" />
-      </svg>
-    </div>
+    <img src={mizlyLogo.url} alt="Mizly" style={{ height: size, width: "auto" }} className="block" />
   );
 }

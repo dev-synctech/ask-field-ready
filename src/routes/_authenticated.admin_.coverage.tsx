@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { ArrowLeft, BarChart3, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, BarChart3, AlertTriangle, CheckCircle2, GitBranch } from "lucide-react";
 import { ITEMS, MODULES, type ContentType } from "@/lib/demo-data";
+import { useConversions, STATUS_LABEL, RISK_LABEL } from "@/lib/conversions-data";
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/admin_/coverage")({
@@ -13,6 +14,11 @@ const TYPES: ContentType[] = ["lesson", "playbook", "video", "checklist", "scena
 const TARGET_PER_TYPE = 3; // demo target: each module should have at least 3 of each type
 
 function CoveragePage() {
+  const conversions = useConversions();
+  const sourceReadyGaps = useMemo(
+    () => conversions.filter(c => c.status !== "published" && c.converted_items.length === 0),
+    [conversions],
+  );
   const grid = useMemo(() => {
     return MODULES.map(m => {
       const counts = Object.fromEntries(
@@ -106,6 +112,34 @@ function CoveragePage() {
           {grid.every(r => r.gaps.length === 0) && (
             <li className="text-sm text-muted-foreground">No gaps. Every module has at least one of each type.</li>
           )}
+        </ul>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-border bg-card p-5 shadow-soft">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="font-display font-semibold flex items-center gap-2">
+            <GitBranch className="size-4 text-primary" /> Source-ready gaps
+          </div>
+          <Link to="/admin/conversions" className="text-xs text-primary hover:underline">Open conversion queue →</Link>
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">
+          Sanitized source material in the conversion queue that has not yet shipped as Mizly-original learner-facing content.
+        </p>
+        <ul className="mt-3 space-y-2">
+          {sourceReadyGaps.length === 0 && (
+            <li className="text-sm text-muted-foreground">No pending sources — every queued item has shipped a Mizly pack.</li>
+          )}
+          {sourceReadyGaps.map(c => (
+            <li key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-elevated px-3 py-2 text-sm">
+              <div className="min-w-0">
+                <div className="font-medium truncate">{c.title}</div>
+                <div className="text-[11px] text-muted-foreground truncate">
+                  {c.suggested_domain} · {STATUS_LABEL[c.status]} · risk: {RISK_LABEL[c.risk]}
+                </div>
+              </div>
+              <Link to="/admin/conversions/$id" params={{ id: c.id }} className="text-xs text-primary hover:underline shrink-0">Convert →</Link>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
