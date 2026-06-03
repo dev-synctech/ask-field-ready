@@ -100,83 +100,93 @@ function Landing() {
             </p>
           </div>
 
-          {/* Phone mockup — refined */}
-          <div className="relative mx-auto md:mx-0 w-full max-w-[320px] animate-in fade-in zoom-in-95 duration-700">
-            {/* Soft brand glow behind */}
-            <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-gradient-to-br from-primary/8 via-transparent to-teal/8 blur-2xl" />
-            <div className="relative aspect-[9/19] rounded-[2.4rem] bg-foreground p-[3px] shadow-elevated ring-brand">
-              <div className="relative h-full w-full rounded-[2.2rem] bg-surface-elevated overflow-hidden flex flex-col">
+          {/* Phone mockup — faithful miniature of mobile /ask */}
+          <div className="relative mx-auto md:mx-0 w-full max-w-[300px] animate-in fade-in zoom-in-95 duration-700">
+            <div className="relative aspect-[9/19.5] rounded-[2.4rem] bg-foreground p-[3px] shadow-elevated">
+              <div className="relative h-full w-full rounded-[2.2rem] bg-background overflow-hidden flex flex-col">
                 {/* Notch */}
-                <div className="absolute top-0 inset-x-0 h-7 flex justify-center pointer-events-none">
-                  <div className="mt-1.5 h-5 w-28 rounded-full bg-foreground" />
+                <div className="absolute top-0 inset-x-0 h-6 flex justify-center pointer-events-none z-10">
+                  <div className="mt-1.5 h-4 w-24 rounded-full bg-foreground" />
                 </div>
                 {/* Status bar */}
-                <div className="h-7 flex items-center justify-between px-6 text-[9px] font-medium text-foreground/70">
+                <div className="h-6 flex items-center justify-between px-5 text-[8.5px] font-medium text-foreground/70 shrink-0">
                   <span>9:41</span>
                   <span className="opacity-0">.</span>
                 </div>
-                {/* App header */}
-                <div className="px-4 pt-2 pb-3 flex items-center gap-2 border-b border-border/70">
-                  <img src={logoAsset.url} alt="" className="h-4 w-auto" />
-                  <span className="ml-auto text-[9px] uppercase tracking-wider text-muted-foreground">Ask</span>
-                </div>
 
-                {/* Content */}
-                <div className="flex-1 px-4 py-3 space-y-2.5 overflow-hidden">
-                  {/* Question */}
-                  <div className="flex justify-end">
-                    <div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary-soft px-3 py-2 text-[10.5px] leading-snug text-foreground/85">
-                      Registration is slow this morning. What do I do first?
+                {/* Top app bar */}
+                <div className="px-3.5 h-9 flex items-center gap-2 border-b border-border shrink-0">
+                  <img src={logoAsset.url} alt="" className="h-3.5 w-auto" />
+                  <div className="ml-auto flex items-center gap-1">
+                    <div className="size-6 rounded-md border border-border bg-card flex items-center justify-center">
+                      <ShieldCheck className="size-3 text-muted-foreground" />
+                    </div>
+                    <div className="size-6 rounded-md border border-border bg-card flex items-center justify-center">
+                      <div className="size-3 rounded-full bg-foreground/15" />
                     </div>
                   </div>
-                  {/* Match badge */}
-                  <div className="inline-flex items-center gap-1 text-[8.5px] font-medium px-1.5 py-0.5 rounded-full bg-teal-soft text-teal border border-teal/25">
-                    <CheckCircle2 className="size-2.5" /> Strong match
+                </div>
+
+                {/* Ask header + starters (scroll area) */}
+                <div className="flex-1 px-3.5 pt-3 pb-2 overflow-hidden">
+                  <div className="inline-flex items-center gap-1 text-[7.5px] uppercase tracking-wider text-muted-foreground font-semibold">
+                    <Sparkles className="size-2.5 text-teal" /> Ask Mizly
                   </div>
-                  {/* Answer card */}
-                  <div className="rounded-xl border border-border bg-card p-3 shadow-soft">
-                    <div className="text-[8.5px] uppercase tracking-wider text-primary font-semibold">First 90 seconds</div>
-                    <ol className="mt-1.5 space-y-1 text-[10px] text-foreground/85">
-                      {["Capture identity on paper.", "Note the start time.", "Flag the unit lead."].map((s, i) => (
-                        <li key={i} className="flex gap-1.5">
-                          <span className="size-3.5 shrink-0 rounded-full bg-primary-soft text-primary text-[8px] font-semibold flex items-center justify-center">{i + 1}</span>
-                          <span className="leading-tight">{s}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                  {/* Related chips */}
-                  <div className="grid grid-cols-2 gap-1.5">
+                  <h3 className="mt-1 text-[13px] leading-tight font-display font-semibold text-foreground">
+                    What just happened on the floor?
+                  </h3>
+                  <p className="mt-1 text-[9px] leading-snug text-muted-foreground">
+                    Short answer, first 90 seconds, what to say, what to check, and when to escalate.
+                  </p>
+
+                  <div className="mt-3 text-[7.5px] uppercase tracking-wider text-muted-foreground font-semibold">Try one of these</div>
+                  <div className="mt-1.5 space-y-1.5">
                     {[
-                      { l: "Playbook", t: "Slow registration" },
-                      { l: "Checklist", t: "Downtime kit" },
-                    ].map(x => (
-                      <div key={x.t} className="rounded-lg border border-border bg-surface px-2 py-1.5">
-                        <div className="text-[7.5px] uppercase tracking-wider text-muted-foreground">{x.l}</div>
-                        <div className="text-[9.5px] text-foreground mt-0.5 leading-tight">{x.t}</div>
+                      "I can't log in — my password is not working.",
+                      "The printer is not printing.",
+                      "Where do I find my patient list?",
+                    ].map(s => (
+                      <div key={s} className="relative rounded-lg border border-border bg-card pl-2.5 pr-2.5 py-1.5 text-[9.5px] leading-snug text-foreground/85 overflow-hidden">
+                        <span className="absolute left-0 top-1.5 bottom-1.5 w-[2px] rounded-r bg-teal/60" />
+                        {s}
                       </div>
                     ))}
                   </div>
                 </div>
 
+                {/* Sticky composer */}
+                <div className="px-2.5 pt-2 pb-1.5 border-t border-border bg-background/95 backdrop-blur shrink-0">
+                  <div className="relative">
+                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-2.5 text-muted-foreground" />
+                    <div className="h-7 pl-6 pr-12 rounded-lg border border-border bg-surface-elevated flex items-center text-[9px] text-muted-foreground">
+                      Ask Mizly…
+                    </div>
+                    <div className="absolute right-1 top-1/2 -translate-y-1/2 h-5 px-2 rounded-md bg-primary text-primary-foreground text-[8.5px] font-semibold flex items-center shadow-soft">
+                      Ask
+                    </div>
+                  </div>
+                </div>
+
                 {/* Bottom nav */}
-                <div className="border-t border-border bg-background/80 backdrop-blur px-2 py-1.5 grid grid-cols-4 gap-1">
+                <div className="border-t border-border bg-surface px-1.5 pt-1 pb-2 grid grid-cols-5 gap-0.5 shrink-0">
                   {[
-                    { l: "Ask", active: true },
-                    { l: "Learn" },
-                    { l: "Plays" },
-                    { l: "More" },
+                    { l: "Ask", icon: Search, active: true },
+                    { l: "Learn", icon: BookOpen },
+                    { l: "Plays", icon: NotebookPen },
+                    { l: "Scenarios", icon: ListChecks },
+                    { l: "More", icon: Layers },
                   ].map(n => (
-                    <div key={n.l} className="flex flex-col items-center gap-0.5 py-1 relative">
-                      {n.active && <span className="absolute top-0 h-[2px] w-6 rounded-full bg-teal" />}
-                      <div className={`size-3.5 rounded ${n.active ? "bg-primary" : "bg-foreground/15"}`} />
-                      <span className={`text-[7.5px] ${n.active ? "text-primary font-semibold" : "text-muted-foreground"}`}>{n.l}</span>
+                    <div key={n.l} className="relative flex flex-col items-center gap-0.5 py-0.5">
+                      {n.active && <span className="absolute -top-1 h-[2px] w-5 rounded-full bg-teal" />}
+                      <n.icon className={`size-3 ${n.active ? "text-primary" : "text-muted-foreground"}`} />
+                      <span className={`text-[7px] leading-none ${n.active ? "text-primary font-semibold" : "text-muted-foreground"}`}>{n.l}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
           </div>
+
         </div>
 
         {/* Below-the-fold hint */}
