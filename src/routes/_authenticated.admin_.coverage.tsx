@@ -44,7 +44,7 @@ function CoveragePage() {
       </div>
 
       <div className="mt-8 font-display font-semibold flex items-center gap-2">
-        <BarChart3 className="size-4 text-primary" /> Coverage by module
+        <BarChart3 className="size-4 text-primary" /> Coverage Matrix
       </div>
       <p className="text-xs text-muted-foreground mt-1">
         Target: at least {TARGET_PER_TYPE} published items per type per module.
