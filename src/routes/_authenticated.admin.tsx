@@ -23,6 +23,40 @@ export const Route = createFileRoute("/_authenticated/admin")({
 const TYPES: ContentType[] = ["lesson", "playbook", "video", "checklist", "scenario"];
 type PublishFilter = "all" | "published" | "draft";
 
+type EditorialStatus =
+  | "Draft"
+  | "Needs sanitized approval"
+  | "Ready to publish"
+  | "Published"
+  | "Needs rewrite"
+  | "Needs review";
+
+const STATUS_FILTERS: ("all" | EditorialStatus)[] = [
+  "all",
+  "Draft",
+  "Needs sanitized approval",
+  "Ready to publish",
+  "Published",
+  "Needs rewrite",
+  "Needs review",
+];
+
+function editorialStatus(it: ContentItem): EditorialStatus {
+  if (it.publish_status === "published") return "Published";
+  if (!it.sanitized_approved) return "Needs sanitized approval";
+  return "Ready to publish";
+}
+
+const STATUS_CLS: Record<EditorialStatus, string> = {
+  "Draft":                       "bg-secondary text-secondary-foreground",
+  "Needs sanitized approval":    "bg-warning/15 text-warning",
+  "Ready to publish":            "bg-primary-soft text-primary",
+  "Published":                   "bg-success/15 text-success",
+  "Needs rewrite":               "bg-destructive/15 text-destructive",
+  "Needs review":                "bg-accent text-accent-foreground",
+};
+
+
 interface EditorForm {
   title: string;
   summary: string;
