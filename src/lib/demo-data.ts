@@ -44,6 +44,7 @@ export const MODULES: Module[] = [
   { id: "m8", title: "Issue Triage", summary: "Severity, scope, and the right channel — fast.", sort_order: 8 },
   { id: "m9", title: "Floor Support Scenarios", summary: "Real moments, replayed without names or PHI.", sort_order: 9 },
   { id: "m10", title: "Consultant Professionalism", summary: "Badge, posture, and trust at the bedside.", sort_order: 10 },
+  { id: "m11", title: "Patient Placement & Bed Control", summary: "Bed assignment requests, transfer flow, and shift-change handoffs.", sort_order: 11 },
 ];
 
 const t = (...xs: string[]) => xs;
