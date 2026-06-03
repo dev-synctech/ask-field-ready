@@ -6,6 +6,15 @@
 import { ITEMS, itemById, type ContentItem, type ContentType } from "./demo-data";
 
 export type LaunchType = ContentType | "ask_answer_seed";
+export type VisualAidKind = "screenshot" | "video" | "tasklet";
+
+export interface VisualAid {
+  kind: VisualAidKind;
+  title: string;
+  note: string;
+  callouts?: string[];
+  href?: string;
+}
 
 export interface LaunchEntry {
   id: string;
@@ -23,6 +32,9 @@ export interface LaunchEntry {
   whatToSay: string[];
   whatToCheck: string[];
   whenToEscalate: string;
+  walkthrough?: string[];
+  ifThatFails?: string[];
+  visualAids?: VisualAid[];
   // Search hints
   keywords: string[];
   related_ids: string[]; // ContentItem ids in demo-data.ITEMS
@@ -706,6 +718,149 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     sanitized_approved: true, status: "published",
   },
   {
+    id: "ll_schedule_columns",
+    title: "Schedule columns - exact walkthrough",
+    type: "playbook",
+    summary: "Change the schedule view by confirming the right context, opening column/view options, applying the column change, then saving only if local policy allows.",
+    roles: k("scheduling", "front desk", "all roles"),
+    domains: k("scheduling", "personalization"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 2,
+    escalation: 2,
+    first90: [
+      "Open the exact schedule view the user is working from.",
+      "Confirm the top filters first: location/department, date range, provider/resource, and schedule view/template.",
+      "Look for View, Options, Columns, Display, or Personalize before assuming the column is missing.",
+    ],
+    whatToSay: [
+      "'First, let's confirm you're in the right schedule view. Columns are usually view-specific.'",
+      "'If the column option is not available, this may be a locked template or role permission issue, not user error.'",
+    ],
+    whatToCheck: [
+      "Right schedule view/template, location/department, date range, and provider/resource filter.",
+      "Column picker or view options: add, remove, reorder, apply.",
+      "Whether the user can personalize the view or whether the template is centrally controlled.",
+      "Screen width, zoom, and filters if the column is selected but still not visible.",
+    ],
+    whenToEscalate: "If the column is not in the available list, the view is locked, or the same column is missing for multiple users in the same role, escalate as a scheduling template/build request with the exact column name, view name, role, and location.",
+    walkthrough: [
+      "Go to the schedule screen the user is actually using.",
+      "Confirm location/department, date range, provider/resource, and schedule view/template.",
+      "Open View / Options / Columns / Display / Personalize.",
+      "Find the column list. Check the needed column. If drag-and-drop is allowed, place it where the user expects it.",
+      "Select Apply. Verify the column shows on the schedule line.",
+      "Save as default/my view only if local policy allows. Otherwise leave it as a one-time view change.",
+    ],
+    ifThatFails: [
+      "No Columns/View option: check whether the schedule view is locked by role or template.",
+      "Column is selected but not visible: widen the schedule pane, reset zoom, clear filters, refresh once, then retry.",
+      "Column is not listed: escalate as a template/build request with the exact column name and impacted role.",
+      "Only one user affected: check personalization or permission. Whole team affected: treat it as a template/build issue.",
+    ],
+    visualAids: [
+      {
+        kind: "screenshot",
+        title: "Annotated Mizly screenshot: column picker path",
+        note: "Sanitized mock screen with numbered circles. No vendor UI, logos, patient data, or organization names.",
+        callouts: [
+          "1 - Confirm the right schedule view.",
+          "2 - Open View / Options / Columns.",
+          "3 - Check the column and Apply.",
+          "4 - Save only if local policy allows.",
+        ],
+      },
+      {
+        kind: "tasklet",
+        title: "Tap path",
+        note: "Schedule view -> View/Options -> Columns/Display -> Apply -> Verify schedule line.",
+        callouts: [
+          "Use the user's actual schedule view.",
+          "Stop and escalate if the view is locked or the column is missing.",
+        ],
+      },
+      {
+        kind: "video",
+        title: "Changing schedule columns in 60 seconds",
+        note: "Short Mizly training clip that follows the same steps.",
+        href: "/videos",
+      },
+    ],
+    keywords: k("schedule", "scheduling", "appointment", "columns", "column", "change columns", "schedule line", "line", "grid", "view", "personalize", "add column", "remove column", "show column", "column settings"),
+    related_ids: ["p18", "c12", "v14"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_billing_triage",
+    title: "Billing issue - split it into three lanes",
+    type: "playbook",
+    summary: "Do not troubleshoot billing as one big bucket. Split it into charge capture, coding/status, or account/coverage, then follow that lane.",
+    roles: k("billing", "front desk", "all roles"),
+    domains: k("billing", "charge capture", "registration"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    first90: [
+      "Ask which lane is wrong: charge missing, code/status wrong, or account/coverage wrong.",
+      "Confirm whether one account/encounter is affected or the issue is repeating across a role/team.",
+      "Capture the exact visible status or field name without patient identifiers.",
+    ],
+    whatToSay: [
+      "'Let's split this first. Is the charge missing, is the status/code wrong, or is the account/coverage wrong?'",
+      "'I am going to capture the status and route this to the right owner instead of guessing.'",
+    ],
+    whatToCheck: [
+      "Charge capture lane: encounter, department/location, provider/resource, completion status.",
+      "Coding/status lane: documentation/order/procedure status and whether it is waiting for review.",
+      "Account/coverage lane: registration/coverage/account selection and whether the right team owns correction.",
+    ],
+    whenToEscalate: "Escalate if money-impacting workflow is blocked, the wrong lane is unclear after the three checks, or the same issue affects multiple users/encounters. Include lane, scope, exact status/field, role, and callback.",
+    walkthrough: [
+      "Ask: 'Which one is wrong: charge missing, code/status wrong, or account/coverage wrong?'",
+      "If charge missing: verify encounter, department/location, provider/resource, and whether charge capture was completed.",
+      "If code/status wrong: verify documentation/order/procedure status and whether it is waiting for review.",
+      "If account/coverage wrong: verify account/coverage selection and route to the registration/billing owner. Do not improvise corrections.",
+      "Capture lane, scope, exact status/field, who is blocked, and callback path.",
+    ],
+    ifThatFails: [
+      "If you cannot identify the lane in two minutes, escalate with 'billing lane unclear' and the exact visible status.",
+      "If one user is affected, check role/permission/personalization first.",
+      "If multiple users see it, treat it as workflow/build/routing until the owning team confirms.",
+      "If patient care or checkout flow is blocked, escalate now and close the loop with the requester within five minutes.",
+    ],
+    visualAids: [
+      {
+        kind: "screenshot",
+        title: "Annotated Mizly screenshot: billing lane decision tree",
+        note: "Sanitized mock visual showing the three lanes only. No account numbers, patient identifiers, vendor screens, or organization names.",
+        callouts: [
+          "1 - Charge capture: missing or wrong charge.",
+          "2 - Coding/status: review or completion status.",
+          "3 - Account/coverage: ownership and routing.",
+        ],
+      },
+      {
+        kind: "tasklet",
+        title: "Two-minute lane check",
+        note: "Pick the lane, capture scope, capture exact status/field, route to the owner.",
+        callouts: [
+          "One user = check role or permission first.",
+          "Multiple users = treat as workflow/build/routing until confirmed.",
+        ],
+      },
+      {
+        kind: "video",
+        title: "Walking a billing issue to the right owner",
+        note: "Short Mizly clip showing how to explain the lane and close the loop.",
+        href: "/videos",
+      },
+    ],
+    keywords: k("billing", "charge", "charges", "charge capture", "claim", "coding", "coverage", "account", "invoice", "bill", "payment", "revenue", "missing charge", "wrong charge"),
+    related_ids: ["c3", "p2", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
     id: "ll_bed_control",
     title: "Patient placement / bed control issue",
     type: "playbook",
@@ -749,6 +904,9 @@ export interface AskAnswer {
   matchLabel: string;
   title: string;
   shortAnswer: string;
+  walkthrough: string[];
+  ifThatFails: string[];
+  visualAids: VisualAid[];
   first90: string[];
   whatToSay: string[];
   whatToCheck: string[];
@@ -768,6 +926,12 @@ function tokenize(s: string): string[] {
   return s.toLowerCase().match(/[a-z0-9]+/g) ?? [];
 }
 
+const STOP_TOKENS = new Set([
+  "the", "and", "for", "with", "what", "when", "where", "which", "who",
+  "how", "does", "that", "this", "there", "here", "first", "issue",
+  "item", "items", "looks", "look", "need", "needs", "help",
+]);
+
 function scoreEntry(entry: LaunchEntry, tokens: string[]): number {
   if (tokens.length === 0) return 0;
   const hay = [
@@ -777,18 +941,62 @@ function scoreEntry(entry: LaunchEntry, tokens: string[]): number {
     entry.domains.join(" "),
     entry.roles.join(" "),
   ].join(" ").toLowerCase();
+  const phraseHay = ` ${hay} `;
   let s = 0;
   for (const tk of tokens) {
     if (entry.keywords.some(kw => kw.toLowerCase().includes(tk))) s += 3;
     if (hay.includes(tk)) s += 1;
   }
+  for (const kw of entry.keywords) {
+    const normalized = kw.toLowerCase().trim();
+    if (normalized.length > 3 && phraseHay.includes(` ${normalized} `)) {
+      s += tokens.includes(normalized) ? 4 : 0;
+    }
+  }
   return s;
 }
 
+function walkthroughFor(entry: LaunchEntry): string[] {
+  return entry.walkthrough ?? [
+    ...entry.first90.slice(0, 3),
+    "Run the checks below in order before escalating.",
+    "If the first path works, stop there and close the loop with the requester.",
+  ];
+}
+
+function ifThatFailsFor(entry: LaunchEntry): string[] {
+  return entry.ifThatFails ?? [
+    "If the first attempt fails, confirm scope: one user, one workstation, or the whole unit/team.",
+    "If a second reasonable attempt fails, stop troubleshooting and capture what you tried.",
+    "If the issue blocks care, throughput, or a time-sensitive workflow, escalate with scope, severity, and callback.",
+  ];
+}
+
+function visualAidsFor(entry: LaunchEntry, relatedItems: ContentItem[]): VisualAid[] {
+  if (entry.visualAids?.length) return entry.visualAids;
+  const video = relatedItems.find(item => item.content_type === "video");
+  return video
+    ? [{
+        kind: "video",
+        title: video.title,
+        note: "Short Mizly training clip for this workflow.",
+        href: "/videos",
+      }]
+    : [];
+}
+
 export function askLaunch(query: string): AskAnswer {
-  const tokens = tokenize(query).filter(t => t.length > 2);
+  const tokens = tokenize(query).filter(t => t.length > 2 && !STOP_TOKENS.has(t));
+  const queryText = query.toLowerCase();
   const ranked = LAUNCH_LIBRARY
-    .map(e => ({ e, s: scoreEntry(e, tokens) }))
+    .map(e => {
+      const phraseBoost = e.keywords.reduce((total, kw) => {
+        const normalized = kw.toLowerCase().trim();
+        if (normalized.length < 4) return total;
+        return queryText.includes(normalized) ? total + (normalized.includes(" ") ? 8 : 5) : total;
+      }, 0);
+      return { e, s: scoreEntry(e, tokens) + phraseBoost };
+    })
     .filter(x => x.s > 0)
     .sort((a, b) => b.s - a.s);
 
@@ -825,6 +1033,9 @@ export function askLaunch(query: string): AskAnswer {
     shortAnswer: top
       ? entry.summary
       : `I couldn't find an exact match in the Mizly library for that question. Here is the closest playbook — confirm with your floor lead before acting.`,
+    walkthrough: walkthroughFor(entry),
+    ifThatFails: ifThatFailsFor(entry),
+    visualAids: visualAidsFor(entry, relatedItems),
     first90: entry.first90,
     whatToSay: entry.whatToSay,
     whatToCheck: entry.whatToCheck,
@@ -842,6 +1053,8 @@ export function askLaunch(query: string): AskAnswer {
 }
 
 export const STARTER_QUESTIONS = [
+  "How do I change columns in the schedule line?",
+  "A billing item looks wrong. What do I check first?",
   "I can't log in - my password is not working.",
   "The printer is not printing.",
   "Where do I find my patient list?",

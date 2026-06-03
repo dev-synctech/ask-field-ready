@@ -139,6 +139,11 @@ export const ITEMS: ContentItem[] = [
   { id: "c11", module_id: "m11", title: "Before escalating a bed assignment issue", summary: "Scope, location, status, requester, and next owner.", content_type: "checklist", tags: t("bed-control","placement","escalation"), difficulty: "foundational", estimated_minutes: 2, publish_status: "published", sanitized_approved: true },
   { id: "s10", module_id: "m11", title: "Bed assignment stalls during shift change", summary: "A unit says a patient cannot move because the bed assignment is unclear.", content_type: "scenario", tags: t("bed-control","placement","handoff"), difficulty: "intermediate", estimated_minutes: 6, publish_status: "published", sanitized_approved: true },
   { id: "v13", module_id: "m11", title: "Bed control handoff in 90 seconds", summary: "How to summarize a placement issue without adding PHI.", content_type: "video", tags: t("bed-control","handoff","communication"), difficulty: "foundational", estimated_minutes: 2, publish_status: "published", sanitized_approved: true, transcript: "Three pieces in ninety seconds. One: name the issue without PHI — 'one bed assignment is unclear on a med-surg unit.' Two: confirm scope — one patient or several, and which unit is waiting. Three: state the handoff — who owns the next step, what you need from command, and when you'll check back. Close the loop with the requester within five minutes so the floor knows it landed." },
+
+  // ---------- Exact Walkthrough Pack 01: Scheduling view support ----------
+  { id: "p18", module_id: "m8", title: "Schedule columns - exact walkthrough", summary: "Confirm the schedule context, open column options, apply the change, then save only if allowed.", content_type: "playbook", tags: t("schedule","columns","personalization"), difficulty: "foundational", estimated_minutes: 4, publish_status: "published", sanitized_approved: true },
+  { id: "c12", module_id: "m8", title: "Before escalating schedule column changes", summary: "View, filters, column picker, permissions, and template ownership.", content_type: "checklist", tags: t("schedule","columns","escalation"), difficulty: "foundational", estimated_minutes: 2, publish_status: "published", sanitized_approved: true },
+  { id: "v14", module_id: "m8", title: "Changing schedule columns in 60 seconds", summary: "Confirm the view, open columns, apply the change, and know when it is a template issue.", content_type: "video", tags: t("schedule","columns","personalization"), difficulty: "foundational", estimated_minutes: 1, publish_status: "published", sanitized_approved: true, transcript: "Start on the schedule view the user is actually using. Confirm location, date range, provider or resource, and schedule template. Open View, Options, Columns, Display, or Personalize. Select the needed column, apply it, and verify it appears. Save as default only if local policy allows. If the column is missing from the list, escalate as a template or build request." },
 ];
 
 export const itemsByType = (type: ContentType) => ITEMS.filter(i => i.content_type === type);
@@ -266,6 +271,18 @@ export const PLAYBOOK_DETAIL: Record<string, PlaybookDetail> = {
     ],
     pitfalls: ["Escalating before confirming ownership.", "Sharing patient identifiers on the floor.", "Repeating a request without timestamping it."],
     escalation: "Time-critical placement (ED holding, ICU transfer, post-op recovery) waiting > 15 minutes: page command center with scope, severity, callback.",
+  },
+  p18: {
+    whenToUse: "A user needs to add, remove, reorder, or reveal columns on a schedule line or schedule grid.",
+    steps: [
+      { title: "Confirm the view", body: "Make sure they are in the exact schedule view they use for the workflow: location, department, date range, provider/resource, and view/template." },
+      { title: "Open column options", body: "Look for View, Options, Columns, Display, or Personalize. Do this before assuming the column is missing." },
+      { title: "Apply the column", body: "Select the needed column, reorder it if allowed, then Apply. Verify it appears on the schedule line." },
+      { title: "Save only if allowed", body: "If local policy allows personal views, save it as My View/default. If not, leave it as a one-time change." },
+      { title: "Escalate cleanly", body: "If the column is not listed or the view is locked, capture the column name, view/template, role, location, and requester." },
+    ],
+    pitfalls: ["Changing the wrong schedule view.", "Saving a personal default when local policy does not allow it.", "Escalating before checking filters and screen width."],
+    escalation: "Column missing from picker, locked template, or multiple users affected: escalate as scheduling template/build with exact column name, view, role, and location.",
   },
 };
 
@@ -448,6 +465,15 @@ export const VIDEO_DETAIL: Record<string, VideoDetail> = {
     ],
     transcript: "Three pieces in ninety seconds. One: name the issue without PHI — 'one bed assignment is unclear on a med-surg unit.' Two: confirm scope — one patient or several, and which unit is waiting. Three: state the handoff — who owns the next step, what you need from command, and when you'll check back. Close the loop with the requester within five minutes so the floor knows it landed.",
   },
+  v14: {
+    chapters: [
+      { t: "0:00", title: "Start in the right view", body: "Confirm location, department, date range, provider/resource, and schedule template." },
+      { t: "0:15", title: "Open columns", body: "Use View, Options, Columns, Display, or Personalize. Names vary by organization." },
+      { t: "0:35", title: "Apply, then verify", body: "Select the column, apply it, and make sure it appears on the schedule line." },
+      { t: "0:50", title: "Know when to escalate", body: "Missing column or locked view means template/build, not user error." },
+    ],
+    transcript: "Start on the schedule view the user is actually using. Confirm location, date range, provider or resource, and schedule template. Open View, Options, Columns, Display, or Personalize. Select the needed column, apply it, and verify it appears. Save as default only if local policy allows. If the column is missing from the list, escalate as a template or build request.",
+  },
 };
 
 export interface ChecklistItem { id: string; text: string; }
@@ -487,6 +513,14 @@ export const CHECKLIST_ITEMS: Record<string, ChecklistItem[]> = {
     { id: "d", text: "Confirm whether this is one patient or multiple patients" },
     { id: "e", text: "Capture the caller/requester and callback path" },
     { id: "f", text: "Escalate with scope, severity, and timing" },
+  ],
+  c12: [
+    { id: "a", text: "Confirm the exact schedule view/template" },
+    { id: "b", text: "Confirm location/department, date range, and provider/resource filters" },
+    { id: "c", text: "Open View, Options, Columns, Display, or Personalize" },
+    { id: "d", text: "Select the needed column and apply the change" },
+    { id: "e", text: "Check screen width, zoom, and filters if the column still does not show" },
+    { id: "f", text: "Escalate with column name, view/template, role, and location if locked or missing" },
   ],
 };
 
