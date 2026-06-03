@@ -268,6 +268,8 @@ export const PLAYBOOK_DETAIL: Record<string, PlaybookDetail> = {
     escalation: "Time-critical placement (ED holding, ICU transfer, post-op recovery) waiting > 15 minutes: page command center with scope, severity, callback.",
   },
 };
+
+export interface ScenarioDetail {
   situation: string;
   first90: string[];
   whatToSay: string[];
