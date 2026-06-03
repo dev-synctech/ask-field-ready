@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/admin_/feedback")({
 });
 
 type FeedbackKind = "helpful" | "not_helpful" | "missing" | "request_playbook";
-type Status = "new" | "triaged" | "resolved";
+type Status = "new" | "triaged" | "resolved" | "dismissed";
 
 interface FeedbackItem {
   id: string;
