@@ -14,6 +14,11 @@ const TYPES: ContentType[] = ["lesson", "playbook", "video", "checklist", "scena
 const TARGET_PER_TYPE = 3; // demo target: each module should have at least 3 of each type
 
 function CoveragePage() {
+  const conversions = useConversions();
+  const sourceReadyGaps = useMemo(
+    () => conversions.filter(c => c.status !== "published" && c.converted_items.length === 0),
+    [conversions],
+  );
   const grid = useMemo(() => {
     return MODULES.map(m => {
       const counts = Object.fromEntries(
