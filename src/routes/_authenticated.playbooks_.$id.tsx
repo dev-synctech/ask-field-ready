@@ -81,15 +81,15 @@ function PlaybookDetailPage() {
         <ArrowLeft className="size-3.5" /> Back to Playbooks
       </Link>
 
-      {/* Polished header */}
-      <div className="mt-4 rounded-3xl border border-border bg-gradient-to-br from-warning/10 via-card to-card p-6 md:p-7 shadow-soft">
+      {/* Clean header */}
+      <div className="mt-4 rounded-2xl border border-border bg-card p-6 md:p-7 shadow-soft">
         <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-warning text-warning-foreground"><NotebookPen className="size-3" /> Playbook</span>
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-teal-soft text-teal border border-teal/20"><NotebookPen className="size-3" /> Playbook</span>
           <span className="text-muted-foreground inline-flex items-center gap-1"><Clock className="size-3" /> {item.estimated_minutes} min</span>
           <span className="text-muted-foreground">· {item.difficulty}</span>
         </div>
-        <h1 className="mt-3 text-2xl md:text-3xl font-display font-semibold tracking-tight">{item.title}</h1>
-        <p className="mt-2 text-sm text-foreground/75">{item.summary}</p>
+        <h1 className="mt-3 text-2xl md:text-[28px] leading-tight font-display font-semibold tracking-tight">{item.title}</h1>
+        <p className="mt-2 text-sm text-foreground/75 leading-relaxed">{item.summary}</p>
       </div>
 
       {detail?.whenToUse && (
