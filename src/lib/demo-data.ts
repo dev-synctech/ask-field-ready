@@ -192,6 +192,14 @@ export const LESSON_DETAIL: Record<string, LessonDetail> = {
     ],
     takeaways: ["Visible badge, open hands.", "First names only.", "You are a guest."],
   },
+  l16: {
+    sections: [
+      { heading: "Where placement starts", body: "Most placement questions begin with a request: a unit needs a bed, or a patient needs to move. The request lands somewhere — bed control, a charge nurse, or a coordinator — and waits on a status check before anyone moves." },
+      { heading: "The three things to confirm", body: "Confirm the current location of the patient, the destination unit or service, and whether a placement order or status already exists. Without all three, no one can act." },
+      { heading: "Who owns the next step", body: "Placement issues stall when ownership is unclear. Name the next owner out loud: 'Bed control owns the assignment; the sending unit owns transport.' Hand off with a callback time." },
+    ],
+    takeaways: ["Request → status → owner. In that order.", "Location and destination before anything else.", "Name the next owner out loud."],
+  },
 };
 
 export interface PlaybookDetail {
