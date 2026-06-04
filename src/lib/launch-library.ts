@@ -894,6 +894,175 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     related_ids: ["p17", "c11", "l16", "s10", "v13"],
     sanitized_approved: true, status: "published",
   },
+
+  // --- Pack 02 (safe Mizly patterns) -----------------------------------
+  {
+    id: "ll_med_doc_mismatch_lispro",
+    title: "Insulin drip row entered on the wrong line",
+    type: "ask_answer_seed",
+    summary: "A Lispro / insulin drip rate was charted on the wrong row or against the wrong order. Stabilize first, then escalate the correction.",
+    roles: k("inpatient nurse"), domains: k("documentation", "bcma / mar"), phases: k("stabilization week 1"),
+    urgency: 3, escalation: 3,
+    walkthrough: [
+      "Pause and re-verify the active insulin order against the chart.",
+      "Confirm current patient state (last glucose, last documented rate) before doing anything else.",
+      "Flag the misplaced row to the responsible RN and bedside provider.",
+    ],
+    ifThatFails: [
+      "Do not delete or overwrite a signed entry on your own — escalate.",
+      "Notify the charge nurse and the responsible provider so a corrected entry can be written through approved channels.",
+      "Open a ticket with clinical informatics for the correction and document the patient communication.",
+    ],
+    first90: [
+      "Stop. Re-read the active insulin order before touching anything.",
+      "Verify last glucose and last documented infusion rate.",
+      "Tell the charge nurse: wrong-row insulin documentation, patient stable / unstable.",
+    ],
+    whatToSay: [
+      "'I need to flag a documentation mismatch on the insulin drip — patient is stable, but the record needs correction.'",
+    ],
+    whatToCheck: [
+      "Is the patient clinically stable right now?",
+      "Which order the rate was charted against vs the active order.",
+      "Whether the entry is already signed.",
+    ],
+    whenToEscalate: "Always escalate signed-entry corrections to the charge nurse, provider, and clinical informatics. Do not self-correct a signed medication record.",
+    keywords: k("lispro", "insulin drip", "insulin rate", "wrong row", "wrong line", "drip row", "med documentation", "mar mismatch", "documentation mismatch"),
+    related_ids: ["p2", "c3", "l8"],
+    sanitized_approved: true, status: "published",
+  },
+  {
+    id: "ll_treatment_plan_locked",
+    title: "Treatment plan is locked and won't update",
+    type: "ask_answer_seed",
+    summary: "The treatment plan is read-only and the clinician can't add or change items. Confirm ownership before paging build.",
+    roles: k("inpatient provider", "ambulatory provider", "inpatient nurse"),
+    domains: k("documentation"), phases: k("stabilization week 1"),
+    urgency: 3, escalation: 2,
+    walkthrough: [
+      "Confirm who owns the plan and whether it was signed or routed for cosign.",
+      "Have the owner reopen or unlock through the standard workflow, not a back door.",
+      "If the owner is unavailable, document the requested change in a clinical note as an interim record.",
+    ],
+    ifThatFails: [
+      "If the plan can't be unlocked through the normal route within the care window, escalate to clinical informatics.",
+      "Do not duplicate a locked plan to bypass the lock — that fragments the record.",
+    ],
+    first90: [
+      "Identify the plan owner and the lock reason.",
+      "Ask the owner to unlock through the approved workflow.",
+      "Capture the requested change in a clinical note as an interim record if the unlock is delayed.",
+    ],
+    whatToSay: [
+      "'Let's get the plan owner to unlock it the right way — I'll document the requested change in the meantime.'",
+    ],
+    whatToCheck: [
+      "Who signed or cosigned the plan.",
+      "Whether the lock is policy-driven (cosign pending) vs a build issue.",
+    ],
+    whenToEscalate: "Escalate to clinical informatics if the plan can't be unlocked within the care window or if the lock blocks a time-sensitive order.",
+    keywords: k("treatment plan", "plan locked", "locked plan", "read only", "cannot edit", "won't update", "care plan locked"),
+    related_ids: ["p2", "c3", "l8"],
+    sanitized_approved: true, status: "published",
+  },
+  {
+    id: "ll_or_scheduling_codes",
+    title: "Wrong OR scheduling code blocks the case",
+    type: "ask_answer_seed",
+    summary: "Surgical case can't move because the scheduling code, procedure code, or case-type does not match the room or the team.",
+    roles: k("or / surgical", "scheduling"), domains: k("scheduling"), phases: k("stabilization week 1"),
+    urgency: 3, escalation: 3,
+    walkthrough: [
+      "Confirm the case-type code on the request against the room's allowed codes.",
+      "Ask the scheduler which code the team expected, in plain language.",
+      "Have the scheduler reissue or correct the code through the standard scheduling workflow.",
+    ],
+    ifThatFails: [
+      "If the room is held and the code can't be corrected in time, escalate to the OR charge so the case can be re-slotted.",
+      "Do not force the case through with a mismatched code — downstream charges and supplies will be wrong.",
+    ],
+    first90: [
+      "Confirm the code on the request and the room's allowed codes.",
+      "Ask the scheduler which code the surgical team expected.",
+      "Tell the OR charge there is a code mismatch with the room.",
+    ],
+    whatToSay: [
+      "'There's a scheduling-code mismatch on this case — I'm looping in the OR charge so we don't lose the room.'",
+    ],
+    whatToCheck: [
+      "Whether the room is booked under the expected case-type.",
+      "Whether the surgical service has changed the standard code recently.",
+    ],
+    whenToEscalate: "Escalate to OR charge and the scheduling lead if the case is at risk of losing its room or the next case is queued.",
+    keywords: k("or scheduling", "surgical case", "case-type", "case type", "procedure code", "wrong code", "surginet code", "scheduling code"),
+    related_ids: ["p4", "c3", "l14"],
+    sanitized_approved: true, status: "published",
+  },
+  {
+    id: "ll_ambulation_no_option",
+    title: "Ambulation status has no option that fits",
+    type: "ask_answer_seed",
+    summary: "A required ambulation, mobility, or activity field has no choice that matches the patient. Document accurately and request a build update.",
+    roles: k("inpatient nurse"), domains: k("documentation"), phases: k("stabilization week 1"),
+    urgency: 2, escalation: 1,
+    walkthrough: [
+      "Pick the closest documented option to the patient's actual status.",
+      "Add a clarifying free-text note explaining what's different.",
+      "Log the gap in feedback so the option list can be updated.",
+    ],
+    ifThatFails: [
+      "If the closest option could be misread clinically, escalate to the charge nurse rather than guess.",
+    ],
+    first90: [
+      "Choose the closest matching ambulation option.",
+      "Add a free-text note describing the actual status.",
+      "Submit a build-feedback note so the choice list can be expanded.",
+    ],
+    whatToSay: [
+      "'I'll pick the closest option and add a note so the chart reads accurately.'",
+    ],
+    whatToCheck: [
+      "Whether a clarifying note is enough or if the field drives downstream rules.",
+    ],
+    whenToEscalate: "Escalate to the charge nurse if the missing option could affect orders, transfers, or therapy referrals.",
+    keywords: k("ambulation", "mobility status", "activity status", "no option", "missing option", "no fit", "no choice fits"),
+    related_ids: ["l8", "c3"],
+    sanitized_approved: true, status: "published",
+  },
+  {
+    id: "ll_scan_document_workflow",
+    title: "Scan a consent or paper document into the chart",
+    type: "ask_answer_seed",
+    summary: "Add a paper consent, ID, or external document to the patient record using the approved scan/route workflow.",
+    roles: k("registration", "inpatient nurse", "front desk"), domains: k("documentation"), phases: k("stabilization week 1"),
+    urgency: 2, escalation: 1,
+    walkthrough: [
+      "Open the patient chart > Media or Documents > Scan / Add Document.",
+      "Choose the document type that matches the form (consent, ID, external record).",
+      "Scan, preview for legibility and patient match, then save to the patient record.",
+    ],
+    ifThatFails: [
+      "If the scanner is offline, capture with the approved mobile workflow only.",
+      "If the document type list does not include the form, choose the closest type and add a free-text label — then flag HIM so the type list is updated.",
+    ],
+    first90: [
+      "Open the patient chart and navigate to Media / Documents.",
+      "Pick the correct document type before scanning.",
+      "Preview the scan for legibility and patient match before saving.",
+    ],
+    whatToSay: [
+      "'I'm scanning this directly to the patient's chart so it's in the record before the next handoff.'",
+    ],
+    whatToCheck: [
+      "Patient identifier on the form vs the chart.",
+      "Document type matches the form (consent vs ID vs external).",
+      "Scan is legible end-to-end before saving.",
+    ],
+    whenToEscalate: "Escalate to HIM if the document type is missing from the list, or if a scanned consent cannot be located after save.",
+    keywords: k("scan", "scan document", "scan consent", "consent into chart", "upload document", "media tab", "him scanning", "route document", "scan into chart"),
+    related_ids: ["p1", "c4", "l11"],
+    sanitized_approved: true, status: "published",
+  },
 ];
 
 // --- Match engine -------------------------------------------------------
