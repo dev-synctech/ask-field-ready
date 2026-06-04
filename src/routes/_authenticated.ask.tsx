@@ -566,13 +566,13 @@ function MoreHelpGroups({ answer }: { answer: AskAnswer }) {
 }
 
 function MoreHelpGroupsFromRelated({ related }: { related: AskAnswer["related"] }) {
-  const groups: Array<{ type: ContentType; items: ContentItem[] }> = [
-    { type: "playbook", items: related.playbooks },
-    { type: "checklist", items: related.checklists },
-    { type: "video", items: related.videos },
-    { type: "lesson", items: related.lessons },
-    { type: "scenario", items: related.scenarios },
-  ].filter(g => g.items.length > 0);
+  const groups: Array<{ type: ContentType; items: ContentItem[] }> = ([
+    { type: "playbook" as ContentType, items: related.playbooks },
+    { type: "checklist" as ContentType, items: related.checklists },
+    { type: "video" as ContentType, items: related.videos },
+    { type: "lesson" as ContentType, items: related.lessons },
+    { type: "scenario" as ContentType, items: related.scenarios },
+  ]).filter(g => g.items.length > 0);
 
   if (!groups.length) return null;
 
