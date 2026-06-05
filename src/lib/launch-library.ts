@@ -2337,7 +2337,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_clearinghouse_error_refresh_retest",
     title: "Clearinghouse error needs refresh/retest",
     type: "playbook",
-    summary: "Clearinghouse errors should be corrected, refreshed or retested, and routed with the external status detail instead of repeatedly resubmitted.",
+    summary: "The clearinghouse rejected a claim — fix it once, retest, and only then resend instead of resubmitting blindly.",
     roles: k("biller", "claims rep", "revenue cycle"),
     domains: k("claims", "clearinghouse", "edits"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
