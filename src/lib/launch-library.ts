@@ -1818,7 +1818,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_smarttool_missing",
     title: "SmartPhrase, SmartText, SmartList, or SmartLink is missing",
     type: "playbook",
-    summary: "SmartTools are often personal, shared, or template-controlled. Check the tool type and ownership before rebuilding anything.",
+    summary: "A SmartPhrase, SmartText, SmartList, or SmartLink you expected isn't showing up in the note.",
     roles: k("provider", "clinic staff", "all roles"),
     domains: k("documentation", "personalization", "smarttools"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
