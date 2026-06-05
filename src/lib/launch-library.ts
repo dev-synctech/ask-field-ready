@@ -2251,7 +2251,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_dnb_edit_or_stop_bill_owner",
     title: "DNB edit or stop-bill needs an owner",
     type: "playbook",
-    summary: "DNB and stop-bill issues need the edit category, blocker reason, owner lane, and safe handoff before billing is forced forward.",
+    summary: "An account is being held from billing because of an edit, and we need to find who actually owns it before clearing anything.",
     roles: k("biller", "claims rep", "revenue cycle"),
     domains: k("hospital billing", "dnb", "edits"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
