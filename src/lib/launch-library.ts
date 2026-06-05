@@ -5926,7 +5926,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Wrong default: fix in personal profile.",
       "Still wrong after switch: log out and back in.",
     ],
-    keywords: k("wrong department", "wrong context", "wrong clinic", "login context", "change context", "department switch", "logged in wrong place"),
+    keywords: k("wrong department", "wrong department context", "wrong login department", "logged in wrong department", "wrong context", "wrong clinic", "login context", "change context", "department switch", "logged in wrong place", "wrong location context"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
