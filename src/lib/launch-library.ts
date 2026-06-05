@@ -6184,7 +6184,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Unmonitored pool: assign coverage now, fix rule next.",
       "User sent to wrong place: educate and update guidance.",
     ],
-    keywords: k("portal message routing", "mychart message wrong place", "portal message lost", "portal message no answer", "patient message routing", "in basket portal message"),
+    keywords: k("portal message routing", "portal message routed wrong team", "portal message wrong team", "portal message wrong place", "mychart message wrong place", "portal message lost", "portal message no answer", "patient message routing", "in basket portal message", "patient message went to wrong team"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
