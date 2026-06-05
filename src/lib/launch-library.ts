@@ -1295,6 +1295,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     phases: k("cutover day 0", "stabilization week 1"),
     urgency: 3,
     escalation: 2,
+    visual_url: "/visual-guides/attestation-cosign-routing.svg",
+    visual_callouts: [
+      "Confirm what created the signature task.",
+      "Check who owns the next signature.",
+      "Verify task status and routing visibility.",
+      "Escalate with owner, status, and callback if blocked.",
+    ],
     first90: [
       "Confirm what action created the attestation or cosign.",
       "Identify who owns the next signature by role.",
@@ -1591,7 +1598,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "cerner",
     action: "document",
     is_deep_flow: false,
-    visual_url: null,
+    visual_url: "/visual-guides/ambulation-mobility-option.svg",
+    visual_callouts: [
+      "Start in ADL or Mobility, not off-unit transport.",
+      "Expand collapsed rows before calling the option missing.",
+      "Capture assist/device details in the approved field.",
+      "Escalate if the option is missing for multiple users.",
+    ],
     first90: [
       "In the ADL section - look under Mobility.",
       "Inside Mobility - expand the collapsed wheelchair options.",
@@ -2524,7 +2537,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Chart -> Allergies/adverse reactions -> Medication order alert -> Acknowledge/route owner",
-    visual_url: null,
+    visual_url: "/visual-guides/allergy-reaction-block.svg",
+    visual_callouts: [
+      "Read the allergy or reaction context before action.",
+      "Compare the alert to the medication/order being blocked.",
+      "Identify who owns the clinical decision.",
+      "Escalate if override or reaction status is unclear.",
+    ],
     first90: [
       "Do not bypass the allergy alert.",
       "Confirm reaction field and order status.",
@@ -3149,7 +3168,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "cerner",
     action: "review",
     nav_trail: "Appointment/request -> Referral or authorization area -> Coverage/status -> Owner queue",
-    visual_url: null,
+    visual_url: "/visual-guides/authorization-referral-status.svg",
+    visual_callouts: [
+      "Start from the appointment or request context.",
+      "Check referral/auth status and coverage lane.",
+      "Confirm owner queue before changing the visit.",
+      "Escalate same-day blockers with callback.",
+    ],
     first90: [
       "Confirm appointment or order/request context.",
       "Check referral, auth, and coverage status.",
@@ -4108,7 +4133,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Procedure/case -> Consents/documents -> Signed status -> Scan/link to encounter -> Owner",
-    visual_url: null,
+    visual_url: "/visual-guides/consent-procedure-status.svg",
+    visual_callouts: [
+      "Confirm procedure/case and encounter context.",
+      "Separate signed status from scan/link status.",
+      "Check document type and encounter link.",
+      "Escalate active procedure blockers immediately.",
+    ],
     first90: [
       "Confirm the procedure and encounter.",
       "Check consent document status.",
@@ -4336,7 +4367,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "document",
     is_deep_flow: true,
     nav_trail: "Downtime packet -> Priority stack -> Owner assignment -> Backload entry -> Verification/handoff",
-    visual_url: null,
+    visual_url: "/visual-guides/downtime-backload-queue.svg",
+    visual_callouts: [
+      "Sort paper by safety priority before entry.",
+      "Assign one owner per stack.",
+      "Backload with original timestamps.",
+      "Verify filing before closing the packet.",
+    ],
     first90: [
       "Sort paper by patient-safety priority.",
       "Assign one owner per stack.",
@@ -4590,6 +4627,71 @@ function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
       ifYouDontSeeIt: "If Change Context or the department/location option is missing, this is likely access or security-template related. Escalate to the floor lead or access team.",
       whatToSay: "I am checking the right context before we retry, so we do not fix the wrong screen.",
       checkThis: ["Top banner/workspace label.", "Department, job, location, and role.", "Whether context resets after switching."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_allergy_or_reaction_blocks_order") {
+    return {
+      doThisFirst: "Keep the alert visible and do not bypass it.",
+      whereToLook: "Look at allergy/reaction context, severity, alert wording, the blocked order or medication, and the owner lane.",
+      whatToClick: "Open alert or allergy details. Compare reaction context to the blocked item, then route the clinical decision owner.",
+      whatShouldHappen: "You should see the reaction context, blocked item, and who owns the next clinical decision.",
+      ifYouDontSeeIt: "If reaction context, owner, or override path is unclear, stop and escalate to pharmacy/provider owner before the medication moves.",
+      whatToSay: "This is a medication safety stop, so I am checking context and owner before anyone proceeds.",
+      checkThis: ["Allergy/reaction field and severity.", "Blocked medication or order.", "Clinical owner and escalation path."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_attestation_cosign") {
+    return {
+      doThisFirst: "Confirm what action created the attestation or cosign task.",
+      whereToLook: "Look at the source action, owner role, task status, queue or pool, and whether the signer can see it.",
+      whatToClick: "Open the signature/cosign task details, confirm owner and route status, then use the approved route or reassign action if available.",
+      whatShouldHappen: "The next owner, queue, or blocked routing reason should be visible before anyone retries.",
+      ifYouDontSeeIt: "If the owner cannot see the task or active work is blocked, escalate with source action, owner role, status, and callback.",
+      whatToSay: "I am confirming who owns the next signature before we chase screens.",
+      checkThis: ["Source action.", "Owner role and task status.", "Queue/pool visibility and callback."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_authorization_or_referral_status_missing") {
+    return {
+      doThisFirst: "Open the appointment, referral, or request context first.",
+      whereToLook: "Look at referral/auth status, coverage lane, linked appointment/order, owner queue, and visit timing.",
+      whatToClick: "Open referral or authorization details. Confirm status and owner before changing, canceling, or moving the visit.",
+      whatShouldHappen: "You should see missing, pending, denied, expired, linked, or owner status before scheduling changes.",
+      ifYouDontSeeIt: "If same-day care is blocked or owner is unclear, escalate to referral/authorization owner with callback.",
+      whatToSay: "I am checking whether this is missing, pending, or hidden by context before we change the appointment.",
+      checkThis: ["Appointment/request context.", "Referral/auth and coverage status.", "Owner queue and same-day urgency."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_consent_missing_before_procedure") {
+    return {
+      doThisFirst: "Confirm the procedure or case and the correct encounter.",
+      whereToLook: "Look in consents/documents for consent type, signed status, scanned image, encounter link, and owner.",
+      whatToClick: "Open consent or document details. Separate signed status from scan/link status before routing the owner.",
+      whatShouldHappen: "The consent should show signed, unsigned, scanned, linked, or blocked with the owner path clear.",
+      ifYouDontSeeIt: "If signed consent is missing, linked wrong, or timing is affected, escalate to periop/clinical owner immediately.",
+      whatToSay: "I am separating clinical consent from the scan/link step before the case proceeds.",
+      checkThis: ["Procedure/case and encounter.", "Consent type and signed status.", "Scan/link status and owner."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_ambulation_no_option") {
+    return {
+      doThisFirst: "Start in ADL or Mobility, not off-unit Transport.",
+      whereToLook: "Look in the flowsheet mobility/ADL section for collapsed rows, wheelchair options, assist level, device, and comment policy.",
+      whatToClick: "Expand Mobility, choose the approved activity/device row if present, document once, then verify timestamp and initials.",
+      whatShouldHappen: "The activity should file under Mobility/ADL with assist/device context, or show that the row is truly missing.",
+      ifYouDontSeeIt: "If the option is missing for multiple users or policy is unclear, escalate to clinical documentation owner.",
+      whatToSay: "I am naming what happened first so we pick the right documentation category.",
+      checkThis: ["Actual activity and destination.", "Mobility/ADL row and collapsed options.", "Assist level, device, timestamp, and comment policy."],
       escalateWhen: entry.whenToEscalate,
     };
   }
