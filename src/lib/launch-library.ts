@@ -2395,15 +2395,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Route to charge or claims owner before forcing billing.",
     ],
     whatToSay: [
-      "'Let's confirm whether this is a charge timing issue or a claim-status issue.'",
-      "'We should not manually push billing until the owner lane is clear.'",
+      "'Let me figure out if this is a charge that came in late or a claim-status problem — they're different.'",
+      "'I don't want to force the bill until we know who owns this.'",
     ],
     whatToCheck: [
-      "Service date, charge status, late-charge indicator, claim status, split-claim context, and owner.",
-      "Whether documentation, coding, or coverage changed after claim creation.",
-      "Whether manual entry or resubmission is allowed by local revenue policy.",
+      "The date of service, the charge status, and whether the charge is flagged as a late charge.",
+      "The claim status and whether the visit was already billed or split into multiple claims.",
+      "Whether documentation, coding, or coverage changed after the original claim went out.",
     ],
-    whenToEscalate: "If late-charge handling, split-claim ownership, or manual billing policy is unclear, escalate to charge/revenue owner with account context and status.",
+    whenToEscalate: "If you can't tell whether to add it as a late charge or split the claim, or your workflow doesn't allow a manual push, send it to the charge capture lead with the account and what changed.",
     walkthrough: [
       "Open account charge/transaction view.",
       "Check service date and claim status.",
