@@ -2743,15 +2743,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Check selected orders and required fields.",
     ],
     whatToSay: [
-      "'Let's make sure the right section is open before we call the order missing.'",
-      "'SmartSets still need required fields before signing.'",
+      "'Let's open the right section before we say the order is missing.'",
+      "'Even when the order is there, it still needs the required fields filled in before signing.'",
     ],
     whatToCheck: [
-      "Encounter, department, SmartSet name, section/accordion state, selected orders, required fields, and sign status.",
-      "Whether the expected order is hidden, unchecked, filtered by context, or unavailable for role/location.",
-      "Whether the issue is personal preference, specialty template, or shared build.",
+      "Which encounter, department, and visit type you're in — the order set changes with context.",
+      "Whether the section is collapsed, the order is unchecked, or it's hidden because of role or location.",
+      "Whether this is a personal favorites issue or a shared template the team uses.",
     ],
-    whenToEscalate: "If the expected section/order is missing for the right role/context or required fields cannot be completed, escalate to provider support/build owner with SmartSet name and context.",
+    whenToEscalate: "If the right section or order is missing for the correct role and context, or required fields can't be completed, send it to provider support with the order set name and what's blocked.",
     walkthrough: [
       "Open SmartSet in correct context.",
       "Expand section and select expected order.",
