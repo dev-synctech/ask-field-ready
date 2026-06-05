@@ -2054,15 +2054,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Check attachment owner before sending.",
     ],
     whatToSay: [
-      "'Let's confirm the claim lane and requested document before we attach anything.'",
-      "'We only send final, approved documentation through the right owner.'",
+      "'Let me confirm what the payer is asking for and that the document is final before anything goes out.'",
+      "'We only attach approved, signed documents — and only on the right account.'",
     ],
     whatToCheck: [
-      "Claim status, payer/request type, document type, final/signature status, and attachment queue.",
-      "Whether the document belongs to the correct account/encounter.",
-      "Whether the user has permission to attach or should route it.",
+      "The claim status and which payer or request is asking for the document.",
+      "That the document is final and signed, and that it belongs to this account and visit.",
+      "Whether you have permission to attach it yourself, or it has to go through the attachment queue.",
     ],
-    whenToEscalate: "If the document, account, or attachment owner is unclear, escalate to claims/revenue owner with claim lane, requested document type, status, and callback.",
+    whenToEscalate: "If the document, the account, or who attaches it isn't clear, send it to the claims team lead with the payer, the document type, and the claim status.",
     walkthrough: [
       "Open the claim lane and status.",
       "Confirm requested document and final status.",
