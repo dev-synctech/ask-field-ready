@@ -1,13 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Search, Sparkles, BookOpen, ListChecks, Film, ClipboardCheck,
-  NotebookPen, Copy, Bookmark, Loader2, Clock, X,
-  CheckCircle2, AlertTriangle, ChevronRight,
+  NotebookPen, Copy, Bookmark, Loader2, Clock, X, ShieldCheck,
+  ThumbsUp, ThumbsDown, MessageSquarePlus, FileQuestion, CheckCircle2, AlertTriangle,
+  ImageIcon, MousePointerClick,
 } from "lucide-react";
 import { toast } from "sonner";
-import { askLaunch, STARTER_QUESTIONS, type AskAnswer } from "@/lib/launch-library";
-import type { ContentType, ContentItem } from "@/lib/demo-data";
+import {
+  askLaunch,
+  STARTER_QUESTIONS,
+  badgeForLaunchType,
+  type AskAction,
+  type AskAnswer,
+  type MatchQuality,
+  type VendorFamily,
+} from "@/lib/launch-library";
+import { ASK_SAFETY_LINE } from "@/lib/legal";
+import { searchItems, type ContentType, type ContentItem } from "@/lib/demo-data";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
@@ -18,80 +28,55 @@ const RECENT_KEY = "ate.ask.recent";
 const SAVED_KEY = "ate.ask.saved";
 const CONTENT_GAP_KEY = "mizly.ask.content_gaps";
 
-const TRADEMARK_DISCLAIMER =
-  "Epic and EpicCare are registered trademarks of Epic Systems Corporation. Oracle Health and Cerner are trademarks of Oracle Corporation. MEDITECH is a registered trademark of Medical Information Technology, Inc. Mizly is an independent product not affiliated with or endorsed by these vendors.";
-
 const TYPE_META: Record<ContentType, { label: string; icon: any; cls: string }> = {
-  lesson:    { label: "Lessons",    icon: BookOpen,       cls: "bg-primary-soft text-primary" },
-  playbook:  { label: "Playbooks",  icon: NotebookPen,    cls: "bg-warning/15 text-warning" },
-  video:     { label: "Videos",     icon: Film,           cls: "bg-accent text-accent-foreground" },
-  checklist: { label: "Checklists", icon: ClipboardCheck, cls: "bg-success/15 text-success" },
-  scenario:  { label: "Scenarios",  icon: ListChecks,     cls: "bg-secondary text-secondary-foreground" },
+  lesson:    { label: "Lesson",    icon: BookOpen,       cls: "bg-primary-soft text-primary" },
+  playbook:  { label: "Playbook",  icon: NotebookPen,    cls: "bg-warning/15 text-warning" },
+  video:     { label: "Video",     icon: Film,           cls: "bg-accent text-accent-foreground" },
+  checklist: { label: "Checklist", icon: ClipboardCheck, cls: "bg-success/15 text-success" },
+  scenario:  { label: "Scenario",  icon: ListChecks,     cls: "bg-secondary text-secondary-foreground" },
 };
 
-// --- Slot parsing -----------------------------------------------------------
+type KnownVendor = Exclude<VendorFamily, "unknown">;
+type KnownAction = Exclude<AskAction, "unknown">;
 
-type VendorFamily =
-  | "epic" | "cerner" | "oracle_health" | "meditech"
-  | "sunquest" | "philips_careevent" | "unknown";
+type ParsedSlots = {
+  vendor_family: VendorFamily;
+  action: AskAction;
+};
 
-type ActionKind =
-  | "place" | "sign" | "cosign" | "modify" | "discontinue"
-  | "document" | "scan" | "schedule" | "route" | "reconcile" | "review" | "unknown";
+type ClarifierState = {
+  baseQuery: string;
+  vendor_family: VendorFamily;
+  action: AskAction;
+  stage: "vendor" | "action" | "screen";
+  turns: number;
+};
 
-type Slots = { vendor: VendorFamily; action: ActionKind };
+type NoMatchState = {
+  query: string;
+  slots: ParsedSlots;
+};
 
-const VENDOR_PATTERNS: Array<[RegExp, VendorFamily]> = [
-  [/\b(epic|epiccare|hyperspace|storyboard|in[- ]?basket|smartset|smarttool|smarttools|wisdom|lumens|rehab)\b/i, "epic"],
-  [/\b(cerner|powerchart|firstnet|surginet)\b/i, "cerner"],
-  [/\boracle\s*health\b/i, "oracle_health"],
-  [/\bmeditech\b/i, "meditech"],
-  [/\bsunquest\b/i, "sunquest"],
-  [/\bphilips(\s+care\s*event)?\b/i, "philips_careevent"],
+type ActionOption = {
+  action: KnownAction;
+  label: string;
+  query: string;
+};
+
+const VENDOR_OPTIONS: { value: VendorFamily; label: string }[] = [
+  { value: "epic", label: "Epic" },
+  { value: "cerner", label: "Cerner" },
+  { value: "oracle_health", label: "Oracle Health" },
+  { value: "unknown", label: "Not sure" },
 ];
 
-const ACTION_PATTERNS: Array<[RegExp, ActionKind]> = [
-  [/\bcosign|co-?sign\b/i, "cosign"],
-  [/\bsign(ing|ed)?\b/i, "sign"],
-  [/\bplace(d|ing)?\b|\bnew\s+order\b|\border(ing|s)?\b/i, "place"],
-  [/\bmodif(y|ying|ied)\b|\bedit(ing|ed)?\b|\bchange\b/i, "modify"],
-  [/\bdiscontinu|d\/c\b|\bstop\s+order\b/i, "discontinue"],
-  [/\bdocument(ation|ing|ed)?\b|\bchart(ing|ed)?\b/i, "document"],
-  [/\bscan(ning|ned)?\b/i, "scan"],
-  [/\bschedul(e|ing|ed)\b/i, "schedule"],
-  [/\broute(ing|d)?\b/i, "route"],
-  [/\breconcil(e|ing|iation)\b/i, "reconcile"],
-  [/\breview(ing|ed)?\b/i, "review"],
+const SCREEN_CLUE_OPTIONS: { label: string; vendor: KnownVendor }[] = [
+  { label: "Hyperspace / Storyboard", vendor: "epic" },
+  { label: "PowerChart / FirstNet", vendor: "cerner" },
 ];
 
-function parseSlots(text: string): Slots {
-  let vendor: VendorFamily = "unknown";
-  let action: ActionKind = "unknown";
-  for (const [re, v] of VENDOR_PATTERNS) if (re.test(text)) { vendor = v; break; }
-  for (const [re, a] of ACTION_PATTERNS) if (re.test(text)) { action = a; break; }
-  return { vendor, action };
-}
-
-function mergeSlots(a: Slots, b: Slots): Slots {
-  return {
-    vendor: b.vendor !== "unknown" ? b.vendor : a.vendor,
-    action: b.action !== "unknown" ? b.action : a.action,
-  };
-}
-
-const VENDOR_LABEL: Record<VendorFamily, string> = {
-  epic: "Epic", cerner: "Cerner", oracle_health: "Oracle Health",
-  meditech: "MEDITECH", sunquest: "Sunquest", philips_careevent: "Philips CareEvent",
-  unknown: "",
-};
-const ACTION_LABEL: Record<ActionKind, string> = {
-  place: "place a new order", sign: "sign", cosign: "cosign", modify: "modify",
-  discontinue: "discontinue", document: "document", scan: "scan",
-  schedule: "schedule", route: "route", reconcile: "reconcile", review: "review",
-  unknown: "",
-};
-
-// --- Storage helpers --------------------------------------------------------
+const ASK_TRADEMARK_LINE =
+  "Epic and EpicCare are registered trademarks of Epic Systems Corporation. Oracle Health and Cerner are trademarks of Oracle Corporation. MEDITECH is a registered trademark of Medical Information Technology, Inc. Mizly is an independent product not affiliated with or endorsed by these vendors.";
 
 function readList(key: string): string[] {
   if (typeof window === "undefined") return [];
@@ -102,106 +87,97 @@ function writeList(key: string, arr: string[]) {
   localStorage.setItem(key, JSON.stringify(arr.slice(0, 8)));
 }
 
-// --- Turn types -------------------------------------------------------------
-
-type Turn =
-  | { id: string; kind: "user"; text: string }
-  | { id: string; kind: "clarify-vendor" }
-  | { id: string; kind: "clarify-vendor-detail" }
-  | { id: string; kind: "clarify-action" }
-  | { id: string; kind: "answer"; answer: AskAnswer; query: string }
-  | { id: string; kind: "no-match"; related: AskAnswer["related"] };
-
-let turnSeq = 0;
-const tid = () => `t${++turnSeq}`;
-
-// --- Component --------------------------------------------------------------
-
 function AskPage() {
   const [q, setQ] = useState("");
-  const [turns, setTurns] = useState<Turn[]>([]);
-  const [slots, setSlots] = useState<Slots>({ vendor: "unknown", action: "unknown" });
-  const [clarifierCount, setClarifierCount] = useState(0);
-  const [originalQuery, setOriginalQuery] = useState("");
+  const [submitted, setSubmitted] = useState("");
   const [loading, setLoading] = useState(false);
   const [recent, setRecent] = useState<string[]>([]);
-  const hasConversation = turns.length > 0;
-  const scrollAnchorRef = useRef<HTMLDivElement>(null);
+  const [clarifier, setClarifier] = useState<ClarifierState | null>(null);
+  const [noMatch, setNoMatch] = useState<NoMatchState | null>(null);
+  const r: AskAnswer | null = useMemo(
+    () => (submitted.trim().length >= 2 && !clarifier && !noMatch ? askLaunch(submitted) : null),
+    [submitted, clarifier, noMatch],
+  );
+  const isNoMatchAnswer = Boolean(r && r.matchQuality === "general");
+  const hasAnswer = Boolean((r || noMatch) && !loading && !clarifier);
 
   useEffect(() => { setRecent(readList(RECENT_KEY)); }, []);
-  useEffect(() => {
-    if (hasConversation) scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [turns, hasConversation]);
 
-  const resolveAnswer = (slotsNow: Slots, baseQuery: string) => {
-    const vendorBits = slotsNow.vendor !== "unknown" ? VENDOR_LABEL[slotsNow.vendor] : "";
-    const actionBits = slotsNow.action !== "unknown" ? ACTION_LABEL[slotsNow.action] : "";
-    const synthesized = [vendorBits, actionBits, baseQuery].filter(Boolean).join(" ");
-    const answer = askLaunch(synthesized || baseQuery);
-    if (answer.matchQuality === "general") {
-      setTurns(prev => [...prev, { id: tid(), kind: "no-match", related: answer.related }]);
-    } else {
-      setTurns(prev => [...prev, { id: tid(), kind: "answer", answer, query: baseQuery }]);
-    }
-  };
-
-  const advance = (slotsNow: Slots, baseQuery: string, clarifiersSoFar: number) => {
-    if (slotsNow.vendor !== "unknown" && slotsNow.action !== "unknown") {
-      resolveAnswer(slotsNow, baseQuery); return;
-    }
-    if (clarifiersSoFar >= 2) {
-      resolveAnswer(slotsNow, baseQuery); return;
-    }
-    if (slotsNow.vendor === "unknown") {
-      setTurns(prev => [...prev, { id: tid(), kind: "clarify-vendor" }]);
-    } else {
-      setTurns(prev => [...prev, { id: tid(), kind: "clarify-action" }]);
-    }
-  };
-
-  const submitFirst = (text: string) => {
-    const trimmed = text.trim();
-    if (trimmed.length < 2) return;
-    setQ("");
-    setOriginalQuery(trimmed);
-    const parsed = parseSlots(trimmed);
-    setSlots(parsed);
-    setClarifierCount(0);
-    setTurns([{ id: tid(), kind: "user", text: trimmed }]);
-    setLoading(true);
-    const next = [trimmed, ...recent.filter(x => x.toLowerCase() !== trimmed.toLowerCase())];
+  const rememberRecent = (t: string) => {
+    const next = [t, ...recent.filter(x => x.toLowerCase() !== t.toLowerCase())];
     setRecent(next); writeList(RECENT_KEY, next);
-    setTimeout(() => {
-      setLoading(false);
-      advance(parsed, trimmed, 0);
-    }, 280);
   };
 
-  const handleChip = (kind: Turn["kind"], chipText: string, chipSlots: Partial<Slots>) => {
-    setTurns(prev => [...prev, { id: tid(), kind: "user", text: chipText }]);
-    if (kind === "clarify-vendor" && chipSlots.vendor === undefined) {
-      // "Not sure" → ask vendor detail
-      setTurns(prev => [...prev, { id: tid(), kind: "clarify-vendor-detail" }]);
-      setClarifierCount(c => c + 1);
+  const showAnswer = (query: string) => {
+    setSubmitted(query);
+    setClarifier(null);
+    setNoMatch(null);
+    setQ(query);
+  };
+
+  const run = (query: string, forceAnswer = false) => {
+    const t = query.trim(); if (t.length < 2) return;
+    setQ(t); setLoading(true);
+    setTimeout(() => {
+      const decision = forceAnswer ? { mode: "answer" as const } : decideAskMode(t);
+      setLoading(false);
+      rememberRecent(t);
+      if (decision.mode === "clarifier") {
+        setSubmitted(t);
+        setClarifier(decision.state);
+        setNoMatch(null);
+        return;
+      }
+      if (decision.mode === "no-match") {
+        setSubmitted("");
+        setClarifier(null);
+        setNoMatch({ query: t, slots: decision.slots });
+        return;
+      }
+      showAnswer(t);
+    }, 350);
+  };
+
+  const chooseVendor = (vendor: VendorFamily) => {
+    if (!clarifier) return;
+    if (vendor === "unknown") {
+      if (clarifier.stage === "screen" || clarifier.turns >= 1) {
+        setClarifier(null);
+        setSubmitted("");
+        setNoMatch({ query: clarifier.baseQuery, slots: { vendor_family: "unknown", action: clarifier.action } });
+        return;
+      }
+      setClarifier({ ...clarifier, stage: "screen", turns: clarifier.turns + 1 });
       return;
     }
-    const merged = mergeSlots(slots, {
-      vendor: chipSlots.vendor ?? "unknown",
-      action: chipSlots.action ?? "unknown",
-    });
-    setSlots(merged);
-    const newCount = clarifierCount + 1;
-    setClarifierCount(newCount);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      advance(merged, originalQuery, newCount);
-    }, 220);
+
+    const nextTurns = clarifier.turns + 1;
+    const slots = { vendor_family: vendor, action: clarifier.action };
+    if (slots.action !== "unknown") {
+      showAnswer(enrichedQuery(clarifier.baseQuery, slots));
+      return;
+    }
+
+    const actions = actionOptionsFor(clarifier.baseQuery);
+    if (actions.length && nextTurns < 2) {
+      setClarifier({ ...clarifier, vendor_family: vendor, stage: "action", turns: nextTurns });
+      return;
+    }
+
+    setClarifier(null);
+    setSubmitted("");
+    setNoMatch({ query: clarifier.baseQuery, slots });
   };
 
-  const reset = () => {
-    setTurns([]); setSlots({ vendor: "unknown", action: "unknown" });
-    setClarifierCount(0); setOriginalQuery(""); setQ("");
+  const chooseScreenVendor = (vendor: KnownVendor) => {
+    if (!clarifier) return;
+    chooseVendor(vendor);
+  };
+
+  const chooseAction = (option: ActionOption) => {
+    if (!clarifier) return;
+    const slots = { vendor_family: clarifier.vendor_family, action: option.action };
+    showAnswer(enrichedQuery(option.query, slots));
   };
 
   const removeRecent = (item: string) => {
@@ -210,45 +186,37 @@ function AskPage() {
   };
 
   return (
-    <div className={`max-w-[720px] mx-auto px-5 pb-40 md:pb-8 ${hasConversation ? "pt-4 md:pt-4" : "pt-6 md:pt-12"}`}>
-      <div className={`${hasConversation ? "mb-2 flex items-center justify-between" : "md:text-center mb-6 md:mb-10"}`}>
-        <div>
-          <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">
-            <Sparkles className="size-3 text-teal" /> Ask Mizly
-          </div>
-          <h1 className={`${hasConversation ? "text-[18px] md:text-[22px]" : "text-[22px] md:text-[34px]"} leading-tight font-display font-semibold tracking-tight text-foreground`}>
-            What just happened on the floor?
-          </h1>
-          {!hasConversation && (
-            <p className="mt-2 text-[13px] md:text-sm text-muted-foreground max-w-lg md:mx-auto">
-              No greeting. No theory. Get the exact next move, what to try if it fails, and when to escalate.
-            </p>
-          )}
+    <div className={`max-w-[720px] mx-auto px-5 pb-40 md:pb-8 ${hasAnswer ? "pt-4 md:pt-4" : "pt-6 md:pt-12"}`}>
+      <div className={`${hasAnswer ? "mb-1 md:mb-2" : "md:text-center mb-6 md:mb-10"}`}>
+        <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">
+          <Sparkles className="size-3 text-teal" /> Ask Mizly
         </div>
-        {hasConversation && (
-          <button onClick={reset} className="text-xs px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-secondary inline-flex items-center gap-1.5">
-            <X className="size-3.5" /> New
-          </button>
-        )}
+        <h1 className={`${hasAnswer ? "text-[20px] md:text-[26px]" : "text-[22px] md:text-[34px]"} leading-tight font-display font-semibold tracking-tight text-foreground`}>
+          What just happened on the floor?
+        </h1>
+        <p className={`mt-2 text-[13px] md:text-sm text-muted-foreground max-w-lg ${hasAnswer ? "sr-only" : "md:mx-auto"}`}>
+          No greeting. No theory. Get the exact next move, what to try if it fails, and when to escalate.
+        </p>
       </div>
 
-      {/* Desktop composer */}
-      <form onSubmit={e => { e.preventDefault(); submitFirst(q); }} className="relative hidden md:block">
+      {/* Desktop inline composer */}
+      <form onSubmit={e => { e.preventDefault(); run(q); }} className={`relative hidden md:block ${hasAnswer ? "mb-0" : ""}`}>
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
         <input
           value={q} onChange={e => setQ(e.target.value)}
-          placeholder="e.g. How do I scan a consent into the chart?"
-          className={`${hasConversation ? "h-11" : "h-14"} w-full pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition`}
+          placeholder="e.g. The printer is not printing. What do I check first?"
+          className={`${hasAnswer ? "h-11" : "h-14"} w-full pl-11 pr-28 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition`}
         />
         <button type="submit" disabled={q.trim().length < 2 || loading}
-          className={`${hasConversation ? "h-8" : "h-10"} press absolute right-2 top-1/2 -translate-y-1/2 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:bg-primary/90 shadow-soft`}>
+          className={`${hasAnswer ? "h-8" : "h-10"} press absolute right-2 top-1/2 -translate-y-1/2 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 inline-flex items-center gap-1.5 hover:bg-primary/90 shadow-soft`}>
           {loading ? <><Loader2 className="size-3.5 animate-spin" /> Thinking</> : "Ask"}
         </button>
+
       </form>
 
-      {/* Mobile sticky composer */}
+      {/* Mobile sticky bottom composer (above bottom nav) */}
       <form
-        onSubmit={e => { e.preventDefault(); submitFirst(q); }}
+        onSubmit={e => { e.preventDefault(); run(q); }}
         className="md:hidden fixed left-0 right-0 z-20 px-3 pt-2 pb-2 bg-background/95 backdrop-blur-md border-t border-border"
         style={{ bottom: 'calc(env(safe-area-inset-bottom) + 60px)' }}
       >
@@ -263,23 +231,24 @@ function AskPage() {
             className="press absolute right-1.5 top-1/2 -translate-y-1/2 h-9 min-w-[68px] px-3 rounded-xl bg-primary text-primary-foreground text-[13px] font-medium disabled:opacity-40 inline-flex items-center justify-center gap-1.5 shadow-soft">
             {loading ? <Loader2 className="size-3.5 animate-spin" /> : "Ask"}
           </button>
+
         </div>
       </form>
 
-      {/* Idle landing */}
-      {!hasConversation && !loading && (
+      {!r && !loading && !clarifier && !noMatch && (
         <div className="mt-5 md:mt-6 space-y-6 animate-in fade-in duration-300">
           <div>
             <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">Try one of these</div>
             <div className="grid sm:grid-cols-2 gap-2">
               {STARTER_QUESTIONS.map(s => (
-                <button key={s} onClick={() => submitFirst(s)}
+                <button key={s} onClick={() => run(s)}
                   className="press group relative text-left rounded-xl border border-border bg-card hover:border-primary/30 hover:bg-primary-soft/40 hover:shadow-soft pl-4 pr-4 py-3 text-[13px] leading-snug overflow-hidden">
                   <span className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r bg-teal/0 group-hover:bg-teal transition-colors" />
                   {s}
                 </button>
               ))}
             </div>
+
           </div>
 
           {recent.length > 0 && (
@@ -290,7 +259,7 @@ function AskPage() {
               <ul className="space-y-1.5">
                 {recent.map(item => (
                   <li key={item} className="group flex items-center gap-2 rounded-lg border border-border bg-card hover:bg-secondary/60 transition-colors">
-                    <button onClick={() => submitFirst(item)} className="flex-1 text-left text-[13px] px-3 py-2.5 truncate">{item}</button>
+                    <button onClick={() => run(item)} className="flex-1 text-left text-[13px] px-3 py-2.5 truncate">{item}</button>
                     <button onClick={() => removeRecent(item)} aria-label="Remove" className="px-3 py-2 text-muted-foreground opacity-60 group-hover:opacity-100 transition-opacity">
                       <X className="size-3.5" />
                     </button>
@@ -302,112 +271,324 @@ function AskPage() {
         </div>
       )}
 
-      {/* Conversation */}
-      {hasConversation && (
-        <div className="mt-3 space-y-3">
-          {turns.map(turn => {
-            if (turn.kind === "user") {
-              return (
-                <div key={turn.id} className="flex justify-end">
-                  <div className="max-w-[85%] rounded-2xl rounded-tr-md bg-primary text-primary-foreground px-3.5 py-2 text-sm leading-snug shadow-soft">
-                    {turn.text}
-                  </div>
-                </div>
-              );
-            }
-            if (turn.kind === "clarify-vendor") {
-              return (
-                <ClarifierBubble
-                  key={turn.id}
-                  prompt="Quick check — which system are you in?"
-                  chips={[
-                    { label: "Epic", onClick: () => handleChip("clarify-vendor", "Epic", { vendor: "epic" }) },
-                    { label: "Cerner", onClick: () => handleChip("clarify-vendor", "Cerner", { vendor: "cerner" }) },
-                    { label: "Oracle Health", onClick: () => handleChip("clarify-vendor", "Oracle Health", { vendor: "oracle_health" }) },
-                    { label: "Not sure", onClick: () => handleChip("clarify-vendor", "Not sure", {}) },
-                  ]}
-                />
-              );
-            }
-            if (turn.kind === "clarify-vendor-detail") {
-              return (
-                <ClarifierBubble
-                  key={turn.id}
-                  prompt="No problem — what does the top of your screen say?"
-                  chips={[
-                    { label: "Hyperspace / Storyboard", onClick: () => handleChip("clarify-vendor", "Hyperspace / Storyboard", { vendor: "epic" }) },
-                    { label: "PowerChart / FirstNet", onClick: () => handleChip("clarify-vendor", "PowerChart / FirstNet", { vendor: "cerner" }) },
-                    { label: "Still not sure", onClick: () => handleChip("clarify-action", "Still not sure", {}) },
-                  ]}
-                />
-              );
-            }
-            if (turn.kind === "clarify-action") {
-              return (
-                <ClarifierBubble
-                  key={turn.id}
-                  prompt="Got it. What are you trying to do?"
-                  chips={[
-                    { label: "Place new", onClick: () => handleChip("clarify-action", "Place new", { action: "place" }) },
-                    { label: "Sign / cosign", onClick: () => handleChip("clarify-action", "Sign / cosign", { action: "cosign" }) },
-                    { label: "Modify existing", onClick: () => handleChip("clarify-action", "Modify existing", { action: "modify" }) },
-                    { label: "Discontinue", onClick: () => handleChip("clarify-action", "Discontinue", { action: "discontinue" }) },
-                  ]}
-                />
-              );
-            }
-            if (turn.kind === "answer") {
-              return <AnswerView key={turn.id} answer={turn.answer} query={turn.query} />;
-            }
-            if (turn.kind === "no-match") {
-              return <NoMatchView key={turn.id} related={turn.related} />;
-            }
-            return null;
-          })}
-
-          {loading && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground px-2 py-2">
-              <Loader2 className="size-3.5 animate-spin" /> Thinking…
+      {loading && (
+        <div className="mt-6 md:mt-8 space-y-3 animate-in fade-in duration-200">
+          {[0, 1, 2].map(i => (
+            <div key={i} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+              <div className="h-2.5 rounded bg-secondary animate-pulse w-1/3" />
+              <div className="mt-4 h-3 rounded bg-secondary animate-pulse w-full" />
+              <div className="mt-2 h-3 rounded bg-secondary animate-pulse w-5/6" />
+              <div className="mt-2 h-3 rounded bg-secondary animate-pulse w-2/3" />
             </div>
-          )}
-          <div ref={scrollAnchorRef} />
+          ))}
         </div>
+      )}
+
+      {clarifier && !loading && (
+        <ClarifierThread
+          state={clarifier}
+          query={submitted}
+          onVendor={chooseVendor}
+          onScreenVendor={chooseScreenVendor}
+          onAction={chooseAction}
+        />
+      )}
+
+      {noMatch && !loading && !clarifier && (
+        <NoMatchView query={noMatch.query} slots={noMatch.slots} />
+      )}
+
+      {r && !loading && !clarifier && !isNoMatchAnswer && (
+        <AnswerView answer={r} query={submitted} />
+      )}
+
+      {r && !loading && !clarifier && isNoMatchAnswer && (
+        <NoMatchView query={submitted} slots={parseSlots(submitted)} />
       )}
     </div>
   );
 }
 
-// --- Clarifier bubble -------------------------------------------------------
+type CompactVisual = {
+  url: string;
+  title: string;
+  callouts?: string[];
+};
 
-function ClarifierBubble({ prompt, chips }: {
-  prompt: string;
-  chips: { label: string; onClick: () => void }[];
+function decideAskMode(query: string):
+  | { mode: "answer" }
+  | { mode: "clarifier"; state: ClarifierState }
+  | { mode: "no-match"; slots: ParsedSlots } {
+  const slots = parseSlots(query);
+  if (hasSpecificPatternHit(query, slots)) return { mode: "answer" };
+
+  const actionOptions = actionOptionsFor(query);
+  if (slots.vendor_family === "unknown" && slots.action === "unknown" && !actionOptions.length) {
+    return { mode: "no-match", slots };
+  }
+
+  if (shouldGoDirect(query, slots)) return { mode: "answer" };
+
+  if (slots.vendor_family === "unknown" && slots.action === "unknown") {
+    return {
+      mode: "clarifier",
+      state: { baseQuery: query, vendor_family: "unknown", action: "unknown", stage: "vendor", turns: 0 },
+    };
+  }
+
+  if (slots.vendor_family === "unknown") {
+    return {
+      mode: "clarifier",
+      state: { baseQuery: query, vendor_family: "unknown", action: slots.action, stage: "vendor", turns: 0 },
+    };
+  }
+
+  if (slots.action === "unknown") {
+    if (!actionOptions.length) return { mode: "no-match", slots };
+    return {
+      mode: "clarifier",
+      state: { baseQuery: query, vendor_family: slots.vendor_family, action: "unknown", stage: "action", turns: 0 },
+    };
+  }
+
+  return { mode: "answer" };
+}
+
+function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
+  const answer = askLaunch(query);
+  const sourceId = answer.sourceEntry?.id ?? "";
+  if (answer.matchQuality !== "strong" || !sourceId) return false;
+
+  const text = query.toLowerCase();
+  const tokenCount = text.match(/[a-z0-9]+/g)?.length ?? 0;
+  const broadOrderOnly = /\borders?\b/.test(text) && !/\b(sign|cosign|co-sign|place|put|enter|new|modify|discontinue|cancel|diagnosis|indication|unsigned|pending|initiated|favorite|personal list|lispro|drip|mar|medication|procedure|scan|document|chart)\b/.test(text);
+  const broadActionOnly = tokenCount <= 3 && /\b(sign|scan|document|schedule|orders?)\b/.test(text) && slots.vendor_family === "unknown";
+  if (broadOrderOnly || broadActionOnly) return false;
+
+  const specificSignals = [
+    "lispro", "humalog", "drip row", "injection row", "insulin",
+    "consent", "media manager", "paper document", "scan document",
+    "procedure", "preference list", "case request", "surgeon",
+    "wheelchair", "bathroom", "transport", "mobility",
+    "treatment plan", "greyed", "grayed",
+    "wrong chart", "wrong patient", "wrong encounter", "patient context",
+    "patient list", "worklist", "rounding list", "relationship filter",
+    "recurring medication", "recurring med", "refill", "renewal",
+    "smartphrase", "smart phrase", "smarttext", "smart text",
+    "smartlist", "smart list", "smartlink", "smart link",
+    "smartset", "smart set", "order set", "powerplan",
+    "prearrival", "pre-arrival", "tracking board", "ed board", "launchpoint",
+    "ed discharge", "discharge paperwork", "discharge instructions",
+    "dynamic documentation", "dyn doc", "note template", "note type",
+    "claim attachment", "refresh claim", "resubmit claim", "refresh or resubmit",
+    "resubmit this claim", "refresh this claim", "detail bill",
+    "detailed bill", "adjustment", "approval queue", "write off",
+    "beaker", "specimen", "accession", "lab label",
+    "radiant", "radiology", "imaging", "protocol", "exam status",
+    "anesthesia", "crna", "case record", "case event", "anesthesia macro",
+    "diagnosis required", "diagnosis needed", "indication required", "link diagnosis",
+    "unsigned order", "pending order", "initiated order", "order status",
+    "discontinue order", "cancel order", "duplicate order",
+    "med rec", "medication reconciliation", "home med", "home meds",
+    "allergy alert", "allergy warning", "reaction field", "adverse reaction",
+    "result not showing", "results not showing", "acknowledge result", "result acknowledgement",
+    "wrong pool", "message pool", "proxy inbox", "delegate inbox", "message routing",
+    "note won't sign", "note wont sign", "required field", "unsigned note",
+    "addendum", "signed note", "late entry", "note correction",
+    "favorite order", "favorite orders", "personal list", "shortcut missing",
+    "provider relationship", "location filter", "date filter", "list refresh",
+    "signout", "sign out", "provider handoff", "team handoff",
+    "case status", "periop status", "surgery case", "or case", "case board",
+    "procedure macro", "macro not applying", "macro missing", "macro not firing",
+    "discharge blocked", "cannot discharge", "departure blocked", "patient cannot leave",
+    "transfer stuck", "transport task", "patient movement", "receiving unit", "sending unit",
+  ];
+  if (specificSignals.some(signal => text.includes(signal))) return true;
+
+  return slots.vendor_family !== "unknown" && slots.action !== "unknown" && sourceId !== "ll_order_entry";
+}
+
+function parseSlots(query: string): ParsedSlots {
+  const text = query.toLowerCase();
+  return {
+    vendor_family: parseVendor(text),
+    action: parseAction(text),
+  };
+}
+
+function parseVendor(text: string): VendorFamily {
+  if (/\b(epic|epiccare|hyperspace|storyboard|smartset|smarttools|wisdom|lumens|rehab)\b/.test(text)) return "epic";
+  if (/\b(oracle health)\b/.test(text)) return "oracle_health";
+  if (/\b(cerner|powerchart|firstnet|surginet)\b/.test(text)) return "cerner";
+  if (/\bmeditech\b/.test(text)) return "meditech";
+  if (/\bsunquest\b/.test(text)) return "sunquest";
+  if (/\b(philips careevent|careevent)\b/.test(text)) return "philips_careevent";
+  return "unknown";
+}
+
+function parseAction(text: string): AskAction {
+  if (/\b(scan|scanning|media manager|upload document|paper consent|consent)\b/.test(text)) return "scan";
+  if (/\b(co-?sign|cosign|attestation|attest|verbal order)\b/.test(text)) return "cosign";
+  if (/\b(sign|signature|cannot sign|can't sign|wont sign|won't sign)\b/.test(text)) return "sign";
+  if (/\b(discontinue|delete|remove|drop off|greyed out|grayed out|cancel order|duplicate order|stop order|dc order|d\/c order)\b/.test(text)) return "discontinue";
+  if (/\b(lispro|humalog|drip row|injection row|wrong row|wrong flowsheet|modify|edit|change|correction|corrected|addendum|amend|late entry|signed note correction|note correction)\b/.test(text)) return "modify";
+  if (/\b(smartset|smart set|order set|orderset|powerplan|place order|favorite orders|favorite order|diagnosis required|diagnosis needed|indication required|associate diagnosis|link diagnosis)\b/.test(text)) return "place";
+  if (/\b(schedule|scheduling|book|booking|appointment|case request|procedure code|preference list|doctor codes|provider codes)\b/.test(text)) return "schedule";
+  if (/\b(smartphrase|smart phrase|smarttext|smart text|smartlist|smart list|smartlink|smart link|note template|note type|dynamic documentation|dyn doc|ed discharge|discharge paperwork|discharge instructions|handoff|signout|sign out|anesthesia|crna|macro|case record|procedure macro|procedure template)\b/.test(text)) return "document";
+  if (/\b(document|chart|flowsheet|flow sheet|adl|mobility|ambulat|wheelchair|note)\b/.test(text)) return "document";
+  if (/\b(place new|new order|place order|put in order|enter order|order entry|order composer)\b/.test(text)) return "place";
+  if (/\b(route|routing|queue|in basket|inbasket|message|wrong pool|pool message|proxy inbox|delegate inbox)\b/.test(text)) return "route";
+  if (/\b(reconcile|reconciliation|med rec|home med|home meds|medication history)\b/.test(text)) return "reconcile";
+  if (/\b(patient list|worklist|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|beaker|specimen|accession|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked)\b/.test(text)) return "review";
+  if (/\b(review|verify|check)\b/.test(text)) return "review";
+  return "unknown";
+}
+
+function shouldGoDirect(query: string, slots: ParsedSlots) {
+  const text = query.toLowerCase();
+  if (slots.vendor_family !== "unknown" && slots.action !== "unknown") return true;
+  if (slots.action === "scan" && /\b(consent|chart|media manager|document|scan)\b/.test(text)) return true;
+  if (slots.action === "schedule" && /\b(procedure|preference|case request|codes?)\b/.test(text)) return true;
+  if (slots.action === "modify" && /\b(lispro|drip row|wrong row|insulin)\b/.test(text)) return true;
+  if (slots.action === "sign" && /\b(order|note|required field|unsigned|pending|initiated)\b/.test(text)) return true;
+  if (slots.action === "place" && /\b(diagnosis|indication|favorite|order|smartset|powerplan)\b/.test(text)) return true;
+  if (slots.action === "discontinue" && /\b(order|duplicate|cancel|stop|remove)\b/.test(text)) return true;
+  if (slots.action === "reconcile" && /\b(home med|home meds|med rec|medication)\b/.test(text)) return true;
+  if (slots.action === "route" && /\b(in basket|inbasket|message|pool|proxy|delegate)\b/.test(text)) return true;
+  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement)\b/.test(text)) return true;
+  return false;
+}
+
+function actionOptionsFor(query: string): ActionOption[] {
+  const text = query.toLowerCase();
+  if (/\b(order|orders|order entry)\b/.test(text)) {
+    return [
+      { action: "place", label: "Place new", query: "Where do I put in an order and what order entry context matters?" },
+      { action: "sign", label: "Sign / cosign", query: "The provider cannot sign an order. What do I check first?" },
+      { action: "modify", label: "Modify existing", query: "An order is not showing or not populating. What do I check first?" },
+      { action: "discontinue", label: "Discontinue", query: "How do I handle an order that needs to be discontinued or removed?" },
+    ];
+  }
+  if (/\b(schedule|scheduling|cadence|appointment|booking|procedure|codes?)\b/.test(text)) {
+    return [
+      { action: "schedule", label: "Book procedure", query: "Procedure scheduling codes are not pulling in for the provider." },
+      { action: "modify", label: "Change columns", query: "How do I change columns in the schedule line?" },
+      { action: "review", label: "Review appointment", query: "An appointment is not showing on the schedule. What do I check first?" },
+    ];
+  }
+  if (/\b(document|documentation|flowsheet|flow sheet|note|scan|mobility|ambulat|wheelchair)\b/.test(text)) {
+    return [
+      { action: "document", label: "Document", query: "A flowsheet row or option is missing. What category should I use?" },
+      { action: "scan", label: "Scan document", query: "How do I scan a document and attach it to the correct encounter?" },
+      { action: "sign", label: "Sign note", query: "A note will not save or sign. What should I do first?" },
+      { action: "modify", label: "Correct mismatch", query: "A medication appears in the wrong flowsheet row." },
+    ];
+  }
+  return [];
+}
+
+function enrichedQuery(query: string, slots: ParsedSlots) {
+  const vendor = vendorLabel(slots.vendor_family);
+  const action = slots.action === "unknown" ? "" : ` ${slots.action}`;
+  return slots.vendor_family === "unknown" ? query : `${vendor}${action}: ${query}`;
+}
+
+function vendorLabel(vendor: VendorFamily) {
+  switch (vendor) {
+    case "epic": return "Epic";
+    case "cerner": return "Cerner";
+    case "oracle_health": return "Oracle Health";
+    case "meditech": return "MEDITECH";
+    case "sunquest": return "Sunquest";
+    case "philips_careevent": return "Philips CareEvent";
+    default: return "Mizly";
+  }
+}
+
+function ClarifierThread({
+  state,
+  query,
+  onVendor,
+  onScreenVendor,
+  onAction,
+}: {
+  state: ClarifierState;
+  query: string;
+  onVendor: (vendor: VendorFamily) => void;
+  onScreenVendor: (vendor: KnownVendor) => void;
+  onAction: (option: ActionOption) => void;
 }) {
+  const actions = actionOptionsFor(state.baseQuery);
+  const question = state.stage === "vendor"
+    ? "Quick check - which system are you in?"
+    : state.stage === "screen"
+    ? "No problem - what does the top of your screen say?"
+    : "Got it. What are you trying to do?";
+
   return (
-    <div className="flex justify-start">
-      <div className="max-w-[90%] rounded-2xl rounded-tl-md border border-border bg-card px-3.5 py-3 shadow-soft">
-        <div className="text-sm text-foreground/90 leading-snug">{prompt}</div>
-        <div className="mt-2.5 flex flex-wrap gap-1.5">
-          {chips.map(chip => (
-            <button key={chip.label} onClick={chip.onClick}
-              className="press h-8 px-3 rounded-full border border-border bg-surface-elevated hover:bg-primary-soft hover:border-primary/30 text-xs font-medium inline-flex items-center gap-1.5 transition">
-              {chip.label}
-            </button>
-          ))}
+    <div className="mt-3 md:mt-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <div className="rounded-[1.4rem] border border-border bg-card shadow-card overflow-hidden">
+        <div className="p-4 md:p-5 space-y-4">
+          <div className="max-w-[82%] rounded-2xl rounded-bl-md border border-border bg-secondary/45 px-3.5 py-3">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">You</div>
+            <p className="mt-1 text-sm font-medium text-foreground">{query}</p>
+          </div>
+
+          <div className="ml-auto max-w-[86%] rounded-2xl rounded-br-md border border-primary/15 bg-primary-soft/50 px-3.5 py-3">
+            <div className="text-[10px] uppercase tracking-wider text-primary font-medium">Mizly</div>
+            <p className="mt-1 text-[15px] font-semibold leading-snug text-foreground">{question}</p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {state.stage === "vendor" && VENDOR_OPTIONS.map(option => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => onVendor(option.value)}
+                className="press min-h-11 rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm font-medium hover:border-primary/35 hover:bg-primary-soft/45 hover:shadow-soft transition"
+              >
+                {option.label}
+              </button>
+            ))}
+            {state.stage === "screen" && SCREEN_CLUE_OPTIONS.map(option => (
+              <button
+                key={option.label}
+                type="button"
+                onClick={() => onScreenVendor(option.vendor)}
+                className="press min-h-11 rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm font-medium hover:border-primary/35 hover:bg-primary-soft/45 hover:shadow-soft transition"
+              >
+                {option.label}
+              </button>
+            ))}
+            {state.stage === "screen" && (
+              <button
+                type="button"
+                onClick={() => onVendor("unknown")}
+                className="press min-h-11 rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm font-medium hover:border-primary/35 hover:bg-primary-soft/45 hover:shadow-soft transition"
+              >
+                Still not sure
+              </button>
+            )}
+            {state.stage === "action" && actions.map(option => (
+              <button
+                key={option.label}
+                type="button"
+                onClick={() => onAction(option)}
+                className="press min-h-11 rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm font-medium hover:border-primary/35 hover:bg-primary-soft/45 hover:shadow-soft transition"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-// --- Answer card ------------------------------------------------------------
-
-type CompactVisual = { url: string; title: string; callouts?: string[] };
-
 function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
   const compact = compactAnswer(answer);
   const visual = visualForAnswer(answer);
-  const navTrail = navTrailFor(answer);
 
   useEffect(() => {
     if (visual) return;
@@ -415,7 +596,7 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
   }, [answer, query, visual]);
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <div className="mt-3 md:mt-3 animate-in fade-in slide-in-from-bottom-2 duration-400">
       <div aria-label="Ask answer" className="rounded-[1.4rem] border border-border bg-card shadow-card overflow-hidden">
         {visual && <VisualHero visual={visual} />}
 
@@ -425,12 +606,14 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             <div className="flex items-center gap-2">
               <button
                 onClick={async () => {
-                  const text = `${query}\n\nWhat it is: ${compact.whatItIs}\n${navTrail ? `\nNav trail: ${navTrail}\n` : ""}\nFirst 90 seconds:\n${compact.steps.map((s, i) => `${i + 1}. ${s}`).join("\n")}\n\nIf it works: ${compact.ifWorks}\n\nIf it doesn't: ${compact.ifNot}\nEscalate to: ${compact.escalationTarget}`;
+                  const text = `${query}\n\nWhat it is: ${compact.whatItIs}\n\nFirst 90 seconds:\n${compact.steps.map((s, i) => `${i + 1}. ${s}`).join("\n")}\n\nSay this: \"${compact.sayThis}\"\n\nIf it works: ${compact.ifWorks}\n\nIf it doesn't: ${compact.ifNot}\nEscalate to: ${compact.escalationTarget}`;
                   try {
                     await navigator.clipboard?.writeText(text);
                     toast.success("Answer copied");
                   } catch {
-                    toast.error("Copy blocked by browser", { description: "Select the answer text and copy manually." });
+                    toast.error("Copy blocked by browser", {
+                      description: "Select the answer text and copy manually.",
+                    });
                   }
                 }}
                 className="h-9 px-3 rounded-lg border border-border bg-card hover:bg-secondary text-xs inline-flex items-center gap-1.5"
@@ -457,18 +640,10 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             </p>
           </section>
 
-          {navTrail && (
-            <section>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1.5">NAV TRAIL</div>
-              <div className="flex flex-wrap items-center gap-1.5 text-sm">
-                {navTrail.split(/\s*>\s*/).map((seg, i, arr) => (
-                  <span key={i} className="inline-flex items-center gap-1.5">
-                    <span className="px-2 py-1 rounded-md bg-secondary/70 text-foreground/85 font-medium text-[13px]">{seg}</span>
-                    {i < arr.length - 1 && <ChevronRight className="size-3.5 text-muted-foreground" />}
-                  </span>
-                ))}
-              </div>
-            </section>
+          {answer.sourceEntry?.is_deep_flow && answer.sourceEntry.nav_trail && (
+            <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-nowrap overflow-x-auto">
+              {answer.sourceEntry.nav_trail}
+            </div>
           )}
 
           <section className="rounded-2xl border border-success/25 bg-success/5 p-3.5 border-l-[5px] border-l-success">
@@ -481,10 +656,14 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
                   <span className="size-6 shrink-0 rounded-full bg-success/15 text-success text-xs font-semibold flex items-center justify-center">
                     {i + 1}
                   </span>
-                  <span className="pt-0.5">{step}</span>
+                  <StepLine text={step} />
                 </li>
               ))}
             </ol>
+            <div className="mt-3 rounded-xl bg-card border border-border px-3 py-2.5 text-sm">
+              <span className="font-semibold text-foreground">Say this: </span>
+              <span className="text-foreground/85">"{compact.sayThis}"</span>
+            </div>
           </section>
 
           <section>
@@ -508,12 +687,15 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             </div>
           </section>
 
-          <MoreHelpGroups answer={answer} />
+          <section>
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">MORE HELP</div>
+            <MoreHelpChips answer={answer} />
+          </section>
 
           <CompactFeedbackBar query={query} answer={answer} />
 
           <p className="text-[11px] leading-relaxed text-muted-foreground border-t border-border pt-3">
-            {TRADEMARK_DISCLAIMER}{" "}
+            {ASK_TRADEMARK_LINE}{" "}
             <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
           </p>
         </div>
@@ -522,132 +704,44 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
   );
 }
 
-// --- No-match ---------------------------------------------------------------
-
-function NoMatchView({ related }: { related: AskAnswer["related"] }) {
-  const empty = related.playbooks.length + related.checklists.length + related.videos.length
-    + related.lessons.length + related.scenarios.length === 0;
-
-  return (
-    <div className="animate-in fade-in duration-300">
-      <div className="rounded-2xl border border-border bg-card p-4 md:p-4 shadow-soft space-y-3">
-        {empty ? (
-          <p className="text-sm text-foreground/85 leading-relaxed">
-            Try rephrasing — mention the system (Epic, Cerner) and what you're trying to do.
-          </p>
-        ) : (
-          <>
-            <div className="text-sm font-medium text-foreground">Closest materials we have:</div>
-            <MoreHelpGroupsFromRelated related={related} />
-          </>
-        )}
-        <p className="text-[11px] leading-relaxed text-muted-foreground border-t border-border pt-3">
-          {TRADEMARK_DISCLAIMER}{" "}
-          <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// --- More help (grouped) ----------------------------------------------------
-
-function MoreHelpGroups({ answer }: { answer: AskAnswer }) {
-  const empty = answer.related.playbooks.length + answer.related.checklists.length
-    + answer.related.videos.length + answer.related.lessons.length
-    + answer.related.scenarios.length === 0;
-  if (empty) return null;
-  return (
-    <section>
-      <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">MORE HELP</div>
-      <MoreHelpGroupsFromRelated related={answer.related} />
-    </section>
-  );
-}
-
-function MoreHelpGroupsFromRelated({ related }: { related: AskAnswer["related"] }) {
-  const groups: Array<{ type: ContentType; items: ContentItem[] }> = ([
-    { type: "playbook" as ContentType, items: related.playbooks },
-    { type: "checklist" as ContentType, items: related.checklists },
-    { type: "video" as ContentType, items: related.videos },
-    { type: "lesson" as ContentType, items: related.lessons },
-    { type: "scenario" as ContentType, items: related.scenarios },
-  ]).filter(g => g.items.length > 0);
-
-  if (!groups.length) return null;
-
-  return (
-    <div className="space-y-2.5">
-      {groups.map(g => {
-        const meta = TYPE_META[g.type];
-        const Icon = meta.icon;
-        return (
-          <div key={g.type}>
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1.5">{meta.label}</div>
-            <div className="flex flex-wrap gap-1.5">
-              {g.items.slice(0, 4).map(item => {
-                const lk = linkForType(g.type, item.id);
-                return (
-                  <Link key={item.id} to={lk.to} params={lk.params}
-                    className="h-9 px-3 rounded-full border border-border bg-surface-elevated hover:border-primary/35 hover:bg-primary-soft/45 text-xs font-medium inline-flex items-center gap-1.5 transition max-w-full">
-                    <Icon className="size-3.5 text-primary shrink-0" />
-                    <span className="truncate">{item.title}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function linkForType(type: ContentType, id: string): { to: any; params?: any } {
-  switch (type) {
-    case "lesson": return { to: "/lessons/$id", params: { id } };
-    case "playbook": return { to: "/playbooks/$id", params: { id } };
-    case "scenario": return { to: "/scenarios/$id", params: { id } };
-    case "video": return { to: "/videos" };
-    case "checklist": return { to: "/checklists" };
-  }
-}
-
-// --- Compactors -------------------------------------------------------------
-
 function compactAnswer(answer: AskAnswer) {
   const baseSteps = (answer.walkthrough.length ? answer.walkthrough : answer.first90).slice(0, 3);
   const fallbackSteps = [...baseSteps, ...answer.first90, ...answer.whatToCheck]
-    .filter(Boolean).slice(0, 3);
+    .filter(Boolean)
+    .slice(0, 3);
   const steps = fallbackSteps.length
-    ? fallbackSteps.map(step => limitWords(cleanStep(step), 14))
+    ? fallbackSteps.map(step => limitWords(cleanStep(step), 12))
     : ["Confirm what changed.", "Check scope and context.", "Escalate with one clear sentence."];
+  const safetyFail = answer.ifThatFails.find(step => /do not delete a signed entry/i.test(step));
+  const firstFail = answer.ifThatFails[0] || answer.whenToEscalate;
+  const ifNot = safetyFail
+    ? "If correction is blocked, escalate; do not delete a signed entry on your own."
+    : limitWords(firstSentence(firstFail), 22);
 
   return {
-    whatItIs: compactSentence(answer.shortAnswer || answer.title, 22),
+    whatItIs: compactSentence(answer.shortAnswer || answer.title, 20),
     steps,
+    sayThis: limitWords(stripOuterQuotes(answer.whatToSay[0] || "I'll stay with you until this is stable."), 24),
     ifWorks: "Confirm it worked, close the loop, and move to the next issue.",
-    ifNot: limitWords(firstSentence(answer.ifThatFails[0] || answer.whenToEscalate), 24),
+    ifNot,
     escalationTarget: escalationTarget(answer.whenToEscalate),
   };
 }
 
-function navTrailFor(answer: AskAnswer): string | null {
-  const candidates = [...answer.walkthrough, ...answer.first90];
-  for (const step of candidates) {
-    const cleaned = step.trim();
-    const arrow = cleaned.match(/([A-Z][\w\/ ]+?\s*>\s*[\w\/ ]+(?:\s*>\s*[\w\/ ]+)*)/);
-    if (arrow) {
-      const trail = arrow[1].split(">").map(s => s.trim()).filter(Boolean).slice(0, 4);
-      if (trail.length >= 2) return trail.join(" > ");
-    }
-  }
-  return null;
+function StepLine({ text }: { text: string }) {
+  const parts = text.split(/\s+-\s+/);
+  if (parts.length < 2) return <span className="pt-0.5">{text}</span>;
+  return (
+    <span className="pt-0.5">
+      <strong className="font-semibold text-foreground">{parts[0]}</strong>
+      <span className="text-muted-foreground"> - </span>
+      <span>{parts.slice(1).join(" - ")}</span>
+    </span>
+  );
 }
 
 function firstSentence(text: string): string {
-  const cleaned = (text || "").replace(/\s+/g, " ").trim();
-  if (!cleaned) return "";
+  const cleaned = text.replace(/\s+/g, " ").trim();
   const match = cleaned.match(/^.*?[.!?](?:\s|$)/);
   return (match?.[0] ?? cleaned).trim().replace(/[.!?]+$/, ".");
 }
@@ -655,21 +749,29 @@ function firstSentence(text: string): string {
 function compactSentence(text: string, max: number): string {
   const sentence = firstSentence(text);
   if (wordCount(sentence) <= max) return sentence;
-  const clauses = sentence.split(/\s*(?:,|;|:|\s+-\s+|\s+then\s+|\s+before\s+)\s*/i)
-    .map(c => c.trim()).filter(Boolean);
-  const useful = clauses.find(c => { const w = wordCount(c); return w >= 4 && w <= max; });
-  if (useful) return useful.replace(/[.!?]+$/, "") + ".";
+
+  const clauses = sentence
+    .split(/\s*(?:,|;|:|\s+-\s+|\s+then\s+|\s+before\s+)\s*/i)
+    .map(clause => clause.trim())
+    .filter(Boolean);
+
+  const usefulClause = clauses.find(clause => {
+    const words = wordCount(clause);
+    return words >= 4 && words <= max;
+  });
+
+  if (usefulClause) return usefulClause.replace(/[.!?]+$/, "") + ".";
   return limitWords(sentence, max);
 }
 
 function limitWords(text: string, max: number): string {
-  const words = (text || "").replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
-  if (words.length <= max) return (text || "").trim();
+  const words = text.replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+  if (words.length <= max) return text.trim();
   return words.slice(0, max).join(" ").replace(/[,:;.-]+$/, "") + ".";
 }
 
 function wordCount(text: string): number {
-  return (text || "").replace(/\s+/g, " ").trim().split(" ").filter(Boolean).length;
+  return text.replace(/\s+/g, " ").trim().split(" ").filter(Boolean).length;
 }
 
 function cleanStep(text: string): string {
@@ -681,42 +783,57 @@ function cleanStep(text: string): string {
 }
 
 function stripOuterQuotes(text: string): string {
-  return (text || "").trim().replace(/^['"`]+|['"`]+$/g, "");
+  return text.trim().replace(/^['"`]+|['"`]+$/g, "");
 }
 
 function escalationTarget(text: string): string {
-  const t = (text || "").toLowerCase();
+  const t = text.toLowerCase();
   if (t.includes("command center")) return "Command center";
-  if (t.includes("clinical informatics")) return "Clinical informatics";
-  if (t.includes("him")) return "HIM";
-  if (t.includes("or charge") || t.includes("or scheduling")) return "OR charge";
   if (t.includes("access")) return "Access support";
   if (t.includes("device")) return "Device support";
+  if (t.includes("clinical informatics")) return "Clinical informatics";
   if (t.includes("billing") || t.includes("registration")) return "Registration or billing owner";
   if (t.includes("template") || t.includes("build")) return "Template/build owner";
-  if (t.includes("charge nurse") || t.includes("floor lead") || t.includes("unit lead")) return "Charge nurse";
-  return "Charge nurse or command center";
+  if (t.includes("floor lead") || t.includes("unit lead")) return "Floor lead";
+  return "Floor lead or command center";
 }
 
 function visualForAnswer(answer: AskAnswer): CompactVisual | null {
   const anyAnswer = answer as AskAnswer & { visual_url?: string; visualUrl?: string; visual_callouts?: string[] };
-  const url = anyAnswer.visual_url ?? anyAnswer.visualUrl;
-  if (url) return { url, title: answer.title, callouts: anyAnswer.visual_callouts };
+  const url = anyAnswer.visual_url ?? anyAnswer.visualUrl ?? answer.sourceEntry?.visual_url;
+  if (url) {
+    return {
+      url,
+      title: answer.title,
+      callouts: anyAnswer.visual_callouts,
+    };
+  }
   const screenshot = answer.visualAids.find(aid => aid.kind === "screenshot" && aid.href && !aid.href.startsWith("/videos"));
   if (!screenshot?.href) return null;
-  return { url: screenshot.href, title: screenshot.title, callouts: screenshot.callouts };
+  return {
+    url: screenshot.href,
+    title: screenshot.title,
+    callouts: screenshot.callouts,
+  };
 }
 
 function VisualHero({ visual }: { visual: CompactVisual }) {
   return (
     <div className="relative bg-secondary/40 border-b border-border">
-      <img src={visual.url} alt={visual.title} className="w-full max-h-[280px] object-contain" loading="lazy" />
+      <img
+        src={visual.url}
+        alt={visual.title}
+        className="w-full max-h-[280px] object-contain"
+        loading="lazy"
+      />
       {visual.callouts?.length ? (
         <div className="absolute left-3 right-3 bottom-3 rounded-xl bg-card/95 backdrop-blur border border-border p-2 shadow-soft">
           <div className="grid gap-1">
             {visual.callouts.slice(0, 4).map((callout, i) => (
               <div key={i} className="flex items-center gap-2 text-[11px] text-foreground/85">
-                <span className="size-5 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold flex items-center justify-center">{i + 1}</span>
+                <span className="size-5 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold flex items-center justify-center">
+                  {i + 1}
+                </span>
                 <span className="line-clamp-1">{callout.replace(/^\d+\s*-\s*/, "")}</span>
               </div>
             ))}
@@ -727,7 +844,143 @@ function VisualHero({ visual }: { visual: CompactVisual }) {
   );
 }
 
-// --- Feedback + telemetry ---------------------------------------------------
+function MoreHelpChips({ answer }: { answer: AskAnswer }) {
+  const groups = relatedGroupsFor(answer);
+  const vendor = answer.sourceEntry?.vendor_family ?? "unknown";
+
+  if (!groups.length) return null;
+
+  return <MoreHelpGroups groups={groups} vendor={vendor} answerId={answerId(answer)} />;
+}
+
+function MoreHelpGroups({
+  groups,
+  vendor,
+  answerId,
+}: {
+  groups: { type: ContentType; items: ContentItem[] }[];
+  vendor: VendorFamily;
+  answerId: string;
+}) {
+  useEffect(() => {
+    const itemIds = groups.flatMap(group => group.items.map(item => item.id));
+    if (!itemIds.length) return;
+    void postJsonSilently("/api/related-impression", { answer_id: answerId, item_ids: itemIds });
+  }, [answerId, groups]);
+
+  return (
+    <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
+      {groups.map(group => {
+        const meta = TYPE_META[group.type];
+        const Icon = meta.icon;
+        return (
+          <div key={group.type}>
+            <div className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium text-muted-foreground">
+              <Icon className="size-3" /> {meta.label}s
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {group.items.map(item => {
+                const lk = linkForType(item.content_type, item.id);
+                return (
+                  <Link
+                    key={`${item.content_type}:${item.id}`}
+                    to={lk.to}
+                    params={lk.params}
+                    search={lk.search}
+                    onClick={() => void postJsonSilently("/api/related-click", { answer_id: answerId, item_id: item.id, type: item.content_type })}
+                    className="min-h-11 rounded-xl border border-border bg-surface-elevated px-3 py-2 hover:border-primary/35 hover:bg-primary-soft/45 transition group"
+                  >
+                    <div className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium rounded-full px-2 py-0.5 ${meta.cls}`}>
+                      <Icon className="size-3" /> {meta.label}
+                    </div>
+                    <span className="ml-1 inline-flex rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      {vendorLabel(vendor)}
+                    </span>
+                    <div className="mt-1 text-sm font-medium leading-snug line-clamp-2 group-hover:text-primary">
+                      {item.title}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function relatedGroupsFor(answer: AskAnswer): { type: ContentType; items: ContentItem[] }[] {
+  const byType: { type: ContentType; items: ContentItem[] }[] = [
+    { type: "playbook", items: answer.related.playbooks },
+    { type: "checklist", items: answer.related.checklists },
+    { type: "video", items: answer.related.videos },
+    { type: "lesson", items: answer.related.lessons },
+    { type: "scenario", items: answer.related.scenarios },
+  ];
+  const seen = new Set<string>();
+  return byType
+    .map(group => ({
+      ...group,
+      items: group.items.filter(item => {
+        const key = `${item.content_type}:${item.id}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      }).slice(0, 5),
+    }))
+    .filter(group => group.items.length > 0);
+}
+
+function NoMatchView({ query, slots }: { query: string; slots: ParsedSlots }) {
+  const groups = fallbackGroupsFor(query);
+
+  return (
+    <div className="mt-3 md:mt-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <div className="rounded-[1.4rem] border border-border bg-card shadow-card p-4 md:p-5">
+        {groups.length ? (
+          <>
+            <p className="text-sm text-muted-foreground mb-3">Closest materials we have:</p>
+            <MoreHelpGroups groups={groups} vendor={slots.vendor_family} answerId={`no_match_${query.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`} />
+          </>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Try rephrasing - mention the system (Epic, Cerner) and what you're trying to do.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function fallbackGroupsFor(query: string): { type: ContentType; items: ContentItem[] }[] {
+  const text = query.toLowerCase();
+  let items = searchItems(query).slice(0, 15);
+  if (!items.length && /\b(glucometer|glucose|calibration|meter)\b/.test(text)) {
+    items = searchItems("medication results safety").slice(0, 15);
+  }
+
+  const byType: { type: ContentType; items: ContentItem[] }[] = [
+    { type: "playbook", items: items.filter(item => item.content_type === "playbook") },
+    { type: "checklist", items: items.filter(item => item.content_type === "checklist") },
+    { type: "video", items: items.filter(item => item.content_type === "video") },
+    { type: "lesson", items: items.filter(item => item.content_type === "lesson") },
+    { type: "scenario", items: items.filter(item => item.content_type === "scenario") },
+  ];
+
+  const seen = new Set<string>();
+  return byType
+    .map(group => ({
+      ...group,
+      items: group.items.filter(item => {
+        const key = `${item.content_type}:${item.id}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      }).slice(0, 5),
+    }))
+    .filter(group => group.items.length > 0);
+}
 
 function answerId(answer: AskAnswer): string {
   return answer.sourceEntry?.id ?? answer.title.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
@@ -743,6 +996,7 @@ function logVisualGap(answer: AskAnswer, query: string) {
     gaps: [{ kind: "screenshot", label: "Visual needed", priority: answer.matchQuality === "strong" ? "high" : "medium" }],
     ts: Date.now(),
   };
+
   try {
     const seen = JSON.parse(localStorage.getItem(seenKey) ?? "[]") as string[];
     const key = `${id}:${query.toLowerCase()}`;
@@ -751,14 +1005,23 @@ function logVisualGap(answer: AskAnswer, query: string) {
       localStorage.setItem(CONTENT_GAP_KEY, JSON.stringify([...prev, gapRecord].slice(-80)));
       localStorage.setItem(seenKey, JSON.stringify([...seen, key].slice(-120)));
     }
-  } catch { /* best-effort */ }
+  } catch {
+    // Local gap logging is best-effort in the preview build.
+  }
+
   void postJsonSilently("/api/content-gaps/log", { answer_id: id, gap: "visual" });
 }
 
 async function postJsonSilently(url: string, body: unknown) {
   try {
-    await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-  } catch { /* preview builds may not have endpoints */ }
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    // Preview builds may not have server endpoints yet.
+  }
 }
 
 function CompactFeedbackBar({ query, answer }: { query: string; answer: AskAnswer }) {
@@ -773,11 +1036,15 @@ function CompactFeedbackBar({ query, answer }: { query: string; answer: AskAnswe
         const prev = JSON.parse(localStorage.getItem(key) ?? "[]");
         prev.push({ q: query, answer_id: answerId(answer), kind, note: noteText, ts: Date.now() });
         localStorage.setItem(key, JSON.stringify(prev.slice(-80)));
-      } catch { /* best-effort */ }
+      } catch {
+        // Local feedback is best-effort.
+      }
     }
     void postJsonSilently("/api/feedback", {
-      question: query, answer_id: answerId(answer),
-      rating: kind === "up" ? "helpful" : "not_helpful", note: noteText,
+      question: query,
+      answer_id: answerId(answer),
+      rating: kind === "up" ? "helpful" : "not_helpful",
+      note: noteText,
     });
     toast.success(kind === "up" ? "Marked helpful" : "Feedback sent");
   };
@@ -788,22 +1055,552 @@ function CompactFeedbackBar({ query, answer }: { query: string; answer: AskAnswe
         <div className="text-sm font-medium">Was this what you needed?</div>
         <div className="flex gap-2">
           <button
-            onClick={() => submit("up")} aria-pressed={vote === "up"}
+            onClick={() => submit("up")}
+            aria-pressed={vote === "up"}
             className={`h-10 min-w-12 px-3 rounded-xl border text-sm font-medium transition ${vote === "up" ? "bg-success/15 text-success border-success/30" : "bg-card border-border hover:bg-secondary"}`}
-          >👍</button>
+          >
+            👍
+          </button>
           <button
-            onClick={() => setVote("down")} aria-pressed={vote === "down"}
+            onClick={() => setVote("down")}
+            aria-pressed={vote === "down"}
             className={`h-10 min-w-12 px-3 rounded-xl border text-sm font-medium transition ${vote === "down" ? "bg-destructive/15 text-destructive border-destructive/30" : "bg-card border-border hover:bg-secondary"}`}
-          >👎</button>
+          >
+            👎
+          </button>
         </div>
       </div>
       {vote === "down" && (
-        <form onSubmit={e => { e.preventDefault(); submit("down", note.trim()); setNote(""); }} className="mt-3 flex gap-2">
-          <input value={note} onChange={e => setNote(e.target.value)} placeholder="What was missing?"
-            className="min-w-0 flex-1 h-10 rounded-xl border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/35" />
-          <button type="submit" className="h-10 px-3 rounded-xl bg-primary text-primary-foreground text-sm font-medium">Send</button>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            submit("down", note.trim());
+            setNote("");
+          }}
+          className="mt-3 flex gap-2"
+        >
+          <input
+            value={note}
+            onChange={e => setNote(e.target.value)}
+            placeholder="What was missing?"
+            className="min-w-0 flex-1 h-10 rounded-xl border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/35"
+          />
+          <button type="submit" className="h-10 px-3 rounded-xl bg-primary text-primary-foreground text-sm font-medium">
+            Send
+          </button>
         </form>
       )}
+    </div>
+  );
+}
+
+function LegacyAnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
+  const r = answer;
+  const sourceBadge = r.sourceEntry ? badgeForLaunchType(r.sourceEntry.type) : null;
+
+  useEffect(() => {
+    if (typeof window === "undefined" || r.kbSupport.gaps.length === 0) return;
+    try {
+      const prev = JSON.parse(localStorage.getItem(CONTENT_GAP_KEY) ?? "[]");
+      const next = [
+        ...prev,
+        {
+          query,
+          answerTitle: r.title,
+          gaps: r.kbSupport.gaps.map(gap => ({
+            kind: gap.kind,
+            label: gap.label,
+            priority: gap.priority,
+          })),
+          ts: Date.now(),
+        },
+      ];
+      localStorage.setItem(CONTENT_GAP_KEY, JSON.stringify(next.slice(-80)));
+    } catch {
+      // Local gap logging is best-effort in the preview build.
+    }
+  }, [query, r.title, r.kbSupport.gaps]);
+
+  return (
+    <div className="mt-8 space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-400">
+      {/* Match quality bar */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <MatchBadge q={r.matchQuality} label={r.matchLabel} />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              const visualGuide = r.visualAids.length
+                ? `\n\nVisual guide:\n${r.visualAids.map(a => `- ${a.title}: ${a.note}${a.callouts?.length ? `\n  ${a.callouts.join("\n  ")}` : ""}`).join("\n")}`
+                : `\n\nVisual guide:\nNo sanitized screenshot/video yet. Written walkthrough only for now.`;
+              const kbMatches = r.kbSupport.matches.length
+                ? `\n\nMizly KB match:\n${r.kbSupport.matches.slice(0, 6).map(m => `- ${m.title} (${m.reason})`).join("\n")}`
+                : "";
+              const gaps = r.kbSupport.gaps.length
+                ? `\n\nContent gaps:\n${r.kbSupport.gaps.map(g => `- ${g.label}: ${g.prompt}`).join("\n")}`
+                : "";
+              const text = `${query}\n\nShort answer: ${r.shortAnswer}\n\nDo this now:\n${r.walkthrough.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nIf that fails:\n${r.ifThatFails.map(s=>`- ${s}`).join("\n")}${visualGuide}${kbMatches}${gaps}\n\nFirst 90 seconds:\n${r.first90.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\nWhat to say:\n${r.whatToSay.map(s=>`- ${s}`).join("\n")}\n\nWhat to check:\n${r.whatToCheck.map(s=>`- ${s}`).join("\n")}\n\nWhen to escalate: ${r.whenToEscalate}`;
+              try {
+                await navigator.clipboard?.writeText(text);
+                toast.success("Answer copied to clipboard");
+              } catch {
+                toast.error("Copy blocked by browser", {
+                  description: "Select the answer text and copy manually.",
+                });
+              }
+            }}
+            className="text-xs px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-secondary inline-flex items-center gap-1.5">
+            <Copy className="size-3.5" /> Copy
+          </button>
+          <button
+            onClick={() => {
+              const saved = readList(SAVED_KEY);
+              writeList(SAVED_KEY, [query, ...saved.filter(x => x !== query)]);
+              toast.success("Answer saved", { description: "Available in this browser." });
+            }}
+            className="text-xs px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-secondary inline-flex items-center gap-1.5">
+            <Bookmark className="size-3.5" /> Save
+          </button>
+        </div>
+      </div>
+
+      {/* 1. SHORT ANSWER */}
+      <div className="relative rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card overflow-hidden">
+        <span className="absolute left-0 top-4 bottom-4 w-[3px] rounded-r accent-rule-v" />
+        <div className="flex items-center gap-2 mb-3">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Short answer</div>
+          {sourceBadge && (
+            <span className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${sourceBadge.cls}`}>
+              <ShieldCheck className="size-3" /> {sourceBadge.label} · Mizly library
+            </span>
+          )}
+        </div>
+        <div className="text-[17px] md:text-lg font-display font-semibold leading-snug text-foreground">{r.title}</div>
+        <p className="mt-2.5 text-[14px] leading-relaxed text-foreground/85">
+          {r.shortAnswer?.trim() ? r.shortAnswer : "No direct Mizly match yet."}
+        </p>
+        <p className="mt-4 text-[11.5px] text-muted-foreground italic border-l-2 border-border pl-3">
+          {ASK_SAFETY_LINE}{" "}
+          <Link to="/legal" className="underline hover:text-foreground">Trademark &amp; legal notice</Link>.
+        </p>
+      </div>
+
+
+      <WalkthroughSection answer={r} />
+      <VisualGuideSection answer={r} />
+      <KbMatchSection answer={r} />
+      <ContentGapSection answer={r} />
+
+      {/* Existing field-support sections */}
+      <ListSection title="FIRST 90 SECONDS" items={r.first90} ordered />
+      <ListSection title="WHAT TO SAY" items={r.whatToSay} />
+      <ListSection title="WHAT TO CHECK" items={r.whatToCheck} />
+
+      {/* 5. WHEN TO ESCALATE */}
+      <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5">
+        <div className="text-[10px] uppercase tracking-wider text-warning font-medium mb-2 inline-flex items-center gap-1.5">
+          <AlertTriangle className="size-3" /> WHEN TO ESCALATE
+        </div>
+        <p className="text-sm leading-relaxed">
+          {r.whenToEscalate?.trim() ? r.whenToEscalate : "No direct Mizly match yet."}
+        </p>
+      </div>
+
+      {/* 6-9. Related sections — always render */}
+      <RelatedGrid label="RELATED PLAYBOOKS" type="playbook" items={r.related.playbooks} />
+      <RelatedGrid label="RELATED CHECKLISTS" type="checklist" items={r.related.checklists} />
+      <RelatedGrid label="RELATED LESSONS" type="lesson" items={r.related.lessons} />
+      <RelatedGrid label="RELATED SCENARIOS" type="scenario" items={r.related.scenarios} />
+
+      {/* 10. SOURCES / BASED ON MIZLY LIBRARY */}
+      <Section title="SOURCES / BASED ON MIZLY LIBRARY">
+        {r.sources.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {r.sources.map(s => (
+              <span key={s.id} className="text-[11px] px-2 py-1 rounded-full inline-flex items-center gap-1.5 bg-primary-soft text-primary">
+                <ShieldCheck className="size-3" /> {s.title}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">No direct Mizly match yet.</p>
+        )}
+      </Section>
+
+      {/* 11. WAS THIS HELPFUL? */}
+      <FeedbackBar query={query} />
+    </div>
+  );
+}
+
+function MatchBadge({ q, label }: { q: MatchQuality; label: string }) {
+  const cls = q === "strong"
+    ? "bg-teal-soft text-teal border-teal/25"
+    : q === "related"
+    ? "bg-primary-soft text-primary border-primary/20"
+    : "bg-warning/12 text-warning border-warning/25";
+  const Icon = q === "strong" ? CheckCircle2 : q === "related" ? Sparkles : AlertTriangle;
+  return (
+    <span className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full border ${cls}`}>
+      <Icon className="size-3" /> {label}
+    </span>
+  );
+}
+
+function WalkthroughSection({ answer }: { answer: AskAnswer }) {
+  const video = answer.related.videos[0];
+  return (
+    <div className="rounded-2xl border border-primary/20 bg-primary-soft/35 p-5 shadow-soft">
+      <div className="text-[10px] uppercase tracking-wider text-primary font-medium mb-3">DO THIS NOW</div>
+      <ol className="space-y-2 text-sm">
+        {answer.walkthrough.map((step, i) => (
+          <li key={i} className="flex gap-3">
+            <span className="size-6 shrink-0 rounded-full bg-primary text-primary-foreground text-xs font-semibold flex items-center justify-center">{i + 1}</span>
+            <span className="pt-0.5 leading-relaxed">{step}</span>
+          </li>
+        ))}
+      </ol>
+
+      {answer.ifThatFails.length > 0 && (
+        <div className="mt-4 rounded-xl border border-border bg-card p-4">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">IF THAT FAILS</div>
+          <ul className="space-y-2 text-sm">
+            {answer.ifThatFails.map((step, i) => (
+              <li key={i} className="flex gap-2">
+                <span className="text-primary font-semibold">Then</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {video && !answer.visualAids.length && (
+        <Link
+          to="/videos"
+          className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-4 py-3 text-sm hover:border-primary/30 hover:shadow-soft transition"
+        >
+          <span className="min-w-0">
+            <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Training video instead</span>
+            <span className="mt-0.5 block font-medium truncate">{video.title}</span>
+          </span>
+          <Film className="size-4 text-primary shrink-0" />
+        </Link>
+      )}
+    </div>
+  );
+}
+
+function VisualGuideSection({ answer }: { answer: AskAnswer }) {
+  const iconFor = (kind: string) => {
+    if (kind === "screenshot") return ImageIcon;
+    if (kind === "tasklet") return MousePointerClick;
+    return Film;
+  };
+
+  const labelFor = (kind: string) => {
+    if (kind === "screenshot") return "Sanitized screenshot";
+    if (kind === "tasklet") return "Click path";
+    return "Training video";
+  };
+
+  if (!answer.visualAids.length) {
+    const topGap = answer.kbSupport.gaps[0];
+    return (
+      <Section title="VISUAL GUIDE">
+        <div className="rounded-xl border border-dashed border-border bg-secondary/45 p-4">
+          <div className="flex items-start gap-3">
+            <span className="size-9 shrink-0 rounded-xl bg-primary-soft text-primary flex items-center justify-center">
+              <ImageIcon className="size-4" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">No visual guide yet</span>
+              <span className="mt-0.5 block text-sm font-semibold text-foreground">
+                {topGap?.label ?? "Written walkthrough only for now"}
+              </span>
+              <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                Mizly has the written workflow. The content factory should add a sanitized screenshot, click path, or short training clip next.
+              </span>
+            </span>
+          </div>
+        </div>
+      </Section>
+    );
+  }
+
+  return (
+    <Section title="VISUAL GUIDE">
+      <div className="space-y-3">
+        {answer.visualAids.map((aid, i) => {
+          const Icon = iconFor(aid.kind);
+          const body = (
+            <>
+              <div className="flex items-start gap-3">
+                <span className="size-9 shrink-0 rounded-xl bg-primary-soft text-primary flex items-center justify-center">
+                  <Icon className="size-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{labelFor(aid.kind)}</span>
+                  <span className="mt-0.5 block text-sm font-semibold text-foreground">{aid.title}</span>
+                  <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{aid.note}</span>
+                </span>
+              </div>
+              {aid.callouts?.length ? (
+                <ul className="mt-3 grid gap-1.5 text-xs text-foreground/80">
+                  {aid.callouts.map((callout, j) => (
+                    <li key={j} className="flex gap-2">
+                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-teal" />
+                      <span>{callout}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </>
+          );
+
+          if (aid.href === "/videos") {
+            return (
+              <Link
+                key={`${aid.kind}-${i}`}
+                to="/videos"
+                className="block rounded-xl border border-border bg-card p-4 hover:border-primary/35 hover:shadow-soft transition-all"
+              >
+                {body}
+              </Link>
+            );
+          }
+
+          return (
+            <div key={`${aid.kind}-${i}`} className="rounded-xl border border-border bg-card p-4">
+              {body}
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+        Mizly visuals must be recreated, sanitized, and vendor-neutral. Do not upload screenshots with patient data, vendor branding, private URLs, or organization names.
+      </p>
+    </Section>
+  );
+}
+
+function isContentKind(kind: string): kind is ContentType {
+  return ["lesson", "playbook", "video", "checklist", "scenario"].includes(kind);
+}
+
+function KbMatchSection({ answer }: { answer: AskAnswer }) {
+  const matches = answer.kbSupport.matches.slice(0, 6);
+  if (!matches.length) return null;
+
+  const iconFor = (kind: string) => {
+    if (isContentKind(kind)) return TYPE_META[kind].icon;
+    if (kind === "screenshot") return ImageIcon;
+    if (kind === "tasklet") return MousePointerClick;
+    if (kind === "video") return Film;
+    return ShieldCheck;
+  };
+
+  const card = (match: (typeof matches)[number]) => {
+    const Icon = iconFor(match.kind);
+    return (
+      <div className="rounded-xl border border-border bg-card p-3.5 hover:border-primary/35 hover:shadow-soft transition-all">
+        <div className="flex items-start gap-3">
+          <span className="size-8 shrink-0 rounded-lg bg-primary-soft text-primary flex items-center justify-center">
+            <Icon className="size-3.5" />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{match.kind}</span>
+            <span className="mt-0.5 block text-sm font-medium text-foreground line-clamp-2">{match.title}</span>
+            <span className="mt-1 block text-xs text-muted-foreground">{match.reason}</span>
+          </span>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <Section title="MIZLY KB MATCH">
+      <p className="text-xs leading-relaxed text-muted-foreground mb-3">
+        {answer.kbSupport.retrievalNote}
+      </p>
+      <div className="grid sm:grid-cols-2 gap-2.5">
+        {matches.map(match => {
+          if (isContentKind(match.kind)) {
+            const lk = linkForType(match.kind, match.id);
+            return (
+              <Link key={match.id} to={lk.to} params={lk.params} className="block">
+                {card(match)}
+              </Link>
+            );
+          }
+          if (match.href === "/videos") {
+            return (
+              <Link key={match.id} to="/videos" className="block">
+                {card(match)}
+              </Link>
+            );
+          }
+          return <div key={match.id}>{card(match)}</div>;
+        })}
+      </div>
+    </Section>
+  );
+}
+
+function ContentGapSection({ answer }: { answer: AskAnswer }) {
+  const gaps = answer.kbSupport.gaps;
+  if (!gaps.length) return null;
+
+  return (
+    <Section title="CONTENT GAP LOGGED">
+      <div className="space-y-2">
+        {gaps.map(gap => (
+          <div key={gap.id} className="rounded-xl border border-border bg-secondary/35 p-3">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-sm font-medium text-foreground">{gap.label}</div>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{gap.prompt}</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-card px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground border border-border">
+                {gap.priority}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function ListSection({ title, items, ordered }: { title: string; items: string[]; ordered?: boolean }) {
+  if (!items?.length) {
+    return (
+      <Section title={title}>
+        <p className="text-sm text-muted-foreground">No direct Mizly match yet.</p>
+      </Section>
+    );
+  }
+  return (
+    <Section title={title}>
+      {ordered ? (
+        <ol className="space-y-2 text-sm">
+          {items.map((s, i) => (
+            <li key={i} className="flex gap-3">
+              <span className="size-6 shrink-0 rounded-full bg-primary-soft text-primary text-xs font-semibold flex items-center justify-center">{i + 1}</span>
+              <span className="pt-0.5">{s}</span>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <ul className="space-y-2 text-sm">
+          {items.map((s, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="text-muted-foreground">•</span>
+              <span>{s}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Section>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">{title}</div>
+      {children}
+    </div>
+  );
+}
+
+function linkForType(type: string, id: string): { to: any; params?: any; search?: any } {
+  switch (type) {
+    case "lesson": return { to: "/lessons/$id", params: { id } };
+    case "playbook": return { to: "/playbooks/$id", params: { id } };
+    case "scenario": return { to: "/scenarios/$id", params: { id } };
+    case "video": return { to: "/videos", search: { item: id } };
+    case "checklist": return { to: "/checklists", search: { item: id } };
+    default: return { to: "/learn" };
+  }
+}
+
+function RelatedGrid({ label, type, items }: { label: string; type: ContentType; items: ContentItem[] }) {
+  const meta = TYPE_META[type];
+  const Icon = meta.icon;
+  if (!items?.length) {
+    return (
+      <Section title={label}>
+        <p className="text-sm text-muted-foreground">No direct Mizly match yet.</p>
+      </Section>
+    );
+  }
+  return (
+    <Section title={label}>
+      <div className="grid sm:grid-cols-2 gap-3">
+        {items.map(it => {
+          const lk = linkForType(it.content_type, it.id);
+          return (
+            <Link key={it.id} to={lk.to} params={lk.params} search={lk.search}
+              className="group rounded-xl border border-border p-4 hover:border-primary/40 hover:shadow-soft transition-all block bg-card">
+              <div className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${meta.cls}`}>
+                <Icon className="size-3" /> {meta.label}
+              </div>
+              <div className="mt-2 text-sm font-medium group-hover:text-primary transition-colors">{it.title}</div>
+              {it.summary && <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{it.summary}</div>}
+            </Link>
+          );
+        })}
+      </div>
+    </Section>
+  );
+}
+
+function FeedbackBar({ query }: { query: string }) {
+  const [given, setGiven] = useState<null | "up" | "down">(null);
+
+  const send = (kind: "up" | "down" | "missing" | "request") => {
+    // Mock-only: store locally for now.
+    if (typeof window !== "undefined") {
+      try {
+        const key = "ate.ask.feedback";
+        const prev = JSON.parse(localStorage.getItem(key) ?? "[]");
+        prev.push({ q: query, kind, ts: Date.now() });
+        localStorage.setItem(key, JSON.stringify(prev.slice(-50)));
+      } catch { /* noop */ }
+    }
+    if (kind === "up") { setGiven("up"); toast.success("Thanks — marked helpful"); }
+    if (kind === "down") { setGiven("down"); toast.success("Thanks — we'll review this answer"); }
+    if (kind === "missing") toast.success("Noted — 'missing something' logged");
+    if (kind === "request") toast.success("Playbook request sent to the Mizly library team");
+  };
+
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-3">WAS THIS HELPFUL?</div>
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => send("up")}
+          aria-pressed={given === "up"}
+          className={`text-xs px-3 py-2 rounded-lg border inline-flex items-center gap-1.5 transition-colors ${given === "up" ? "bg-success/15 text-success border-success/30" : "bg-card border-border hover:bg-secondary"}`}>
+          <ThumbsUp className="size-3.5" /> Helpful
+        </button>
+        <button
+          onClick={() => send("down")}
+          aria-pressed={given === "down"}
+          className={`text-xs px-3 py-2 rounded-lg border inline-flex items-center gap-1.5 transition-colors ${given === "down" ? "bg-destructive/15 text-destructive border-destructive/30" : "bg-card border-border hover:bg-secondary"}`}>
+          <ThumbsDown className="size-3.5" /> Not helpful
+        </button>
+        <button
+          onClick={() => send("missing")}
+          className="text-xs px-3 py-2 rounded-lg border border-border bg-card hover:bg-secondary inline-flex items-center gap-1.5">
+          <MessageSquarePlus className="size-3.5" /> Missing something?
+        </button>
+        <button
+          onClick={() => send("request")}
+          className="text-xs px-3 py-2 rounded-lg border border-border bg-card hover:bg-secondary inline-flex items-center gap-1.5">
+          <FileQuestion className="size-3.5" /> Request a playbook
+        </button>
+      </div>
     </div>
   );
 }
