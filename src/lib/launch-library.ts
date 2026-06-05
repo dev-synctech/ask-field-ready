@@ -2352,15 +2352,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Correct once, then refresh or retest per policy.",
     ],
     whatToSay: [
-      "'Let's retest the claim after the correction instead of resubmitting blindly.'",
-      "'I am capturing the external status so the owner can act on it.'",
+      "'Let's fix the error, retest it once, then send it. Don't keep resubmitting blindly.'",
+      "'I'll write down the exact error so the right person can act on it.'",
     ],
     whatToCheck: [
-      "External status/error text, claim edit, payer lane, correction made, refresh result, and owner.",
-      "Whether the blocker is modifier, coding, coverage, charge, or documentation related.",
-      "Whether the same error returns after one approved refresh/retest.",
+      "The exact error text the clearinghouse returned, and which payer it came from.",
+      "Whether the fix is a modifier, coding, coverage, a charge, or documentation.",
+      "Whether the same error comes back after one approved correction and retest.",
     ],
-    whenToEscalate: "If the clearinghouse error returns after one approved correction/retest or the owner is unclear, escalate to claims/revenue owner with error text and result.",
+    whenToEscalate: "If the same error comes back after one approved correction, or you can't tell who owns the fix, send it to the claims team lead with the error text and what you tried.",
     walkthrough: [
       "Open external status/error.",
       "Correct the owned blocker.",
