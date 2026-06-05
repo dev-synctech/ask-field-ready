@@ -2567,15 +2567,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Add a clean note before routing or closing.",
     ],
     whatToSay: [
-      "'This is a handoff item, so I am checking owner and note before closing it.'",
-      "'We need the next team to know exactly what is being asked.'",
+      "'This is a handoff, so let me confirm who it's going to and leave a clean note.'",
+      "'The next team needs to know exactly what we're asking for.'",
     ],
     whatToCheck: [
-      "Activity type, recipient group, account context, billing indicator, status, note, and callback.",
-      "Whether the communication is for coding, charge, coverage, claims, customer service, or self-pay owner.",
-      "Whether local workflow requires a specific note, status, or follow-up queue.",
+      "What kind of activity this is and which team needs to receive it.",
+      "Whether the message is for coding, charges, coverage, claims, the patient billing office, or self-pay.",
+      "Whether your workflow needs a specific note, status, or follow-up queue before you close it.",
     ],
-    whenToEscalate: "If the recipient owner or required activity status is unclear, escalate to revenue-cycle lead with account lane, activity type, and callback.",
+    whenToEscalate: "If you can't tell who should receive it, or what status to leave it in, send it to the revenue cycle lead with the account, the activity type, and a callback number.",
     walkthrough: [
       "Open account activity/communication.",
       "Select owner and activity type.",
