@@ -2727,7 +2727,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_smartset_section_or_order_not_selected",
     title: "SmartSet section or expected order is not selected",
     type: "playbook",
-    summary: "SmartSet questions need context, section visibility, selected orders, required fields, and sign status before calling build broken.",
+    summary: "An expected order in a SmartSet is not selected — it may be hidden, in the wrong section, or filtered out by context.",
     roles: k("provider", "resident / fellow", "clinical support"),
     domains: k("smartsets", "orders", "provider efficiency"),
     phases: k("cutover day 0", "stabilization week 1"),
