@@ -228,7 +228,7 @@ function AskPage() {
             className="w-full h-12 pl-10 pr-24 rounded-2xl border border-border bg-surface-elevated text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
           />
           <button type="submit" disabled={q.trim().length < 2 || loading}
-            className="press absolute right-1.5 top-1/2 -translate-y-1/2 h-9 min-w-[68px] px-3 rounded-xl bg-primary text-primary-foreground text-[13px] font-medium disabled:opacity-40 inline-flex items-center justify-center gap-1.5 shadow-soft">
+            className="press absolute right-1 top-1/2 -translate-y-1/2 h-11 min-w-[72px] px-3 rounded-xl bg-primary text-primary-foreground text-[13px] font-medium disabled:opacity-40 inline-flex items-center justify-center gap-1.5 shadow-soft">
             {loading ? <Loader2 className="size-3.5 animate-spin" /> : "Ask"}
           </button>
 
@@ -402,6 +402,21 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
     "procedure macro", "macro not applying", "macro missing", "macro not firing",
     "discharge blocked", "cannot discharge", "departure blocked", "patient cannot leave",
     "transfer stuck", "transport task", "patient movement", "receiving unit", "sending unit",
+    "workqueue", "work queue", "report filter", "report missing", "wrong count",
+    "charge not dropping", "charge did not drop", "charge capture", "charge queue",
+    "authorization missing", "auth status", "referral status", "referral not linked",
+    "insurance card", "coverage missing", "payer missing", "card image",
+    "specimen collection", "collection task", "specimen not received", "recollect",
+    "lab label reprint", "specimen label reprint", "wrong printer label", "duplicate label",
+    "imaging delay", "exam delayed", "ready for exam", "radiology transport", "patient prep",
+    "pharmacy verification", "pending verification", "waiting on pharmacy", "dispense status",
+    "barcode mismatch", "med barcode", "bcma mismatch", "barcode alert",
+    "therapy note", "therapy eval", "pt note", "ot note", "treatment note",
+    "behavioral health", "safety assessment", "risk assessment", "behavioral treatment plan",
+    "fetal monitoring", "fetalink", "delivery event", "fetal strip",
+    "avs", "after visit summary", "patient instructions", "summary not generating",
+    "case management", "discharge planning", "placement status", "facility placement",
+    "eprescribe", "e-prescribe", "pharmacy send failed", "prescription not sent",
   ];
   if (specificSignals.some(signal => text.includes(signal))) return true;
 
@@ -434,12 +449,12 @@ function parseAction(text: string): AskAction {
   if (/\b(lispro|humalog|drip row|injection row|wrong row|wrong flowsheet|modify|edit|change|correction|corrected|addendum|amend|late entry|signed note correction|note correction)\b/.test(text)) return "modify";
   if (/\b(smartset|smart set|order set|orderset|powerplan|place order|favorite orders|favorite order|diagnosis required|diagnosis needed|indication required|associate diagnosis|link diagnosis)\b/.test(text)) return "place";
   if (/\b(schedule|scheduling|book|booking|appointment|case request|procedure code|preference list|doctor codes|provider codes)\b/.test(text)) return "schedule";
-  if (/\b(smartphrase|smart phrase|smarttext|smart text|smartlist|smart list|smartlink|smart link|note template|note type|dynamic documentation|dyn doc|ed discharge|discharge paperwork|discharge instructions|handoff|signout|sign out|anesthesia|crna|macro|case record|procedure macro|procedure template)\b/.test(text)) return "document";
+  if (/\b(smartphrase|smart phrase|smarttext|smart text|smartlist|smart list|smartlink|smart link|note template|note type|dynamic documentation|dyn doc|ed discharge|discharge paperwork|discharge instructions|handoff|signout|sign out|therapy note|therapy eval|pt note|ot note|behavioral health note|safety assessment|fetal monitoring|fetalink|delivery event|anesthesia|crna|macro|case record|procedure macro|procedure template)\b/.test(text)) return "document";
   if (/\b(document|chart|flowsheet|flow sheet|adl|mobility|ambulat|wheelchair|note)\b/.test(text)) return "document";
   if (/\b(place new|new order|place order|put in order|enter order|order entry|order composer)\b/.test(text)) return "place";
   if (/\b(route|routing|queue|in basket|inbasket|message|wrong pool|pool message|proxy inbox|delegate inbox)\b/.test(text)) return "route";
   if (/\b(reconcile|reconciliation|med rec|home med|home meds|medication history)\b/.test(text)) return "reconcile";
-  if (/\b(patient list|worklist|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|beaker|specimen|accession|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked)\b/.test(text)) return "review";
+  if (/\b(patient list|worklist|workqueue|work queue|report|reports|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|charge|authorization|auth status|referral|coverage|insurance|payer|beaker|specimen|accession|lab label|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|pharmacy verification|barcode|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked|case management|discharge planning|placement status|eprescribe|e-prescribe|prescription)\b/.test(text)) return "review";
   if (/\b(review|verify|check)\b/.test(text)) return "review";
   return "unknown";
 }
@@ -455,7 +470,8 @@ function shouldGoDirect(query: string, slots: ParsedSlots) {
   if (slots.action === "discontinue" && /\b(order|duplicate|cancel|stop|remove)\b/.test(text)) return true;
   if (slots.action === "reconcile" && /\b(home med|home meds|med rec|medication)\b/.test(text)) return true;
   if (slots.action === "route" && /\b(in basket|inbasket|message|pool|proxy|delegate)\b/.test(text)) return true;
-  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement)\b/.test(text)) return true;
+  if (slots.action === "document" && /\b(therapy|behavioral health|safety assessment|fetal|fetalink|delivery event)\b/.test(text)) return true;
+  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement|workqueue|work queue|report|charge|authorization|auth|referral|coverage|insurance|specimen|lab label|radiology|imaging|pharmacy verification|barcode|case management|placement|eprescribe|prescription)\b/.test(text)) return true;
   return false;
 }
 
@@ -616,7 +632,7 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
                     });
                   }
                 }}
-                className="h-9 px-3 rounded-lg border border-border bg-card hover:bg-secondary text-xs inline-flex items-center gap-1.5"
+                className="h-11 md:h-9 px-3 rounded-lg border border-border bg-card hover:bg-secondary text-xs inline-flex items-center gap-1.5"
               >
                 <Copy className="size-3.5" /> Copy
               </button>
@@ -626,7 +642,7 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
                   writeList(SAVED_KEY, [query, ...saved.filter(x => x !== query)]);
                   toast.success("Answer saved", { description: "Available in this browser." });
                 }}
-                className="h-9 px-3 rounded-lg border border-border bg-card hover:bg-secondary text-xs inline-flex items-center gap-1.5"
+                className="h-11 md:h-9 px-3 rounded-lg border border-border bg-card hover:bg-secondary text-xs inline-flex items-center gap-1.5"
               >
                 <Bookmark className="size-3.5" /> Save
               </button>
