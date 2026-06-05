@@ -3897,7 +3897,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_charge_not_dropping_after_visit",
     title: "Charge is not dropping after documentation or visit close",
     type: "playbook",
-    summary: "Charge questions need documentation status, encounter context, charge trigger, work queue, and owner checks before manual entry.",
+    summary: "The visit is done but the charge has not shown up where billing expects it.",
     roles: k("biller", "clinic staff", "provider", "front desk"),
     domains: k("charge capture", "billing", "documentation"),
     phases: k("cutover day 0", "stabilization week 1"),
