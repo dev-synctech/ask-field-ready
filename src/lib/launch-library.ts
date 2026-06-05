@@ -2903,7 +2903,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_radiant_protocol_ready_for_exam_blocked",
     title: "Radiant protocol or ready-for-exam status is blocked",
     type: "playbook",
-    summary: "Radiology readiness questions need order, protocol, patient prep, transport, exam status, and modality owner checks.",
+    summary: "A radiology exam will not move to ready — could be the order, the protocol, patient prep, or transport.",
     roles: k("radiology tech", "provider", "scheduler", "transport"),
     domains: k("radiology", "imaging", "protocol"),
     phases: k("cutover day 0", "stabilization week 1"),
