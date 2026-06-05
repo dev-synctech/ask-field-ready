@@ -2595,7 +2595,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_provider_inbasket_folder_filter_overload",
     title: "Provider In Basket is overloaded or filtered wrong",
     type: "playbook",
-    summary: "In Basket overload starts with folder, pool/proxy view, priority, due date, and owner before anyone bulk-resolves messages.",
+    summary: "Your In Basket is overflowing and the filters are hiding the messages that actually need a reply.",
     roles: k("provider", "resident / fellow", "clinic support"),
     domains: k("in basket", "messages", "provider efficiency"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
