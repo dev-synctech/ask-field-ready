@@ -2205,6 +2205,393 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     status: "published",
   },
   {
+    id: "ll_hb_account_status_dnb_or_billed",
+    title: "Hospital account status is unclear",
+    type: "playbook",
+    summary: "Account-status questions start by naming the current billing state, DNB reason, workqueue, and owner before anyone changes the account.",
+    roles: k("biller", "revenue cycle", "customer service"),
+    domains: k("hospital billing", "account", "dnb"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Hospital Account -> Account summary/status -> Billing or DNB edits -> Workqueue/owner",
+    first90: [
+      "Open the hospital account and read the current status.",
+      "Check for DNB, billing, or closed-state blockers.",
+      "Identify the workqueue or owner before changing anything.",
+    ],
+    whatToSay: [
+      "'Let's name the account status before we troubleshoot the bill.'",
+      "'I am checking whether this is DNB, billed, closed, or owner-routed.'",
+    ],
+    whatToCheck: [
+      "Account status, discharge/billing state, DNB reason, workqueue, owner, and last action.",
+      "Whether the issue is one account or a repeated queue pattern.",
+      "Whether documentation, coding, charge, coverage, or claim state is the blocker.",
+    ],
+    whenToEscalate: "If the account status or owner is unclear, escalate to hospital billing/revenue owner with status, DNB reason, queue, and callback.",
+    walkthrough: [
+      "Open the hospital account.",
+      "Read status and DNB/billing reason.",
+      "Route to the accountable owner.",
+    ],
+    ifThatFails: [
+      "Status missing: check filters and account context.",
+      "DNB reason unclear: route billing owner.",
+      "Queue trend: escalate count and owner.",
+    ],
+    keywords: k("har status", "hospital account status", "account status", "open account", "dnb", "discharged not billed", "billed status", "closed account", "stop bill", "billing status", "account billing state", "hb account status", "hospital account review"),
+    related_ids: ["p2", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_dnb_edit_or_stop_bill_owner",
+    title: "DNB edit or stop-bill needs an owner",
+    type: "playbook",
+    summary: "DNB and stop-bill issues need the edit category, blocker reason, owner lane, and safe handoff before billing is forced forward.",
+    roles: k("biller", "claims rep", "revenue cycle"),
+    domains: k("hospital billing", "dnb", "edits"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Hospital Account -> DNB/edit list -> Edit detail -> Owner or workqueue",
+    first90: [
+      "Open the DNB or edit detail.",
+      "Name the blocker category before resolving anything.",
+      "Route to the owner lane if it is not yours.",
+    ],
+    whatToSay: [
+      "'DNB edits are owner-based. Let's find who owns this blocker first.'",
+      "'We should not clear an edit unless the supporting work is actually done.'",
+    ],
+    whatToCheck: [
+      "Edit code/category, blocker text, account status, owner lane, workqueue, and last update.",
+      "Whether the blocker is documentation, coding, charge, coverage, claim, or system routing.",
+      "Whether the user owns this edit or only sees it because the account is in a shared queue.",
+    ],
+    whenToEscalate: "If the edit owner, blocker meaning, or safe resolution path is unclear, escalate to billing/revenue owner with edit category, status, queue, and callback.",
+    walkthrough: [
+      "Open DNB/edit detail.",
+      "Identify blocker category and owner.",
+      "Resolve only owned edits; route the rest.",
+    ],
+    ifThatFails: [
+      "Not your owner lane: route it.",
+      "Edit repeats after resolution: escalate pattern.",
+      "Patient flow or deadline risk: flag urgency.",
+    ],
+    keywords: k("dnb edit", "dnb edits", "discharged not billed edit", "resolve dnb edit", "billing related dnb edit", "charging related dnb edit", "stop bill", "stop bill edit", "dnb workqueue", "dnb owner", "dnb blocker", "clear dnb", "hb dnb"),
+    related_ids: ["p2", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_claim_edit_workqueue_owner",
+    title: "Claim edit is in the wrong owner lane",
+    type: "playbook",
+    summary: "Claim edit questions need the edit code, responsible owner, workqueue, and retest path before anyone fixes unrelated errors.",
+    roles: k("biller", "claims rep", "revenue cycle"),
+    domains: k("claims", "workqueue", "edits"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Claim edit workqueue -> Claim/edit detail -> Error owner -> Retest or route",
+    first90: [
+      "Open the claim edit detail.",
+      "Identify the exact edit code and owner.",
+      "Fix only the edit assigned to your lane.",
+    ],
+    whatToSay: [
+      "'A claim can sit in multiple queues, so we need the exact edit owner.'",
+      "'Do not fix unrelated edits just because they are visible.'",
+    ],
+    whatToCheck: [
+      "Claim status, edit code, error message, owner lane, workqueue, and responsible team.",
+      "Whether the edit is coding, coverage, modifier, charge, documentation, or clearinghouse related.",
+      "Whether the claim needs refresh, resubmit, or route after the owned edit is addressed.",
+    ],
+    whenToEscalate: "If ownership is unclear or the edit spans multiple teams, escalate to claims/revenue owner with edit code, workqueue, claim status, and callback.",
+    walkthrough: [
+      "Open claim edit detail.",
+      "Name edit code and owner.",
+      "Resolve owned edit or route.",
+    ],
+    ifThatFails: [
+      "Multiple queues: handle your assigned code only.",
+      "Owner unclear: route claims supervisor.",
+      "Edit repeats: capture retest result.",
+    ],
+    keywords: k("claim edit", "claim edits", "claim edit workqueue", "claim edit wq", "claim error", "claim errors sidebar", "claim error sidebar", "claim in multiple workqueues", "multiple claim workqueues", "error code owner", "edit owner", "fix claim error", "responsible for error code", "hb claim edit"),
+    related_ids: ["p2", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_clearinghouse_error_refresh_retest",
+    title: "Clearinghouse error needs refresh/retest",
+    type: "playbook",
+    summary: "Clearinghouse errors should be corrected, refreshed or retested, and routed with the external status detail instead of repeatedly resubmitted.",
+    roles: k("biller", "claims rep", "revenue cycle"),
+    domains: k("claims", "clearinghouse", "edits"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Claim edit -> Clearinghouse/external status -> Correction -> Refresh/retest result",
+    first90: [
+      "Open the clearinghouse or external-status error.",
+      "Capture the exact error text and owner lane.",
+      "Correct once, then refresh or retest per policy.",
+    ],
+    whatToSay: [
+      "'Let's retest the claim after the correction instead of resubmitting blindly.'",
+      "'I am capturing the external status so the owner can act on it.'",
+    ],
+    whatToCheck: [
+      "External status/error text, claim edit, payer lane, correction made, refresh result, and owner.",
+      "Whether the blocker is modifier, coding, coverage, charge, or documentation related.",
+      "Whether the same error returns after one approved refresh/retest.",
+    ],
+    whenToEscalate: "If the clearinghouse error returns after one approved correction/retest or the owner is unclear, escalate to claims/revenue owner with error text and result.",
+    walkthrough: [
+      "Open external status/error.",
+      "Correct the owned blocker.",
+      "Refresh/retest once and document result.",
+    ],
+    ifThatFails: [
+      "Error repeats: stop resubmitting.",
+      "Owner unclear: route claims owner.",
+      "Deadline risk: escalate payer urgency.",
+    ],
+    keywords: k("clearinghouse error", "external status code", "external status", "claim scrubber", "scrubber error", "claim retest", "rapid retest", "refresh to retest", "refresh clearinghouse", "claim clearinghouse", "claim error retest", "claim failed clearinghouse"),
+    related_ids: ["p2", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_late_charge_or_split_claim",
+    title: "Late charge or split claim is holding billing",
+    type: "playbook",
+    summary: "Late-charge and split-claim questions need account context, charge timing, claim status, and billing owner before any manual action.",
+    roles: k("biller", "charge capture", "revenue cycle"),
+    domains: k("charges", "claims", "hospital billing"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Hospital Account -> Charges/transactions -> Claim status -> Late charge or split-claim owner",
+    first90: [
+      "Confirm the account and service date.",
+      "Check whether the charge is late, held, or split.",
+      "Route to charge or claims owner before forcing billing.",
+    ],
+    whatToSay: [
+      "'Let's confirm whether this is a charge timing issue or a claim-status issue.'",
+      "'We should not manually push billing until the owner lane is clear.'",
+    ],
+    whatToCheck: [
+      "Service date, charge status, late-charge indicator, claim status, split-claim context, and owner.",
+      "Whether documentation, coding, or coverage changed after claim creation.",
+      "Whether manual entry or resubmission is allowed by local revenue policy.",
+    ],
+    whenToEscalate: "If late-charge handling, split-claim ownership, or manual billing policy is unclear, escalate to charge/revenue owner with account context and status.",
+    walkthrough: [
+      "Open account charge/transaction view.",
+      "Check service date and claim status.",
+      "Route late-charge or split-claim owner.",
+    ],
+    ifThatFails: [
+      "Charge missing: use charge-capture path.",
+      "Claim already billed: route claims owner.",
+      "Policy unclear: do not manually force.",
+    ],
+    keywords: k("late charge", "late charges", "late charge split claim", "split claim", "process late charge", "late charge on split claim", "charge posted after claim", "charge after billing", "claim already billed charge", "manual charge billing", "charge timing", "hb late charge"),
+    related_ids: ["p7", "c3", "v7"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_sbo_guarantor_balance_statement_call",
+    title: "Guarantor has a balance or statement question",
+    type: "playbook",
+    summary: "SBO balance questions need caller context, guarantor/account lane, statement status, and approved owner without putting identifiers in chat.",
+    roles: k("customer service", "self-pay", "revenue cycle"),
+    domains: k("sbo", "guarantor", "statement"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 1,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Guarantor/account lookup -> Balance or statement summary -> Notes/owner -> Close-loop action",
+    first90: [
+      "Confirm this is a guarantor balance or statement question.",
+      "Open the approved account/guarantor lane.",
+      "Check statement status before quoting next steps.",
+    ],
+    whatToSay: [
+      "'Let's confirm the statement lane before we answer or route this.'",
+      "'Do not paste account identifiers into the support note.'",
+    ],
+    whatToCheck: [
+      "Guarantor/account lane, statement status, balance category, last action, note requirement, and owner.",
+      "Whether the caller needs statement explanation, payment plan, coverage review, or billing-office routing.",
+      "Whether local policy requires a note or specific customer-service disposition.",
+    ],
+    whenToEscalate: "If the balance source, statement state, or policy answer is unclear, route to customer-service/revenue owner with non-PHI summary and callback.",
+    walkthrough: [
+      "Open guarantor/account lane.",
+      "Read balance and statement status.",
+      "Document or route the approved close-loop action.",
+    ],
+    ifThatFails: [
+      "Wrong account risk: stop and verify lane.",
+      "Coverage dispute: route coverage owner.",
+      "Upset caller: document and hand off owner.",
+    ],
+    keywords: k("guarantor balance", "balance inquiry", "statement inquiry", "sbo statement", "sbo balance", "customer service call", "patient statement", "account balance question", "statement status", "why did i get a bill", "guarantor account", "hospital account lookup", "self pay statement"),
+    related_ids: ["p2", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_sbo_payment_plan_or_self_pay_followup",
+    title: "Payment plan or self-pay follow-up is unclear",
+    type: "playbook",
+    summary: "Payment plan questions need guarantor/account context, plan status, follow-up queue, and policy owner before changes are promised.",
+    roles: k("customer service", "self-pay", "revenue cycle"),
+    domains: k("sbo", "payment plan", "self-pay"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 1,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Guarantor/account -> Payment plan or self-pay follow-up -> Workqueue/notes -> Owner",
+    first90: [
+      "Open the guarantor/account lane.",
+      "Check payment plan or self-pay follow-up status.",
+      "Confirm policy owner before promising changes.",
+    ],
+    whatToSay: [
+      "'I am checking the plan status before we tell the caller what will happen.'",
+      "'If the plan change needs approval, we route it instead of guessing.'",
+    ],
+    whatToCheck: [
+      "Payment plan status, self-pay follow-up queue, balance category, note history, owner, and due date.",
+      "Whether the request is new plan, missed payment, follow-up outreach, adjustment, or financial-assistance handoff.",
+      "Whether policy requires supervisor, self-pay, or financial-counseling ownership.",
+    ],
+    whenToEscalate: "If payment plan policy, self-pay owner, or financial-assistance handoff is unclear, escalate to customer-service/self-pay owner with clean summary and callback.",
+    walkthrough: [
+      "Open guarantor/account.",
+      "Check payment plan or self-pay follow-up status.",
+      "Route policy owner before changing terms.",
+    ],
+    ifThatFails: [
+      "Plan missing: check account lane.",
+      "Policy unclear: route owner.",
+      "Queue backlog: escalate count and due dates.",
+    ],
+    keywords: k("payment plan", "payment plan question", "self-pay follow-up", "self pay follow up", "self-pay account", "self pay account", "missed payment", "payment arrangement", "financial assistance", "bad debt", "follow up workqueue", "follow-up workqueue", "sbo payment", "sbo self pay"),
+    related_ids: ["p2", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_coverage_filing_order_term_delete",
+    title: "Coverage filing order, term, or delete decision",
+    type: "playbook",
+    summary: "Coverage changes need the account/encounter lane, active dates, filing order, and whether the record should be termed or deleted.",
+    roles: k("registration", "customer service", "revenue cycle"),
+    domains: k("coverage", "insurance", "sbo"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Registration or account -> Coverage area -> Filing order/effective dates -> Owner",
+    first90: [
+      "Open the account or encounter coverage lane.",
+      "Check active dates and filing order.",
+      "Term old valid coverage; delete only if added in error.",
+    ],
+    whatToSay: [
+      "'Let's decide whether this coverage was once valid or added by mistake.'",
+      "'Filing order matters, so I am checking it before we attach anything.'",
+    ],
+    whatToCheck: [
+      "Coverage status, effective dates, filing order, account/encounter link, payer lane, and owner.",
+      "Whether the coverage was ever valid for past encounters.",
+      "Whether the issue is add coverage, attach coverage, term coverage, delete erroneous coverage, or reorder filing.",
+    ],
+    whenToEscalate: "If effective dates, filing order, or term/delete decision is unclear, escalate to registration/coverage owner with account context and callback.",
+    walkthrough: [
+      "Open coverage lane.",
+      "Check dates and filing order.",
+      "Term valid-old coverage; delete error-only coverage.",
+    ],
+    ifThatFails: [
+      "Wrong account risk: stop.",
+      "Coverage date unclear: route coverage owner.",
+      "Balance transfer concern: involve billing owner.",
+    ],
+    keywords: k("coverage filing order", "filing order", "edit filing order", "add new coverage", "attach coverage", "term coverage", "delete coverage", "coverage effective date", "effective to field", "insurance filing order", "coverage was valid", "coverage added in error", "old insurance coverage", "new insurance coverage", "sbo coverage"),
+    related_ids: ["p20", "c14", "v16"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_account_activity_communication_needed",
+    title: "Account activity communication needs routing",
+    type: "playbook",
+    summary: "Billing communication workflows need account context, activity type, recipient owner, note, and follow-up status before the item is closed.",
+    roles: k("biller", "customer service", "revenue cycle"),
+    domains: k("billing", "communication", "account activity"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 1,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "route",
+    nav_trail: "Hospital Account -> Account activity/communication -> Recipient owner -> Status/note",
+    first90: [
+      "Open the account activity or communication area.",
+      "Confirm recipient owner and activity type.",
+      "Add a clean note before routing or closing.",
+    ],
+    whatToSay: [
+      "'This is a handoff item, so I am checking owner and note before closing it.'",
+      "'We need the next team to know exactly what is being asked.'",
+    ],
+    whatToCheck: [
+      "Activity type, recipient group, account context, billing indicator, status, note, and callback.",
+      "Whether the communication is for coding, charge, coverage, claims, customer service, or self-pay owner.",
+      "Whether local workflow requires a specific note, status, or follow-up queue.",
+    ],
+    whenToEscalate: "If the recipient owner or required activity status is unclear, escalate to revenue-cycle lead with account lane, activity type, and callback.",
+    walkthrough: [
+      "Open account activity/communication.",
+      "Select owner and activity type.",
+      "Route with clean note and follow-up status.",
+    ],
+    ifThatFails: [
+      "Owner unclear: route revenue lead.",
+      "Status locked: check security/queue.",
+      "Repeated misroutes: escalate workflow pattern.",
+    ],
+    keywords: k("account activity", "account activities", "communication workflow", "billing communication", "send communication", "route account activity", "recipient owner", "billing indicator", "account note", "follow up note", "customer service handoff", "revenue handoff"),
+    related_ids: ["p2", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
     id: "ll_beaker_specimen_label_accession",
     title: "Lab specimen label or accession workflow is blocked",
     type: "playbook",
@@ -4583,6 +4970,60 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return 30;
   }
+  if (
+    entry.id === "ll_dnb_edit_or_stop_bill_owner" &&
+    /\b(dnb\s+edit|discharged\s+not\s+billed\s+edit|stop\s+bill|resolve\s+dnb|clear\s+dnb|dnb\s+workqueue)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_hb_account_status_dnb_or_billed" &&
+    /\b(har\s+status|hospital\s+account\s+status|account\s+status|dnb|discharged\s+not\s+billed|billed\s+status|closed\s+account|billing\s+status)\b/.test(queryText)
+  ) {
+    return 25;
+  }
+  if (
+    entry.id === "ll_claim_edit_workqueue_owner" &&
+    /\b(claim\s+edit\s+(workqueue|wq)?|claim\s+error|claim\s+errors\s+sidebar|multiple\s+claim\s+workqueues|error\s+code\s+owner)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_clearinghouse_error_refresh_retest" &&
+    /\b(clearinghouse\s+error|external\s+status\s+code|external\s+status|claim\s+scrubber|rapid\s+retest|refresh\s+to\s+retest)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_late_charge_or_split_claim" &&
+    /\b(late\s+charge|split\s+claim|charge\s+posted\s+after\s+claim|charge\s+after\s+billing|claim\s+already\s+billed\s+charge)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_sbo_guarantor_balance_statement_call" &&
+    /\b(guarantor\s+balance|balance\s+inquiry|statement\s+inquiry|sbo\s+statement|why\s+did\s+i\s+get\s+a\s+bill|account\s+balance\s+question)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_sbo_payment_plan_or_self_pay_followup" &&
+    /\b(payment\s+plan|self-?pay\s+follow\s*up|missed\s+payment|payment\s+arrangement|financial\s+assistance|bad\s+debt)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_coverage_filing_order_term_delete" &&
+    /\b(filing\s+order|term\s+coverage|delete\s+coverage|effective\s+to\s+field|coverage\s+added\s+in\s+error|old\s+insurance\s+coverage)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_account_activity_communication_needed" &&
+    /\b(account\s+activit(y|ies)|communication\s+workflow|billing\s+communication|send\s+communication|recipient\s+owner|billing\s+indicator)\b/.test(queryText)
+  ) {
+    return 30;
+  }
   return 0;
 }
 
@@ -4692,6 +5133,123 @@ function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
       ifYouDontSeeIt: "If the option is missing for multiple users or policy is unclear, escalate to clinical documentation owner.",
       whatToSay: "I am naming what happened first so we pick the right documentation category.",
       checkThis: ["Actual activity and destination.", "Mobility/ADL row and collapsed options.", "Assist level, device, timestamp, and comment policy."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_hb_account_status_dnb_or_billed") {
+    return {
+      doThisFirst: "Open the hospital account and read the current billing status.",
+      whereToLook: "Look at account status, DNB/billing state, workqueues, owner lane, last action, and any visible blocker reason.",
+      whatToClick: "Open account summary or status details first. Then open the related DNB/edit/workqueue item before changing account state.",
+      whatShouldHappen: "You should see whether the account is open, DNB, billed, closed, or blocked by an owner lane.",
+      ifYouDontSeeIt: "If status or owner is unclear, route the billing owner with account state, queue, blocker, and callback.",
+      whatToSay: "Let's name the account status before we troubleshoot the bill.",
+      checkThis: ["Account status and blocker reason.", "DNB/billing edit or workqueue.", "Owner lane and last action."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_dnb_edit_or_stop_bill_owner") {
+    return {
+      doThisFirst: "Open the DNB/edit detail and identify the blocker category.",
+      whereToLook: "Look at edit code, edit category, blocker text, account status, owner lane, workqueue, and last update.",
+      whatToClick: "Open the edit detail or workqueue item. Resolve only if it belongs to this owner lane; otherwise route it.",
+      whatShouldHappen: "The edit should show the owner, blocker, and whether it can be safely resolved or routed.",
+      ifYouDontSeeIt: "If owner or blocker meaning is unclear, stop and escalate with edit category, queue, and callback.",
+      whatToSay: "DNB edits are owner-based, so let's find who owns this blocker first.",
+      checkThis: ["Edit code/category.", "Owner lane and workqueue.", "Last update and blocker reason."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_claim_edit_workqueue_owner") {
+    return {
+      doThisFirst: "Open the claim edit detail and identify the exact edit code.",
+      whereToLook: "Look at claim status, edit code, error message, workqueue, owner lane, and responsible team.",
+      whatToClick: "Open the claim error or edit sidebar. Work only the assigned error code, then route or retest as policy requires.",
+      whatShouldHappen: "The responsible owner, error code, and next action should be clear before anyone fixes unrelated edits.",
+      ifYouDontSeeIt: "If ownership spans multiple queues or teams, escalate to claims owner with edit code, status, and callback.",
+      whatToSay: "A claim can sit in multiple queues, so we need the exact edit owner.",
+      checkThis: ["Claim status and edit code.", "Workqueue and owner lane.", "Route, refresh, or resubmit path."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_clearinghouse_error_refresh_retest") {
+    return {
+      doThisFirst: "Open the clearinghouse or external-status error and keep the text visible.",
+      whereToLook: "Look at external status text, payer lane, claim edit, correction made, refresh/retest result, and owner.",
+      whatToClick: "Open the error detail, correct the owned blocker once, then use the approved refresh or retest action.",
+      whatShouldHappen: "The claim should pass retest or show the same external error with a clear owner path.",
+      ifYouDontSeeIt: "If the error repeats after one approved correction, stop repeated resubmits and escalate the error text.",
+      whatToSay: "Let's retest the claim after the correction instead of resubmitting blindly.",
+      checkThis: ["External status/error text.", "Correction owner and claim edit.", "Refresh/retest result."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_late_charge_or_split_claim") {
+    return {
+      doThisFirst: "Confirm the account, service date, and current claim status.",
+      whereToLook: "Look at charges/transactions, service date, late-charge indicator, claim status, split-claim context, and owner lane.",
+      whatToClick: "Open charge or transaction detail. Check whether the charge is late, held, or already tied to a claim before routing.",
+      whatShouldHappen: "You should see whether this is a charge timing issue, claim status issue, or owner-policy issue.",
+      ifYouDontSeeIt: "If split-claim handling or manual billing policy is unclear, route charge/revenue owner before forcing anything.",
+      whatToSay: "Let's confirm whether this is a charge timing issue or a claim-status issue.",
+      checkThis: ["Account and service date.", "Charge/transaction status.", "Claim status and owner lane."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_sbo_guarantor_balance_statement_call") {
+    return {
+      doThisFirst: "Confirm this is a guarantor balance or statement question, not a clinical issue.",
+      whereToLook: "Look at guarantor/account lane, balance category, statement status, note history, and customer-service owner.",
+      whatToClick: "Open the approved account or guarantor summary, then open statement or balance details before giving next steps.",
+      whatShouldHappen: "You should see balance source, statement status, owner, and the approved close-loop action.",
+      ifYouDontSeeIt: "If balance source or policy answer is unclear, route customer-service/revenue owner with a non-PHI summary.",
+      whatToSay: "Let's confirm the statement lane before we answer or route this.",
+      checkThis: ["Guarantor/account lane.", "Balance and statement status.", "Owner, note, and callback."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_sbo_payment_plan_or_self_pay_followup") {
+    return {
+      doThisFirst: "Open the guarantor/account lane and check payment plan status.",
+      whereToLook: "Look at payment plan status, self-pay follow-up queue, balance category, note history, due date, and owner.",
+      whatToClick: "Open payment plan or self-pay follow-up details. Do not change terms until the policy owner is clear.",
+      whatShouldHappen: "You should see plan status, follow-up owner, and whether the request needs approval or routing.",
+      ifYouDontSeeIt: "If policy or ownership is unclear, route customer-service/self-pay owner before promising changes.",
+      whatToSay: "I am checking the plan status before we tell the caller what will happen.",
+      checkThis: ["Payment plan or self-pay status.", "Follow-up queue and owner.", "Policy/approval requirement."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_coverage_filing_order_term_delete") {
+    return {
+      doThisFirst: "Open the account or encounter coverage lane and check effective dates.",
+      whereToLook: "Look at coverage status, effective dates, filing order, account/encounter link, payer lane, and owner.",
+      whatToClick: "Open coverage details or filing order. Term old valid coverage; delete only coverage added in error.",
+      whatShouldHappen: "The correct coverage order, active dates, and term/delete decision should be clear before billing moves.",
+      ifYouDontSeeIt: "If dates, filing order, or term/delete decision is unclear, route registration/coverage owner.",
+      whatToSay: "Let's decide whether this coverage was once valid or added by mistake.",
+      checkThis: ["Coverage dates and status.", "Filing order and account link.", "Term vs delete decision."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_account_activity_communication_needed") {
+    return {
+      doThisFirst: "Open the account activity or communication area and confirm the recipient owner.",
+      whereToLook: "Look at activity type, recipient group, account context, billing indicator, note, status, and callback.",
+      whatToClick: "Open the communication action, choose the correct owner group, add a clean note, then route or close per policy.",
+      whatShouldHappen: "The next team should receive the account activity with owner, reason, status, and callback clear.",
+      ifYouDontSeeIt: "If owner or required status is unclear, route revenue-cycle lead with activity type and account lane.",
+      whatToSay: "This is a handoff item, so I am checking owner and note before closing it.",
+      checkThis: ["Activity type and owner.", "Billing indicator/status.", "Clean note and callback."],
       escalateWhen: entry.whenToEscalate,
     };
   }

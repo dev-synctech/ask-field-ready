@@ -387,6 +387,13 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
     "claim attachment", "refresh claim", "resubmit claim", "refresh or resubmit",
     "resubmit this claim", "refresh this claim", "detail bill",
     "detailed bill", "adjustment", "approval queue", "write off",
+    "har status", "hospital account status", "dnb edit", "discharged not billed",
+    "stop bill", "claim edit", "claim error", "claim errors sidebar",
+    "clearinghouse error", "external status code", "claim scrubber", "rapid retest",
+    "late charge", "split claim", "guarantor balance", "statement inquiry",
+    "payment plan", "self-pay follow-up", "self pay follow up", "bad debt",
+    "coverage filing order", "filing order", "term coverage", "delete coverage",
+    "account activity", "communication workflow", "billing communication",
     "beaker", "specimen", "accession", "lab label",
     "radiant", "radiology", "imaging", "protocol", "exam status",
     "anesthesia", "crna", "case record", "case event", "anesthesia macro",
@@ -451,7 +458,7 @@ function parseSlots(query: string): ParsedSlots {
 }
 
 function parseVendor(text: string): VendorFamily {
-  if (/\b(epic|epiccare|hyperspace|storyboard|smartset|smarttools|wisdom|lumens|rehab)\b/.test(text)) return "epic";
+  if (/\b(epic|epiccare|hyperspace|storyboard|smartset|smarttools|wisdom|lumens|rehab|hospital billing|single billing office|hb biller|epic hb|epic sbo|\bhb\b|\bsbo\b)\b/.test(text)) return "epic";
   if (/\b(oracle health)\b/.test(text)) return "oracle_health";
   if (/\b(cerner|powerchart|firstnet|surginet)\b/.test(text)) return "cerner";
   if (/\bmeditech\b/.test(text)) return "meditech";
@@ -473,7 +480,7 @@ function parseAction(text: string): AskAction {
   if (/\b(place new|new order|place order|place an order|put in order|put in an order|enter order|enter an order|order entry|order composer)\b/.test(text)) return "place";
   if (/\b(route|routing|queue|in basket|inbasket|message|wrong pool|pool message|proxy inbox|delegate inbox)\b/.test(text)) return "route";
   if (/\b(reconcile|reconciliation|med rec|home med|home meds|medication history)\b/.test(text)) return "reconcile";
-  if (/\b(patient list|worklist|workqueue|work queue|report|reports|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|charge|authorization|auth status|auth not ready|referral|coverage|insurance|payer|beaker|specimen|accession|lab label|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|pharmacy verification|barcode|badge reader|scanner not working|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked|case management|discharge planning|placement status|eprescribe|e-prescribe|prescription|escalation packet|command center ticket|support ticket)\b/.test(text)) return "review";
+  if (/\b(patient list|worklist|workqueue|work queue|report|reports|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|billing|hospital billing|revenue cycle|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|charge|claim edit|claim error|clearinghouse|external status|late charge|split claim|har status|dnb|discharged not billed|stop bill|account status|guarantor|statement inquiry|payment plan|self-pay|self pay|bad debt|filing order|term coverage|delete coverage|account activity|billing communication|authorization|auth status|auth not ready|referral|coverage|insurance|payer|beaker|specimen|accession|lab label|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|pharmacy verification|barcode|badge reader|scanner not working|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked|case management|discharge planning|placement status|eprescribe|e-prescribe|prescription|escalation packet|command center ticket|support ticket)\b/.test(text)) return "review";
   if (/\b(review|verify|check)\b/.test(text)) return "review";
   return "unknown";
 }
@@ -490,7 +497,7 @@ function shouldGoDirect(query: string, slots: ParsedSlots) {
   if (slots.action === "reconcile" && /\b(home med|home meds|med rec|medication)\b/.test(text)) return true;
   if (slots.action === "route" && /\b(in basket|inbasket|message|pool|proxy|delegate)\b/.test(text)) return true;
   if (slots.action === "document" && /\b(note|documentation|document|template|required field|therapy|behavioral health|safety assessment|fetal|fetalink|delivery event|flowsheet|flow sheet|time column|backload|downtime)\b/.test(text)) return true;
-  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement|workqueue|work queue|report|charge|authorization|auth|referral|coverage|insurance|specimen|lab label|radiology|imaging|pharmacy verification|barcode|scanner|badge reader|case management|placement|eprescribe|prescription|escalation|command center|ticket)\b/.test(text)) return true;
+  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement|workqueue|work queue|report|billing|hospital billing|revenue|claim|account|guarantor|statement|payment plan|self-pay|self pay|dnb|har status|stop bill|clearinghouse|late charge|split claim|filing order|term coverage|delete coverage|charge|authorization|auth|referral|coverage|insurance|specimen|lab label|radiology|imaging|pharmacy verification|barcode|scanner|badge reader|case management|placement|eprescribe|prescription|escalation|command center|ticket)\b/.test(text)) return true;
   return false;
 }
 
@@ -509,6 +516,14 @@ function actionOptionsFor(query: string): ActionOption[] {
       { action: "schedule", label: "Book procedure", query: "Procedure scheduling codes are not pulling in for the provider." },
       { action: "modify", label: "Change columns", query: "How do I change columns in the schedule line?" },
       { action: "review", label: "Review appointment", query: "An appointment is not showing on the schedule. What do I check first?" },
+    ];
+  }
+  if (/\b(billing|hospital billing|revenue|claim|claims|account|guarantor|sbo|self-pay|self pay|payment|coverage|insurance)\b/.test(text)) {
+    return [
+      { action: "review", label: "Account / DNB", query: "Hospital account is DNB or billing status is unclear. What do I check first?" },
+      { action: "review", label: "Claim edits", query: "Claim edit is in a workqueue and I am not sure who owns it." },
+      { action: "review", label: "Charge / late charge", query: "Late charge or split claim is holding billing. What do I check first?" },
+      { action: "review", label: "Guarantor / payment", query: "Guarantor has a balance or payment plan question. What do I check first?" },
     ];
   }
   if (/\b(document|documentation|flowsheet|flow sheet|note|scan|mobility|ambulat|wheelchair)\b/.test(text)) {
