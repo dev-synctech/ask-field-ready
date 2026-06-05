@@ -368,6 +368,10 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
   const specificSignals = [
     "lispro", "humalog", "drip row", "injection row", "insulin",
     "consent", "media manager", "paper document", "scan document",
+    "change context", "change department", "change location", "wrong location context",
+    "place an order", "put in an order", "enter an order", "can't place an order",
+    "write my note", "where is the note", "where do i write my note",
+    "charge capture", "visit charges", "get to charge capture",
     "procedure", "preference list", "case request", "surgeon",
     "wheelchair", "bathroom", "transport", "mobility",
     "treatment plan", "greyed", "grayed",
@@ -447,11 +451,11 @@ function parseAction(text: string): AskAction {
   if (/\b(sign|signature|cannot sign|can't sign|wont sign|won't sign)\b/.test(text)) return "sign";
   if (/\b(discontinue|delete|remove|drop off|greyed out|grayed out|cancel order|duplicate order|stop order|dc order|d\/c order)\b/.test(text)) return "discontinue";
   if (/\b(lispro|humalog|drip row|injection row|wrong row|wrong flowsheet|modify|edit|change|correction|corrected|addendum|amend|late entry|signed note correction|note correction)\b/.test(text)) return "modify";
-  if (/\b(smartset|smart set|order set|orderset|powerplan|place order|favorite orders|favorite order|diagnosis required|diagnosis needed|indication required|associate diagnosis|link diagnosis)\b/.test(text)) return "place";
+  if (/\b(smartset|smart set|order set|orderset|powerplan|place order|place an order|favorite orders|favorite order|diagnosis required|diagnosis needed|indication required|associate diagnosis|link diagnosis)\b/.test(text)) return "place";
   if (/\b(schedule|scheduling|book|booking|appointment|case request|procedure code|preference list|doctor codes|provider codes)\b/.test(text)) return "schedule";
   if (/\b(smartphrase|smart phrase|smarttext|smart text|smartlist|smart list|smartlink|smart link|note template|note type|dynamic documentation|dyn doc|ed discharge|discharge paperwork|discharge instructions|handoff|signout|sign out|therapy note|therapy eval|pt note|ot note|behavioral health note|safety assessment|fetal monitoring|fetalink|delivery event|anesthesia|crna|macro|case record|procedure macro|procedure template)\b/.test(text)) return "document";
   if (/\b(document|chart|flowsheet|flow sheet|adl|mobility|ambulat|wheelchair|note)\b/.test(text)) return "document";
-  if (/\b(place new|new order|place order|put in order|enter order|order entry|order composer)\b/.test(text)) return "place";
+  if (/\b(place new|new order|place order|place an order|put in order|put in an order|enter order|enter an order|order entry|order composer)\b/.test(text)) return "place";
   if (/\b(route|routing|queue|in basket|inbasket|message|wrong pool|pool message|proxy inbox|delegate inbox)\b/.test(text)) return "route";
   if (/\b(reconcile|reconciliation|med rec|home med|home meds|medication history)\b/.test(text)) return "reconcile";
   if (/\b(patient list|worklist|workqueue|work queue|report|reports|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|charge|authorization|auth status|referral|coverage|insurance|payer|beaker|specimen|accession|lab label|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|pharmacy verification|barcode|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked|case management|discharge planning|placement status|eprescribe|e-prescribe|prescription)\b/.test(text)) return "review";
@@ -464,13 +468,13 @@ function shouldGoDirect(query: string, slots: ParsedSlots) {
   if (slots.vendor_family !== "unknown" && slots.action !== "unknown") return true;
   if (slots.action === "scan" && /\b(consent|chart|media manager|document|scan)\b/.test(text)) return true;
   if (slots.action === "schedule" && /\b(procedure|preference|case request|codes?)\b/.test(text)) return true;
-  if (slots.action === "modify" && /\b(lispro|drip row|wrong row|insulin)\b/.test(text)) return true;
+  if (slots.action === "modify" && /\b(lispro|drip row|wrong row|insulin|change context|department|location)\b/.test(text)) return true;
   if (slots.action === "sign" && /\b(order|note|required field|unsigned|pending|initiated)\b/.test(text)) return true;
   if (slots.action === "place" && /\b(diagnosis|indication|favorite|order|smartset|powerplan)\b/.test(text)) return true;
   if (slots.action === "discontinue" && /\b(order|duplicate|cancel|stop|remove)\b/.test(text)) return true;
   if (slots.action === "reconcile" && /\b(home med|home meds|med rec|medication)\b/.test(text)) return true;
   if (slots.action === "route" && /\b(in basket|inbasket|message|pool|proxy|delegate)\b/.test(text)) return true;
-  if (slots.action === "document" && /\b(therapy|behavioral health|safety assessment|fetal|fetalink|delivery event)\b/.test(text)) return true;
+  if (slots.action === "document" && /\b(note|documentation|document|template|required field|therapy|behavioral health|safety assessment|fetal|fetalink|delivery event)\b/.test(text)) return true;
   if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement|workqueue|work queue|report|charge|authorization|auth|referral|coverage|insurance|specimen|lab label|radiology|imaging|pharmacy verification|barcode|case management|placement|eprescribe|prescription)\b/.test(text)) return true;
   return false;
 }
@@ -622,7 +626,7 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             <div className="flex items-center gap-2">
               <button
                 onClick={async () => {
-                  const text = `${query}\n\nWhat it is: ${compact.whatItIs}\n\nFirst 90 seconds:\n${compact.steps.map((s, i) => `${i + 1}. ${s}`).join("\n")}\n\nSay this: \"${compact.sayThis}\"\n\nIf it works: ${compact.ifWorks}\n\nIf it doesn't: ${compact.ifNot}\nEscalate to: ${compact.escalationTarget}`;
+                  const text = `${query}\n\nWhat it is: ${compact.whatItIs}\n\nFirst 90 seconds:\n${compact.steps.map((s, i) => `${i + 1}. ${s}`).join("\n")}\n\nCheck this:\n${compact.checkThis.map(s => `- ${s}`).join("\n")}\n\nSay this: \"${compact.sayThis}\"\n\nWhat should happen next: ${compact.ifWorks}\n\nIf you don't see it: ${compact.ifNot}\nEscalate to: ${compact.escalationTarget}`;
                   try {
                     await navigator.clipboard?.writeText(text);
                     toast.success("Answer copied");
@@ -680,6 +684,10 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
               <span className="font-semibold text-foreground">Say this: </span>
               <span className="text-foreground/85">"{compact.sayThis}"</span>
             </div>
+            <div className="mt-2 rounded-xl bg-card/70 border border-border px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+              <span className="font-semibold text-foreground">Check: </span>
+              {compact.checkThis.join(" | ")}
+            </div>
           </section>
 
           <section>
@@ -687,13 +695,13 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             <div className="grid sm:grid-cols-2 gap-2.5">
               <div className="rounded-2xl border border-success/25 bg-success/5 p-3.5">
                 <div className="flex items-center gap-2 text-sm font-semibold text-success">
-                  <CheckCircle2 className="size-4" /> If it works
+                  <CheckCircle2 className="size-4" /> What should happen
                 </div>
                 <p className="mt-2 text-sm leading-relaxed text-foreground/85">{compact.ifWorks}</p>
               </div>
               <div className="rounded-2xl border border-warning/35 bg-warning/10 p-3.5">
                 <div className="flex items-center gap-2 text-sm font-semibold text-warning">
-                  <AlertTriangle className="size-4" /> If it doesn't
+                  <AlertTriangle className="size-4" /> If you don't see it
                 </div>
                 <p className="mt-2 text-sm leading-relaxed text-foreground/85">{compact.ifNot}</p>
                 <div className="mt-2 inline-flex items-center rounded-full bg-card border border-border px-2.5 py-1 text-[11px] font-medium text-foreground">
@@ -721,24 +729,23 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
 }
 
 function compactAnswer(answer: AskAnswer) {
-  const baseSteps = (answer.walkthrough.length ? answer.walkthrough : answer.first90).slice(0, 3);
-  const fallbackSteps = [...baseSteps, ...answer.first90, ...answer.whatToCheck]
-    .filter(Boolean)
-    .slice(0, 3);
-  const steps = fallbackSteps.length
-    ? fallbackSteps.map(step => limitWords(cleanStep(step), 12))
-    : ["Confirm what changed.", "Check scope and context.", "Escalate with one clear sentence."];
+  const guide = answer.liveGuide;
+  const steps = [
+    `Do this first - ${guide.doThisFirst}`,
+    `Where to look - ${guide.whereToLook}`,
+    `What to click - ${guide.whatToClick}`,
+  ].map(step => limitWords(cleanStep(step), 30));
   const safetyFail = answer.ifThatFails.find(step => /do not delete a signed entry/i.test(step));
-  const firstFail = answer.ifThatFails[0] || answer.whenToEscalate;
   const ifNot = safetyFail
     ? "If correction is blocked, escalate; do not delete a signed entry on your own."
-    : limitWords(firstSentence(firstFail), 22);
+    : limitWords(firstSentence(guide.ifYouDontSeeIt), 34);
 
   return {
     whatItIs: compactSentence(answer.shortAnswer || answer.title, 20),
     steps,
-    sayThis: limitWords(stripOuterQuotes(answer.whatToSay[0] || "I'll stay with you until this is stable."), 24),
-    ifWorks: "Confirm it worked, close the loop, and move to the next issue.",
+    checkThis: guide.checkThis.map(item => limitWords(cleanStep(item), 14)).slice(0, 3),
+    sayThis: limitWords(stripOuterQuotes(guide.whatToSay || answer.whatToSay[0] || "I'll stay with you until this is stable."), 24),
+    ifWorks: limitWords(firstSentence(guide.whatShouldHappen), 30),
     ifNot,
     escalationTarget: escalationTarget(answer.whenToEscalate),
   };
