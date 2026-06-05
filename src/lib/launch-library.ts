@@ -6141,7 +6141,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Provider not enabled: scheduling build.",
       "Eligibility block: resolve flag (forms, balance) then retry.",
     ],
-    keywords: k("portal scheduling", "self schedule", "can't book on portal", "mychart scheduling", "patient can't schedule", "portal appointment", "scheduling unavailable"),
+    keywords: k("portal scheduling", "online scheduling", "online scheduling visit type", "visit type not showing", "visit type missing portal", "self schedule", "self scheduling", "can't book on portal", "cant book portal", "mychart scheduling", "patient can't schedule", "patient cant schedule", "portal appointment", "scheduling unavailable", "no appointments online"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
