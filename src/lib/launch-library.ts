@@ -5628,43 +5628,45 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
   },
   {
     id: "ll_p12_portal_message_or_result_missing",
-    title: "Patient says a message or result isn't showing in their portal",
+    title: "Patient can't see a result or message in their portal",
     type: "playbook",
-    summary: "A patient is looking for a message or a test result in the portal and can't find it — it may not be released yet, or they're in the wrong account.",
-    roles: k("front desk", "clinic support", "nurse"),
-    domains: k("patient portal", "results", "messaging"),
+    summary: "A patient or proxy says a result or message isn't showing in the portal — usually a release rule, timing window, or wrong account, not a lost result.",
+    roles: k("front desk", "clinic support", "nurse", "patient support"),
+    domains: k("patient portal", "results", "messaging", "proxy"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
     urgency: 2,
     escalation: 2,
     vendor_family: "epic",
     action: "review",
-    nav_trail: "Patient chart -> Results / messages area -> Release status -> Portal preview",
+    is_deep_flow: true,
+    nav_trail: "Patient chart -> Result or message -> Release status -> Release rule and timing -> Portal account / proxy check",
     first90: [
-      "Open the patient's chart and find the result or message they're asking about.",
-      "Check whether it's been released to the portal yet (some results have a delay).",
-      "Confirm the patient is logged into the right account, not a family member's.",
+      "Open the result or message in the chart and check the release status — released, pending, or held.",
+      "Check the release rule and timing window for this result type — many results hold for a short provider-review window by design.",
+      "Confirm the patient is logged into their own portal account, not a proxy account for a child or spouse, and that the proxy has the right access level.",
     ],
     whatToSay: [
-      "'Some results take a little time to release to the portal — let me check the status here.'",
-      "'Make sure you're in your own account, not your child's or spouse's, when you look.'",
+      "'Most of the time the result is on a short hold by design, or you're looking at the wrong account — let me check the status here before we call it missing.'",
+      "'If you're a caregiver, make sure you've switched into the right person's account inside the portal.'",
     ],
     whatToCheck: [
-      "The release status of the result or message (released, pending, or held).",
-      "Whether the patient might be looking at a proxy account by mistake.",
-      "Whether the provider has placed a hold on the result for a clinical reason.",
+      "Release status of the result or message (released to patient, released to provider only, held, or pending).",
+      "Release rule and timing window for that result type, and whether a clinical hold is in place.",
+      "Whether the patient is in their own account vs a proxy account, and whether the proxy access level shows results.",
     ],
-    whenToEscalate: "If a released result is genuinely missing from the portal, or a clinical hold needs to be released, send it to the patient portal support team for system checks and to the provider for clinical holds.",
+    whenToEscalate: "If the result is released, the timing window has passed, the patient is in the right account with the right access level, and it still isn't visible, send it to the patient portal support team with the result type, release timestamp, and account context. Route clinical holds to the ordering provider.",
     walkthrough: [
-      "Find the result or message in the chart.",
-      "Check release status and proxy account.",
-      "Route portal team or provider as needed.",
+      "Check release status in the chart.",
+      "Check release rule, timing window, and clinical holds.",
+      "Confirm account and proxy access level.",
+      "Escalate to portal support or ordering provider.",
     ],
     ifThatFails: [
-      "Result on hold: provider releases.",
-      "Truly missing from portal: patient portal support.",
-      "Wrong account: walk patient through correct login.",
+      "Still held: ordering provider to release or explain.",
+      "Wrong account or proxy level: walk patient through the correct login and access.",
+      "Released and timed out but still missing: patient portal support team.",
     ],
-    keywords: k("portal result missing", "mychart result missing", "result not in portal", "message not in portal", "portal message missing", "mychart message missing", "result delay portal", "result release portal", "patient can't see result", "patient cant see result"),
+    keywords: k("portal result missing", "portal result not visible", "result not visible in portal", "patient can't see result in portal", "patient cant see result in portal", "patient cannot see result", "mychart result missing", "result not in portal", "message not in portal", "portal message missing", "mychart message missing", "result delay portal", "result release portal", "proxy can't see result", "caregiver can't see result", "result on hold portal", "patient cant see lab", "patient cannot see lab result"),
     related_ids: ["p20", "c14", "v16"],
     sanitized_approved: true,
     status: "published",
@@ -5840,7 +5842,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Peer has it: role/template mismatch — access team.",
       "Wrong department: switch login department.",
     ],
-    keywords: k("missing tab", "missing activity", "missing report", "tab not showing", "activity not showing", "report not showing", "can't find", "where is the tab", "hidden activity", "customize view"),
+    keywords: k("missing tab", "missing activity", "missing report", "activity tab", "provider cannot see activity", "provider cant see activity", "provider can not see activity", "cannot see activity tab", "cant see tab", "tab not showing", "activity not showing", "report not showing", "can't find tab", "where is the tab", "hidden activity", "customize view", "activity missing", "tab missing", "report missing"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
@@ -5926,7 +5928,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Wrong default: fix in personal profile.",
       "Still wrong after switch: log out and back in.",
     ],
-    keywords: k("wrong department", "wrong context", "wrong clinic", "login context", "change context", "department switch", "logged in wrong place"),
+    keywords: k("wrong department", "wrong department context", "wrong login department", "logged in wrong department", "wrong context", "wrong clinic", "login context", "change context", "department switch", "logged in wrong place", "wrong location context"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
@@ -6099,7 +6101,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Age-based rules unclear: portal support team.",
       "Activation email not received: resend; if still failing, portal support.",
     ],
-    keywords: k("portal proxy", "proxy access", "family access", "parent access", "caregiver access", "mychart proxy", "patient portal proxy", "share access", "minor portal access"),
+    keywords: k("portal proxy", "proxy access", "proxy cannot see", "proxy cant see portal", "proxy can not see portal", "proxy cannot see portal information", "caregiver cannot see patient portal", "caregiver cant see portal", "family access", "parent access", "caregiver access", "mychart proxy", "patient portal proxy", "share access", "minor portal access", "spouse portal access"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
@@ -6141,7 +6143,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Provider not enabled: scheduling build.",
       "Eligibility block: resolve flag (forms, balance) then retry.",
     ],
-    keywords: k("portal scheduling", "self schedule", "can't book on portal", "mychart scheduling", "patient can't schedule", "portal appointment", "scheduling unavailable"),
+    keywords: k("portal scheduling", "online scheduling", "online scheduling visit type", "visit type not showing", "visit type missing portal", "self schedule", "self scheduling", "can't book on portal", "cant book portal", "mychart scheduling", "patient can't schedule", "patient cant schedule", "portal appointment", "scheduling unavailable", "no appointments online"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
@@ -6184,7 +6186,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Unmonitored pool: assign coverage now, fix rule next.",
       "User sent to wrong place: educate and update guidance.",
     ],
-    keywords: k("portal message routing", "mychart message wrong place", "portal message lost", "portal message no answer", "patient message routing", "in basket portal message"),
+    keywords: k("portal message routing", "portal message routed wrong team", "portal message wrong team", "portal message wrong place", "mychart message wrong place", "portal message lost", "portal message no answer", "patient message routing", "in basket portal message", "patient message went to wrong team"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
@@ -6228,7 +6230,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Wrong pool: fix routing in build.",
       "Truly missing: results routing team.",
     ],
-    keywords: k("results not showing", "result missing", "labs not in chart", "imaging not in chart", "patient can't see result", "portal result missing", "where is my result"),
+    keywords: k("results not in chart", "result missing from chart", "labs not in chart", "imaging not in chart", "result not in inbox", "result not in in basket", "result folder empty", "lab result not routed", "imaging not routed"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
@@ -6270,7 +6272,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Wrong visit type: switch to the correct visit type.",
       "Peer has it: copy their personal layout.",
     ],
-    keywords: k("eye exam section missing", "slit lamp missing", "refraction missing", "iop field missing", "ophthalmology template missing", "optometry template missing", "specialty exam form missing"),
+    keywords: k("eye exam section missing", "eye exam field missing", "eye exam layout missing", "slit lamp missing", "refraction missing", "iop field missing", "ophthalmology template missing", "optometry template missing", "specialty exam form missing", "ophthalmology section missing", "eye care section missing"),
     related_ids: ["p25", "c19", "v21"],
     sanitized_approved: true,
     status: "published",
@@ -6313,7 +6315,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Wrong category: re-classify with imaging team.",
       "Won't display: eye-care imaging team.",
     ],
-    keywords: k("imaging not showing", "oct not in view", "visual field not in view", "eye image wrong tab", "eye imaging filtered", "eye media missing view", "ophthalmology imaging view"),
+    keywords: k("imaging not showing", "imaging wrong view", "eye image not showing in expected view", "image not showing in expected view", "eye care image not showing", "oct not in view", "visual field not in view", "eye image wrong tab", "eye imaging filtered", "eye media missing view", "ophthalmology imaging view", "fundus image missing view"),
     related_ids: ["p25", "c19", "v21"],
     sanitized_approved: true,
     status: "published",
@@ -6555,8 +6557,57 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return 30;
   }
+  if (
+    entry.id === "ll_p12r2_missing_activity_or_tab" &&
+    /\b(missing\s+(activity|tab|report)|(activity|tab|report)\s+(is\s+)?missing|(activity|tab|report)\s+not\s+showing|cannot?\s+see\s+(the\s+)?(activity|tab|report)|can'?t\s+see\s+(the\s+)?(activity|tab|report)|provider\s+can(not|'?t)\s+see\s+activity)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_wrong_department_context" &&
+    /\b(wrong\s+department(\s+context)?|wrong\s+login\s+department|logged\s+in(\s+to)?\s+wrong\s+department|wrong\s+clinic\s+context|wrong\s+login\s+context)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_portal_proxy_access" &&
+    /\b(proxy\s+can(not|'?t)\s+see(\s+portal)?|caregiver\s+can(not|'?t)\s+see(\s+patient)?\s+portal|proxy\s+access\s+missing|family\s+member\s+can(not|'?t)\s+see\s+portal)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_portal_scheduling_unavailable" &&
+    /\b(online\s+scheduling\s+visit\s+type|visit\s+type\s+not\s+showing(\s+online)?|portal\s+visit\s+type\s+missing|self[- ]?schedule\s+visit\s+type|no\s+visit\s+types\s+online)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_portal_message_routing" &&
+    /\b(portal\s+message\s+(routed|went)\s+to\s+wrong\s+team|portal\s+message\s+wrong\s+(team|place|pool)|patient\s+message\s+wrong\s+team|mychart\s+message\s+wrong\s+team)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12_portal_message_or_result_missing" &&
+    /\b(patient\s+can(not|'?t)\s+see\s+(a\s+)?result(\s+in\s+portal)?|result\s+not\s+visible\s+in\s+portal|portal\s+result\s+(missing|not\s+visible)|proxy\s+can(not|'?t)\s+see\s+result|result\s+release\s+rule|result\s+held\s+for\s+release)\b/.test(queryText)
+  ) {
+    return 35;
+  }
+  if (
+    entry.id === "ll_p12r2_eye_exam_section_missing" &&
+    /\b(eye\s+exam\s+(section|field|layout)\s+missing|slit\s+lamp\s+missing|refraction\s+missing|iop\s+field\s+missing|ophthalmology\s+section\s+missing)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_eye_imaging_wrong_view" &&
+    /\b(eye[- ]?care\s+(image|imaging)\s+(not\s+showing|wrong\s+view)|image\s+not\s+showing\s+in\s+expected\s+view|imaging\s+wrong\s+view|eye\s+imaging\s+filtered|oct\s+not\s+in\s+view)\b/.test(queryText)
+  ) {
+    return 30;
+  }
   return 0;
 }
+
 
 function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
   const queryText = query.toLowerCase();
