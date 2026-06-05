@@ -2466,7 +2466,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_sbo_payment_plan_or_self_pay_followup",
     title: "Payment plan or self-pay follow-up is unclear",
     type: "playbook",
-    summary: "Payment plan questions need guarantor/account context, plan status, follow-up queue, and policy owner before changes are promised.",
+    summary: "A caller is asking about a payment plan or self-pay follow-up — check the plan status before promising any change.",
     roles: k("customer service", "self-pay", "revenue cycle"),
     domains: k("sbo", "payment plan", "self-pay"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
