@@ -2639,7 +2639,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_provider_inbasket_result_or_refill_followup",
     title: "Provider In Basket result or refill follow-up is unclear",
     type: "playbook",
-    summary: "Result, refill, and follow-up messages need owner, task type, action button, documentation status, and callback path.",
+    summary: "A result, refill, or follow-up message is unclear — open it and find the actual action it needs before marking it done.",
     roles: k("provider", "clinic support", "nurse"),
     domains: k("in basket", "results", "refills"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
