@@ -2223,15 +2223,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Identify the workqueue or owner before changing anything.",
     ],
     whatToSay: [
-      "'Let's name the account status before we troubleshoot the bill.'",
-      "'I am checking whether this is DNB, billed, closed, or owner-routed.'",
+      "'Let me name the account status before we troubleshoot the bill.'",
+      "'I'm checking whether this is held from billing, already billed, or closed — they each have a different next step.'",
     ],
     whatToCheck: [
-      "Account status, discharge/billing state, DNB reason, workqueue, owner, and last action.",
-      "Whether the issue is one account or a repeated queue pattern.",
-      "Whether documentation, coding, charge, coverage, or claim state is the blocker.",
+      "The current account status (open, held from billing, billed, or closed) and the reason it's in that state.",
+      "Whether one account is affected, or the same problem is stacking up in a work queue.",
+      "Whether the blocker is documentation, coding, a charge, coverage, or the claim itself.",
     ],
-    whenToEscalate: "If the account status or owner is unclear, escalate to hospital billing/revenue owner with status, DNB reason, queue, and callback.",
+    whenToEscalate: "If the status or who owns the account isn't clear, send it to the hospital billing lead with the status, the hold reason, and the work queue name.",
     walkthrough: [
       "Open the hospital account.",
       "Read status and DNB/billing reason.",
