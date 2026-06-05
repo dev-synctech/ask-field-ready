@@ -2963,15 +2963,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Send one controlled reprint only after verifying printer.",
     ],
     whatToSay: [
-      "'Before we reprint, I am checking the prescription printer route.'",
-      "'We do one controlled print so we do not create duplicates.'",
+      "'Before we reprint, let me make sure it's going to the prescription printer this time.'",
+      "'We'll print it once so we don't end up with two scripts floating around.'",
     ],
     whatToCheck: [
-      "Prescription/order context, print button/menu, selected printer, printer status, output location, and duplicate-print risk.",
-      "Whether the issue is wrong printer, missing printer, offline printer, permission, or prescription status.",
-      "Whether local policy requires pharmacy/provider owner before reprinting.",
+      "Which printer is selected in the print menu, and whether it's the approved prescription printer.",
+      "Whether the printer is online, offline, missing from the list, or out of paper.",
+      "Whether a copy already printed somewhere else — we don't want duplicates of a controlled script.",
     ],
-    whenToEscalate: "If the approved prescription printer is missing/offline, duplicates may exist, or medication workflow is blocked, escalate to device/pharmacy/provider support with printer and status.",
+    whenToEscalate: "If the prescription printer is missing or offline, a duplicate may already exist, or the medication can't be sent, send it to device support with the printer name and what you saw.",
     walkthrough: [
       "Open prescription print action.",
       "Verify printer route/status.",
