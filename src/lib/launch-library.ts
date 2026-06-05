@@ -2699,15 +2699,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Resolve prompts before the provider signs.",
     ],
     whatToSay: [
-      "'Let's resolve the placeholder before this note gets signed.'",
-      "'If the tool is broken for everyone, that is a content/build owner issue.'",
+      "'Let's fill in the leftover prompts before this note gets signed.'",
+      "'If the tool is blank for everyone, that's a template problem and we'll route it.'",
     ],
     whatToCheck: [
-      "Note type, encounter, SmartTool type, unresolved placeholder, required prompt, refresh behavior, and sign status.",
-      "Whether the issue is one personal tool, one shared tool, or a note-template build issue.",
-      "Whether local policy allows manual text or requires content-owner correction.",
+      "What's still unfilled in the note (stars, brackets, or a blank prompt).",
+      "Whether the tool belongs to you, is shared with the team, or is part of the note template.",
+      "Whether one person sees the problem or everyone using that tool does.",
     ],
-    whenToEscalate: "If a shared SmartTool fails, required prompt will not resolve, or the note cannot sign, escalate to clinical documentation/content owner with tool name, note type, and callback.",
+    whenToEscalate: "If a shared tool is broken, a required prompt won't fill in, or the note can't be signed, send it to documentation support with the tool name and the note type.",
     walkthrough: [
       "Find unresolved placeholder.",
       "Confirm SmartTool type and prompt.",
