@@ -2859,7 +2859,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_surgical_workflow_case_ready_blocked",
     title: "Surgical workflow is not ready or case status is blocked",
     type: "playbook",
-    summary: "Surgical workflow questions need case status, required documentation, orders, consent, and owner before moving the case forward.",
+    summary: "A surgical case will not move to ready — usually a missing document, order, or consent is blocking it.",
     roles: k("or support", "provider", "scheduler", "periop support"),
     domains: k("surgery", "periop", "case status"),
     phases: k("cutover day 0", "stabilization week 1"),
