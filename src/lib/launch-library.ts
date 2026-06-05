@@ -2294,7 +2294,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_claim_edit_workqueue_owner",
     title: "Claim edit is in the wrong owner lane",
     type: "playbook",
-    summary: "Claim edit questions need the edit code, responsible owner, workqueue, and retest path before anyone fixes unrelated errors.",
+    summary: "A claim is sitting in an edit work queue and we need to know which exact error to fix and who owns it.",
     roles: k("biller", "claims rep", "revenue cycle"),
     domains: k("claims", "workqueue", "edits"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
