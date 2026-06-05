@@ -396,6 +396,7 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
     "account activity", "communication workflow", "billing communication",
     "beaker", "specimen", "accession", "lab label",
     "radiant", "radiology", "imaging", "protocol", "exam status",
+    "radiant protocol", "ready for exam", "exam not ready", "modality queue",
     "anesthesia", "crna", "case record", "case event", "anesthesia macro",
     "diagnosis required", "diagnosis needed", "indication required", "link diagnosis",
     "unsigned order", "pending order", "initiated order", "order status",
@@ -404,13 +405,23 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
     "allergy alert", "allergy warning", "reaction field", "adverse reaction",
     "result not showing", "results not showing", "acknowledge result", "result acknowledgement",
     "wrong pool", "message pool", "proxy inbox", "delegate inbox", "message routing",
+    "provider inbasket", "provider in basket", "inbasket overflowing", "in basket overflowing",
+    "message folder filter", "pool view", "proxy view", "delegate view",
+    "inbasket result", "in basket result", "refill message", "done button missing",
     "note won't sign", "note wont sign", "required field", "unsigned note",
     "addendum", "signed note", "late entry", "note correction",
+    "copy forward", "copy-forward", "copied forward", "refresh note", "stale note data",
+    "old assessment in note", "imported data wrong",
     "favorite order", "favorite orders", "personal list", "shortcut missing",
     "provider relationship", "location filter", "date filter", "list refresh",
+    "clinical review", "provider clinical review", "inpatient clinical review", "patient summary missing",
     "signout", "sign out", "provider handoff", "team handoff",
     "case status", "periop status", "surgery case", "or case", "case board",
+    "surgical workflow", "case not ready", "case readiness", "preop not ready", "procedure readiness",
     "procedure macro", "macro not applying", "macro missing", "macro not firing",
+    "smarttools", "smart tools", "placeholder not resolving", "unresolved placeholder",
+    "smartlink blank", "smartlist prompt",
+    "smartset section", "smartset unchecked", "smartset hidden section", "order missing from smartset",
     "discharge blocked", "cannot discharge", "departure blocked", "patient cannot leave",
     "transfer stuck", "transport task", "patient movement", "receiving unit", "sending unit",
     "workqueue", "work queue", "report filter", "report missing", "wrong count",
@@ -428,6 +439,7 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
     "avs", "after visit summary", "patient instructions", "summary not generating",
     "case management", "discharge planning", "placement status", "facility placement",
     "eprescribe", "e-prescribe", "pharmacy send failed", "prescription not sent",
+    "print prescription", "prescription printer", "rx printer", "troy printer", "print rx",
     "appointment not showing", "appointment missing", "schedule missing appointment",
     "slot unavailable", "no slots", "schedule template", "template locked", "overbook",
     "order not available", "order missing", "order search empty", "encounter type order",
@@ -475,12 +487,12 @@ function parseAction(text: string): AskAction {
   if (/\b(lispro|humalog|drip row|injection row|wrong row|wrong flowsheet|modify|edit|change|correction|corrected|addendum|amend|late entry|signed note correction|note correction)\b/.test(text)) return "modify";
   if (/\b(smartset|smart set|order set|orderset|powerplan|place order|place an order|favorite orders|favorite order|diagnosis required|diagnosis needed|indication required|associate diagnosis|link diagnosis|order missing|order not available|order search empty)\b/.test(text)) return "place";
   if (/\b(schedule|scheduling|book|booking|appointment|case request|procedure code|preference list|doctor codes|provider codes|slot|slots|template|overbook|referral scheduling)\b/.test(text)) return "schedule";
-  if (/\b(smartphrase|smart phrase|smarttext|smart text|smartlist|smart list|smartlink|smart link|note template|note type|dynamic documentation|dyn doc|ed discharge|discharge paperwork|discharge instructions|handoff|signout|sign out|therapy note|therapy eval|pt note|ot note|behavioral health note|safety assessment|fetal monitoring|fetalink|delivery event|anesthesia|crna|macro|case record|procedure macro|procedure template)\b/.test(text)) return "document";
+  if (/\b(smarttools|smart tools|smarttool|smart tool|smartphrase|smart phrase|smarttext|smart text|smartlist|smart list|smartlink|smart link|placeholder|prompt|copy forward|copy-forward|copied forward|refresh note|note template|note type|dynamic documentation|dyn doc|ed discharge|discharge paperwork|discharge instructions|handoff|signout|sign out|therapy note|therapy eval|pt note|ot note|behavioral health note|safety assessment|fetal monitoring|fetalink|delivery event|anesthesia|crna|macro|case record|procedure macro|procedure template)\b/.test(text)) return "document";
   if (/\b(document|chart|flowsheet|flow sheet|adl|mobility|ambulat|wheelchair|note|wrong time column|collapsed row|backload|back loading|downtime backload)\b/.test(text)) return "document";
   if (/\b(place new|new order|place order|place an order|put in order|put in an order|enter order|enter an order|order entry|order composer)\b/.test(text)) return "place";
-  if (/\b(route|routing|queue|in basket|inbasket|message|wrong pool|pool message|proxy inbox|delegate inbox)\b/.test(text)) return "route";
+  if (/\b(route|routing|queue|in basket|inbasket|message|wrong pool|pool message|proxy inbox|delegate inbox|pool view|proxy view|delegate view|refill message|result message|follow up message|follow-up message)\b/.test(text)) return "route";
   if (/\b(reconcile|reconciliation|med rec|home med|home meds|medication history)\b/.test(text)) return "reconcile";
-  if (/\b(patient list|worklist|workqueue|work queue|report|reports|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|billing|hospital billing|revenue cycle|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|charge|claim edit|claim error|clearinghouse|external status|late charge|split claim|har status|dnb|discharged not billed|stop bill|account status|guarantor|statement inquiry|payment plan|self-pay|self pay|bad debt|filing order|term coverage|delete coverage|account activity|billing communication|authorization|auth status|auth not ready|referral|coverage|insurance|payer|beaker|specimen|accession|lab label|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|pharmacy verification|barcode|badge reader|scanner not working|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked|case management|discharge planning|placement status|eprescribe|e-prescribe|prescription|escalation packet|command center ticket|support ticket)\b/.test(text)) return "review";
+  if (/\b(patient list|worklist|workqueue|work queue|report|reports|clinical review|chart review|patient summary|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|billing|hospital billing|revenue cycle|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|charge|claim edit|claim error|clearinghouse|external status|late charge|split claim|har status|dnb|discharged not billed|stop bill|account status|guarantor|statement inquiry|payment plan|self-pay|self pay|bad debt|filing order|term coverage|delete coverage|account activity|billing communication|authorization|auth status|auth not ready|referral|coverage|insurance|payer|beaker|specimen|accession|lab label|radiant|radiology|imaging|protocol|exam status|ready for exam|modality queue|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|pharmacy verification|barcode|badge reader|scanner not working|case status|periop status|surgery case|surgical workflow|case readiness|case not ready|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked|case management|discharge planning|placement status|eprescribe|e-prescribe|prescription|print prescription|rx printer|prescription printer|escalation packet|command center ticket|support ticket)\b/.test(text)) return "review";
   if (/\b(review|verify|check)\b/.test(text)) return "review";
   return "unknown";
 }
@@ -495,9 +507,9 @@ function shouldGoDirect(query: string, slots: ParsedSlots) {
   if (slots.action === "place" && /\b(diagnosis|indication|favorite|order|smartset|powerplan)\b/.test(text)) return true;
   if (slots.action === "discontinue" && /\b(order|duplicate|cancel|stop|remove)\b/.test(text)) return true;
   if (slots.action === "reconcile" && /\b(home med|home meds|med rec|medication)\b/.test(text)) return true;
-  if (slots.action === "route" && /\b(in basket|inbasket|message|pool|proxy|delegate)\b/.test(text)) return true;
-  if (slots.action === "document" && /\b(note|documentation|document|template|required field|therapy|behavioral health|safety assessment|fetal|fetalink|delivery event|flowsheet|flow sheet|time column|backload|downtime)\b/.test(text)) return true;
-  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement|workqueue|work queue|report|billing|hospital billing|revenue|claim|account|guarantor|statement|payment plan|self-pay|self pay|dnb|har status|stop bill|clearinghouse|late charge|split claim|filing order|term coverage|delete coverage|charge|authorization|auth|referral|coverage|insurance|specimen|lab label|radiology|imaging|pharmacy verification|barcode|scanner|badge reader|case management|placement|eprescribe|prescription|escalation|command center|ticket)\b/.test(text)) return true;
+  if (slots.action === "route" && /\b(in basket|inbasket|message|pool|proxy|delegate|result message|refill message|follow up message|follow-up message)\b/.test(text)) return true;
+  if (slots.action === "document" && /\b(note|documentation|document|template|required field|therapy|behavioral health|safety assessment|fetal|fetalink|delivery event|flowsheet|flow sheet|time column|backload|downtime|smarttools|smart tools|placeholder|prompt|copy forward|copy-forward|refresh note|macro)\b/.test(text)) return true;
+  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement|workqueue|work queue|report|clinical review|patient summary|billing|hospital billing|revenue|claim|account|guarantor|statement|payment plan|self-pay|self pay|dnb|har status|stop bill|clearinghouse|late charge|split claim|filing order|term coverage|delete coverage|charge|authorization|auth|referral|coverage|insurance|specimen|lab label|radiology|imaging|radiant|ready for exam|modality queue|pharmacy verification|barcode|scanner|badge reader|case management|placement|surgical workflow|case readiness|case not ready|eprescribe|prescription|print prescription|rx printer|prescription printer|escalation|command center|ticket)\b/.test(text)) return true;
   return false;
 }
 
@@ -509,6 +521,14 @@ function actionOptionsFor(query: string): ActionOption[] {
       { action: "sign", label: "Sign / cosign", query: "The provider cannot sign an order. What do I check first?" },
       { action: "modify", label: "Modify existing", query: "An order is not showing or not populating. What do I check first?" },
       { action: "discontinue", label: "Discontinue", query: "How do I handle an order that needs to be discontinued or removed?" },
+    ];
+  }
+  if (/\b(provider|resident|fellow|inpatient provider|provider workflow|provider efficiency)\b/.test(text)) {
+    return [
+      { action: "place", label: "Orders", query: "Provider cannot find or sign an order. What do I check first?" },
+      { action: "document", label: "Notes", query: "Provider note copy forward or SmartTool prompt looks wrong. What do I check first?" },
+      { action: "route", label: "In Basket", query: "Provider In Basket is overloaded or filtered wrong. What do I check first?" },
+      { action: "review", label: "Clinical review", query: "Inpatient clinical review data is hidden or incomplete. What do I check first?" },
     ];
   }
   if (/\b(schedule|scheduling|cadence|appointment|booking|procedure|codes?)\b/.test(text)) {
