@@ -2096,15 +2096,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Confirm owner before refresh or resubmit.",
     ],
     whatToSay: [
-      "'Refresh and resubmit are not the same move. Let's confirm the status first.'",
-      "'I will capture the hold or edit reason before routing this.'",
+      "'Refresh, resubmit, and hold are three different actions. Let me check the status before we pick one.'",
+      "'I'll write down why it was held or edited before we do anything to it.'",
     ],
     whatToCheck: [
-      "Current claim status, edit/hold reason, change source, payer lane, and review owner.",
-      "Whether new documentation, coding, charge, or coverage data changed.",
-      "Whether local workflow calls for refresh, resubmit, hold, or route.",
+      "The current claim status, the hold or edit reason, and when it last changed.",
+      "Whether new documentation, coding, charges, or coverage changed since the claim went out.",
+      "What your workflow calls for: refresh, resubmit, hold, or send to someone else.",
     ],
-    whenToEscalate: "If the right claim action is unclear, or the same edit repeats after one approved attempt, escalate to claims/revenue owner with status, edit reason, and change source.",
+    whenToEscalate: "If you can't tell which action is right, or the same edit keeps coming back after one approved try, send it to the claims team lead with the status, the edit reason, and what changed.",
     walkthrough: [
       "Confirm what changed.",
       "Check status, edit, and hold reason.",
