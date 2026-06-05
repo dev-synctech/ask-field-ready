@@ -2787,15 +2787,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Open detail before calling data missing.",
     ],
     whatToSay: [
-      "'Clinical review is usually view-driven, so I am checking filters first.'",
-      "'If the source data is not final, the summary may not show it yet.'",
+      "'Most of the time it's a filter or a date range. Let me check that first.'",
+      "'If the lab or vital isn't final yet, the summary won't show it.'",
     ],
     whatToCheck: [
-      "List name, selected patient, encounter, date range, filters, section visibility, result/vital/note status, and owner.",
-      "Whether data is hidden, not resulted, preliminary, unsigned, or outside the current date range.",
-      "Whether one patient, one list, or multiple providers are affected.",
+      "The patient list, the selected patient, the date range, and any active filters.",
+      "Whether the data is just hidden, or is preliminary, unsigned, or not yet resulted.",
+      "Whether one patient is affected, or every provider on the unit sees the same gap.",
     ],
-    whenToEscalate: "If final/source data is missing for multiple users or critical review is blocked, escalate to clinical review/provider support with list, section, filter, and callback.",
+    whenToEscalate: "If final data is missing for more than one user, or a rounding decision is blocked, send it to provider support with the list name, the section, and the filters in use.",
     walkthrough: [
       "Open patient list and selected patient.",
       "Check clinical review filters/date.",
