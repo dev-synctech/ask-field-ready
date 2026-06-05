@@ -2919,15 +2919,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Route modality owner if timing is blocked.",
     ],
     whatToSay: [
-      "'Let's find whether this is order, protocol, prep, or transport.'",
-      "'I will capture the exact imaging status before escalating.'",
+      "'Let's figure out which step is stuck — the order, the protocol, patient prep, or transport.'",
+      "'I'll get the exact status before we call the imaging team.'",
     ],
     whatToCheck: [
-      "Order status, protocol status, modality, exam status, patient prep, transport, location, owner, and callback.",
-      "Whether the study is ordered, scheduled, protocolled, ready, delayed, completed, or waiting on prep.",
-      "Whether one patient/study or a modality queue is affected.",
+      "Order status, protocol status, exam status, and modality (CT, MRI, X-ray, ultrasound).",
+      "Whether patient prep is done and transport is on the way.",
+      "Whether one exam is stuck, or the whole modality queue is backed up.",
     ],
-    whenToEscalate: "If exam timing is blocked by protocol, prep, transport, or owner uncertainty, escalate to radiology/modality owner with status, location, and callback.",
+    whenToEscalate: "If the exam can't move because of protocol, prep, transport, or unclear ownership, send it to the imaging team with the exam status, the location, and a callback.",
     walkthrough: [
       "Open imaging order/exam detail.",
       "Check protocol and ready status.",
