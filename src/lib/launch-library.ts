@@ -1880,15 +1880,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Check favorites, recent, and available order sets.",
     ],
     whatToSay: [
-      "'Let's confirm context before we call it missing.'",
-      "'If it is not available for this role, we will route that cleanly.'",
+      "'Before we call it missing, let me make sure we're in the right visit type.'",
+      "'If it's just not available for this role, I'll get it routed cleanly.'",
     ],
     whatToCheck: [
-      "Encounter type, department/location, provider role, specialty, and diagnosis/order context.",
-      "Favorites/recent vs all available order set search.",
-      "Whether the same order set is missing for one user or the role/team.",
+      "The encounter type, department, provider role, and any diagnosis context that filters the list.",
+      "Whether you're looking at favorites and recent only, or the full search for all available order sets.",
+      "Whether only one provider can't find it, or no one on that role/team can.",
     ],
-    whenToEscalate: "If the order set is not available after context and search checks, escalate to order set/build owner with exact name, role, encounter, location, and urgency.",
+    whenToEscalate: "If the order set still doesn't appear after checking context and searching, send it to the order set team with the exact name, the role, the visit type, the location, and how urgent the order is.",
     walkthrough: [
       "In order entry - confirm encounter and role.",
       "Search exact name and approved synonym.",
