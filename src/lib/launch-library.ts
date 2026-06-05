@@ -4008,15 +4008,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Scan or route only through approved lane.",
     ],
     whatToSay: [
-      "'Let's confirm coverage context before adding or changing anything.'",
-      "'If the card image is missing, we attach it to the right encounter/account.'",
+      "'Let me confirm the right person and the right visit before we add or change coverage.'",
+      "'If the insurance card image is missing, I'll attach it to the correct visit.'",
     ],
     whatToCheck: [
-      "Identity context, encounter/account, coverage status, payer lane, card image, document type, and scan/upload path.",
-      "Whether coverage is missing, inactive, expired, duplicate, or only missing the card image.",
-      "Whether the question belongs to registration, billing, or document management.",
+      "That you're on the right patient and the right visit before anything else.",
+      "Whether coverage is just missing, inactive, expired, duplicate, or only missing the card image.",
+      "Whether this is a registration question, a billing question, or a document scanning question.",
     ],
-    whenToEscalate: "If coverage cannot be verified or card attachment risks the wrong account, escalate to registration/billing owner with account context and document type.",
+    whenToEscalate: "If you can't verify coverage, or attaching the card could land on the wrong account, send it to the registration lead with the visit, the account, and the document type.",
     walkthrough: [
       "Verify identity and encounter/account.",
       "Check coverage and card image.",
