@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { ArrowLeft, BarChart3, AlertTriangle, CheckCircle2, GitBranch } from "lucide-react";
+import { ArrowLeft, BarChart3, AlertTriangle, CheckCircle2, GitBranch, Eye } from "lucide-react";
 import { ITEMS, MODULES, type ContentType } from "@/lib/demo-data";
 import { useConversions, STATUS_LABEL, RISK_LABEL } from "@/lib/conversions-data";
+import { visualNeedsFromLibrary } from "@/lib/content-factory";
 import { Header } from "./_authenticated.learn";
 
 export const Route = createFileRoute("/_authenticated/admin_/coverage")({
@@ -19,6 +20,7 @@ function CoveragePage() {
     () => conversions.filter(c => c.status !== "published" && c.converted_items.length === 0),
     [conversions],
   );
+  const visualNeeds = useMemo(() => visualNeedsFromLibrary(12), []);
   const grid = useMemo(() => {
     return MODULES.map(m => {
       const counts = Object.fromEntries(
@@ -42,8 +44,9 @@ function CoveragePage() {
       </Link>
       <Header title="Coverage" subtitle="Where the Mizly library is strong, thin, or missing." />
 
-      <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
         <KPI label="Published total" value={totals.total} tone="primary" />
+        <KPI label="Visual needs" value={visualNeeds.length} tone="danger" />
         {TYPES.map(ty => (
           <KPI key={ty} label={ty} value={totals.byType[ty]} />
         ))}
@@ -118,6 +121,31 @@ function CoveragePage() {
       <div className="mt-6 rounded-2xl border border-border bg-card p-5 shadow-soft">
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="font-display font-semibold flex items-center gap-2">
+            <Eye className="size-4 text-primary" /> Visual coverage gaps
+          </div>
+          <Link to="/admin/visual-needs" className="text-xs text-primary hover:underline">Open visual queue →</Link>
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">
+          Ask can answer these workflows, but the library still needs Mizly-created screenshots, click paths, or short clips.
+        </p>
+        <ul className="mt-3 space-y-2">
+          {visualNeeds.slice(0, 8).map(need => (
+            <li key={need.id} className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-elevated px-3 py-2 text-sm">
+              <div className="min-w-0">
+                <div className="font-medium truncate">{need.workflowTitle}</div>
+                <div className="text-[11px] text-muted-foreground truncate">
+                  {need.kind} · {need.priority} priority · {need.suggestedOutput}
+                </div>
+              </div>
+              <Link to="/admin/visual-needs" className="text-xs text-primary hover:underline shrink-0">Plan →</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-border bg-card p-5 shadow-soft">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="font-display font-semibold flex items-center gap-2">
             <GitBranch className="size-4 text-primary" /> Source-ready gaps
           </div>
           <Link to="/admin/conversions" className="text-xs text-primary hover:underline">Open conversion queue →</Link>
@@ -146,8 +174,8 @@ function CoveragePage() {
   );
 }
 
-function KPI({ label, value, tone }: { label: string; value: number; tone?: "primary" }) {
-  const cls = tone === "primary" ? "text-primary" : "text-foreground";
+function KPI({ label, value, tone }: { label: string; value: number; tone?: "primary" | "danger" }) {
+  const cls = tone === "primary" ? "text-primary" : tone === "danger" ? "text-destructive" : "text-foreground";
   return (
     <div className="rounded-2xl border border-border bg-card p-3 shadow-soft">
       <div className="text-[10px] uppercase tracking-wider text-muted-foreground capitalize">{label}</div>
