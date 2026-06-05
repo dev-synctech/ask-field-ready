@@ -30,12 +30,14 @@ import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedScenariosIdRouteImport } from './routes/_authenticated.scenarios_.$id'
 import { Route as AuthenticatedPlaybooksIdRouteImport } from './routes/_authenticated.playbooks_.$id'
 import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated.lessons_.$id'
+import { Route as AuthenticatedAdminVisualNeedsRouteImport } from './routes/_authenticated.admin_.visual-needs'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated.admin_.users'
 import { Route as AuthenticatedAdminTaxonomyRouteImport } from './routes/_authenticated.admin_.taxonomy'
 import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authenticated.admin_.sources'
 import { Route as AuthenticatedAdminSourcePacksRouteImport } from './routes/_authenticated.admin_.source-packs'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated.admin_.feedback'
+import { Route as AuthenticatedAdminFactoryRouteImport } from './routes/_authenticated.admin_.factory'
 import { Route as AuthenticatedAdminCoverageRouteImport } from './routes/_authenticated.admin_.coverage'
 import { Route as AuthenticatedAdminConversionsRouteImport } from './routes/_authenticated.admin_.conversions'
 import { Route as AuthenticatedAdminSourcesIdRouteImport } from './routes/_authenticated.admin_.sources_.$id'
@@ -149,6 +151,12 @@ const AuthenticatedLessonsIdRoute = AuthenticatedLessonsIdRouteImport.update({
   path: '/lessons/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminVisualNeedsRoute =
+  AuthenticatedAdminVisualNeedsRouteImport.update({
+    id: '/admin_/visual-needs',
+    path: '/admin/visual-needs',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   id: '/admin_/users',
   path: '/admin/users',
@@ -182,6 +190,12 @@ const AuthenticatedAdminFeedbackRoute =
   AuthenticatedAdminFeedbackRouteImport.update({
     id: '/admin_/feedback',
     path: '/admin/feedback',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminFactoryRoute =
+  AuthenticatedAdminFactoryRouteImport.update({
+    id: '/admin_/factory',
+    path: '/admin/factory',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminCoverageRoute =
@@ -241,12 +255,14 @@ export interface FileRoutesByFullPath {
   '/checkout/return': typeof CheckoutReturnRoute
   '/admin/conversions': typeof AuthenticatedAdminConversionsRoute
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
+  '/admin/factory': typeof AuthenticatedAdminFactoryRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/admin/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
   '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
@@ -275,12 +291,14 @@ export interface FileRoutesByTo {
   '/checkout/return': typeof CheckoutReturnRoute
   '/admin/conversions': typeof AuthenticatedAdminConversionsRoute
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
+  '/admin/factory': typeof AuthenticatedAdminFactoryRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/admin/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
   '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
@@ -311,12 +329,14 @@ export interface FileRoutesById {
   '/checkout/return': typeof CheckoutReturnRoute
   '/_authenticated/admin_/conversions': typeof AuthenticatedAdminConversionsRoute
   '/_authenticated/admin_/coverage': typeof AuthenticatedAdminCoverageRoute
+  '/_authenticated/admin_/factory': typeof AuthenticatedAdminFactoryRoute
   '/_authenticated/admin_/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin_/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/admin_/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/_authenticated/admin_/sources': typeof AuthenticatedAdminSourcesRoute
   '/_authenticated/admin_/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/_authenticated/admin_/users': typeof AuthenticatedAdminUsersRoute
+  '/_authenticated/admin_/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
   '/_authenticated/lessons_/$id': typeof AuthenticatedLessonsIdRoute
   '/_authenticated/playbooks_/$id': typeof AuthenticatedPlaybooksIdRoute
   '/_authenticated/scenarios_/$id': typeof AuthenticatedScenariosIdRoute
@@ -347,12 +367,14 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/admin/conversions'
     | '/admin/coverage'
+    | '/admin/factory'
     | '/admin/feedback'
     | '/admin/questions'
     | '/admin/source-packs'
     | '/admin/sources'
     | '/admin/taxonomy'
     | '/admin/users'
+    | '/admin/visual-needs'
     | '/lessons/$id'
     | '/playbooks/$id'
     | '/scenarios/$id'
@@ -381,12 +403,14 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/admin/conversions'
     | '/admin/coverage'
+    | '/admin/factory'
     | '/admin/feedback'
     | '/admin/questions'
     | '/admin/source-packs'
     | '/admin/sources'
     | '/admin/taxonomy'
     | '/admin/users'
+    | '/admin/visual-needs'
     | '/lessons/$id'
     | '/playbooks/$id'
     | '/scenarios/$id'
@@ -416,12 +440,14 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/_authenticated/admin_/conversions'
     | '/_authenticated/admin_/coverage'
+    | '/_authenticated/admin_/factory'
     | '/_authenticated/admin_/feedback'
     | '/_authenticated/admin_/questions'
     | '/_authenticated/admin_/source-packs'
     | '/_authenticated/admin_/sources'
     | '/_authenticated/admin_/taxonomy'
     | '/_authenticated/admin_/users'
+    | '/_authenticated/admin_/visual-needs'
     | '/_authenticated/lessons_/$id'
     | '/_authenticated/playbooks_/$id'
     | '/_authenticated/scenarios_/$id'
@@ -592,6 +618,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLessonsIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/visual-needs': {
+      id: '/_authenticated/admin_/visual-needs'
+      path: '/admin/visual-needs'
+      fullPath: '/admin/visual-needs'
+      preLoaderRoute: typeof AuthenticatedAdminVisualNeedsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/users': {
       id: '/_authenticated/admin_/users'
       path: '/admin/users'
@@ -632,6 +665,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/feedback'
       fullPath: '/admin/feedback'
       preLoaderRoute: typeof AuthenticatedAdminFeedbackRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin_/factory': {
+      id: '/_authenticated/admin_/factory'
+      path: '/admin/factory'
+      fullPath: '/admin/factory'
+      preLoaderRoute: typeof AuthenticatedAdminFactoryRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin_/coverage': {
@@ -690,12 +730,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
   AuthenticatedAdminConversionsRoute: typeof AuthenticatedAdminConversionsRoute
   AuthenticatedAdminCoverageRoute: typeof AuthenticatedAdminCoverageRoute
+  AuthenticatedAdminFactoryRoute: typeof AuthenticatedAdminFactoryRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
   AuthenticatedAdminSourcePacksRoute: typeof AuthenticatedAdminSourcePacksRoute
   AuthenticatedAdminSourcesRoute: typeof AuthenticatedAdminSourcesRoute
   AuthenticatedAdminTaxonomyRoute: typeof AuthenticatedAdminTaxonomyRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
+  AuthenticatedAdminVisualNeedsRoute: typeof AuthenticatedAdminVisualNeedsRoute
   AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
   AuthenticatedPlaybooksIdRoute: typeof AuthenticatedPlaybooksIdRoute
   AuthenticatedScenariosIdRoute: typeof AuthenticatedScenariosIdRoute
@@ -716,12 +758,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
   AuthenticatedAdminConversionsRoute: AuthenticatedAdminConversionsRoute,
   AuthenticatedAdminCoverageRoute: AuthenticatedAdminCoverageRoute,
+  AuthenticatedAdminFactoryRoute: AuthenticatedAdminFactoryRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
   AuthenticatedAdminSourcePacksRoute: AuthenticatedAdminSourcePacksRoute,
   AuthenticatedAdminSourcesRoute: AuthenticatedAdminSourcesRoute,
   AuthenticatedAdminTaxonomyRoute: AuthenticatedAdminTaxonomyRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
+  AuthenticatedAdminVisualNeedsRoute: AuthenticatedAdminVisualNeedsRoute,
   AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
   AuthenticatedPlaybooksIdRoute: AuthenticatedPlaybooksIdRoute,
   AuthenticatedScenariosIdRoute: AuthenticatedScenariosIdRoute,

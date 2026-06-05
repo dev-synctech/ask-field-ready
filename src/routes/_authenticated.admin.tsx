@@ -233,6 +233,8 @@ function AdminPage() {
       </div>
 
       <div className="mt-6 grid sm:grid-cols-2 gap-2.5">
+        <AdminTile to="/admin/factory" icon={Edit3} title="Content factory" desc="Run intake, scan, rewrite, visual needs, review, and publish." />
+        <AdminTile to="/admin/visual-needs" icon={Eye} title="Visual needs" desc="Screenshots, click paths, and short videos Ask still needs." />
         <AdminTile to="/admin/source-packs" icon={FileArchive} title="Source packs" desc="Register full KB bundles and manage quarantined intake." />
         <AdminTile to="/admin/conversions" icon={GitBranch} title="Source conversion queue" desc="Sanitize and route raw sources into Mizly content." />
         <AdminTile to="/admin/feedback" icon={MessageSquare} title="Feedback" desc="Answers learners marked unhelpful or missing." />
