@@ -46,6 +46,7 @@ export interface LaunchEntry {
   is_deep_flow?: boolean;
   nav_trail?: string;
   visual_url?: string | null;
+  visual_callouts?: string[];
   // Structured answer payload
   first90: string[];
   whatToSay: string[];
@@ -3728,7 +3729,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Schedule -> Date/provider/resource filter -> Appointment status/view -> Refresh",
-    visual_url: null,
+    visual_url: "/visual-guides/schedule-appointment-missing.svg",
+    visual_callouts: [
+      "Confirm date, provider/resource, location, and schedule view.",
+      "Open filters and check appointment status.",
+      "Refresh once after clearing narrow filters.",
+      "Escalate with view, status, role, and callback if still missing.",
+    ],
     first90: [
       "Confirm the date, provider/resource, and location.",
       "Check appointment status and schedule view.",
@@ -3949,7 +3956,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "document",
     nav_trail: "Chart -> Flowsheets -> Group/section -> Row search/collapsed rows -> Time column -> File/save",
-    visual_url: null,
+    visual_url: "/visual-guides/flowsheet-row-time-column.svg",
+    visual_callouts: [
+      "Pick the correct flowsheet group.",
+      "Expand or search for the missing row.",
+      "Confirm the active time column before entry.",
+      "Verify the entry filed before leaving the screen.",
+    ],
     first90: [
       "Confirm the flowsheet group first.",
       "Expand collapsed sections or search row.",
@@ -3994,7 +4007,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "MAR -> Date/time filter -> Scheduled/PRN/held view -> Order details -> Verification/dispense status",
-    visual_url: null,
+    visual_url: "/visual-guides/mar-medication-filter.svg",
+    visual_callouts: [
+      "Check MAR date and time window.",
+      "Review Scheduled, PRN, Held, and filter views.",
+      "Confirm order status and due time.",
+      "Escalate unclear verification or due-now meds.",
+    ],
     first90: [
       "Confirm the order is active.",
       "Check MAR date/time and view filters.",
@@ -4038,7 +4057,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "scan",
     nav_trail: "Media/documents -> Document details -> Encounter/date/type -> Correction owner",
-    visual_url: null,
+    visual_url: "/visual-guides/document-wrong-encounter.svg",
+    visual_callouts: [
+      "Confirm document type first.",
+      "Compare encounter/date before saving or rescanning.",
+      "Check duplicate or wrong-attachment risk.",
+      "Route correction to document-management owner.",
+    ],
     first90: [
       "Stop before scanning another copy.",
       "Verify document type and encounter.",
@@ -4216,7 +4241,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "route",
     nav_trail: "Workqueue/report -> Queue name -> Owner/status/filter -> Route/reassign action -> Notes",
-    visual_url: null,
+    visual_url: "/visual-guides/workqueue-owner-routing.svg",
+    visual_callouts: [
+      "Confirm the exact queue name.",
+      "Check owner, status, and assignment rule.",
+      "Review filters before routing.",
+      "Use only the approved route/reassign action.",
+    ],
     first90: [
       "Confirm the exact queue name.",
       "Check owner, status, and filters.",
@@ -4349,7 +4380,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "cerner",
     action: "review",
     nav_trail: "Issue observed -> Scope/impact -> Checks tried -> Owner needed -> Callback/handoff",
-    visual_url: null,
+    visual_url: "/visual-guides/escalation-packet.svg",
+    visual_callouts: [
+      "Name scope: one user, role, team, or unit.",
+      "State impact and exact visible blocker.",
+      "List what was tried safely.",
+      "Send owner needed and callback without PHI.",
+    ],
     first90: [
       "Name scope and patient-care impact.",
       "Capture exact screen/status/error.",

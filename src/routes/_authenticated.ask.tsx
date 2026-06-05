@@ -843,7 +843,7 @@ function visualForAnswer(answer: AskAnswer): CompactVisual | null {
     return {
       url,
       title: answer.title,
-      callouts: anyAnswer.visual_callouts,
+      callouts: anyAnswer.visual_callouts ?? answer.sourceEntry?.visual_callouts,
     };
   }
   const screenshot = answer.visualAids.find(aid => aid.kind === "screenshot" && aid.href && !aid.href.startsWith("/videos"));
