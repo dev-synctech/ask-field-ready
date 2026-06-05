@@ -421,6 +421,21 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
     "avs", "after visit summary", "patient instructions", "summary not generating",
     "case management", "discharge planning", "placement status", "facility placement",
     "eprescribe", "e-prescribe", "pharmacy send failed", "prescription not sent",
+    "appointment not showing", "appointment missing", "schedule missing appointment",
+    "slot unavailable", "no slots", "schedule template", "template locked", "overbook",
+    "order not available", "order missing", "order search empty", "encounter type order",
+    "signed order locked", "change signed order", "modify signed order", "order locked",
+    "note area missing", "new note missing", "documentation sidebar", "collapsed sidebar",
+    "flowsheet row missing", "wrong time column", "charted wrong time", "collapsed row",
+    "med not showing on mar", "mar medication missing", "due med missing", "mar filter",
+    "scanned wrong encounter", "document attached wrong encounter", "duplicate scanned document",
+    "consent missing", "missing consent", "procedure consent", "signed consent missing",
+    "referral not ready", "auth not ready", "authorization not ready", "referral pending review",
+    "result routing", "result owner", "result in wrong queue", "can't acknowledge result",
+    "workqueue wrong owner", "work queue wrong owner", "assigned wrong owner", "reassign workqueue",
+    "scanner not working", "badge reader", "barcode reader", "scanner beeps but nothing",
+    "backload", "downtime backload", "system restored", "paper workflow recovery",
+    "escalation packet", "command center ticket", "ticket details", "support ticket",
   ];
   if (specificSignals.some(signal => text.includes(signal))) return true;
 
@@ -446,19 +461,19 @@ function parseVendor(text: string): VendorFamily {
 }
 
 function parseAction(text: string): AskAction {
-  if (/\b(scan|scanning|media manager|upload document|paper consent|consent)\b/.test(text)) return "scan";
+  if (/\b(scan|scanning|media manager|upload document|paper consent|consent|scanned wrong encounter|wrong encounter scan)\b/.test(text)) return "scan";
   if (/\b(co-?sign|cosign|attestation|attest|verbal order)\b/.test(text)) return "cosign";
   if (/\b(sign|signature|cannot sign|can't sign|wont sign|won't sign)\b/.test(text)) return "sign";
   if (/\b(discontinue|delete|remove|drop off|greyed out|grayed out|cancel order|duplicate order|stop order|dc order|d\/c order)\b/.test(text)) return "discontinue";
   if (/\b(lispro|humalog|drip row|injection row|wrong row|wrong flowsheet|modify|edit|change|correction|corrected|addendum|amend|late entry|signed note correction|note correction)\b/.test(text)) return "modify";
-  if (/\b(smartset|smart set|order set|orderset|powerplan|place order|place an order|favorite orders|favorite order|diagnosis required|diagnosis needed|indication required|associate diagnosis|link diagnosis)\b/.test(text)) return "place";
-  if (/\b(schedule|scheduling|book|booking|appointment|case request|procedure code|preference list|doctor codes|provider codes)\b/.test(text)) return "schedule";
+  if (/\b(smartset|smart set|order set|orderset|powerplan|place order|place an order|favorite orders|favorite order|diagnosis required|diagnosis needed|indication required|associate diagnosis|link diagnosis|order missing|order not available|order search empty)\b/.test(text)) return "place";
+  if (/\b(schedule|scheduling|book|booking|appointment|case request|procedure code|preference list|doctor codes|provider codes|slot|slots|template|overbook|referral scheduling)\b/.test(text)) return "schedule";
   if (/\b(smartphrase|smart phrase|smarttext|smart text|smartlist|smart list|smartlink|smart link|note template|note type|dynamic documentation|dyn doc|ed discharge|discharge paperwork|discharge instructions|handoff|signout|sign out|therapy note|therapy eval|pt note|ot note|behavioral health note|safety assessment|fetal monitoring|fetalink|delivery event|anesthesia|crna|macro|case record|procedure macro|procedure template)\b/.test(text)) return "document";
-  if (/\b(document|chart|flowsheet|flow sheet|adl|mobility|ambulat|wheelchair|note)\b/.test(text)) return "document";
+  if (/\b(document|chart|flowsheet|flow sheet|adl|mobility|ambulat|wheelchair|note|wrong time column|collapsed row|backload|back loading|downtime backload)\b/.test(text)) return "document";
   if (/\b(place new|new order|place order|place an order|put in order|put in an order|enter order|enter an order|order entry|order composer)\b/.test(text)) return "place";
   if (/\b(route|routing|queue|in basket|inbasket|message|wrong pool|pool message|proxy inbox|delegate inbox)\b/.test(text)) return "route";
   if (/\b(reconcile|reconciliation|med rec|home med|home meds|medication history)\b/.test(text)) return "reconcile";
-  if (/\b(patient list|worklist|workqueue|work queue|report|reports|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|charge|authorization|auth status|referral|coverage|insurance|payer|beaker|specimen|accession|lab label|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|pharmacy verification|barcode|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked|case management|discharge planning|placement status|eprescribe|e-prescribe|prescription)\b/.test(text)) return "review";
+  if (/\b(patient list|worklist|workqueue|work queue|report|reports|wrong chart|wrong patient|wrong encounter|patient context|recurring medication|recurring med|refill|renewal|claim attachment|refresh claim|resubmit claim|refresh or resubmit|detail bill|detailed bill|adjustment|approval queue|charge|authorization|auth status|auth not ready|referral|coverage|insurance|payer|beaker|specimen|accession|lab label|radiant|radiology|imaging|protocol|exam status|prearrival|pre-arrival|tracking board|launchpoint|allergy|reaction|result|results|pharmacy verification|barcode|badge reader|scanner not working|case status|periop status|surgery case|transport|transfer|patient movement|bed assignment|discharge blocked|cannot discharge|departure blocked|case management|discharge planning|placement status|eprescribe|e-prescribe|prescription|escalation packet|command center ticket|support ticket)\b/.test(text)) return "review";
   if (/\b(review|verify|check)\b/.test(text)) return "review";
   return "unknown";
 }
@@ -467,15 +482,15 @@ function shouldGoDirect(query: string, slots: ParsedSlots) {
   const text = query.toLowerCase();
   if (slots.vendor_family !== "unknown" && slots.action !== "unknown") return true;
   if (slots.action === "scan" && /\b(consent|chart|media manager|document|scan)\b/.test(text)) return true;
-  if (slots.action === "schedule" && /\b(procedure|preference|case request|codes?)\b/.test(text)) return true;
+  if (slots.action === "schedule" && /\b(procedure|preference|case request|codes?|appointment|slot|template|overbook|referral)\b/.test(text)) return true;
   if (slots.action === "modify" && /\b(lispro|drip row|wrong row|insulin|change context|department|location)\b/.test(text)) return true;
   if (slots.action === "sign" && /\b(order|note|required field|unsigned|pending|initiated)\b/.test(text)) return true;
   if (slots.action === "place" && /\b(diagnosis|indication|favorite|order|smartset|powerplan)\b/.test(text)) return true;
   if (slots.action === "discontinue" && /\b(order|duplicate|cancel|stop|remove)\b/.test(text)) return true;
   if (slots.action === "reconcile" && /\b(home med|home meds|med rec|medication)\b/.test(text)) return true;
   if (slots.action === "route" && /\b(in basket|inbasket|message|pool|proxy|delegate)\b/.test(text)) return true;
-  if (slots.action === "document" && /\b(note|documentation|document|template|required field|therapy|behavioral health|safety assessment|fetal|fetalink|delivery event)\b/.test(text)) return true;
-  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement|workqueue|work queue|report|charge|authorization|auth|referral|coverage|insurance|specimen|lab label|radiology|imaging|pharmacy verification|barcode|case management|placement|eprescribe|prescription)\b/.test(text)) return true;
+  if (slots.action === "document" && /\b(note|documentation|document|template|required field|therapy|behavioral health|safety assessment|fetal|fetalink|delivery event|flowsheet|flow sheet|time column|backload|downtime)\b/.test(text)) return true;
+  if (slots.action === "review" && /\b(result|allergy|reaction|case status|transport|transfer|discharge|bed assignment|patient movement|workqueue|work queue|report|charge|authorization|auth|referral|coverage|insurance|specimen|lab label|radiology|imaging|pharmacy verification|barcode|scanner|badge reader|case management|placement|eprescribe|prescription|escalation|command center|ticket)\b/.test(text)) return true;
   return false;
 }
 

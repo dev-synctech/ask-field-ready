@@ -3713,6 +3713,673 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     sanitized_approved: true,
     status: "published",
   },
+
+  // Pack 07 - real-question density for live Ask walkthroughs.
+  {
+    id: "ll_schedule_appointment_not_visible",
+    title: "Appointment is not showing on the schedule",
+    type: "playbook",
+    summary: "Missing appointments usually come from date, provider/resource, location, status, or view filters before they are true build issues.",
+    roles: k("scheduler", "front desk", "clinic support"),
+    domains: k("scheduling", "appointment", "filters"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    nav_trail: "Schedule -> Date/provider/resource filter -> Appointment status/view -> Refresh",
+    visual_url: null,
+    first90: [
+      "Confirm the date, provider/resource, and location.",
+      "Check appointment status and schedule view.",
+      "Refresh once after clearing narrow filters.",
+    ],
+    whatToSay: [
+      "'Let's prove the schedule context before we call the appointment missing.'",
+      "'If the appointment exists in search but not here, we check filters and view next.'",
+    ],
+    whatToCheck: [
+      "Date, provider/resource, department/location, schedule view, and appointment status.",
+      "Canceled, arrived, no-show, hidden, filtered, or rescheduled status.",
+      "Whether search finds the appointment outside the schedule grid.",
+    ],
+    whenToEscalate: "If the appointment exists but is hidden for multiple users in the same role/view, escalate to scheduling template/build owner with view, filters, status, and role.",
+    walkthrough: [
+      "Open the exact schedule view.",
+      "Check date, provider/resource, and location.",
+      "Clear narrow filters and refresh once.",
+    ],
+    ifThatFails: [
+      "Search finds it: schedule filter/view issue.",
+      "Search cannot find it: registration/scheduling owner.",
+      "Multiple users affected: template/build escalation.",
+    ],
+    keywords: k("appointment not showing", "appointment missing", "appointment disappeared", "appt not showing", "appt missing", "schedule missing appointment", "schedule filter", "appointment status", "wrong schedule date", "provider schedule missing", "resource schedule missing", "cadence appointment missing", "epic cadence appointment"),
+    related_ids: ["p18", "c12", "v14"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_schedule_template_slot_unavailable",
+    title: "Schedule slot or template is not available",
+    type: "playbook",
+    summary: "Slot problems need provider/resource, visit type, template, time, location, and override rules before anyone overbooks.",
+    roles: k("scheduler", "front desk", "clinic support"),
+    domains: k("scheduling", "template", "slots"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "schedule",
+    nav_trail: "Schedule -> Provider/resource -> Visit type -> Template/slot rules -> Hold/override status",
+    visual_url: null,
+    first90: [
+      "Confirm provider/resource, visit type, and location.",
+      "Check template date, slot type, and holds.",
+      "Do not overbook until owner approves.",
+    ],
+    whatToSay: [
+      "'Let's find out whether this is a template, slot-type, hold, or permission issue.'",
+      "'We will not overbook from a guess; we need the owner if the slot is locked.'",
+    ],
+    whatToCheck: [
+      "Provider/resource, location, visit type, slot type, date/time, template, and holds.",
+      "Whether slot is frozen, held, full, restricted, mismatched by visit type, or hidden by filter.",
+      "Who owns overbook or template-release approval.",
+    ],
+    whenToEscalate: "If the expected slot is locked, held, missing, or requires override approval, escalate to scheduling template owner with provider/resource, visit type, date/time, and requested action.",
+    walkthrough: [
+      "Open provider/resource schedule.",
+      "Match visit type to slot type.",
+      "Check holds, locks, and override rules.",
+    ],
+    ifThatFails: [
+      "Wrong visit type: correct type before booking.",
+      "Slot held/locked: route owner.",
+      "Overbook requested: require approval path.",
+    ],
+    keywords: k("slot unavailable", "no slots", "template missing", "schedule template", "appointment slot", "slot type", "visit type slot", "hold slot", "frozen slot", "overbook", "template locked", "template unavailable", "cadence slot", "provider template", "resource template"),
+    related_ids: ["p18", "c12", "v14"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_order_missing_due_to_encounter_context",
+    title: "Order is not available in this encounter",
+    type: "playbook",
+    summary: "If an order will not appear, check encounter type, patient class, role, order mode, and synonyms before calling it missing.",
+    roles: k("provider", "resident / fellow", "app", "inpatient nurse"),
+    domains: k("orders", "order entry", "encounter context"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3,
+    escalation: 3,
+    vendor_family: "epic",
+    action: "place",
+    is_deep_flow: true,
+    nav_trail: "Chart -> Encounter banner -> Orders/Add Order -> Search/filter/order mode -> Details",
+    visual_url: null,
+    first90: [
+      "Confirm patient and encounter first.",
+      "Search one approved synonym.",
+      "Check order mode and required filters.",
+    ],
+    whatToSay: [
+      "'Let's confirm the encounter before we call the order missing.'",
+      "'Orders can be filtered by patient class, role, location, or order mode.'",
+    ],
+    whatToCheck: [
+      "Encounter type, patient class, location, provider role, and order mode.",
+      "Order synonym, order set vs single order, facility/location filter, and status.",
+      "Whether a similar order is available under an approved local name.",
+    ],
+    whenToEscalate: "If the expected order is unavailable after encounter, role, synonym, and filter checks, escalate to order build/clinical informatics with order name, role, encounter type, location, and urgency.",
+    walkthrough: [
+      "Check chart and encounter banner.",
+      "Open Orders/Add Order.",
+      "Search approved synonym and check filters.",
+    ],
+    ifThatFails: [
+      "Wrong encounter: switch context first.",
+      "Order filtered by role/location: capture context.",
+      "Time-sensitive order missing: escalate now.",
+    ],
+    keywords: k("order not available", "order missing", "order does not populate", "orders not populating", "cannot find order", "can't find order", "order search empty", "wrong encounter order", "encounter type order", "patient class order", "order mode", "epic order missing", "cerner order missing", "powerchart order missing"),
+    related_ids: ["p2", "s1", "v10"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_order_locked_after_sign",
+    title: "Signed order needs a safe change",
+    type: "playbook",
+    summary: "Once an order is signed, support the approved modify, discontinue, cancel, or new-order pathway instead of editing the signed order from memory.",
+    roles: k("provider", "resident / fellow", "app", "inpatient nurse"),
+    domains: k("orders", "signed order", "modify"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 4,
+    escalation: 3,
+    vendor_family: "epic",
+    action: "modify",
+    nav_trail: "Chart -> Orders -> Signed/active order -> Modify/discontinue/cancel status -> Reason/comment",
+    visual_url: null,
+    first90: [
+      "Read the order status aloud.",
+      "Confirm what change is needed.",
+      "Use approved modify or discontinue path.",
+    ],
+    whatToSay: [
+      "'Because this is already signed, we need the safe correction path.'",
+      "'Let's identify whether this is modify, discontinue, cancel, or new order.'",
+    ],
+    whatToCheck: [
+      "Signed, active, held, pending, initiated, discontinued, or completed status.",
+      "Requested change: dose, route, timing, duplicate, cancellation, or new order.",
+      "Required reason/comment, cosign, and whether patient care is waiting.",
+    ],
+    whenToEscalate: "If the order is locked, clinically time-sensitive, or the correct correction pathway is unclear, escalate to provider owner or clinical informatics before changing it.",
+    walkthrough: [
+      "Open Orders and select the signed order.",
+      "Read status and requested change.",
+      "Use modify/discontinue/cancel only if available.",
+    ],
+    ifThatFails: [
+      "Modify unavailable: check order status and role.",
+      "Duplicate active order: route provider/clinical owner.",
+      "Time-sensitive change: escalate immediately.",
+    ],
+    keywords: k("signed order locked", "signed order is locked", "change signed order", "modify signed order", "edit signed order", "order locked", "order is locked", "order needs to be changed", "cannot edit order", "can't edit order", "cancel signed order", "remove signed order", "order already signed", "order correction", "modify order after signing", "order locked after sign", "epic signed order", "cerner signed order"),
+    related_ids: ["p28", "c22", "v24"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_note_sidebar_or_note_type_missing",
+    title: "Note area or note type is hard to find",
+    type: "playbook",
+    summary: "When the note area is not obvious, check encounter context, collapsed panels, note type filters, specialty view, and role access.",
+    roles: k("provider", "nurse", "therapy pt ot st", "clinical support"),
+    domains: k("notes", "documentation", "navigation"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "cerner",
+    action: "document",
+    nav_trail: "Chart -> Documentation/Notes -> Sidebar or New Note -> Note type/filter -> Required sections",
+    visual_url: null,
+    first90: [
+      "Confirm this is the right encounter.",
+      "Look for collapsed notes/sidebar area.",
+      "Search or filter note type.",
+    ],
+    whatToSay: [
+      "'Let's find the note area before we troubleshoot the note itself.'",
+      "'If the note type is missing for the whole role, that is not user error.'",
+    ],
+    whatToCheck: [
+      "Encounter, documentation activity, collapsed sidebar, note type, specialty view, and role.",
+      "Filter by author, date, status, service, or note type.",
+      "Whether the note type is missing for one user or the entire team.",
+    ],
+    whenToEscalate: "If the required note type or documentation area is missing for multiple users in the same role/location, escalate to documentation build owner with role, location, encounter, and note type.",
+    walkthrough: [
+      "Open chart and confirm encounter.",
+      "Find Notes/Documentation or collapsed sidebar.",
+      "Choose note type and required sections.",
+    ],
+    ifThatFails: [
+      "Sidebar hidden: expand edge panel.",
+      "Note type missing: check filter and role.",
+      "Team-wide missing type: build escalation.",
+    ],
+    keywords: k("where do i write my note", "where do i write my note the sidebar is hidden", "where is notes", "where are notes", "note area missing", "new note missing", "note type missing", "documentation sidebar", "sidebar hidden", "sidebar is hidden", "collapsed sidebar", "cannot find note", "can't find note", "dynamic documentation missing", "dyn doc missing", "powerchart note", "epic note type"),
+    related_ids: ["p30", "c24", "v26"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_flowsheet_row_hidden_or_time_column_wrong",
+    title: "Flowsheet row is missing or charting in the wrong time column",
+    type: "playbook",
+    summary: "Flowsheet problems usually start with group, row search, collapsed sections, time column, and role view before build escalation.",
+    roles: k("inpatient nurse", "clinical staff", "rehab support"),
+    domains: k("flowsheet", "documentation", "time column"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "document",
+    nav_trail: "Chart -> Flowsheets -> Group/section -> Row search/collapsed rows -> Time column -> File/save",
+    visual_url: null,
+    first90: [
+      "Confirm the flowsheet group first.",
+      "Expand collapsed sections or search row.",
+      "Check the active time column.",
+    ],
+    whatToSay: [
+      "'Let's make sure we are in the right group and time column before entering anything.'",
+      "'If the row is missing for the team, we escalate the row/build, not the user.'",
+    ],
+    whatToCheck: [
+      "Flowsheet group, section, row search, collapsed rows, time column, and save/file status.",
+      "Whether row is hidden by role, view, specialty, time, or template.",
+      "Whether charting landed in the wrong time column or wrong encounter.",
+    ],
+    whenToEscalate: "If the required row is missing for multiple users, charting files to the wrong column, or documentation affects safety/quality tracking, escalate to clinical documentation owner.",
+    walkthrough: [
+      "Open Flowsheets and pick group.",
+      "Expand section or search row.",
+      "Confirm time column before charting.",
+    ],
+    ifThatFails: [
+      "Row hidden: check role/view/template.",
+      "Wrong time column: correct per policy.",
+      "Team-wide row gap: documentation owner.",
+    ],
+    keywords: k("flowsheet row missing", "flow sheet row missing", "row hidden", "collapsed row", "flowsheet section", "wrong time column", "charted wrong time", "time column wrong", "flowsheet filed wrong", "vitals row missing", "assessment row missing", "epic flowsheet row", "cerner flowsheet row"),
+    related_ids: ["p23", "c17", "v19"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_mar_med_not_showing_due_time_filter",
+    title: "Medication is not showing on the MAR",
+    type: "playbook",
+    summary: "MAR visibility depends on order status, due time, held/discontinued state, pharmacy verification, filters, and encounter context.",
+    roles: k("inpatient nurse", "pharmacy support", "provider"),
+    domains: k("medication", "mar", "visibility"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 4,
+    escalation: 4,
+    vendor_family: "cerner",
+    action: "review",
+    is_deep_flow: true,
+    nav_trail: "MAR -> Date/time filter -> Scheduled/PRN/held view -> Order details -> Verification/dispense status",
+    visual_url: null,
+    first90: [
+      "Confirm the order is active.",
+      "Check MAR date/time and view filters.",
+      "Check verification, hold, and dispense status.",
+    ],
+    whatToSay: [
+      "'Let's see whether the medication is missing, hidden by time, or waiting on verification.'",
+      "'If it is due now and unclear, we escalate before delaying care.'",
+    ],
+    whatToCheck: [
+      "Order status, MAR date/time, scheduled/PRN/held filters, due time, and encounter.",
+      "Pharmacy verification, dispense status, hold/discontinue status, and medication profile.",
+      "Whether one medication, one patient, or the unit is affected.",
+    ],
+    whenToEscalate: "If an active due medication is not visible after MAR filters and status checks, escalate to pharmacy/clinical owner immediately.",
+    walkthrough: [
+      "Check order status first.",
+      "Review MAR filters and due time.",
+      "Verify pharmacy/dispense state.",
+    ],
+    ifThatFails: [
+      "Hidden by filter: correct view.",
+      "Pending verification: pharmacy owner.",
+      "Due now and unclear: escalate immediately.",
+    ],
+    keywords: k("med not showing on mar", "medication not showing on mar", "mar medication missing", "mar filter", "due med missing", "med not visible", "medication profile missing", "scheduled meds missing", "prn med missing", "held medication", "pharmacy verification mar", "cerner mar missing", "epic mar missing"),
+    related_ids: ["p22", "c16", "v18"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_document_scanned_to_wrong_encounter",
+    title: "Scanned document may be attached to the wrong encounter",
+    type: "playbook",
+    summary: "Wrong-encounter document risk is a stop-and-route moment: verify context, do not rescan blindly, and escalate through document management.",
+    roles: k("front desk", "registration", "clinic staff"),
+    domains: k("scanning", "documents", "encounter"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3,
+    escalation: 3,
+    vendor_family: "epic",
+    action: "scan",
+    nav_trail: "Media/documents -> Document details -> Encounter/date/type -> Correction owner",
+    visual_url: null,
+    first90: [
+      "Stop before scanning another copy.",
+      "Verify document type and encounter.",
+      "Route wrong-encounter risk to owner.",
+    ],
+    whatToSay: [
+      "'Let's stop here. I want to confirm where the document landed before we create duplicates.'",
+      "'If it attached to the wrong encounter, document management owns the correction path.'",
+    ],
+    whatToCheck: [
+      "Document type, encounter/date, upload time, image count, and owner.",
+      "Whether the issue is wrong encounter, wrong document type, duplicate image, or failed scan.",
+      "Approved correction path and whether rescan is allowed.",
+    ],
+    whenToEscalate: "If wrong-encounter attachment, duplicate document, or privacy risk is possible, escalate to registration/document-management owner before saving more scans.",
+    walkthrough: [
+      "Open document details.",
+      "Compare encounter/date and document type.",
+      "Route owner before duplicate scan.",
+    ],
+    ifThatFails: [
+      "Wrong encounter risk: stop and escalate.",
+      "Duplicate scan exists: document owner.",
+      "Scanner failed only: device support.",
+    ],
+    keywords: k("scanned wrong encounter", "document scanned to wrong encounter", "wrong encounter scan", "document attached wrong encounter", "scan wrong visit", "media wrong encounter", "duplicate scanned document", "wrong document type", "scan landed wrong", "document management correction", "media manager wrong encounter", "epic media manager correction"),
+    related_ids: ["p36", "c30", "v32"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_consent_missing_before_procedure",
+    title: "Consent is missing before a procedure",
+    type: "playbook",
+    summary: "Consent questions need procedure context, document type, signed status, scan/link status, and clinical owner before a case proceeds.",
+    roles: k("front desk", "nurse", "periop support", "clinic staff"),
+    domains: k("consent", "procedure", "scanning"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 4,
+    escalation: 4,
+    vendor_family: "epic",
+    action: "review",
+    is_deep_flow: true,
+    nav_trail: "Procedure/case -> Consents/documents -> Signed status -> Scan/link to encounter -> Owner",
+    visual_url: null,
+    first90: [
+      "Confirm the procedure and encounter.",
+      "Check consent document status.",
+      "Escalate missing signed consent now.",
+    ],
+    whatToSay: [
+      "'Let's separate the clinical consent from the scan/link step.'",
+      "'If signed consent is missing for an active procedure, we escalate immediately.'",
+    ],
+    whatToCheck: [
+      "Procedure/case, encounter, consent type, signed status, scanned image, document link, and owner.",
+      "Whether consent is not signed, signed but not scanned, scanned to wrong encounter, or hidden by document type.",
+      "Whether procedure timing is affected.",
+    ],
+    whenToEscalate: "If signed consent is missing, linked to the wrong encounter, or procedure timing is affected, escalate to periop/clinical owner immediately.",
+    walkthrough: [
+      "Open procedure/case context.",
+      "Find consents/documents.",
+      "Confirm signed and linked status.",
+    ],
+    ifThatFails: [
+      "Not signed: clinical owner.",
+      "Signed but not scanned: document lane.",
+      "Wrong encounter/link: stop and escalate.",
+    ],
+    keywords: k("consent missing", "missing consent", "procedure consent", "surgical consent", "paper consent", "consent not scanned", "signed consent missing", "consent wrong encounter", "consent document", "scan consent", "procedure missing consent", "case consent missing"),
+    related_ids: ["p36", "c30", "v32"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_referral_order_not_ready_for_scheduling",
+    title: "Referral or authorization is not ready for scheduling",
+    type: "playbook",
+    summary: "Referral scheduling depends on referral status, authorization, linked order, department, visit type, and owner before booking.",
+    roles: k("scheduler", "front desk", "referral coordinator"),
+    domains: k("referral", "authorization", "scheduling"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "schedule",
+    nav_trail: "Referral/order -> Auth/referral status -> Linked appointment/order -> Scheduling lane -> Owner",
+    visual_url: null,
+    first90: [
+      "Open referral or order status.",
+      "Check authorization and linked appointment.",
+      "Do not book if status blocks scheduling.",
+    ],
+    whatToSay: [
+      "'Let's check whether this is a referral-status issue or a scheduling issue.'",
+      "'If authorization is not ready, we route the owner instead of forcing the appointment.'",
+    ],
+    whatToCheck: [
+      "Referral status, authorization status, linked order, department, visit type, scheduling instructions, and owner.",
+      "Whether referral is pending review, missing auth, linked to wrong department, expired, or already scheduled.",
+      "Callback path for patient-facing follow-up.",
+    ],
+    whenToEscalate: "If referral/auth status blocks booking or linkage is unclear, escalate to referral/authorization owner with status, department, visit type, and callback.",
+    walkthrough: [
+      "Open referral/order status.",
+      "Check authorization and linkage.",
+      "Route owner before booking around it.",
+    ],
+    ifThatFails: [
+      "Auth pending: referral/auth owner.",
+      "Wrong department: scheduling/referral owner.",
+      "Patient waiting: callback owner needed.",
+    ],
+    keywords: k("referral not ready", "referral not linked", "auth not ready", "authorization not ready", "cannot schedule referral", "can't schedule referral", "referral status", "authorization status", "referral pending review", "referral missing auth", "linked order missing", "appointment referral link", "cadence referral", "epic referral scheduling"),
+    related_ids: ["p34", "c28", "v30"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_result_routing_or_ack_owner_unclear",
+    title: "Result needs acknowledgement or routing owner",
+    type: "playbook",
+    summary: "Result questions need result status, responsible owner, routing queue, acknowledgement state, and urgency before anyone closes it.",
+    roles: k("provider", "nurse", "clinic support", "lab support"),
+    domains: k("results", "acknowledgement", "routing"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 4,
+    escalation: 4,
+    vendor_family: "cerner",
+    action: "review",
+    is_deep_flow: true,
+    nav_trail: "Results -> Result detail -> Status/flag -> Responsible owner/queue -> Acknowledge/route",
+    visual_url: null,
+    first90: [
+      "Open the result detail.",
+      "Check flag, status, and owner.",
+      "Do not close without owner clarity.",
+    ],
+    whatToSay: [
+      "'I am not interpreting the result; I am finding status, owner, and routing.'",
+      "'If acknowledgement is blocked and it is urgent, we escalate the owner now.'",
+    ],
+    whatToCheck: [
+      "Result type, flag/critical status, responsible owner, queue, acknowledgement state, and route action.",
+      "Whether it is missing, routed wrong, blocked from acknowledgement, or already acted on.",
+      "Urgency and callback path.",
+    ],
+    whenToEscalate: "If a critical/urgent result cannot be acknowledged or owner/routing is unclear, escalate to clinical owner or command center immediately.",
+    walkthrough: [
+      "Open result details.",
+      "Find status, owner, and queue.",
+      "Acknowledge/route only if owner is clear.",
+    ],
+    ifThatFails: [
+      "Owner unclear: clinical owner escalation.",
+      "Ack action missing: role/access lane.",
+      "Critical/urgent: command center now.",
+    ],
+    keywords: k("result routing", "result owner", "acknowledge result", "result acknowledgement", "result not acknowledged", "can't acknowledge result", "cannot acknowledge result", "result in wrong queue", "result routed wrong", "critical result routing", "result flag", "result status", "lab result acknowledgement"),
+    related_ids: ["p29", "c23", "v25"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_workqueue_item_assigned_to_wrong_owner",
+    title: "Workqueue item is in the wrong owner or pool",
+    type: "playbook",
+    summary: "Workqueue questions need queue, owner, status, filter, assignment rule, and route action before anyone resolves or reassigns.",
+    roles: k("billing", "front desk", "clinic support", "admin"),
+    domains: k("workqueue", "reports", "routing"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "route",
+    nav_trail: "Workqueue/report -> Queue name -> Owner/status/filter -> Route/reassign action -> Notes",
+    visual_url: null,
+    first90: [
+      "Confirm the exact queue name.",
+      "Check owner, status, and filters.",
+      "Route only through approved action.",
+    ],
+    whatToSay: [
+      "'Let's identify whether this is filter, ownership, or assignment-rule behavior.'",
+      "'We do not resolve items just to get them out of the wrong queue.'",
+    ],
+    whatToCheck: [
+      "Queue name, item type, owner, status, date filter, assignment rule, and route/reassign action.",
+      "Whether one item, one user, one role, or the whole queue is affected.",
+      "Required note/comment and callback owner.",
+    ],
+    whenToEscalate: "If assignment rule appears wrong or the queue routes incorrectly for multiple users/items, escalate to workqueue/report owner with queue name, owner, status, filters, and examples without PHI.",
+    walkthrough: [
+      "Open queue and item details.",
+      "Check owner, status, and filters.",
+      "Use route/reassign only if approved.",
+    ],
+    ifThatFails: [
+      "One item: route owner with note.",
+      "Whole queue: report/build owner.",
+      "No route action: permission/workflow lane.",
+    ],
+    keywords: k("workqueue wrong owner", "workqueue item assigned to wrong owner", "work queue wrong owner", "workqueue wrong pool", "work queue wrong pool", "assigned wrong owner", "assigned to wrong owner", "reassign workqueue", "route workqueue", "queue owner", "queue filter", "workqueue status", "report queue routing", "wq owner", "wq routing"),
+    related_ids: ["p19", "c13", "v15"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_scanner_or_badge_reader_not_working",
+    title: "Scanner or badge reader is not working",
+    type: "playbook",
+    summary: "Device issues need workstation, cable/power, focus field, second device, and scope checks before replacing hardware.",
+    roles: k("all roles", "inpatient nurse", "front desk", "lab tech"),
+    domains: k("device", "scanner", "badge reader"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3,
+    escalation: 3,
+    vendor_family: "cerner",
+    action: "review",
+    nav_trail: "Current workflow -> Active field -> Device/cable/power -> Second scan/device -> Device support",
+    visual_url: null,
+    first90: [
+      "Keep the user on the same screen.",
+      "Confirm cursor is in the active field.",
+      "Try one second scan or device.",
+    ],
+    whatToSay: [
+      "'Before we call the device broken, let's make sure the screen is ready to receive the scan.'",
+      "'We will test once, then route if it is device-wide.'",
+    ],
+    whatToCheck: [
+      "Active field/focus, scanner light/beep, cable/power, workstation, and second device.",
+      "Whether badge, wristband, medication, specimen, or document barcode is being scanned.",
+      "One scanner, one workstation, or multiple devices affected.",
+    ],
+    whenToEscalate: "If the scanner/badge reader fails on a second safe test or multiple devices are affected, escalate to device support with location, workstation, scanner type, and workflow.",
+    walkthrough: [
+      "Click the active scan field.",
+      "Check cable/power and scan once.",
+      "Test second device if available.",
+    ],
+    ifThatFails: [
+      "No beep/light: device support.",
+      "Beep but no entry: focus/field issue.",
+      "Medication safety workflow: escalate sooner.",
+    ],
+    keywords: k("scanner not working", "barcode scanner not working", "badge reader not working", "badge scanner", "scanner won't scan", "scanner wont scan", "barcode reader", "no beep scanner", "scanner beeps but nothing", "wristband scanner", "specimen scanner", "device scanner", "scanner focus field"),
+    related_ids: ["p3", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_downtime_backload_queue_after_restore",
+    title: "Backloading after downtime or paper workflow",
+    type: "playbook",
+    summary: "After downtime, backload by ownership, timestamp, priority, and verification instead of entering everything in random order.",
+    roles: k("all roles", "registration", "inpatient nurse", "provider"),
+    domains: k("downtime", "recovery", "backload"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 4,
+    escalation: 4,
+    vendor_family: "cerner",
+    action: "document",
+    is_deep_flow: true,
+    nav_trail: "Downtime packet -> Priority stack -> Owner assignment -> Backload entry -> Verification/handoff",
+    visual_url: null,
+    first90: [
+      "Sort paper by patient-safety priority.",
+      "Assign one owner per stack.",
+      "Backload with original times.",
+    ],
+    whatToSay: [
+      "'We are going to backload by priority and owner, not by whoever grabs the first paper.'",
+      "'Original times and verification matter more than speed right now.'",
+    ],
+    whatToCheck: [
+      "Downtime start/end time, paper forms, original timestamps, owner, and verification step.",
+      "Priority: meds, orders, results, registration, discharge, then routine documentation.",
+      "Whether any active care depends on the backload.",
+    ],
+    whenToEscalate: "If backload ownership is unclear, active-care data is missing, or multiple teams are entering the same paper, escalate to command center with scope and owner request.",
+    walkthrough: [
+      "Sort paper by priority.",
+      "Assign owner and timestamps.",
+      "Verify entry before closing packet.",
+    ],
+    ifThatFails: [
+      "No owner: command center assignment.",
+      "Duplicate backload risk: stop and reconcile.",
+      "Active care affected: escalate now.",
+    ],
+    keywords: k("backload", "back loading", "downtime backload", "paper backload", "after downtime", "system restored", "recovery entry", "enter downtime forms", "downtime packet", "original time", "paper workflow recovery", "back enter", "system back up"),
+    related_ids: ["p1", "c6", "v9"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_escalation_packet_for_command_center",
+    title: "Build a clean escalation packet",
+    type: "playbook",
+    summary: "A good escalation gives command center scope, impact, exact blocker, what was tried, owner needed, and callback.",
+    roles: k("all roles", "field support", "super-user"),
+    domains: k("escalation", "command center", "handoff"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3,
+    escalation: 3,
+    vendor_family: "cerner",
+    action: "review",
+    nav_trail: "Issue observed -> Scope/impact -> Checks tried -> Owner needed -> Callback/handoff",
+    visual_url: null,
+    first90: [
+      "Name scope and patient-care impact.",
+      "Capture exact screen/status/error.",
+      "State owner needed and callback.",
+    ],
+    whatToSay: [
+      "'I am going to send this cleanly so command can act on it without chasing us.'",
+      "'Give me scope, impact, exact blocker, what we tried, and callback.'",
+    ],
+    whatToCheck: [
+      "One user vs role/team/unit, patient-care or throughput impact, exact visible blocker, and time started.",
+      "What was tried safely, what not to retry, owner/team needed, and callback.",
+      "No patient identifiers, screenshots with PHI, passwords, or private links.",
+    ],
+    whenToEscalate: "Escalate immediately when safety, patient flow, medication, results, discharge, registration, or unit-wide access is blocked; include the packet fields and callback.",
+    walkthrough: [
+      "Write scope and impact.",
+      "Add exact blocker and checks tried.",
+      "Name owner needed and callback.",
+    ],
+    ifThatFails: [
+      "Owner unclear: command center triage.",
+      "Safety impact: escalate now.",
+      "Missing facts: gather without PHI.",
+    ],
+    keywords: k("escalation packet", "what do i send command center", "command center ticket", "open ticket", "ticket details", "escalate issue", "what information to collect", "handoff issue", "scope impact callback", "issue summary", "floor lead escalation", "support ticket", "go-live ticket"),
+    related_ids: ["p1", "c3", "v7"],
+    sanitized_approved: true,
+    status: "published",
+  },
 ];
 
 // --- Match engine -------------------------------------------------------
@@ -3817,6 +4484,34 @@ function dedupeVisualAids(aids: VisualAid[]): VisualAid[] {
   });
 }
 
+function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
+  if (
+    entry.id === "ll_barcode_med_admin_scan_mismatch" &&
+    /\b(barcode\s+(med|medication).*mismatch|medication\s+barcode.*mismatch|bcma\s+mismatch|barcode\s+alert|med\s+won'?t\s+scan)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_charge_not_dropping_after_visit" &&
+    /\b(get\s+to\s+charge\s+capture|charge\s+not\s+dropping|charge\s+did\s+not\s+drop|charge\s+queue|visit\s+charges)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_note_sidebar_or_note_type_missing" &&
+    /\b(where\s+do\s+i\s+write\s+my\s+note|note\s+area\s+missing|documentation\s+sidebar|sidebar\s+(is\s+)?hidden|collapsed\s+sidebar)\b/.test(queryText)
+  ) {
+    return 25;
+  }
+  if (
+    entry.id === "ll_document_scanned_to_wrong_encounter" &&
+    /\b(scanned?\s+(document\s+)?to\s+wrong\s+encounter|wrong\s+encounter\s+scan|document\s+attached\s+wrong\s+encounter|duplicate\s+scanned\s+document|scan\s+landed\s+wrong)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  return 0;
+}
+
 function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
   const queryText = query.toLowerCase();
   const hay = [
@@ -3901,6 +4596,45 @@ function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
     };
   }
 
+  if (has("schedule", "appointment", "slot", "template", "cadence", "booking", "referral")) {
+    return {
+      doThisFirst: "Open the exact schedule, referral, or booking workspace the user is working from.",
+      whereToLook: "Check date, department/location, provider/resource, visit type, appointment status, template/slot rules, and referral or authorization status.",
+      whatToClick: "Open filters or details first. Correct the context, refresh once, then use the approved booking, route, or owner action.",
+      whatShouldHappen: "The appointment, slot, referral status, or blocking reason should become visible before the user books or escalates.",
+      ifYouDontSeeIt: "If the item is still missing, capture view, filters, provider/resource, visit type, status, role, and callback for the scheduling owner.",
+      whatToSay: "I am checking schedule context before we call this missing or force a booking.",
+      checkThis: ["Date, provider/resource, location, and visit type.", "View filters, appointment/referral status, and template/slot rules.", "Owner approval before override or overbook."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("flowsheet", "flow sheet", "row", "time column", "vitals", "mobility", "ambulation")) {
+    return {
+      doThisFirst: "Confirm the chart, encounter, flowsheet group, and active time column before documenting.",
+      whereToLook: "Look in Flowsheets for the group, section, collapsed rows, row search, time column, and save/file status.",
+      whatToClick: "Expand the section or search for the row, select the correct time column, document once, then verify the entry filed.",
+      whatShouldHappen: "The row should appear in the right group and the entry should file under the intended time column.",
+      ifYouDontSeeIt: "If the row is missing for multiple users or files to the wrong column, stop and escalate to the documentation owner.",
+      whatToSay: "I am checking the right row and time column before we enter anything.",
+      checkThis: ["Flowsheet group, section, and row search.", "Collapsed rows, role view, and template.", "Active time column and file/save status."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("scan", "scanning", "media manager", "document type", "consent", "wrong encounter")) {
+    return {
+      doThisFirst: "Confirm document type, encounter, and whether a signed document already exists before scanning or correcting anything.",
+      whereToLook: "Look in Media/documents for document details, encounter/date, document type, scan/upload action, page count, and image quality.",
+      whatToClick: "Open Add Media or document details, choose the approved document type, attach to the correct encounter, then verify the saved image.",
+      whatShouldHappen: "The document should show under the correct encounter with the right type, page count, and readable image.",
+      ifYouDontSeeIt: "If wrong-encounter, missing consent, duplicate scan, or privacy risk is possible, stop and route document-management or clinical owner.",
+      whatToSay: "I am confirming where this document belongs before we save or rescan it.",
+      checkThis: ["Document type and encounter/date.", "Signed status, page count, and image quality.", "Wrong-encounter or duplicate-document risk."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
   if (has("note", "documentation", "document type", "note type", "dynamic documentation", "required field")) {
     return {
       doThisFirst: "Go into the patient chart and confirm the note belongs to this encounter.",
@@ -3910,6 +4644,19 @@ function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
       ifYouDontSeeIt: "If the note area is missing, check the far edge for a collapsed sidebar or Open Sidebar button. If Sign stays blocked, check required fields, cosign, smart text, and encounter context.",
       whatToSay: "I am checking the right note type and required fields before we retry signing.",
       checkThis: ["Note type and encounter.", "Required fields and error banner.", "Cosigner, attestation, role, and locked context."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("result", "acknowledge", "acknowledgement", "critical", "routing owner")) {
+    return {
+      doThisFirst: "Open the result detail and identify status, flag, owner, and routing before closing anything.",
+      whereToLook: "Look at result detail, flag/critical status, responsible owner, queue, acknowledgement button, route action, and timestamp.",
+      whatToClick: "Open the result or route detail, confirm owner/status, then acknowledge or route only if the owner path is clear.",
+      whatShouldHappen: "The result should show acknowledged, routed, or clearly blocked with the owner/status visible.",
+      ifYouDontSeeIt: "If owner or acknowledgement is unclear for an urgent result, escalate to clinical owner or command center immediately.",
+      whatToSay: "I am not interpreting the result; I am finding status, owner, and routing.",
+      checkThis: ["Result type, flag, status, and timestamp.", "Responsible owner, queue, and acknowledgement state.", "Urgency and callback path."],
       escalateWhen: entry.whenToEscalate,
     };
   }
@@ -3927,6 +4674,19 @@ function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
     };
   }
 
+  if (has("workqueue", "work queue", "queue owner", "assigned wrong", "report filter", "report missing")) {
+    return {
+      doThisFirst: "Open the exact queue or report and confirm the queue name before changing ownership or status.",
+      whereToLook: "Look at queue name, item type, owner, status, date filters, assignment rule, route/reassign action, and notes.",
+      whatToClick: "Open the item details, confirm owner/status/filter, then use the approved route or reassign action if available.",
+      whatShouldHappen: "The item should show the correct owner/status or a clear reason the route action is unavailable.",
+      ifYouDontSeeIt: "If the same routing issue affects multiple users/items, escalate to workqueue/report owner with clean examples.",
+      whatToSay: "I am checking whether this is filter, ownership, or assignment-rule behavior.",
+      checkThis: ["Queue name, owner, status, and filters.", "One item vs whole queue.", "Route/reassign action and required note."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
   if (has("barcode", "bcma", "medication scan", "med barcode", "mar/med administration")) {
     return {
       doThisFirst: "Pause medication administration and keep the alert on screen.",
@@ -3936,6 +4696,45 @@ function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
       ifYouDontSeeIt: "If the mismatch stays unclear, stop the administration path and escalate to charge nurse/pharmacy support before giving the medication.",
       whatToSay: "This is a safety stop, so I am comparing patient, order, medication, and package before we continue.",
       checkThis: ["Patient scan, medication scan, order, dose, route.", "Package/NDC or formulary mismatch.", "Due time and urgency."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("scanner", "badge reader", "barcode reader", "device scanner")) {
+    return {
+      doThisFirst: "Keep the user on the same screen and confirm the cursor is in the active scan field.",
+      whereToLook: "Look at the active field, scanner light/beep, cable or power, workstation, and whether a second device works.",
+      whatToClick: "Click into the scan field, try one safe scan, then test a second scanner or workstation if available.",
+      whatShouldHappen: "The scanned value should enter the active field or the device should give a clear failure signal.",
+      ifYouDontSeeIt: "If there is no beep/light, or multiple devices fail, escalate to device support with location and workflow.",
+      whatToSay: "I am checking that the screen is ready to receive the scan before we call the device broken.",
+      checkThis: ["Active field/focus.", "Scanner light/beep, cable, and power.", "One device vs multiple devices."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("downtime", "backload", "back loading", "system restored", "paper workflow recovery")) {
+    return {
+      doThisFirst: "Sort the paper or downtime packet by patient-safety priority and assign a clear owner.",
+      whereToLook: "Use the downtime packet, priority stack, original timestamps, owner assignment, backload entry area, and verification step.",
+      whatToClick: "Enter the highest-priority item with the original time, verify it filed correctly, then move to the next owner-assigned stack.",
+      whatShouldHappen: "Each paper item should be entered once, verified, and marked complete with owner and timestamp preserved.",
+      ifYouDontSeeIt: "If ownership or duplicate-entry risk is unclear, stop and ask command center to assign the backload owner.",
+      whatToSay: "We are going to backload by priority and owner, not by whoever grabs the first paper.",
+      checkThis: ["Downtime start/end and original timestamps.", "Priority stack and assigned owner.", "Duplicate-entry risk and verification."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("escalation packet", "command center ticket", "ticket details", "scope impact callback", "support ticket")) {
+    return {
+      doThisFirst: "Write scope, impact, exact blocker, what was tried, owner needed, and callback before escalating.",
+      whereToLook: "Use the issue screen, visible error/status, affected role/unit, time started, prior checks, owner needed, and callback path.",
+      whatToClick: "Open the ticket or handoff channel, paste the clean packet, and send it to the correct owner or command center lane.",
+      whatShouldHappen: "The receiver should know who is blocked, how severe it is, what was tried, and who to call back.",
+      ifYouDontSeeIt: "If the owner is unclear or safety/flow is impacted, send to command center triage instead of holding it.",
+      whatToSay: "I am going to send this cleanly so command can act without chasing us.",
+      checkThis: ["Scope: one user, role, team, or unit.", "Impact, exact blocker, and time started.", "Checks tried, owner needed, and callback."],
       escalateWhen: entry.whenToEscalate,
     };
   }
@@ -3996,7 +4795,7 @@ export function askLaunch(query: string): AskAnswer {
         if (normalized.length < 4) return total;
         return queryText.includes(normalized) ? total + (normalized.includes(" ") ? 8 : 5) : total;
       }, 0);
-      return { e, s: scoreEntry(e, tokens) + phraseBoost };
+      return { e, s: scoreEntry(e, tokens) + phraseBoost + exactWorkflowBoost(e, queryText) };
     })
     .filter(x => x.s > 0)
     .sort((a, b) => b.s - a.s);
