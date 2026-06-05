@@ -2481,15 +2481,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Confirm policy owner before promising changes.",
     ],
     whatToSay: [
-      "'I am checking the plan status before we tell the caller what will happen.'",
-      "'If the plan change needs approval, we route it instead of guessing.'",
+      "'Let me check the plan before I tell the caller what's going to happen.'",
+      "'If changing the plan needs an approval, I'll route it instead of guessing.'",
     ],
     whatToCheck: [
-      "Payment plan status, self-pay follow-up queue, balance category, note history, owner, and due date.",
-      "Whether the request is new plan, missed payment, follow-up outreach, adjustment, or financial-assistance handoff.",
-      "Whether policy requires supervisor, self-pay, or financial-counseling ownership.",
+      "The current payment plan or self-pay follow-up status, and the next due date.",
+      "What they're actually asking for: a new plan, a missed payment, an adjustment, or a handoff to financial assistance.",
+      "Whether your workflow requires a supervisor, self-pay specialist, or financial counselor to make the change.",
     ],
-    whenToEscalate: "If payment plan policy, self-pay owner, or financial-assistance handoff is unclear, escalate to customer-service/self-pay owner with clean summary and callback.",
+    whenToEscalate: "If the plan policy, the right person to change it, or the financial assistance handoff isn't clear, send it to the patient billing office supervisor with a clean summary and a callback number.",
     walkthrough: [
       "Open guarantor/account.",
       "Check payment plan or self-pay follow-up status.",
