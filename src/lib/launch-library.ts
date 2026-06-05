@@ -2611,15 +2611,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Do not bulk-resolve messages to reduce the count.",
     ],
     whatToSay: [
-      "'Let's find the work that needs action first, then we can clean up the view.'",
-      "'We are sorting, not deleting or resolving work blindly.'",
+      "'Let's find the messages that actually need a reply first. Then we can clean up the rest.'",
+      "'We're sorting, not deleting. Nothing gets closed until we know what it is.'",
     ],
     whatToCheck: [
-      "Folder, message type, owner/pool/proxy view, priority, status, date range, and unread/due filters.",
-      "Whether the provider is seeing personal work, delegated work, pool work, or stale filtered work.",
-      "Whether urgent patient follow-up, results, refills, or signatures are mixed with FYI messages.",
+      "Which folder is open, and whether you're looking at your own messages, a shared pool, or someone else's view.",
+      "Sort and filter settings: priority, date range, unread, due today.",
+      "Whether urgent items (results, refills, signatures) are buried under FYI messages.",
     ],
-    whenToEscalate: "If urgent follow-up is hidden, messages route to the wrong owner, or a whole provider group is affected, escalate to ambulatory/provider support with folder, pool, count, and callback.",
+    whenToEscalate: "If urgent messages are hidden, going to the wrong person, or every provider in the group is seeing the same problem, send it to provider support with the folder name, the view, and how many messages are stuck.",
     walkthrough: [
       "Name the current folder and view.",
       "Sort by urgency and owner.",
