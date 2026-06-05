@@ -2380,7 +2380,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_late_charge_or_split_claim",
     title: "Late charge or split claim is holding billing",
     type: "playbook",
-    summary: "Late-charge and split-claim questions need account context, charge timing, claim status, and billing owner before any manual action.",
+    summary: "A charge came in after the claim already went out, and we need to decide if it's a late charge, a split claim, or a billing-owner call.",
     roles: k("biller", "charge capture", "revenue cycle"),
     domains: k("charges", "claims", "hospital billing"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
