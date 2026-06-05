@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">Authorization or referral status mock screen</title>
+  <desc id="desc">Generic Mizly mock screen showing appointment request, referral status, coverage lane, and owner queue.</desc>
+  <defs><style>.bg{fill:#f6f8fb}.panel{fill:#fff;stroke:#d8e0eb;stroke-width:2}.nav{fill:#172033}.card{fill:#fff;stroke:#d8e0eb;stroke-width:2}.soft{fill:#eef5ff}.teal{fill:#ecfdf5;stroke:#14b8a6;stroke-width:2}.warn{fill:#fff7ed;stroke:#f59e0b;stroke-width:2}.text{font-family:Arial,sans-serif;fill:#172033}.muted{fill:#637083}.head{font-size:24px;font-weight:700}.small{font-size:16px}.tiny{font-size:13px}.line{stroke:#d8e0eb;stroke-width:2}.num{fill:#1554c7}.numtext{fill:#fff;font-size:18px;font-weight:700}</style></defs>
+  <rect width="960" height="560" rx="28" class="bg"/>
+  <rect x="38" y="36" width="884" height="488" rx="24" class="panel"/>
+  <rect x="38" y="36" width="884" height="58" rx="24" class="nav"/>
+  <text x="62" y="130" class="text head">Referral / Authorization Check</text>
+  <text x="62" y="156" class="text small muted">Confirm status and owner before moving the appointment.</text>
+  <rect x="62" y="190" width="382" height="214" rx="18" class="card"/>
+  <text x="90" y="224" class="text small" font-weight="700">Appointment or request context</text>
+  <rect x="90" y="250" width="142" height="34" rx="10" class="soft"/><rect x="250" y="250" width="142" height="34" rx="10" class="soft"/>
+  <path d="M90 316h300M90 344h248M90 372h280" class="line"/>
+  <rect x="486" y="190" width="372" height="214" rx="18" class="warn"/>
+  <text x="514" y="224" class="text small" font-weight="700">Status and owner</text>
+  <rect x="514" y="252" width="120" height="34" rx="10" class="teal"/><rect x="652" y="252" width="154" height="34" rx="10" class="soft"/>
+  <path d="M514 318h284M514 346h234M514 374h268" class="line"/>
+  <rect x="62" y="432" width="796" height="44" rx="16" fill="#f8fafc" stroke="#d8e0eb"/>
+  <text x="88" y="460" class="text tiny">Mizly visual guide: appointment/request, referral/auth, coverage lane, owner queue.</text>
+  <g><circle cx="62" cy="190" r="18" class="num"/><text x="56" y="197" class="numtext">1</text></g>
+  <g><circle cx="486" cy="190" r="18" class="num"/><text x="480" y="197" class="numtext">2</text></g>
+  <g><circle cx="652" cy="252" r="18" class="num"/><text x="646" y="259" class="numtext">3</text></g>
+  <g><circle cx="858" cy="432" r="18" class="num"/><text x="852" y="439" class="numtext">4</text></g>
+</svg>
