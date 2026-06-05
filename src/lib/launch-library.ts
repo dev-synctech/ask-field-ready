@@ -19,6 +19,17 @@ export interface VisualAid {
   href?: string;
 }
 
+export interface LiveGuide {
+  doThisFirst: string;
+  whereToLook: string;
+  whatToClick: string;
+  whatShouldHappen: string;
+  ifYouDontSeeIt: string;
+  whatToSay: string;
+  checkThis: string[];
+  escalateWhen: string;
+}
+
 export interface LaunchEntry {
   id: string;
   title: string;
@@ -2006,7 +2017,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Whole role affected: escalate template build.",
       "Alternate note requested: confirm policy first.",
     ],
-    keywords: k("dynamic documentation", "dyn doc", "note template", "template missing", "note type missing", "new note", "document type", "clinical note", "therapy note", "provider note", "can't find note", "cannot find note", "wrong note type", "documentation template"),
+    keywords: k("dynamic documentation", "dyn doc", "note template", "template missing", "note type missing", "new note", "write note", "write my note", "where do i write my note", "where is the note", "start a note", "document type", "clinical note", "therapy note", "provider note", "can't find note", "cannot find note", "wrong note type", "documentation template"),
     related_ids: ["p24", "c18", "v20"],
     sanitized_approved: true,
     status: "published",
@@ -3721,6 +3732,7 @@ export interface AskAnswer {
   whatToSay: string[];
   whatToCheck: string[];
   whenToEscalate: string;
+  liveGuide: LiveGuide;
   sourceEntry: LaunchEntry | null;
   related: {
     playbooks: ContentItem[];
@@ -3805,6 +3817,175 @@ function dedupeVisualAids(aids: VisualAid[]): VisualAid[] {
   });
 }
 
+function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
+  const queryText = query.toLowerCase();
+  const hay = [
+    query,
+    entry.id,
+    entry.title,
+    entry.summary,
+    entry.action ?? "",
+    entry.nav_trail ?? "",
+    entry.domains.join(" "),
+    entry.keywords.join(" "),
+  ].join(" ").toLowerCase();
+  const has = (...terms: string[]) => terms.some(term => hay.includes(term));
+  const say = unquote(entry.whatToSay[0] ?? "I am checking the screen path and context before we retry.");
+  const checks = entry.whatToCheck.slice(0, 3);
+  const fallback: LiveGuide = {
+    doThisFirst: "Start from the workspace or chart where the user is doing the work.",
+    whereToLook: entry.nav_trail
+      ? `Use this trail: ${entry.nav_trail}.`
+      : "Look for the active work area, left activity menu, top toolbar, or right-side panel.",
+    whatToClick: "Open the most specific button, menu, folder, or field for this task. If labels vary, look for the closest workflow label.",
+    whatShouldHappen: "The next panel, queue, editor, or detail view should open so you can complete the missing item.",
+    ifYouDontSeeIt: "If the option is missing, confirm patient, encounter, role, department/location, filters, and access before escalating.",
+    whatToSay: say,
+    checkThis: checks,
+    escalateWhen: entry.whenToEscalate,
+  };
+
+  const isContextSwitch =
+    entry.id === "ll_wrong_location" ||
+    /\b(change context|change department|change location|wrong unit|wrong location|wrong floor|workstation context)\b/.test(queryText);
+
+  if (isContextSwitch) {
+    return {
+      doThisFirst: "Pause the workflow and confirm the user is in the right department, job, location, and patient context.",
+      whereToLook: "Look at the top banner or top-left application/menu area. The current department, location, job, or workspace label is usually shown there.",
+      whatToClick: "Open the top-left menu or context dropdown. Look for Change Context, department, job, location, or workspace. Pick the correct context, then confirm it.",
+      whatShouldHappen: "The top banner or workspace label should change before the user retries the task.",
+      ifYouDontSeeIt: "If Change Context or the department/location option is missing, this is likely access or security-template related. Escalate to the floor lead or access team.",
+      whatToSay: "I am checking the right context before we retry, so we do not fix the wrong screen.",
+      checkThis: ["Top banner/workspace label.", "Department, job, location, and role.", "Whether context resets after switching."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("diagnosis", "indication") && has("order")) {
+    return {
+      doThisFirst: "Open the patient chart and confirm the right encounter before touching the order.",
+      whereToLook: "Go to Orders or the order composer. Open the order details panel and look for required fields, diagnosis, indication, priority, frequency, or start time.",
+      whatToClick: "Click the diagnosis or indication field. Attach the approved diagnosis/indication, complete every required field, then click Sign or Submit.",
+      whatShouldHappen: "The order should move into the signing area or submit without the missing-diagnosis warning.",
+      ifYouDontSeeIt: "If the diagnosis field is missing or Sign stays disabled, look for red required fields, unmatched diagnosis, wrong encounter, or a locked order set.",
+      whatToSay: "The order is asking for context before it can move, so I am checking the required fields first.",
+      checkThis: ["Order name and encounter.", "Diagnosis/indication link.", "Required fields and sign status."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("order entry", "place order", "orders", "order set", "smartset", "powerplan")) {
+    return {
+      doThisFirst: "Open the patient chart first and confirm the correct encounter.",
+      whereToLook: "Look near the bottom, left activity menu, or chart activity area for Orders, Add Order, New Order, order composer, or a plus sign.",
+      whatToClick: "Click the order button, search the order name, select the closest approved order, then fill the details panel that opens.",
+      whatShouldHappen: "The order should appear in the composer or signing area with required fields visible.",
+      ifYouDontSeeIt: "If Add Order is missing, confirm you are inside an encounter, not just demographics. If the order is missing, try one approved synonym before escalating.",
+      whatToSay: "I am checking patient, encounter, and order context before we call the order missing.",
+      checkThis: ["Patient and encounter context.", "Order search term and synonym.", "Required fields, diagnosis, priority, frequency, and signer."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("charge capture", "charge not dropping", "charge queue", "visit charges", "billing charge")) {
+    return {
+      doThisFirst: "Open the patient chart or account workspace and confirm the correct visit or encounter.",
+      whereToLook: "Look in This Visit, encounter details, billing, visit charges, charge capture, or the charge review/work queue area.",
+      whatToClick: "Open the charge section. Check documentation status, charge trigger, hold reason, and required diagnosis/linking fields before adding anything manually.",
+      whatShouldHappen: "You should see available charges, a charge queue item, a hold reason, or the status that explains why it has not dropped.",
+      ifYouDontSeeIt: "If the charge section is missing, check visit type, provider/resource, department/location, and whether the encounter is ready for billing.",
+      whatToSay: "I am checking whether the charge trigger fired before we add anything manually.",
+      checkThis: ["Encounter, service date, and visit status.", "Signed documentation or procedure status.", "Charge queue, hold reason, and owner."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("note", "documentation", "document type", "note type", "dynamic documentation", "required field")) {
+    return {
+      doThisFirst: "Go into the patient chart and confirm the note belongs to this encounter.",
+      whereToLook: "Look on the right side, left activity menu, or documentation area for Notes, Documentation, New Note, note type, or a collapsed sidebar.",
+      whatToClick: "Open the notes/sidebar area, choose the correct note type, complete required sections, then click Sign or Submit.",
+      whatShouldHappen: "The note editor should open and show the required sections or the exact sign error.",
+      ifYouDontSeeIt: "If the note area is missing, check the far edge for a collapsed sidebar or Open Sidebar button. If Sign stays blocked, check required fields, cosign, smart text, and encounter context.",
+      whatToSay: "I am checking the right note type and required fields before we retry signing.",
+      checkThis: ["Note type and encounter.", "Required fields and error banner.", "Cosigner, attestation, role, and locked context."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("in basket", "inbasket", "message center", "wrong pool", "pool", "proxy", "delegate")) {
+    return {
+      doThisFirst: "Open the message area and confirm whether the user is viewing personal, pool, or proxy work.",
+      whereToLook: "Look at the left folder list, pool selector, owner/status column, date filter, and message header.",
+      whatToClick: "Open the correct folder or pool, select the message, then use Route, Forward, Reassign, or the approved owner action if available.",
+      whatShouldHappen: "The message should show the correct owner, pool, folder, or routing status before anyone resolves it.",
+      ifYouDontSeeIt: "If the pool selector or route action is missing, check proxy/delegate access, folder filters, and whether the message is locked by owner or status.",
+      whatToSay: "I am finding who owns the work before we move or resolve the message.",
+      checkThis: ["Folder, pool, owner, proxy/delegate view.", "Status, urgency flag, and date range.", "Whether one message or a whole pool is affected."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("barcode", "bcma", "medication scan", "med barcode", "mar/med administration")) {
+    return {
+      doThisFirst: "Pause medication administration and keep the alert on screen.",
+      whereToLook: "Stay in the MAR or med-administration screen. Look at the patient scan, medication scan, order line, dose, route, package, and alert banner.",
+      whatToClick: "Do not bypass first. Re-scan the patient and medication once if safe, then open the order details or alert details to compare the mismatch.",
+      whatShouldHappen: "The screen should either accept the scan or show exactly what does not match.",
+      ifYouDontSeeIt: "If the mismatch stays unclear, stop the administration path and escalate to charge nurse/pharmacy support before giving the medication.",
+      whatToSay: "This is a safety stop, so I am comparing patient, order, medication, and package before we continue.",
+      checkThis: ["Patient scan, medication scan, order, dose, route.", "Package/NDC or formulary mismatch.", "Due time and urgency."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("lab label", "specimen label", "reprint label", "wrong printer label", "label printer")) {
+    return {
+      doThisFirst: "Confirm the order and specimen before reprinting anything.",
+      whereToLook: "Look in the specimen/order area for Label Print, Reprint, printer dropdown, label status, accession, or collection task.",
+      whatToClick: "Open the print/reprint action, confirm the printer/location, choose one controlled reprint if policy allows, then verify the new label before use.",
+      whatShouldHappen: "A single correct label should print to the expected device and match the order/specimen context.",
+      ifYouDontSeeIt: "If the printer is wrong, duplicate labels exist, or identity is uncertain, stop and escalate to lab/device owner before collection.",
+      whatToSay: "Before we reprint, I am confirming the specimen, label, and printer so we do not create a duplicate safety risk.",
+      checkThis: ["Order, specimen, label type, accession.", "Printer/device context and original print status.", "Duplicate label or wrong-label risk."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("printer", "print", "wrong printer", "label", "wristband")) {
+    return {
+      doThisFirst: "Keep the user in the screen they printed from and confirm what they expected to print.",
+      whereToLook: "Look at the print dialog, printer dropdown, workstation context, and the physical printer closest to the unit.",
+      whatToClick: "Open the printer dropdown if available, choose the correct device, then send one reprint only after the printer is ready.",
+      whatShouldHappen: "One job should appear at the correct printer or the screen should show an error you can route.",
+      ifYouDontSeeIt: "If the printer is offline, missing, jammed, or routing wrong for multiple workstations, escalate to device support.",
+      whatToSay: "I am checking the printer path before we stack more print jobs.",
+      checkThis: ["Printer dropdown and workstation context.", "Paper, jam, toner, queue, and network status.", "One workstation vs multiple users."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (has("patient list", "worklist", "rounding list", "relationship filter")) {
+    return {
+      doThisFirst: "Open the exact list or worklist the user expects to use.",
+      whereToLook: "Look at the list name, filters, location, relationship, provider/team, date, and refresh control.",
+      whatToClick: "Open filters, correct the location/relationship/date/team values, then refresh once.",
+      whatShouldHappen: "The expected patient or task should appear in the list after filters refresh.",
+      ifYouDontSeeIt: "If the patient is still missing, use approved search and escalate if an entire role/team is affected.",
+      whatToSay: "Lists are usually filter-driven, so I am checking the view before calling it missing.",
+      checkThis: ["List name and view.", "Location, relationship, provider/team, date filters.", "Refresh state and approved search fallback."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  return fallback;
+}
+
+function unquote(text: string): string {
+  return text.trim().replace(/^['"`]+|['"`]+$/g, "");
+}
+
 export function askLaunch(query: string): AskAnswer {
   const tokens = tokenize(query).filter(t => t.length > 2 && !STOP_TOKENS.has(t));
   const queryText = query.toLowerCase();
@@ -3869,6 +4050,7 @@ export function askLaunch(query: string): AskAnswer {
     whatToSay: entry.whatToSay,
     whatToCheck: entry.whatToCheck,
     whenToEscalate: entry.whenToEscalate,
+    liveGuide: liveGuideFor(entry, query),
     sourceEntry: top ? entry : entry, // always cite something
     related: {
       playbooks: pickType("playbook"),
