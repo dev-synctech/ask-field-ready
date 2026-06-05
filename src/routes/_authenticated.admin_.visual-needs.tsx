@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import {
   mergeVisualNeeds,
   readAskGapLog,
+  type AskGapLogRecord,
   type VisualNeed,
   type VisualNeedSource,
   type VisualNeedStatus,
