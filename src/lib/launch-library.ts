@@ -5840,7 +5840,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Peer has it: role/template mismatch — access team.",
       "Wrong department: switch login department.",
     ],
-    keywords: k("missing tab", "missing activity", "missing report", "tab not showing", "activity not showing", "report not showing", "can't find", "where is the tab", "hidden activity", "customize view"),
+    keywords: k("missing tab", "missing activity", "missing report", "activity tab", "provider cannot see activity", "provider cant see activity", "provider can not see activity", "cannot see activity tab", "cant see tab", "tab not showing", "activity not showing", "report not showing", "can't find tab", "where is the tab", "hidden activity", "customize view", "activity missing", "tab missing", "report missing"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
