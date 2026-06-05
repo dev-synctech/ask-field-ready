@@ -2040,7 +2040,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_claim_attachment_missing",
     title: "Claim needs an attachment or documentation packet",
     type: "playbook",
-    summary: "Claim attachment issues need the claim lane, payer/request type, document status, and owner before anything is sent.",
+    summary: "A claim needs a document attached before it can go out, and we have to make sure it is the right one.",
     roles: k("biller", "claims rep", "revenue cycle"),
     domains: k("billing", "claims", "attachments"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
