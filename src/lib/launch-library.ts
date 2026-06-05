@@ -2423,7 +2423,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_sbo_guarantor_balance_statement_call",
     title: "Guarantor has a balance or statement question",
     type: "playbook",
-    summary: "SBO balance questions need caller context, guarantor/account lane, statement status, and approved owner without putting identifiers in chat.",
+    summary: "A patient or guarantor is calling about a balance or a statement, and we need to answer from the right account lane.",
     roles: k("customer service", "self-pay", "revenue cycle"),
     domains: k("sbo", "guarantor", "statement"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
