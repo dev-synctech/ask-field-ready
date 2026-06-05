@@ -6315,7 +6315,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Wrong category: re-classify with imaging team.",
       "Won't display: eye-care imaging team.",
     ],
-    keywords: k("imaging not showing", "oct not in view", "visual field not in view", "eye image wrong tab", "eye imaging filtered", "eye media missing view", "ophthalmology imaging view"),
+    keywords: k("imaging not showing", "imaging wrong view", "eye image not showing in expected view", "image not showing in expected view", "eye care image not showing", "oct not in view", "visual field not in view", "eye image wrong tab", "eye imaging filtered", "eye media missing view", "ophthalmology imaging view", "fundus image missing view"),
     related_ids: ["p25", "c19", "v21"],
     sanitized_approved: true,
     status: "published",
