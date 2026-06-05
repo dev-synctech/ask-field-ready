@@ -2947,7 +2947,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_prescription_printer_routing_wrong",
     title: "Prescription is printing to the wrong printer",
     type: "playbook",
-    summary: "Prescription printing issues need prescription context, printer route, one controlled reprint, and escalation if the approved printer is unavailable.",
+    summary: "A prescription printed to the wrong printer — route it to the approved prescription printer and watch for duplicates.",
     roles: k("provider", "clinic support", "front desk"),
     domains: k("printing", "prescriptions", "orders"),
     phases: k("cutover day 0", "stabilization week 1"),
