@@ -2082,7 +2082,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_claim_refresh_vs_resubmit",
     title: "Claim needs refresh, resubmit, or hold decision",
     type: "playbook",
-    summary: "Refresh and resubmit are different billing actions. Confirm what changed, claim status, and owner before touching the claim.",
+    summary: "A claim looks stuck and you are not sure whether to refresh it, resubmit it, or hold it — these are different actions.",
     roles: k("biller", "claims rep", "revenue cycle"),
     domains: k("billing", "claims", "status"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
