@@ -2266,15 +2266,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Route to the owner lane if it is not yours.",
     ],
     whatToSay: [
-      "'DNB edits are owner-based. Let's find who owns this blocker first.'",
-      "'We should not clear an edit unless the supporting work is actually done.'",
+      "'Held-from-billing edits belong to whoever owns the underlying fix. Let me find who that is first.'",
+      "'We shouldn't clear an edit unless the work behind it is actually done.'",
     ],
     whatToCheck: [
-      "Edit code/category, blocker text, account status, owner lane, workqueue, and last update.",
-      "Whether the blocker is documentation, coding, charge, coverage, claim, or system routing.",
-      "Whether the user owns this edit or only sees it because the account is in a shared queue.",
+      "The edit code or category, the message it shows, and when it was last updated.",
+      "Whether the blocker is documentation, coding, a charge, coverage, the claim, or system routing.",
+      "Whether this edit is actually yours to fix, or you're just seeing it because the account sits in a shared queue.",
     ],
-    whenToEscalate: "If the edit owner, blocker meaning, or safe resolution path is unclear, escalate to billing/revenue owner with edit category, status, queue, and callback.",
+    whenToEscalate: "If you can't tell who owns the edit or how to clear it safely, send it to the hospital billing lead with the edit category, the status, and the queue name.",
     walkthrough: [
       "Open DNB/edit detail.",
       "Identify blocker category and owner.",
