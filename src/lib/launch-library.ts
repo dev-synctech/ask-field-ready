@@ -1835,15 +1835,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Check personal vs shared ownership.",
     ],
     whatToSay: [
-      "'Let's identify the tool type first so we do not chase the wrong owner.'",
-      "'If it is shared, we route it. If it is personal, we check personalization.'",
+      "'Let's figure out which kind of tool this is first, so we ask the right person.'",
+      "'If it's yours, we fix it in personalization. If it belongs to the team, we route it.'",
     ],
     whatToCheck: [
-      "Tool type: phrase, text, list, link, or template component.",
-      "Exact name, synonyms, owner, share status, and note context.",
-      "Whether one user or a whole role cannot see it.",
+      "What kind of tool you're looking for: a phrase, a text block, a pick list, or a link.",
+      "The exact name (and one likely alternate spelling), and whether it's your personal tool or a shared one.",
+      "Whether only you can't see it, or the whole role/team can't see it.",
     ],
-    whenToEscalate: "If a shared tool or template component is missing for multiple users, escalate to documentation/template build owner with tool name, note type, role, and callback.",
+    whenToEscalate: "If a shared tool or template piece is missing for more than one person, send it to the documentation template team with the tool name, the note type, and the role affected.",
     walkthrough: [
       "In note editor - identify tool type.",
       "Search exact name and one synonym.",
