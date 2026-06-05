@@ -6559,31 +6559,31 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   }
   if (
     entry.id === "ll_p12r2_missing_activity_or_tab" &&
-    /\b(missing\s+(activity|tab|report)|(activity|tab|report)\s+(is\s+)?missing|(activity|tab|report)\s+not\s+showing|cannot?\s+see\s+(the\s+)?(activity|tab|report)|can'?t\s+see\s+(the\s+)?(activity|tab|report)|provider\s+can(not|'?t)\s+see\s+activity)\b/.test(queryText)
+    /\b(missing\s+(activity|tab|report)|(activity|tab|report)\s+(is\s+)?(missing|gone|hidden)|(activity|tab|report)\s+(is\s+)?not\s+showing|can(not|'?t)\s+see\s+(the\s+|an?\s+)?(activity|tab|report)|provider\s+can(not|'?t)\s+see\s+(the\s+|an?\s+)?activity|activity\s+tab\s+they\s+need|tab\s+they\s+need)\b/.test(queryText)
   ) {
-    return 30;
+    return 40;
   }
   if (
     entry.id === "ll_p12r2_wrong_department_context" &&
-    /\b(wrong\s+department(\s+context)?|wrong\s+login\s+department|logged\s+in(\s+to)?\s+wrong\s+department|wrong\s+clinic\s+context|wrong\s+login\s+context)\b/.test(queryText)
+    /\b(wrong\s+department(\s+context)?|wrong\s+login\s+department|logged\s+in(\s+to)?\s+wrong\s+department|wrong\s+clinic\s+context|wrong\s+login\s+context|in\s+the\s+wrong\s+department|user\s+is\s+in\s+the\s+wrong\s+department|wrong\s+location\s+context)\b/.test(queryText)
   ) {
-    return 30;
+    return 40;
   }
   if (
     entry.id === "ll_p12r2_portal_proxy_access" &&
-    /\b(proxy\s+can(not|'?t)\s+see(\s+portal)?|caregiver\s+can(not|'?t)\s+see(\s+patient)?\s+portal|proxy\s+access\s+missing|family\s+member\s+can(not|'?t)\s+see\s+portal)\b/.test(queryText)
+    /\b(proxy\s+can(not|'?t)\s+see\b|caregiver\s+can(not|'?t)\s+see\b|proxy\s+access\s+(missing|not\s+working)|family\s+member\s+can(not|'?t)\s+see\s+portal|proxy\s+(portal|patient|patients)|portal\s+proxy)\b/.test(queryText)
   ) {
-    return 30;
+    return 40;
   }
   if (
     entry.id === "ll_p12r2_portal_scheduling_unavailable" &&
-    /\b(online\s+scheduling\s+visit\s+type|visit\s+type\s+not\s+showing(\s+online)?|portal\s+visit\s+type\s+missing|self[- ]?schedule\s+visit\s+type|no\s+visit\s+types\s+online)\b/.test(queryText)
+    /\b(online\s+scheduling.*visit\s+type|visit\s+type.*not\s+showing|visit\s+type\s+(is\s+)?(missing|unavailable)|portal\s+visit\s+type|self[- ]?schedul\w*\s+visit\s+type|no\s+visit\s+types\s+online|scheduling\s+is\s+not\s+showing)\b/.test(queryText)
   ) {
-    return 30;
+    return 40;
   }
   if (
     entry.id === "ll_p12r2_portal_message_routing" &&
-    /\b(portal\s+message\s+(routed|went)\s+to\s+wrong\s+team|portal\s+message\s+wrong\s+(team|place|pool)|patient\s+message\s+wrong\s+team|mychart\s+message\s+wrong\s+team)\b/.test(queryText)
+    /\b(portal\s+message\s+(routed|went|routing)|portal\s+message\s+wrong\s+(team|place|pool)|patient\s+message\s+wrong\s+team|mychart\s+message\s+wrong\s+team)\b/.test(queryText)
   ) {
     return 30;
   }
@@ -6595,15 +6595,15 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   }
   if (
     entry.id === "ll_p12r2_eye_exam_section_missing" &&
-    /\b(eye\s+exam\s+(section|field|layout)\s+missing|slit\s+lamp\s+missing|refraction\s+missing|iop\s+field\s+missing|ophthalmology\s+section\s+missing)\b/.test(queryText)
+    /\b(eye\s+exam\s+(section|field|layout)\s+(is\s+)?(missing|gone|hidden)|eye\s+exam\s+(section|field|layout)\s+not\s+showing|slit\s+lamp\s+missing|refraction\s+missing|iop\s+field\s+missing|ophthalmology\s+section\s+missing)\b/.test(queryText)
   ) {
-    return 30;
+    return 40;
   }
   if (
     entry.id === "ll_p12r2_eye_imaging_wrong_view" &&
-    /\b(eye[- ]?care\s+(image|imaging)\s+(not\s+showing|wrong\s+view)|image\s+not\s+showing\s+in\s+expected\s+view|imaging\s+wrong\s+view|eye\s+imaging\s+filtered|oct\s+not\s+in\s+view)\b/.test(queryText)
+    /\b(eye[- ]?care\s+(image|imaging)|image\s+(is\s+)?not\s+showing.*(eye|view)|imaging\s+(is\s+)?(in\s+the\s+)?wrong\s+view|eye\s+imaging\s+filtered|oct\s+not\s+in\s+view|expected\s+eye\s+care\s+view|image.*expected.*view)\b/.test(queryText)
   ) {
-    return 30;
+    return 40;
   }
   return 0;
 }
