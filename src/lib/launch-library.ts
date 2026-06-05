@@ -2509,7 +2509,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_coverage_filing_order_term_delete",
     title: "Coverage filing order, term, or delete decision",
     type: "playbook",
-    summary: "Coverage changes need the account/encounter lane, active dates, filing order, and whether the record should be termed or deleted.",
+    summary: "Insurance coverage on an account looks wrong — decide whether to end it, delete it, or change the order it bills in.",
     roles: k("registration", "customer service", "revenue cycle"),
     domains: k("coverage", "insurance", "sbo"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
