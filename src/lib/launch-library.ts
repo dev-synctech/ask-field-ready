@@ -2592,6 +2592,402 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     status: "published",
   },
   {
+    id: "ll_provider_inbasket_folder_filter_overload",
+    title: "Provider In Basket is overloaded or filtered wrong",
+    type: "playbook",
+    summary: "In Basket overload starts with folder, pool/proxy view, priority, due date, and owner before anyone bulk-resolves messages.",
+    roles: k("provider", "resident / fellow", "clinic support"),
+    domains: k("in basket", "messages", "provider efficiency"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 3,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    is_deep_flow: true,
+    nav_trail: "In Basket -> Folder list -> Pool/proxy view -> Priority/status/date filters -> Message detail",
+    first90: [
+      "Identify the folder, pool, or proxy view.",
+      "Sort by priority, due date, or message type.",
+      "Do not bulk-resolve messages to reduce the count.",
+    ],
+    whatToSay: [
+      "'Let's find the work that needs action first, then we can clean up the view.'",
+      "'We are sorting, not deleting or resolving work blindly.'",
+    ],
+    whatToCheck: [
+      "Folder, message type, owner/pool/proxy view, priority, status, date range, and unread/due filters.",
+      "Whether the provider is seeing personal work, delegated work, pool work, or stale filtered work.",
+      "Whether urgent patient follow-up, results, refills, or signatures are mixed with FYI messages.",
+    ],
+    whenToEscalate: "If urgent follow-up is hidden, messages route to the wrong owner, or a whole provider group is affected, escalate to ambulatory/provider support with folder, pool, count, and callback.",
+    walkthrough: [
+      "Name the current folder and view.",
+      "Sort by urgency and owner.",
+      "Route wrong-pool or hidden urgent work.",
+    ],
+    ifThatFails: [
+      "Wrong pool: use message-routing playbook.",
+      "Filter hides work: reset date/status filters.",
+      "Urgent follow-up blocked: escalate now.",
+    ],
+    keywords: k("provider inbasket", "provider in basket", "inbasket overloaded", "in basket overloaded", "in basket overflowing", "inbasket overflowing", "too many in basket messages", "inbasket folders", "in basket folders", "message folder filter", "pool view", "proxy view", "delegate view", "provider messages filter", "unread messages", "due messages", "message priority", "in basket lessons learned"),
+    related_ids: ["p19", "c13", "v15"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_provider_inbasket_result_or_refill_followup",
+    title: "Provider In Basket result or refill follow-up is unclear",
+    type: "playbook",
+    summary: "Result, refill, and follow-up messages need owner, task type, action button, documentation status, and callback path.",
+    roles: k("provider", "clinic support", "nurse"),
+    domains: k("in basket", "results", "refills"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 3,
+    escalation: 3,
+    vendor_family: "epic",
+    action: "route",
+    is_deep_flow: true,
+    nav_trail: "In Basket -> Message detail -> Result/refill/follow-up action -> Route/done owner",
+    first90: [
+      "Open the message detail, not just the folder row.",
+      "Identify result, refill, signature, or follow-up type.",
+      "Confirm owner before marking done or routing.",
+    ],
+    whatToSay: [
+      "'Let's open the message and identify what action it actually needs.'",
+      "'Done means the next owner is complete, not just that the message is gone.'",
+    ],
+    whatToCheck: [
+      "Message type, result/refill/follow-up status, action buttons, owner, due date, and route/done availability.",
+      "Whether documentation, orders, patient communication, or another owner is required before closing.",
+      "Whether the message belongs to personal, pool, proxy, or covering-provider work.",
+    ],
+    whenToEscalate: "If a time-sensitive result/refill/follow-up cannot be acted on or routed, escalate to provider support/clinic lead with message type, owner, status, and callback.",
+    walkthrough: [
+      "Open message detail.",
+      "Classify action type.",
+      "Route, complete, or escalate with owner.",
+    ],
+    ifThatFails: [
+      "Action button missing: check role/proxy view.",
+      "Owner unclear: route clinic/provider support.",
+      "Time-sensitive result/refill: escalate now.",
+    ],
+    keywords: k("inbasket result", "in basket result", "result message", "refill message", "rx refill inbasket", "rx refill in basket", "follow up message", "follow-up message", "done button missing", "cannot mark done", "can't close inbasket", "can't close in basket", "route result message", "provider refill queue", "in basket follow up", "provider message action"),
+    related_ids: ["p19", "c13", "v15"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_smarttools_placeholder_prompt_unresolved",
+    title: "SmartTool prompt or placeholder did not resolve",
+    type: "playbook",
+    summary: "SmartTool issues need note context, unresolved prompt, required field, and tool ownership before the provider signs.",
+    roles: k("provider", "clinic support", "clinical documentation"),
+    domains: k("smarttools", "notes", "documentation"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 3,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "document",
+    is_deep_flow: true,
+    nav_trail: "Note editor -> SmartTool/SmartText/SmartPhrase -> Prompt or placeholder -> Required field/sign",
+    first90: [
+      "Keep the note open and find the unresolved text.",
+      "Confirm tool type and required prompt.",
+      "Resolve prompts before the provider signs.",
+    ],
+    whatToSay: [
+      "'Let's resolve the placeholder before this note gets signed.'",
+      "'If the tool is broken for everyone, that is a content/build owner issue.'",
+    ],
+    whatToCheck: [
+      "Note type, encounter, SmartTool type, unresolved placeholder, required prompt, refresh behavior, and sign status.",
+      "Whether the issue is one personal tool, one shared tool, or a note-template build issue.",
+      "Whether local policy allows manual text or requires content-owner correction.",
+    ],
+    whenToEscalate: "If a shared SmartTool fails, required prompt will not resolve, or the note cannot sign, escalate to clinical documentation/content owner with tool name, note type, and callback.",
+    walkthrough: [
+      "Find unresolved placeholder.",
+      "Confirm SmartTool type and prompt.",
+      "Resolve before sign or route owner.",
+    ],
+    ifThatFails: [
+      "Personal tool only: personalization owner.",
+      "Shared tool broken: content/build owner.",
+      "Signed note affected: use correction/addendum path.",
+    ],
+    keywords: k("smarttools", "smart tools", "smarttool", "smart tool", "smartphrase prompt", "smart phrase prompt", "smarttext prompt", "smart text prompt", "smartlist prompt", "smart list prompt", "placeholder not resolving", "unresolved placeholder", "wildcard in note", "*** in note", "smartlink blank", "smart link blank", "prompt won't resolve", "prompt wont resolve", "note placeholder"),
+    related_ids: ["p24", "c18", "v20"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_smartset_section_or_order_not_selected",
+    title: "SmartSet section or expected order is not selected",
+    type: "playbook",
+    summary: "SmartSet questions need context, section visibility, selected orders, required fields, and sign status before calling build broken.",
+    roles: k("provider", "resident / fellow", "clinical support"),
+    domains: k("smartsets", "orders", "provider efficiency"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3,
+    escalation: 3,
+    vendor_family: "epic",
+    action: "place",
+    is_deep_flow: true,
+    nav_trail: "Chart -> Orders/SmartSet -> Section/accordion -> Selected orders -> Required fields/sign",
+    first90: [
+      "Confirm encounter, department, and visit context.",
+      "Expand the expected SmartSet section.",
+      "Check selected orders and required fields.",
+    ],
+    whatToSay: [
+      "'Let's make sure the right section is open before we call the order missing.'",
+      "'SmartSets still need required fields before signing.'",
+    ],
+    whatToCheck: [
+      "Encounter, department, SmartSet name, section/accordion state, selected orders, required fields, and sign status.",
+      "Whether the expected order is hidden, unchecked, filtered by context, or unavailable for role/location.",
+      "Whether the issue is personal preference, specialty template, or shared build.",
+    ],
+    whenToEscalate: "If the expected section/order is missing for the right role/context or required fields cannot be completed, escalate to provider support/build owner with SmartSet name and context.",
+    walkthrough: [
+      "Open SmartSet in correct context.",
+      "Expand section and select expected order.",
+      "Complete required fields before signing.",
+    ],
+    ifThatFails: [
+      "Hidden section: expand/search within set.",
+      "Order unavailable: check role/location context.",
+      "Required field blocked: escalate exact field.",
+    ],
+    keywords: k("smartset section", "smart set section", "smartset order not selected", "smart set order not selected", "smartset unchecked", "smartset hidden section", "smartset accordion", "smartset required field", "smartset won't sign", "smartset wont sign", "expected order not in smartset", "order missing from smartset", "provider smartset", "provider smart set", "smartset tips"),
+    related_ids: ["p2", "c3", "v10"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_inpatient_clinical_review_data_hidden",
+    title: "Inpatient clinical review data is hidden or incomplete",
+    type: "playbook",
+    summary: "Clinical review issues need patient-list context, date/filter, result/vitals/source status, and owner before assuming data is missing.",
+    roles: k("inpatient provider", "resident / fellow", "floor consultant"),
+    domains: k("clinical review", "patient lists", "results"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 3,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "review",
+    is_deep_flow: true,
+    nav_trail: "Patient list -> Clinical review/summary -> Date/filter/source -> Detail view",
+    first90: [
+      "Confirm the patient list and selected patient.",
+      "Check date range, filters, and source section.",
+      "Open detail before calling data missing.",
+    ],
+    whatToSay: [
+      "'Clinical review is usually view-driven, so I am checking filters first.'",
+      "'If the source data is not final, the summary may not show it yet.'",
+    ],
+    whatToCheck: [
+      "List name, selected patient, encounter, date range, filters, section visibility, result/vital/note status, and owner.",
+      "Whether data is hidden, not resulted, preliminary, unsigned, or outside the current date range.",
+      "Whether one patient, one list, or multiple providers are affected.",
+    ],
+    whenToEscalate: "If final/source data is missing for multiple users or critical review is blocked, escalate to clinical review/provider support with list, section, filter, and callback.",
+    walkthrough: [
+      "Open patient list and selected patient.",
+      "Check clinical review filters/date.",
+      "Open source detail and route owner.",
+    ],
+    ifThatFails: [
+      "Hidden by filter: reset date/status.",
+      "Source not final: check source workflow.",
+      "Multi-user gap: escalate as build/data issue.",
+    ],
+    keywords: k("clinical review", "provider clinical review", "inpatient clinical review", "clinical review data missing", "clinical review not showing", "labs not showing clinical review", "vitals not showing clinical review", "patient summary missing", "overview missing", "snapshot missing", "chart review missing", "patient lists clinical review", "provider inpatient list", "rounding review"),
+    related_ids: ["p25", "c19", "v21"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_provider_note_copy_forward_or_refresh_wrong",
+    title: "Provider note copy-forward or refresh looks wrong",
+    type: "playbook",
+    summary: "Copy-forward and refresh issues need note source, current encounter, imported data status, and review before signing.",
+    roles: k("provider", "resident / fellow", "clinical documentation"),
+    domains: k("notes", "documentation", "provider efficiency"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 3,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "document",
+    is_deep_flow: true,
+    nav_trail: "Note editor -> Copy-forward/refresh/imported data -> Current encounter -> Sign",
+    first90: [
+      "Confirm the note belongs to this encounter.",
+      "Identify copied, refreshed, or imported content.",
+      "Review stale data before signing.",
+    ],
+    whatToSay: [
+      "'Let's verify what came forward before this note is signed.'",
+      "'I can help find the source, but the provider owns clinical accuracy.'",
+    ],
+    whatToCheck: [
+      "Current encounter, source note/date, copied sections, refreshed data, unresolved placeholders, and sign status.",
+      "Whether old assessment/plan, stale vitals/results, or wrong-context text came forward.",
+      "Whether correction should happen before sign or through addendum after sign.",
+    ],
+    whenToEscalate: "If wrong-context content is already signed, or copied/refresh behavior is broken for multiple providers, escalate to documentation/content owner with note type and context.",
+    walkthrough: [
+      "Confirm encounter and source note.",
+      "Find copied/refreshed sections.",
+      "Review before sign or use correction path.",
+    ],
+    ifThatFails: [
+      "Already signed: use addendum/correction path.",
+      "Tool refresh broken: route content owner.",
+      "Clinical accuracy concern: provider owner decides.",
+    ],
+    keywords: k("copy forward", "copy-forward", "copied forward", "note copy forward", "refresh note", "refresh data note", "note pulled old data", "old assessment in note", "old plan in note", "stale note data", "imported data wrong", "wrong data in note", "provider note refresh", "inpatient provider notes", "note carried forward"),
+    related_ids: ["p30", "c24", "v26"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_surgical_workflow_case_ready_blocked",
+    title: "Surgical workflow is not ready or case status is blocked",
+    type: "playbook",
+    summary: "Surgical workflow questions need case status, required documentation, orders, consent, and owner before moving the case forward.",
+    roles: k("or support", "provider", "scheduler", "periop support"),
+    domains: k("surgery", "periop", "case status"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 4,
+    escalation: 4,
+    vendor_family: "epic",
+    action: "review",
+    is_deep_flow: true,
+    nav_trail: "Surgery/case board -> Case detail/status -> Required docs/orders/consent -> Owner",
+    first90: [
+      "Open the case detail and read current status.",
+      "Check required docs, orders, and consent.",
+      "Escalate if patient movement or procedure timing is blocked.",
+    ],
+    whatToSay: [
+      "'Let's separate case status from the missing requirement.'",
+      "'If the case is time-sensitive, we route the owner now.'",
+    ],
+    whatToCheck: [
+      "Case status, location/room, procedure, consent, H&P/note status, orders, pre-op tasks, owner, and callback.",
+      "Whether the issue is schedule/case request, clinical documentation, order readiness, consent, or room/status movement.",
+      "Whether one case or a board-wide workflow is affected.",
+    ],
+    whenToEscalate: "If case timing, patient movement, consent, orders, or required documentation is blocked, escalate to periop/surgical owner or command center with case status and callback.",
+    walkthrough: [
+      "Open case status/detail.",
+      "Check required docs/orders/consent.",
+      "Route periop owner with blocker.",
+    ],
+    ifThatFails: [
+      "Consent missing: use consent playbook.",
+      "Orders missing: use order-entry path.",
+      "Case not advancing: escalate periop owner.",
+    ],
+    keywords: k("surgical workflow", "surgery workflow", "surgical workflow efficiency", "case not ready", "case readiness", "preop not ready", "pre-op not ready", "or case not ready", "case status blocked", "surgery case status", "case board blocked", "case won't advance", "case wont advance", "procedure readiness", "surgery orders missing", "periop checklist blocked"),
+    related_ids: ["p30", "c24", "v26"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_radiant_protocol_ready_for_exam_blocked",
+    title: "Radiant protocol or ready-for-exam status is blocked",
+    type: "playbook",
+    summary: "Radiology readiness questions need order, protocol, patient prep, transport, exam status, and modality owner checks.",
+    roles: k("radiology tech", "provider", "scheduler", "transport"),
+    domains: k("radiology", "imaging", "protocol"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3,
+    escalation: 3,
+    vendor_family: "epic",
+    action: "review",
+    is_deep_flow: true,
+    nav_trail: "Imaging order/exam -> Protocol/status -> Patient prep/transport -> Modality owner",
+    first90: [
+      "Separate order status from exam readiness.",
+      "Check protocol, prep, and transport status.",
+      "Route modality owner if timing is blocked.",
+    ],
+    whatToSay: [
+      "'Let's find whether this is order, protocol, prep, or transport.'",
+      "'I will capture the exact imaging status before escalating.'",
+    ],
+    whatToCheck: [
+      "Order status, protocol status, modality, exam status, patient prep, transport, location, owner, and callback.",
+      "Whether the study is ordered, scheduled, protocolled, ready, delayed, completed, or waiting on prep.",
+      "Whether one patient/study or a modality queue is affected.",
+    ],
+    whenToEscalate: "If exam timing is blocked by protocol, prep, transport, or owner uncertainty, escalate to radiology/modality owner with status, location, and callback.",
+    walkthrough: [
+      "Open imaging order/exam detail.",
+      "Check protocol and ready status.",
+      "Route modality owner with blocker.",
+    ],
+    ifThatFails: [
+      "Protocol pending: route radiology owner.",
+      "Prep incomplete: route clinical owner.",
+      "Transport delay: escalate patient movement.",
+    ],
+    keywords: k("radiant protocol", "radiology protocol", "protocol pending", "protocol blocked", "ready for exam", "exam not ready", "exam delayed", "radiant exam status", "modality queue", "ct protocol", "mri protocol", "xray ready", "ultrasound ready", "radiology patient prep", "radiology transport", "radiant workflow"),
+    related_ids: ["p2", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_prescription_printer_routing_wrong",
+    title: "Prescription is printing to the wrong printer",
+    type: "playbook",
+    summary: "Prescription printing issues need prescription context, printer route, one controlled reprint, and escalation if the approved printer is unavailable.",
+    roles: k("provider", "clinic support", "front desk"),
+    domains: k("printing", "prescriptions", "orders"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 3,
+    escalation: 3,
+    vendor_family: "epic",
+    action: "review",
+    is_deep_flow: true,
+    nav_trail: "Prescription/order -> Print action -> Printer selector/route -> One controlled reprint",
+    first90: [
+      "Keep the prescription/order screen open.",
+      "Confirm the approved prescription printer route.",
+      "Send one controlled reprint only after verifying printer.",
+    ],
+    whatToSay: [
+      "'Before we reprint, I am checking the prescription printer route.'",
+      "'We do one controlled print so we do not create duplicates.'",
+    ],
+    whatToCheck: [
+      "Prescription/order context, print button/menu, selected printer, printer status, output location, and duplicate-print risk.",
+      "Whether the issue is wrong printer, missing printer, offline printer, permission, or prescription status.",
+      "Whether local policy requires pharmacy/provider owner before reprinting.",
+    ],
+    whenToEscalate: "If the approved prescription printer is missing/offline, duplicates may exist, or medication workflow is blocked, escalate to device/pharmacy/provider support with printer and status.",
+    walkthrough: [
+      "Open prescription print action.",
+      "Verify printer route/status.",
+      "Print once and confirm output.",
+    ],
+    ifThatFails: [
+      "Printer missing: device/support owner.",
+      "Duplicate risk: stop and escalate.",
+      "Prescription status blocked: provider/pharmacy owner.",
+    ],
+    keywords: k("print prescription", "print prescriptions", "prescription printer", "rx printer", "wrong prescription printer", "troy printer", "t printer", "how to print prescriptions", "printer for prescription", "prescription not printing", "rx not printing", "prescription printed wrong printer", "print rx", "paper prescription printer"),
+    related_ids: ["p3", "c3", "v2"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
     id: "ll_beaker_specimen_label_accession",
     title: "Lab specimen label or accession workflow is blocked",
     type: "playbook",
@@ -5024,6 +5420,60 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return 30;
   }
+  if (
+    entry.id === "ll_provider_inbasket_folder_filter_overload" &&
+    /\b(provider\s+in\s?basket|in\s?basket\s+(overloaded|overflowing|folders?|filter)|message\s+folder\s+filter|pool\s+view|proxy\s+view|delegate\s+view)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_provider_inbasket_result_or_refill_followup" &&
+    /\b(in\s?basket\s+(result|refill|follow[- ]?up)|result\s+message|refill\s+message|done\s+button\s+missing|cannot\s+mark\s+done|provider\s+message\s+action)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_smarttools_placeholder_prompt_unresolved" &&
+    /\b(smart\s?tools?|smart\s?phrase\s+prompt|smart\s?text\s+prompt|smart\s?list\s+prompt|placeholder\s+not\s+resolving|unresolved\s+placeholder|smart\s?link\s+blank|prompt\s+won'?t\s+resolve)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_smartset_section_or_order_not_selected" &&
+    /\b(smart\s?set\s+(section|order|unchecked|hidden|required)|expected\s+order\s+not\s+in\s+smart\s?set|order\s+missing\s+from\s+smart\s?set)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_inpatient_clinical_review_data_hidden" &&
+    /\b(clinical\s+review|inpatient\s+clinical\s+review|patient\s+summary\s+missing|chart\s+review\s+missing|provider\s+inpatient\s+list|rounding\s+review)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_provider_note_copy_forward_or_refresh_wrong" &&
+    /\b(copy[- ]?forward|copied\s+forward|refresh\s+note|note\s+pulled\s+old\s+data|old\s+(assessment|plan)\s+in\s+note|stale\s+note\s+data|imported\s+data\s+wrong)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_surgical_workflow_case_ready_blocked" &&
+    /\b(surgical\s+workflow|surgery\s+workflow|case\s+not\s+ready|case\s+readiness|pre-?op\s+not\s+ready|case\s+status\s+blocked|procedure\s+readiness|periop\s+checklist\s+blocked)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_radiant_protocol_ready_for_exam_blocked" &&
+    /\b(radiant\s+protocol|radiology\s+protocol|protocol\s+pending|ready\s+for\s+exam|exam\s+not\s+ready|modality\s+queue|radiology\s+patient\s+prep|radiology\s+transport)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_prescription_printer_routing_wrong" &&
+    /\b(print\s+prescriptions?|prescription\s+printer|rx\s+printer|troy\s+printer|t\s+printer|prescription\s+not\s+printing|print\s+rx|paper\s+prescription\s+printer)\b/.test(queryText)
+  ) {
+    return 30;
+  }
   return 0;
 }
 
@@ -5250,6 +5700,123 @@ function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
       ifYouDontSeeIt: "If owner or required status is unclear, route revenue-cycle lead with activity type and account lane.",
       whatToSay: "This is a handoff item, so I am checking owner and note before closing it.",
       checkThis: ["Activity type and owner.", "Billing indicator/status.", "Clean note and callback."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_provider_inbasket_folder_filter_overload") {
+    return {
+      doThisFirst: "Identify whether the provider is in personal, pool, or proxy view.",
+      whereToLook: "Look at folder, message type, owner/pool/proxy view, priority, due date, status, and date filters.",
+      whatToClick: "Open folder/filter controls, sort by priority or due date, then open the highest-risk message detail first.",
+      whatShouldHappen: "The urgent or owner-specific work should separate from FYI, stale, or filtered messages.",
+      ifYouDontSeeIt: "If urgent work is hidden or a provider group is affected, escalate with folder, pool, count, and callback.",
+      whatToSay: "Let's find the work that needs action first, then we can clean up the view.",
+      checkThis: ["Folder and message type.", "Personal/pool/proxy owner view.", "Priority, due date, status, and date filters."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_provider_inbasket_result_or_refill_followup") {
+    return {
+      doThisFirst: "Open the message detail and identify the action type.",
+      whereToLook: "Look at message type, result/refill/follow-up status, action buttons, owner, due date, and route/done availability.",
+      whatToClick: "Use the message detail action area. Route, complete, or escalate only after owner and required action are clear.",
+      whatShouldHappen: "The message should show whether it needs result review, refill action, patient follow-up, routing, or completion.",
+      ifYouDontSeeIt: "If a time-sensitive message cannot be acted on or routed, escalate with message type, owner, and callback.",
+      whatToSay: "Let's open the message and identify what action it actually needs.",
+      checkThis: ["Message type and owner.", "Action buttons and due date.", "Personal/pool/proxy context."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_smarttools_placeholder_prompt_unresolved") {
+    return {
+      doThisFirst: "Keep the note open and find the unresolved prompt or placeholder.",
+      whereToLook: "Look at note type, encounter, SmartTool type, unresolved placeholder, required prompt, refresh behavior, and sign status.",
+      whatToClick: "Open or click the unresolved prompt/placeholder, complete required choices, then retry sign only after the text resolves.",
+      whatShouldHappen: "The placeholder should resolve into approved text or show a specific tool/content owner problem.",
+      ifYouDontSeeIt: "If a shared tool fails or the note cannot sign, escalate to documentation/content owner with tool and note type.",
+      whatToSay: "Let's resolve the placeholder before this note gets signed.",
+      checkThis: ["Note type and encounter.", "Tool type and unresolved prompt.", "Sign status and shared vs personal tool."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_smartset_section_or_order_not_selected") {
+    return {
+      doThisFirst: "Confirm encounter, department, and visit context before searching the SmartSet.",
+      whereToLook: "Look at SmartSet name, section/accordion state, selected orders, required fields, and sign status.",
+      whatToClick: "Expand the expected section, select the intended order, complete required fields, then sign or route the blocker.",
+      whatShouldHappen: "The expected order should appear as selected or show why role/location/context hides it.",
+      ifYouDontSeeIt: "If the expected section/order is missing in the right context, escalate with SmartSet name and context.",
+      whatToSay: "Let's make sure the right section is open before we call the order missing.",
+      checkThis: ["Encounter and department.", "SmartSet section/selected orders.", "Required fields and sign status."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_inpatient_clinical_review_data_hidden") {
+    return {
+      doThisFirst: "Confirm the patient list, selected patient, encounter, and date range.",
+      whereToLook: "Look at clinical review filters, section visibility, date range, source result/vital/note status, and owner.",
+      whatToClick: "Open filters or section controls, reset date/status if needed, then open the source detail before escalating.",
+      whatShouldHappen: "The data should appear, or the source status should show preliminary, not final, unsigned, or outside range.",
+      ifYouDontSeeIt: "If final/source data is missing for multiple users or critical review is blocked, escalate with list and filter context.",
+      whatToSay: "Clinical review is usually view-driven, so I am checking filters first.",
+      checkThis: ["Patient list and encounter.", "Date/status filters and section visibility.", "Source detail and owner."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_provider_note_copy_forward_or_refresh_wrong") {
+    return {
+      doThisFirst: "Confirm the note belongs to this encounter and identify copied or refreshed content.",
+      whereToLook: "Look at current encounter, source note/date, copied sections, refreshed data, unresolved placeholders, and sign status.",
+      whatToClick: "Open copied/refreshed section details if available, compare source/current context, then correct before sign or use addendum path.",
+      whatShouldHappen: "The provider should know what came forward and whether anything stale must be edited before signing.",
+      ifYouDontSeeIt: "If wrong-context content is already signed or refresh behavior is broken broadly, escalate to documentation/content owner.",
+      whatToSay: "Let's verify what came forward before this note is signed.",
+      checkThis: ["Current encounter and source note.", "Copied/refreshed sections.", "Signed vs unsigned correction path."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_surgical_workflow_case_ready_blocked") {
+    return {
+      doThisFirst: "Open the case detail and read the current case status.",
+      whereToLook: "Look at case status, location/room, procedure, consent, H&P/note status, orders, pre-op tasks, and owner.",
+      whatToClick: "Open the blocked requirement detail, separate docs/orders/consent/status, then route the correct periop owner.",
+      whatShouldHappen: "The blocker should resolve into a specific missing requirement or owner lane before the case moves.",
+      ifYouDontSeeIt: "If case timing, patient movement, consent, orders, or required documentation is blocked, escalate immediately.",
+      whatToSay: "Let's separate case status from the missing requirement.",
+      checkThis: ["Case status and room/location.", "Required docs, orders, and consent.", "Owner and callback."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_radiant_protocol_ready_for_exam_blocked") {
+    return {
+      doThisFirst: "Separate imaging order status from exam readiness.",
+      whereToLook: "Look at order status, protocol status, modality, exam status, patient prep, transport, location, and owner.",
+      whatToClick: "Open imaging order/exam detail, then protocol/status details. Route modality, prep, or transport owner based on blocker.",
+      whatShouldHappen: "The exam should show ordered, scheduled, protocolled, ready, delayed, completed, or waiting on prep/transport.",
+      ifYouDontSeeIt: "If timing is blocked by protocol, prep, transport, or owner uncertainty, escalate to radiology/modality owner.",
+      whatToSay: "Let's find whether this is order, protocol, prep, or transport.",
+      checkThis: ["Order and exam status.", "Protocol, prep, and transport.", "Modality owner and callback."],
+      escalateWhen: entry.whenToEscalate,
+    };
+  }
+
+  if (entry.id === "ll_prescription_printer_routing_wrong") {
+    return {
+      doThisFirst: "Keep the prescription screen open and confirm the approved prescription printer route.",
+      whereToLook: "Look at prescription/order context, print action, selected printer, printer status, output location, and duplicate-print risk.",
+      whatToClick: "Open the print action or printer selector, choose the approved printer if available, then send one controlled reprint.",
+      whatShouldHappen: "One prescription should print to the approved device, or the screen should show a printer/status blocker.",
+      ifYouDontSeeIt: "If the approved printer is missing/offline or duplicates may exist, stop and escalate to device/pharmacy/provider support.",
+      whatToSay: "Before we reprint, I am checking the prescription printer route.",
+      checkThis: ["Prescription/order context.", "Selected printer and status.", "Duplicate-print risk and output confirmation."],
       escalateWhen: entry.whenToEscalate,
     };
   }
