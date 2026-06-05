@@ -2524,15 +2524,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Term old valid coverage; delete only if added in error.",
     ],
     whatToSay: [
-      "'Let's decide whether this coverage was once valid or added by mistake.'",
-      "'Filing order matters, so I am checking it before we attach anything.'",
+      "'Let me see if this coverage was valid at some point, or just added by mistake.'",
+      "'The order it bills in matters too, so I'm checking that before we attach anything.'",
     ],
     whatToCheck: [
-      "Coverage status, effective dates, filing order, account/encounter link, payer lane, and owner.",
-      "Whether the coverage was ever valid for past encounters.",
-      "Whether the issue is add coverage, attach coverage, term coverage, delete erroneous coverage, or reorder filing.",
+      "The coverage status, effective dates, and which order it bills in (primary, secondary, tertiary).",
+      "Whether the coverage was ever valid for any past visit.",
+      "Which action this actually needs: add new coverage, attach it to this visit, end it, delete an error, or change the order.",
     ],
-    whenToEscalate: "If effective dates, filing order, or term/delete decision is unclear, escalate to registration/coverage owner with account context and callback.",
+    whenToEscalate: "If the effective dates, the billing order, or the end-versus-delete decision isn't clear, send it to the registration coverage lead with the account context and a callback number.",
     walkthrough: [
       "Open coverage lane.",
       "Check dates and filing order.",
