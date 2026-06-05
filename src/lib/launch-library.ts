@@ -6228,7 +6228,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Wrong pool: fix routing in build.",
       "Truly missing: results routing team.",
     ],
-    keywords: k("results not showing", "result missing", "labs not in chart", "imaging not in chart", "patient can't see result", "portal result missing", "where is my result"),
+    keywords: k("results not in chart", "result missing from chart", "labs not in chart", "imaging not in chart", "result not in inbox", "result not in in basket", "result folder empty", "lab result not routed", "imaging not routed"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
