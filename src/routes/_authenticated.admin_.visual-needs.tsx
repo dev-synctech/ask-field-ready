@@ -47,8 +47,8 @@ function writeStatusMap(map: Record<string, VisualNeedStatus>) {
 }
 
 function VisualNeedsPage() {
-  const [askGapLog, setAskGapLog] = useState(() => readAskGapLog());
-  const [statusMap, setStatusMap] = useState<Record<string, VisualNeedStatus>>(() => readStatusMap());
+  const [askGapLog, setAskGapLog] = useState<AskGapLogRecord[]>([]);
+  const [statusMap, setStatusMap] = useState<Record<string, VisualNeedStatus>>({});
   const [kindFilter, setKindFilter] = useState<KindFilter>("all");
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
