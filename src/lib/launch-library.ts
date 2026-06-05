@@ -6272,7 +6272,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Wrong visit type: switch to the correct visit type.",
       "Peer has it: copy their personal layout.",
     ],
-    keywords: k("eye exam section missing", "slit lamp missing", "refraction missing", "iop field missing", "ophthalmology template missing", "optometry template missing", "specialty exam form missing"),
+    keywords: k("eye exam section missing", "eye exam field missing", "eye exam layout missing", "slit lamp missing", "refraction missing", "iop field missing", "ophthalmology template missing", "optometry template missing", "specialty exam form missing", "ophthalmology section missing", "eye care section missing"),
     related_ids: ["p25", "c19", "v21"],
     sanitized_approved: true,
     status: "published",
