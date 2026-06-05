@@ -6557,8 +6557,55 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return 30;
   }
+  if (
+    entry.id === "ll_p12r2_missing_activity_or_tab" &&
+    /\b(missing\s+(activity|tab|report)|(activity|tab|report)\s+(is\s+)?missing|(activity|tab|report)\s+not\s+showing|cannot?\s+see\s+(the\s+)?(activity|tab|report)|can'?t\s+see\s+(the\s+)?(activity|tab|report)|provider\s+can(not|'?t)\s+see\s+activity)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_wrong_department_context" &&
+    /\b(wrong\s+department(\s+context)?|wrong\s+login\s+department|logged\s+in(\s+to)?\s+wrong\s+department|wrong\s+clinic\s+context|wrong\s+login\s+context)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_portal_proxy_access" &&
+    /\b(proxy\s+can(not|'?t)\s+see(\s+portal)?|caregiver\s+can(not|'?t)\s+see(\s+patient)?\s+portal|proxy\s+access\s+missing|family\s+member\s+can(not|'?t)\s+see\s+portal)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_portal_scheduling_unavailable" &&
+    /\b(online\s+scheduling\s+visit\s+type|visit\s+type\s+not\s+showing(\s+online)?|portal\s+visit\s+type\s+missing|self[- ]?schedule\s+visit\s+type|no\s+visit\s+types\s+online)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_portal_message_routing" &&
+    /\b(portal\s+message\s+(routed|went)\s+to\s+wrong\s+team|portal\s+message\s+wrong\s+(team|place|pool)|patient\s+message\s+wrong\s+team|mychart\s+message\s+wrong\s+team)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12_portal_message_or_result_missing" &&
+    /\b(patient\s+can(not|'?t)\s+see\s+(a\s+)?result(\s+in\s+portal)?|result\s+not\s+visible\s+in\s+portal|portal\s+result\s+(missing|not\s+visible)|proxy\s+can(not|'?t)\s+see\s+result|result\s+release\s+rule|result\s+held\s+for\s+release)\b/.test(queryText)
+  ) {
+    return 35;
+  }
+  if (
+    entry.id === "ll_p12r2_eye_exam_section_missing" &&
+    /\b(eye\s+exam\s+(section|field|layout)\s+missing|slit\s+lamp\s+missing|refraction\s+missing|iop\s+field\s+missing|ophthalmology\s+section\s+missing)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
+    entry.id === "ll_p12r2_eye_imaging_wrong_view" &&
+    /\b(eye[- ]?care\s+(image|imaging)\s+(not\s+showing|wrong\s+view)|image\s+not\s+showing\s+in\s+expected\s+view|imaging\s+wrong\s+view|eye\s+imaging\s+filtered|oct\s+not\s+in\s+view)\b/.test(queryText)
+  ) {
+    return 30;
+  }
   return 0;
-}
 
 function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
   const queryText = query.toLowerCase();
