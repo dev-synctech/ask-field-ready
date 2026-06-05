@@ -2683,7 +2683,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_smarttools_placeholder_prompt_unresolved",
     title: "SmartTool prompt or placeholder did not resolve",
     type: "playbook",
-    summary: "SmartTool issues need note context, unresolved prompt, required field, and tool ownership before the provider signs.",
+    summary: "A note has leftover *** or unfilled prompts that did not fill in — resolve them before the note is signed.",
     roles: k("provider", "clinic support", "clinical documentation"),
     domains: k("smarttools", "notes", "documentation"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
