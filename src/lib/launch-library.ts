@@ -2208,7 +2208,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_hb_account_status_dnb_or_billed",
     title: "Hospital account status is unclear",
     type: "playbook",
-    summary: "Account-status questions start by naming the current billing state, DNB reason, workqueue, and owner before anyone changes the account.",
+    summary: "You opened a hospital account and the billing status isn't clear — it could be open, on hold (not yet billed), billed, or closed.",
     roles: k("biller", "revenue cycle", "customer service"),
     domains: k("hospital billing", "account", "dnb"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
