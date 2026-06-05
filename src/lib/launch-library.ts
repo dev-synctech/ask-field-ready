@@ -2655,15 +2655,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Confirm owner before marking done or routing.",
     ],
     whatToSay: [
-      "'Let's open the message and identify what action it actually needs.'",
-      "'Done means the next owner is complete, not just that the message is gone.'",
+      "'Let's open the message and figure out what it actually needs us to do.'",
+      "'Done means the next person can act on it — not just that it's off your screen.'",
     ],
     whatToCheck: [
-      "Message type, result/refill/follow-up status, action buttons, owner, due date, and route/done availability.",
-      "Whether documentation, orders, patient communication, or another owner is required before closing.",
-      "Whether the message belongs to personal, pool, proxy, or covering-provider work.",
+      "What kind of message it is (result, refill, signature, or follow-up) and the current status.",
+      "Which buttons are showing — reply, route, sign, done — and which one matches the action.",
+      "Whether the message is for you personally, the pool, a proxy view, or the covering provider.",
     ],
-    whenToEscalate: "If a time-sensitive result/refill/follow-up cannot be acted on or routed, escalate to provider support/clinic lead with message type, owner, status, and callback.",
+    whenToEscalate: "If a time-sensitive result, refill, or follow-up can't be acted on or routed, send it to the clinic lead with the message type, the status, and a callback number.",
     walkthrough: [
       "Open message detail.",
       "Classify action type.",
