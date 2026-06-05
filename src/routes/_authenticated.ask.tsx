@@ -359,6 +359,8 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
   const sourceId = answer.sourceEntry?.id ?? "";
   if (answer.matchQuality !== "strong" || !sourceId) return false;
 
+  if (isPack12DirectAskAlias(query, sourceId)) return true;
+
   const text = query.toLowerCase();
   const tokenCount = text.match(/[a-z0-9]+/g)?.length ?? 0;
   const broadOrderOnly = /\borders?\b/.test(text) && !/\b(sign|cosign|co-sign|place|put|enter|new|modify|discontinue|cancel|diagnosis|indication|unsigned|pending|initiated|favorite|personal list|lispro|drip|mar|medication|procedure|scan|document|chart)\b/.test(text);
@@ -459,6 +461,20 @@ function hasSpecificPatternHit(query: string, slots: ParsedSlots) {
   if (specificSignals.some(signal => text.includes(signal))) return true;
 
   return slots.vendor_family !== "unknown" && slots.action !== "unknown" && sourceId !== "ll_order_entry";
+}
+
+function isPack12DirectAskAlias(query: string, sourceId: string) {
+  const text = query.toLowerCase();
+  const directAliases: Record<string, RegExp> = {
+    ll_p12r2_missing_activity_or_tab: /\b(provider\s+can(not|'?t)\s+see\s+(the\s+)?activity\s+tab\s+they\s+need|missing\s+(activity|tab|report)|(activity|tab|report)\s+(is\s+)?(missing|gone|hidden|not\s+showing)|can(not|'?t)\s+see\s+(the\s+)?(activity|tab|report))\b/,
+    ll_p12r2_wrong_department_context: /\b(user\s+is\s+in\s+the\s+wrong\s+department\s+context|wrong\s+department\s+context|wrong\s+department|wrong\s+login\s+department|wrong\s+location\s+context)\b/,
+    ll_p12r2_portal_proxy_access: /\b(proxy\s+can(not|'?t)\s+see\s+(the\s+)?patients?\s+portal\s+information|proxy\s+can(not|'?t)\s+see|caregiver\s+can(not|'?t)\s+see|proxy\s+access|portal\s+proxy)\b/,
+    ll_p12r2_portal_scheduling_unavailable: /\b(online\s+scheduling\s+is\s+not\s+showing\s+the\s+visit\s+type|online\s+scheduling.*visit\s+type|visit\s+type.*not\s+showing|visit\s+type\s+(is\s+)?(missing|unavailable)|portal\s+visit\s+type)\b/,
+    ll_p12r2_eye_exam_section_missing: /\b(eye\s+exam\s+section\s+is\s+missing|eye\s+exam\s+(section|field|layout)\s+(is\s+)?(missing|gone|hidden|not\s+showing))\b/,
+    ll_p12r2_eye_imaging_wrong_view: /\b(image\s+is\s+not\s+showing\s+in\s+the\s+expected\s+eye\s+care\s+view|image\s+(is\s+)?not\s+showing.*(eye\s+care|view)|eye[- ]?care\s+(image|imaging)|expected\s+eye\s+care\s+view|image.*expected.*view)\b/,
+  };
+
+  return directAliases[sourceId]?.test(text) ?? false;
 }
 
 function parseSlots(query: string): ParsedSlots {
