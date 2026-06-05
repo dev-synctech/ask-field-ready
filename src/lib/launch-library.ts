@@ -1863,7 +1863,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_smartset_order_set_missing",
     title: "SmartSet or order set is missing",
     type: "playbook",
-    summary: "Order sets can be filtered by context, role, specialty, diagnosis, or encounter type. Verify context before calling build.",
+    summary: "The order set you're looking for isn't showing up where you expect it.",
     roles: k("provider", "resident / fellow", "specialty support"),
     domains: k("orders", "order sets", "smartsets"),
     phases: k("cutover day 0", "stabilization week 1"),
