@@ -3992,7 +3992,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_coverage_insurance_scan_or_card_missing",
     title: "Coverage or insurance card is missing from registration",
     type: "playbook",
-    summary: "Coverage questions start with identity, encounter, coverage lane, card scan, and registration owner before billing escalation.",
+    summary: "Insurance coverage or the insurance card image is missing from registration.",
     roles: k("registration", "front desk", "biller"),
     domains: k("registration", "coverage", "insurance"),
     phases: k("cutover day 0", "stabilization week 1"),
