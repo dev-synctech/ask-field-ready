@@ -6606,6 +6606,8 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
     return 30;
   }
   return 0;
+}
+
 
 function liveGuideFor(entry: LaunchEntry, query: string): LiveGuide {
   const queryText = query.toLowerCase();
