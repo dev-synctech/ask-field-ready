@@ -2309,15 +2309,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Fix only the edit assigned to your lane.",
     ],
     whatToSay: [
-      "'A claim can sit in multiple queues, so we need the exact edit owner.'",
-      "'Do not fix unrelated edits just because they are visible.'",
+      "'A claim can sit in more than one queue, so let's find the exact edit that's yours.'",
+      "'Don't fix the other edits just because you can see them — that creates new problems.'",
     ],
     whatToCheck: [
-      "Claim status, edit code, error message, owner lane, workqueue, and responsible team.",
-      "Whether the edit is coding, coverage, modifier, charge, documentation, or clearinghouse related.",
-      "Whether the claim needs refresh, resubmit, or route after the owned edit is addressed.",
+      "The claim status, the exact edit code, and the error message it shows.",
+      "Whether the edit is about coding, coverage, a modifier, a charge, documentation, or the clearinghouse.",
+      "Whether the claim will need a refresh, a resubmit, or to be sent on once your edit is fixed.",
     ],
-    whenToEscalate: "If ownership is unclear or the edit spans multiple teams, escalate to claims/revenue owner with edit code, workqueue, claim status, and callback.",
+    whenToEscalate: "If you can't tell who owns the edit, or the same edit spans multiple teams, send it to the claims team lead with the edit code, the queue, and the claim status.",
     walkthrough: [
       "Open claim edit detail.",
       "Name edit code and owner.",
