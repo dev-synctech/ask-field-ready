@@ -2875,15 +2875,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Escalate if patient movement or procedure timing is blocked.",
     ],
     whatToSay: [
-      "'Let's separate case status from the missing requirement.'",
-      "'If the case is time-sensitive, we route the owner now.'",
+      "'Let's name what's actually missing — the status will move once the blocker is cleared.'",
+      "'If this case is time-sensitive, I'll get the right person on it right now.'",
     ],
     whatToCheck: [
-      "Case status, location/room, procedure, consent, H&P/note status, orders, pre-op tasks, owner, and callback.",
-      "Whether the issue is schedule/case request, clinical documentation, order readiness, consent, or room/status movement.",
-      "Whether one case or a board-wide workflow is affected.",
+      "Case status, location, and the procedure on the schedule.",
+      "Whether consent, the H&P or pre-op note, orders, or a pre-op task is still open.",
+      "Whether just this case is stuck, or every case on the board is stuck the same way.",
     ],
-    whenToEscalate: "If case timing, patient movement, consent, orders, or required documentation is blocked, escalate to periop/surgical owner or command center with case status and callback.",
+    whenToEscalate: "If the case can't move, the patient can't be transported, or consent or orders are missing close to start time, send it to the surgery team lead or command center with the case status and a callback.",
     walkthrough: [
       "Open case status/detail.",
       "Check required docs/orders/consent.",
