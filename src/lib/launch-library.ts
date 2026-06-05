@@ -2815,7 +2815,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_provider_note_copy_forward_or_refresh_wrong",
     title: "Provider note copy-forward or refresh looks wrong",
     type: "playbook",
-    summary: "Copy-forward and refresh issues need note source, current encounter, imported data status, and review before signing.",
+    summary: "A note pulled forward an old assessment or stale data from a previous visit — fix it before the note is signed.",
     roles: k("provider", "resident / fellow", "clinical documentation"),
     domains: k("notes", "documentation", "provider efficiency"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
