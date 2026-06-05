@@ -2438,15 +2438,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Check statement status before quoting next steps.",
     ],
     whatToSay: [
-      "'Let's confirm the statement lane before we answer or route this.'",
-      "'Do not paste account identifiers into the support note.'",
+      "'Let me pull up the right account before I answer about the balance or statement.'",
+      "'Please don't paste account numbers or patient info into the chat — I'll look it up here.'",
     ],
     whatToCheck: [
-      "Guarantor/account lane, statement status, balance category, last action, note requirement, and owner.",
-      "Whether the caller needs statement explanation, payment plan, coverage review, or billing-office routing.",
-      "Whether local policy requires a note or specific customer-service disposition.",
+      "Which guarantor or account the caller is asking about, and the current statement status.",
+      "What they actually need: an explanation of the statement, a payment plan, a coverage check, or a handoff to the billing office.",
+      "Whether your workflow requires a note or a specific call disposition before closing.",
     ],
-    whenToEscalate: "If the balance source, statement state, or policy answer is unclear, route to customer-service/revenue owner with non-PHI summary and callback.",
+    whenToEscalate: "If the balance source or statement state isn't clear, or the answer needs a policy call, send it to the patient billing office lead with a non-PHI summary and a callback number.",
     walkthrough: [
       "Open guarantor/account lane.",
       "Read balance and statement status.",
