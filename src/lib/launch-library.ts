@@ -2831,15 +2831,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Review stale data before signing.",
     ],
     whatToSay: [
-      "'Let's verify what came forward before this note is signed.'",
-      "'I can help find the source, but the provider owns clinical accuracy.'",
+      "'Let's check what got pulled in from the last visit before this note is signed.'",
+      "'I can help spot what came forward, but the provider decides what's still accurate.'",
     ],
     whatToCheck: [
-      "Current encounter, source note/date, copied sections, refreshed data, unresolved placeholders, and sign status.",
-      "Whether old assessment/plan, stale vitals/results, or wrong-context text came forward.",
-      "Whether correction should happen before sign or through addendum after sign.",
+      "That the note belongs to today's visit, not a previous one.",
+      "Which sections were copied or refreshed from an older note.",
+      "Whether anything stale needs to be fixed before signing, or corrected with an addendum after.",
     ],
-    whenToEscalate: "If wrong-context content is already signed, or copied/refresh behavior is broken for multiple providers, escalate to documentation/content owner with note type and context.",
+    whenToEscalate: "If a note is already signed with the wrong content, or copy-forward is breaking for more than one provider, send it to documentation support with the note type and what came through wrong.",
     walkthrough: [
       "Confirm encounter and source note.",
       "Find copied/refreshed sections.",
