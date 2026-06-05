@@ -6099,7 +6099,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Age-based rules unclear: portal support team.",
       "Activation email not received: resend; if still failing, portal support.",
     ],
-    keywords: k("portal proxy", "proxy access", "family access", "parent access", "caregiver access", "mychart proxy", "patient portal proxy", "share access", "minor portal access"),
+    keywords: k("portal proxy", "proxy access", "proxy cannot see", "proxy cant see portal", "proxy can not see portal", "proxy cannot see portal information", "caregiver cannot see patient portal", "caregiver cant see portal", "family access", "parent access", "caregiver access", "mychart proxy", "patient portal proxy", "share access", "minor portal access", "spouse portal access"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
