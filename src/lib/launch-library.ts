@@ -2552,7 +2552,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_account_activity_communication_needed",
     title: "Account activity communication needs routing",
     type: "playbook",
-    summary: "Billing communication workflows need account context, activity type, recipient owner, note, and follow-up status before the item is closed.",
+    summary: "A billing message needs to go to the right team with a clean note before the item is closed.",
     roles: k("biller", "customer service", "revenue cycle"),
     domains: k("billing", "communication", "account activity"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
