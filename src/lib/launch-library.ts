@@ -3914,15 +3914,15 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Review charge queue before manual charge entry.",
     ],
     whatToSay: [
-      "'Let's find whether the charge trigger fired before we add anything manually.'",
-      "'If the note or visit is not complete, the charge may still be waiting.'",
+      "'Let me check whether the charge already fired before we add anything by hand.'",
+      "'If the note or the visit isn't closed yet, the charge may just still be waiting.'",
     ],
     whatToCheck: [
-      "Encounter, service date, provider, signed documentation, visit status, procedure status, charge queue, and error/hold reason.",
-      "Whether this is one visit, one provider, one department, or all charges.",
-      "Whether manual entry is allowed by local revenue policy.",
+      "The visit and date of service, and whether the provider's note is signed.",
+      "The visit status (open, closed, or pending) and the procedure status.",
+      "Whether one visit is affected, or every visit for that provider or department is missing charges.",
     ],
-    whenToEscalate: "If documentation is complete but charges still do not appear, escalate to charge/revenue owner with encounter context, trigger, queue, and hold reason.",
+    whenToEscalate: "If the documentation is complete but the charge still isn't there, send it to the charge capture lead with the visit, the trigger, the queue, and any hold reason.",
     walkthrough: [
       "Check visit and documentation status.",
       "Look for charge queue or hold reason.",
