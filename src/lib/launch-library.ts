@@ -2771,7 +2771,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     id: "ll_inpatient_clinical_review_data_hidden",
     title: "Inpatient clinical review data is hidden or incomplete",
     type: "playbook",
-    summary: "Clinical review issues need patient-list context, date/filter, result/vitals/source status, and owner before assuming data is missing.",
+    summary: "Labs, vitals, or other data aren't showing in clinical review — usually a filter, a date range, or source data that isn't final yet.",
     roles: k("inpatient provider", "resident / fellow", "floor consultant"),
     domains: k("clinical review", "patient lists", "results"),
     phases: k("stabilization week 1", "optimization weeks 2-4"),
