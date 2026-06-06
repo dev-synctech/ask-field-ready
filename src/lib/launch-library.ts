@@ -6614,6 +6614,38 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return 40;
   }
+  // Portal proxy (MyChart/patient portal) — must beat provider coverage/proxy
+  if (
+    entry.id === "ll_p12r2_portal_proxy_access" &&
+    (/\b(mychart|patient\s+portal|portal)\b.*\bproxy\b/.test(queryText) ||
+     /\bproxy\b.*\b(mychart|patient\s+portal|portal)\b/.test(queryText) ||
+     /\bproxy\s+(access\s+)?(not\s+showing|cannot\s+see|cant\s+see|can'?t\s+see)\b/.test(queryText))
+  ) {
+    return 50;
+  }
+  // Suppress provider-coverage entry when the query is clearly about the patient portal / MyChart
+  if (
+    entry.id === "ll_p12_proxy_or_coverage_view" &&
+    /\b(mychart|patient\s+portal)\b/.test(queryText)
+  ) {
+    return -40;
+  }
+  // Patient chart not loading / chart slow after admission → patient list / context, NOT media scanning
+  if (
+    entry.id === "ll_patient_list" &&
+    (/\b(patient\s+)?chart\s+(not\s+loading|won'?t\s+load|isn'?t\s+loading|not\s+opening|blank|wont\s+open)\b/.test(queryText) ||
+     /\bafter\s+admission\b.*\bchart\b/.test(queryText) ||
+     /\bchart\b.*\bafter\s+admission\b/.test(queryText))
+  ) {
+    return 40;
+  }
+  // Suppress the scanning/media entry when query is about chart loading after admission
+  if (
+    entry.id === "ll_document_scanned_to_wrong_encounter" &&
+    /\b(chart\s+(not\s+loading|won'?t\s+load|isn'?t\s+loading|blank)|after\s+admission)\b/.test(queryText)
+  ) {
+    return -40;
+  }
   return 0;
 }
 
