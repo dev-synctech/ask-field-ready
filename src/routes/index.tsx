@@ -127,7 +127,7 @@ function Landing() {
               Small answers for big go-live moments.
             </p>
             <p className="mt-5 text-[15px] md:text-base text-muted-foreground max-w-lg leading-relaxed">
-              The field-support academy and answer engine built for healthcare go-live consultants. Ask what just happened on the floor and get the first 90 seconds, what to say, what to check, and when to escalate.
+              Mizly structures go-live support knowledge into clear workflow answers consultants can use in the moment. A workflow wiki and answer engine for healthcare go-live teams — plain-language workflow answers, not vendor manuals.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Link
@@ -341,13 +341,13 @@ function Landing() {
       <section id="safety" className="border-t border-border">
         <div className="max-w-4xl mx-auto px-5 py-16 md:py-20">
           <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-3">
-            <ShieldCheck className="size-3.5 text-primary" /> Vendor-neutral by design
+            <ShieldCheck className="size-3.5 text-primary" /> Safety &amp; sanitization
           </div>
           <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
             Built to keep training clean.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Mizly content is designed to be rewritten, sanitized, and vendor-neutral before it reaches learners.
+            Mizly content is rewritten as plain-language workflow guidance — no vendor manuals, screenshots, or PHI ever reach learners.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-2 text-sm">
             {[

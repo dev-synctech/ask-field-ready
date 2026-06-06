@@ -51,10 +51,35 @@ const STATUS_CLS: Record<Status, string> = {
   dismissed: "bg-muted text-muted-foreground",
 };
 
+// Admin/content QA markers (Phase A1). Stored in localStorage — pre-pilot, no prod table needed.
+const QA_MARKERS = ["needs review", "intent drift", "too generic", "provenance risk", "ready for pilot"] as const;
+type QAMarker = (typeof QA_MARKERS)[number];
+const QA_STORE_KEY = "mizly.qa.markers.v1";
+
+function loadQAMarkers(): Record<string, QAMarker[]> {
+  if (typeof window === "undefined") return {};
+  try { return JSON.parse(localStorage.getItem(QA_STORE_KEY) ?? "{}"); } catch { return {}; }
+}
+function saveQAMarkers(m: Record<string, QAMarker[]>) {
+  if (typeof window === "undefined") return;
+  try { localStorage.setItem(QA_STORE_KEY, JSON.stringify(m)); } catch { /* ignore */ }
+}
+
 function FeedbackPage() {
   const [items, setItems] = useState<FeedbackItem[]>(SEED);
   const [kindFilter, setKindFilter] = useState<"all" | FeedbackKind>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
+  const [qaMarkers, setQaMarkers] = useState<Record<string, QAMarker[]>>(() => loadQAMarkers());
+
+  function toggleMarker(id: string, marker: QAMarker) {
+    setQaMarkers(prev => {
+      const current = prev[id] ?? [];
+      const next = current.includes(marker) ? current.filter(m => m !== marker) : [...current, marker];
+      const merged = { ...prev, [id]: next };
+      saveQAMarkers(merged);
+      return merged;
+    });
+  }
 
   useEffect(() => {
     const extras: FeedbackItem[] = [];
@@ -187,6 +212,21 @@ function FeedbackPage() {
                     <button onClick={() => setStatus(f.id, "dismissed")} className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary text-muted-foreground">Dismiss</button>
                   )}
                 </div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-border/60 flex items-center gap-1.5 flex-wrap">
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mr-1">QA</span>
+                {QA_MARKERS.map(m => {
+                  const active = (qaMarkers[f.id] ?? []).includes(m);
+                  return (
+                    <button
+                      key={m}
+                      onClick={() => toggleMarker(f.id, m)}
+                      className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${active ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:bg-secondary text-muted-foreground"}`}
+                    >
+                      {m}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           );
