@@ -8,24 +8,27 @@ import {
 import { MizlyLogo } from "@/components/MizlyLogo";
 import previewVideoAsset from "@/assets/mizly-social-music-only.mp4.asset.json";
 import previewPosterAsset from "@/assets/mizly-social-music-only-poster.jpg.asset.json";
+import { supabase } from "@/integrations/supabase/client";
 
 const LANDING_PREVIEW_VIDEO_SRC = previewVideoAsset.url;
 const LANDING_PREVIEW_POSTER_SRC = previewPosterAsset.url;
 
 type WaitlistForm = {
-  name: string;
   email: string;
-  role: string;
-  interest: string;
+  firm: string;
+  next_golive: string;
+  pain: string;
 };
+
+const EMPTY_WAITLIST: WaitlistForm = { email: "", firm: "", next_golive: "", pain: "" };
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mizly — Small answers for big go-live moments" },
-      { name: "description", content: "The field-support academy and answer engine built for healthcare go-live consultants. Fast answers, playbooks, scenarios, and checklists in one mobile place." },
-      { property: "og:title", content: "Mizly — Small answers for big go-live moments" },
-      { property: "og:description", content: "Field-support academy and answer engine for healthcare go-live consultants." },
+      { title: "Mizly — Workflow answers for go-live consultants" },
+      { name: "description", content: "Mizly structures go-live support knowledge into clear workflow answers consultants can use in the moment." },
+      { property: "og:title", content: "Mizly — Workflow answers for go-live consultants" },
+      { property: "og:description", content: "A workflow wiki and answer engine: what to check, what to say, where to click, when to escalate." },
     ],
   }),
   component: Landing,
@@ -33,12 +36,9 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
-  const [waitlistForm, setWaitlistForm] = useState<WaitlistForm>({
-    name: "",
-    email: "",
-    role: "",
-    interest: "Independent consultant",
-  });
+  const [waitlistForm, setWaitlistForm] = useState<WaitlistForm>(EMPTY_WAITLIST);
+  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "done" | "error">("idle");
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function scrollToPricing(e: React.MouseEvent) {
     e.preventDefault();
@@ -49,9 +49,31 @@ function Landing() {
     setWaitlistForm(current => ({ ...current, [field]: value }));
   }
 
-  function submitWaitlist(e: React.FormEvent) {
+  async function submitWaitlist(e: React.FormEvent) {
     e.preventDefault();
-    window.location.href = buildWaitlistHref(waitlistForm);
+    setSubmitState("submitting");
+    setSubmitError(null);
+    const { error } = await supabase.from("founding_access_requests").insert({
+      email: waitlistForm.email.trim(),
+      firm: waitlistForm.firm.trim() || null,
+      next_golive: waitlistForm.next_golive.trim() || null,
+      pain: waitlistForm.pain.trim() || null,
+    });
+    if (error) {
+      setSubmitError(error.message);
+      setSubmitState("error");
+      return;
+    }
+    setSubmitState("done");
+  }
+
+  function closeWaitlist() {
+    setWaitlistOpen(false);
+    setTimeout(() => {
+      setSubmitState("idle");
+      setSubmitError(null);
+      setWaitlistForm(EMPTY_WAITLIST);
+    }, 200);
   }
 
   return (

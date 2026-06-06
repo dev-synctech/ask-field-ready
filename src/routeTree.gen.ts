@@ -10,10 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UpdatePasswordRouteImport } from './routes/update-password'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LegalRouteImport } from './routes/legal'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -36,6 +39,7 @@ import { Route as AuthenticatedAdminTaxonomyRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authenticated.admin_.sources'
 import { Route as AuthenticatedAdminSourcePacksRouteImport } from './routes/_authenticated.admin_.source-packs'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
+import { Route as AuthenticatedAdminFoundingAccessRouteImport } from './routes/_authenticated.admin_.founding-access'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated.admin_.feedback'
 import { Route as AuthenticatedAdminFactoryRouteImport } from './routes/_authenticated.admin_.factory'
 import { Route as AuthenticatedAdminCoverageRouteImport } from './routes/_authenticated.admin_.coverage'
@@ -50,9 +54,19 @@ const UpdatePasswordRoute = UpdatePasswordRouteImport.update({
   path: '/update-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
@@ -68,6 +82,11 @@ const LoginRoute = LoginRouteImport.update({
 const LegalRoute = LegalRouteImport.update({
   id: '/legal',
   path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -186,6 +205,12 @@ const AuthenticatedAdminQuestionsRoute =
     path: '/admin/questions',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminFoundingAccessRoute =
+  AuthenticatedAdminFoundingAccessRouteImport.update({
+    id: '/admin_/founding-access',
+    path: '/admin/founding-access',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminFeedbackRoute =
   AuthenticatedAdminFeedbackRouteImport.update({
     id: '/admin_/feedback',
@@ -238,10 +263,13 @@ const AuthenticatedAdminConversionsIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRouteWithChildren
+  '/contact': typeof ContactRoute
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/payment-success': typeof PaymentSuccessRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/update-password': typeof UpdatePasswordRoute
   '/account': typeof AuthenticatedAccountRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -257,6 +285,7 @@ export interface FileRoutesByFullPath {
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
   '/admin/factory': typeof AuthenticatedAdminFactoryRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
+  '/admin/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
@@ -274,10 +303,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRouteWithChildren
+  '/contact': typeof ContactRoute
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/payment-success': typeof PaymentSuccessRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/update-password': typeof UpdatePasswordRoute
   '/account': typeof AuthenticatedAccountRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -293,6 +325,7 @@ export interface FileRoutesByTo {
   '/admin/coverage': typeof AuthenticatedAdminCoverageRoute
   '/admin/factory': typeof AuthenticatedAdminFactoryRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
+  '/admin/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
@@ -312,10 +345,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/checkout': typeof CheckoutRouteWithChildren
+  '/contact': typeof ContactRoute
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/payment-success': typeof PaymentSuccessRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/update-password': typeof UpdatePasswordRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -331,6 +367,7 @@ export interface FileRoutesById {
   '/_authenticated/admin_/coverage': typeof AuthenticatedAdminCoverageRoute
   '/_authenticated/admin_/factory': typeof AuthenticatedAdminFactoryRoute
   '/_authenticated/admin_/feedback': typeof AuthenticatedAdminFeedbackRoute
+  '/_authenticated/admin_/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
   '/_authenticated/admin_/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/admin_/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/_authenticated/admin_/sources': typeof AuthenticatedAdminSourcesRoute
@@ -350,10 +387,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/checkout'
+    | '/contact'
     | '/legal'
     | '/login'
     | '/payment-success'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/update-password'
     | '/account'
     | '/admin'
@@ -369,6 +409,7 @@ export interface FileRouteTypes {
     | '/admin/coverage'
     | '/admin/factory'
     | '/admin/feedback'
+    | '/admin/founding-access'
     | '/admin/questions'
     | '/admin/source-packs'
     | '/admin/sources'
@@ -386,10 +427,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/checkout'
+    | '/contact'
     | '/legal'
     | '/login'
     | '/payment-success'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/update-password'
     | '/account'
     | '/admin'
@@ -405,6 +449,7 @@ export interface FileRouteTypes {
     | '/admin/coverage'
     | '/admin/factory'
     | '/admin/feedback'
+    | '/admin/founding-access'
     | '/admin/questions'
     | '/admin/source-packs'
     | '/admin/sources'
@@ -423,10 +468,13 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/checkout'
+    | '/contact'
     | '/legal'
     | '/login'
     | '/payment-success'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/update-password'
     | '/_authenticated/account'
     | '/_authenticated/admin'
@@ -442,6 +490,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin_/coverage'
     | '/_authenticated/admin_/factory'
     | '/_authenticated/admin_/feedback'
+    | '/_authenticated/admin_/founding-access'
     | '/_authenticated/admin_/questions'
     | '/_authenticated/admin_/source-packs'
     | '/_authenticated/admin_/sources'
@@ -461,10 +510,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   CheckoutRoute: typeof CheckoutRouteWithChildren
+  ContactRoute: typeof ContactRoute
   LegalRoute: typeof LegalRoute
   LoginRoute: typeof LoginRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
+  PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  TermsRoute: typeof TermsRoute
   UpdatePasswordRoute: typeof UpdatePasswordRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
 }
@@ -478,11 +530,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UpdatePasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payment-success': {
@@ -504,6 +570,13 @@ declare module '@tanstack/react-router' {
       path: '/legal'
       fullPath: '/legal'
       preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -660,6 +733,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminQuestionsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/founding-access': {
+      id: '/_authenticated/admin_/founding-access'
+      path: '/admin/founding-access'
+      fullPath: '/admin/founding-access'
+      preLoaderRoute: typeof AuthenticatedAdminFoundingAccessRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/feedback': {
       id: '/_authenticated/admin_/feedback'
       path: '/admin/feedback'
@@ -732,6 +812,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminCoverageRoute: typeof AuthenticatedAdminCoverageRoute
   AuthenticatedAdminFactoryRoute: typeof AuthenticatedAdminFactoryRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
+  AuthenticatedAdminFoundingAccessRoute: typeof AuthenticatedAdminFoundingAccessRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
   AuthenticatedAdminSourcePacksRoute: typeof AuthenticatedAdminSourcePacksRoute
   AuthenticatedAdminSourcesRoute: typeof AuthenticatedAdminSourcesRoute
@@ -760,6 +841,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminCoverageRoute: AuthenticatedAdminCoverageRoute,
   AuthenticatedAdminFactoryRoute: AuthenticatedAdminFactoryRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
+  AuthenticatedAdminFoundingAccessRoute: AuthenticatedAdminFoundingAccessRoute,
   AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
   AuthenticatedAdminSourcePacksRoute: AuthenticatedAdminSourcePacksRoute,
   AuthenticatedAdminSourcesRoute: AuthenticatedAdminSourcesRoute,
@@ -795,10 +877,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   CheckoutRoute: CheckoutRouteWithChildren,
+  ContactRoute: ContactRoute,
   LegalRoute: LegalRoute,
   LoginRoute: LoginRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
+  PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  TermsRoute: TermsRoute,
   UpdatePasswordRoute: UpdatePasswordRoute,
   AuthCallbackRoute: AuthCallbackRoute,
 }
