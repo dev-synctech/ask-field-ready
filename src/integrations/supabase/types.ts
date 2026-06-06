@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      ask_feedback: {
+        Row: {
+          answer_id: string | null
+          answer_title: string | null
+          created_at: string
+          id: string
+          note: string | null
+          question: string
+          rating: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          answer_id?: string | null
+          answer_title?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          question: string
+          rating: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          answer_id?: string | null
+          answer_title?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          question?: string
+          rating?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       content_items: {
         Row: {
           admin_reviewed: boolean
@@ -124,6 +160,42 @@ export type Database = {
           stripe_session_id?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      founding_access_requests: {
+        Row: {
+          created_at: string
+          email: string
+          firm: string | null
+          id: string
+          next_golive: string | null
+          notes: string | null
+          pain: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          firm?: string | null
+          id?: string
+          next_golive?: string | null
+          notes?: string | null
+          pain?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          firm?: string | null
+          id?: string
+          next_golive?: string | null
+          notes?: string | null
+          pain?: string | null
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }

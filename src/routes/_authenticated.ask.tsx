@@ -18,6 +18,7 @@ import {
 } from "@/lib/launch-library";
 import { ASK_SAFETY_LINE } from "@/lib/legal";
 import { searchItems, type ContentType, type ContentItem } from "@/lib/demo-data";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
@@ -63,16 +64,15 @@ type ActionOption = {
   query: string;
 };
 
-const VENDOR_OPTIONS: { value: VendorFamily; label: string }[] = [
+const VENDOR_OPTIONS: { value: VendorFamily; label: string; disabled?: boolean }[] = [
   { value: "epic", label: "Epic" },
-  { value: "cerner", label: "Cerner" },
-  { value: "oracle_health", label: "Oracle Health" },
+  { value: "cerner", label: "Cerner (coming soon)", disabled: true },
+  { value: "oracle_health", label: "Oracle Health (coming soon)", disabled: true },
   { value: "unknown", label: "Not sure" },
 ];
 
 const SCREEN_CLUE_OPTIONS: { label: string; vendor: KnownVendor }[] = [
   { label: "Hyperspace / Storyboard", vendor: "epic" },
-  { label: "PowerChart / FirstNet", vendor: "cerner" },
 ];
 
 const ASK_TRADEMARK_LINE =
@@ -321,6 +321,14 @@ function decideAskMode(query: string):
   | { mode: "no-match"; slots: ParsedSlots } {
   const slots = parseSlots(query);
   if (hasSpecificPatternHit(query, slots)) return { mode: "answer" };
+
+  // Phase A1: try direct matching first. Only show clarifier when match
+  // confidence is genuinely low. askLaunch returns "strong" | "related" | "general".
+  // Treat strong AND related as good enough to bypass clarifier (~0.55+ confidence).
+  const directAnswer = askLaunch(query);
+  if (directAnswer.matchQuality === "strong" || directAnswer.matchQuality === "related") {
+    return { mode: "answer" };
+  }
 
   const actionOptions = actionOptionsFor(query);
   if (slots.vendor_family === "unknown" && slots.action === "unknown" && !actionOptions.length) {
@@ -630,8 +638,9 @@ function ClarifierThread({
               <button
                 key={option.value}
                 type="button"
-                onClick={() => onVendor(option.value)}
-                className="press min-h-11 rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm font-medium hover:border-primary/35 hover:bg-primary-soft/45 hover:shadow-soft transition"
+                disabled={option.disabled}
+                onClick={() => !option.disabled && onVendor(option.value)}
+                className={`press min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition ${option.disabled ? "border-border bg-muted text-muted-foreground cursor-not-allowed opacity-70" : "border-border bg-surface-elevated hover:border-primary/35 hover:bg-primary-soft/45 hover:shadow-soft"}`}
               >
                 {option.label}
               </button>
@@ -1126,18 +1135,20 @@ function CompactFeedbackBar({ query, answer }: { query: string; answer: AskAnswe
       try {
         const key = "ate.ask.feedback";
         const prev = JSON.parse(localStorage.getItem(key) ?? "[]");
-        prev.push({ q: query, answer_id: answerId(answer), kind, note: noteText, ts: Date.now() });
+        prev.push({ q: query, answer_id: answerId(answer), answer_title: answer.title, kind, note: noteText, ts: Date.now() });
         localStorage.setItem(key, JSON.stringify(prev.slice(-80)));
       } catch {
         // Local feedback is best-effort.
       }
     }
-    void postJsonSilently("/api/feedback", {
+    // Persist to Lovable Cloud so admin/feedback can read it.
+    void supabase.from("ask_feedback").insert({
       question: query,
       answer_id: answerId(answer),
+      answer_title: answer.title,
       rating: kind === "up" ? "helpful" : "not_helpful",
-      note: noteText,
-    });
+      note: noteText || null,
+    }).then(({ error }) => { if (error) console.warn("ask_feedback insert failed", error.message); });
     toast.success(kind === "up" ? "Marked helpful" : "Feedback sent");
   };
 

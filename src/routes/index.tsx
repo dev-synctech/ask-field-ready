@@ -8,24 +8,27 @@ import {
 import { MizlyLogo } from "@/components/MizlyLogo";
 import previewVideoAsset from "@/assets/mizly-social-music-only.mp4.asset.json";
 import previewPosterAsset from "@/assets/mizly-social-music-only-poster.jpg.asset.json";
+import { supabase } from "@/integrations/supabase/client";
 
 const LANDING_PREVIEW_VIDEO_SRC = previewVideoAsset.url;
 const LANDING_PREVIEW_POSTER_SRC = previewPosterAsset.url;
 
 type WaitlistForm = {
-  name: string;
   email: string;
-  role: string;
-  interest: string;
+  firm: string;
+  next_golive: string;
+  pain: string;
 };
+
+const EMPTY_WAITLIST: WaitlistForm = { email: "", firm: "", next_golive: "", pain: "" };
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mizly — Small answers for big go-live moments" },
-      { name: "description", content: "The field-support academy and answer engine built for healthcare go-live consultants. Fast answers, playbooks, scenarios, and checklists in one mobile place." },
-      { property: "og:title", content: "Mizly — Small answers for big go-live moments" },
-      { property: "og:description", content: "Field-support academy and answer engine for healthcare go-live consultants." },
+      { title: "Mizly — Workflow answers for go-live consultants" },
+      { name: "description", content: "Mizly structures go-live support knowledge into clear workflow answers consultants can use in the moment." },
+      { property: "og:title", content: "Mizly — Workflow answers for go-live consultants" },
+      { property: "og:description", content: "A workflow wiki and answer engine: what to check, what to say, where to click, when to escalate." },
     ],
   }),
   component: Landing,
@@ -33,12 +36,9 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
-  const [waitlistForm, setWaitlistForm] = useState<WaitlistForm>({
-    name: "",
-    email: "",
-    role: "",
-    interest: "Independent consultant",
-  });
+  const [waitlistForm, setWaitlistForm] = useState<WaitlistForm>(EMPTY_WAITLIST);
+  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "done" | "error">("idle");
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function scrollToPricing(e: React.MouseEvent) {
     e.preventDefault();
@@ -49,9 +49,31 @@ function Landing() {
     setWaitlistForm(current => ({ ...current, [field]: value }));
   }
 
-  function submitWaitlist(e: React.FormEvent) {
+  async function submitWaitlist(e: React.FormEvent) {
     e.preventDefault();
-    window.location.href = buildWaitlistHref(waitlistForm);
+    setSubmitState("submitting");
+    setSubmitError(null);
+    const { error } = await supabase.from("founding_access_requests").insert({
+      email: waitlistForm.email.trim(),
+      firm: waitlistForm.firm.trim() || null,
+      next_golive: waitlistForm.next_golive.trim() || null,
+      pain: waitlistForm.pain.trim() || null,
+    });
+    if (error) {
+      setSubmitError(error.message);
+      setSubmitState("error");
+      return;
+    }
+    setSubmitState("done");
+  }
+
+  function closeWaitlist() {
+    setWaitlistOpen(false);
+    setTimeout(() => {
+      setSubmitState("idle");
+      setSubmitError(null);
+      setWaitlistForm(EMPTY_WAITLIST);
+    }, 200);
   }
 
   return (
@@ -438,15 +460,18 @@ function Landing() {
             <MizlyLogo size={24} />
           </div>
           <p className="text-xs text-muted-foreground max-w-3xl leading-relaxed">
-            Mizly is an independent training and field-support product. Other product names are
-            trademarks of their respective owners. Mizly is not affiliated with, endorsed by,
-            sponsored by, or certified by those companies.
+            Operated by SyncTech Innovations LLC, Huntington, NY. Mizly is an independent
+            workflow wiki and answer engine. Other product names are trademarks of their
+            respective owners. Mizly is not affiliated with, endorsed by, sponsored by, or
+            certified by those companies.
           </p>
           <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-muted-foreground">
-            <div>© Mizly</div>
+            <div>© Mizly · support@mizly.app</div>
             <div className="flex flex-wrap gap-x-5 gap-y-2">
-              <Link to="/legal" className="hover:text-foreground">Trademark notice</Link>
-              <a href="#safety" className="hover:text-foreground">Safety standards</a>
+              <Link to="/privacy" className="hover:text-foreground">Privacy</Link>
+              <Link to="/terms" className="hover:text-foreground">Terms</Link>
+              <Link to="/contact" className="hover:text-foreground">Contact</Link>
+              <Link to="/legal" className="hover:text-foreground">Legal</Link>
               <Link to="/ask" className="hover:text-foreground">Open app</Link>
             </div>
           </div>
@@ -457,14 +482,14 @@ function Landing() {
       {waitlistOpen && (
         <div
           className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-foreground/40 backdrop-blur-sm p-4"
-          onClick={() => setWaitlistOpen(false)}
+          onClick={closeWaitlist}
         >
           <div
             className="w-full max-w-md rounded-lg bg-card border border-border shadow-elevated p-6 relative"
             onClick={e => e.stopPropagation()}
           >
             <button
-              onClick={() => setWaitlistOpen(false)}
+              onClick={closeWaitlist}
               className="absolute top-3 right-3 p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary"
               aria-label="Close"
             >
@@ -473,66 +498,84 @@ function Landing() {
             <div className="size-10 rounded-md bg-primary-soft text-primary flex items-center justify-center mb-3">
               <Mail className="size-5" />
             </div>
-            <h3 className="text-lg font-display font-semibold">Request founding access</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Founding access is not open for purchase yet. Send a quick request and we will use it
-              to prioritize early users, roles, and team needs.
-            </p>
-            <form onSubmit={submitWaitlist} className="mt-5 space-y-3">
-              <label className="block text-xs font-medium text-foreground/80">
-                Name
-                <input
-                  value={waitlistForm.name}
-                  onChange={e => updateWaitlistField("name", e.target.value)}
-                  className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
-                  placeholder="Your name"
-                  required
-                />
-              </label>
-              <label className="block text-xs font-medium text-foreground/80">
-                Email
-                <input
-                  value={waitlistForm.email}
-                  onChange={e => updateWaitlistField("email", e.target.value)}
-                  className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
-                  placeholder="you@example.com"
-                  type="email"
-                  required
-                />
-              </label>
-              <label className="block text-xs font-medium text-foreground/80">
-                Role
-                <input
-                  value={waitlistForm.role}
-                  onChange={e => updateWaitlistField("role", e.target.value)}
-                  className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
-                  placeholder="Go-live consultant, trainer, lead..."
-                />
-              </label>
-              <label className="block text-xs font-medium text-foreground/80">
-                Best fit
-                <select
-                  value={waitlistForm.interest}
-                  onChange={e => updateWaitlistField("interest", e.target.value)}
-                  className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+
+            {submitState === "done" ? (
+              <>
+                <h3 className="text-lg font-display font-semibold">You&rsquo;re on the founding access list.</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  We&rsquo;ll reach out as we open seats. In the meantime, you can{" "}
+                  <Link to="/ask" className="underline hover:text-foreground" onClick={closeWaitlist}>open the demo</Link>.
+                </p>
+                <button
+                  onClick={closeWaitlist}
+                  className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90"
                 >
-                  <option>Independent consultant</option>
-                  <option>Agency or staffing team</option>
-                  <option>Training lead</option>
-                  <option>Healthcare operations team</option>
-                </select>
-              </label>
-              <button
-                type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90"
-              >
-                Send request
-                <ArrowRight className="size-4" />
-              </button>
-            </form>
-            <p className="mt-3 text-[11px] text-muted-foreground text-center">
-              You can also <Link to="/ask" className="underline hover:text-foreground" onClick={() => setWaitlistOpen(false)}>open the demo</Link> in the meantime.
-            </p>
+                  Close
+                </button>
+              </>
+            ) : (
+              <>
+                <h3 className="text-lg font-display font-semibold">Join founding access</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Tell us a little about your work so we can prioritize early seats.
+                </p>
+                <form onSubmit={submitWaitlist} className="mt-5 space-y-3">
+                  <label className="block text-xs font-medium text-foreground/80">
+                    Email
+                    <input
+                      value={waitlistForm.email}
+                      onChange={e => updateWaitlistField("email", e.target.value)}
+                      className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                      placeholder="you@example.com"
+                      type="email"
+                      required
+                      maxLength={255}
+                    />
+                  </label>
+                  <label className="block text-xs font-medium text-foreground/80">
+                    Firm / company
+                    <input
+                      value={waitlistForm.firm}
+                      onChange={e => updateWaitlistField("firm", e.target.value)}
+                      className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                      placeholder="Independent, agency name, or health system"
+                      maxLength={255}
+                    />
+                  </label>
+                  <label className="block text-xs font-medium text-foreground/80">
+                    Next go-live or project
+                    <input
+                      value={waitlistForm.next_golive}
+                      onChange={e => updateWaitlistField("next_golive", e.target.value)}
+                      className="mt-1 w-full h-11 rounded-md border border-border bg-surface-elevated px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                      placeholder="e.g. Aug 2026 ambulatory cutover"
+                      maxLength={255}
+                    />
+                  </label>
+                  <label className="block text-xs font-medium text-foreground/80">
+                    Biggest support pain
+                    <textarea
+                      value={waitlistForm.pain}
+                      onChange={e => updateWaitlistField("pain", e.target.value)}
+                      className="mt-1 w-full min-h-[88px] rounded-md border border-border bg-surface-elevated px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                      placeholder="What slows you down on the floor?"
+                      maxLength={1000}
+                    />
+                  </label>
+                  {submitError && (
+                    <div className="text-xs text-destructive">Could not submit: {submitError}</div>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={submitState === "submitting"}
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 disabled:opacity-60"
+                  >
+                    {submitState === "submitting" ? "Sending…" : "Send request"}
+                    <ArrowRight className="size-4" />
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -610,23 +653,8 @@ function LandingVideoPreview({ onJoin }: { onJoin: () => void }) {
   );
 }
 
-function buildWaitlistHref(form: WaitlistForm) {
-  const subject = "Mizly founding access request";
-  const body = [
-    "Hi Mizly team,",
-    "",
-    "I would like to join founding access.",
-    "",
-    `Name: ${form.name}`,
-    `Email: ${form.email}`,
-    `Role: ${form.role || "Not provided"}`,
-    `Best fit: ${form.interest}`,
-    "",
-    "Sent from the Mizly landing page.",
-  ].join("\n");
 
-  return `mailto:hello@mizly.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
+
 
 function FAQItem({ q, children }: { q: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);

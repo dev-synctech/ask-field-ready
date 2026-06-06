@@ -238,6 +238,7 @@ function AdminPage() {
         <AdminTile to="/admin/source-packs" icon={FileArchive} title="Source packs" desc="Register full KB bundles and manage quarantined intake." />
         <AdminTile to="/admin/conversions" icon={GitBranch} title="Source conversion queue" desc="Sanitize and route raw sources into Mizly content." />
         <AdminTile to="/admin/feedback" icon={MessageSquare} title="Feedback" desc="Answers learners marked unhelpful or missing." />
+        <AdminTile to="/admin/founding-access" icon={Users} title="Founding access" desc="Pilot interest submissions from the landing page." />
         <AdminTile to="/admin/coverage" icon={BarChart3} title="Coverage" desc="Where the library is thin across roles and phases." />
         <AdminTile to="/admin/sources" icon={FolderInput} title="Source library" desc="Admin-only raw source material." />
         <AdminTile to="/admin/questions" icon={HelpCircle} title="Question bank" desc="Curated questions and their routed answers." />

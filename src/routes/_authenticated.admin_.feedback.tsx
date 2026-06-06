@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, MessageSquare, ThumbsDown, ThumbsUp, FileQuestion, Sparkles, Filter } from "lucide-react";
 import { Header } from "./_authenticated.learn";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin_/feedback")({
   head: () => ({ meta: [{ title: "Ask Feedback Inbox — Mizly Admin" }] }),
@@ -54,6 +55,49 @@ function FeedbackPage() {
   const [items, setItems] = useState<FeedbackItem[]>(SEED);
   const [kindFilter, setKindFilter] = useState<"all" | FeedbackKind>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
+
+  useEffect(() => {
+    const extras: FeedbackItem[] = [];
+    // Merge local thumbs feedback (demo / signed-out)
+    if (typeof window !== "undefined") {
+      try {
+        const raw = JSON.parse(localStorage.getItem("ate.ask.feedback") ?? "[]");
+        for (const f of raw) {
+          extras.push({
+            id: `local_${f.ts}`,
+            kind: f.kind === "up" ? "helpful" : "not_helpful",
+            question: f.q,
+            note: f.note || undefined,
+            matchedTitle: f.answer_title,
+            createdAt: new Date(f.ts).toISOString().slice(0, 10),
+            status: "new",
+          });
+        }
+      } catch { /* ignore */ }
+    }
+    // Pull from Lovable Cloud (admin only — RLS will block otherwise)
+    void supabase
+      .from("ask_feedback")
+      .select("id,question,answer_title,rating,note,status,created_at")
+      .order("created_at", { ascending: false })
+      .limit(200)
+      .then(({ data }) => {
+        const cloud: FeedbackItem[] = (data ?? []).map((r: any) => ({
+          id: r.id,
+          kind: r.rating === "helpful" ? "helpful" : "not_helpful",
+          question: r.question,
+          note: r.note ?? undefined,
+          matchedTitle: r.answer_title ?? undefined,
+          createdAt: (r.created_at as string).slice(0, 10),
+          status: (r.status as Status) ?? "new",
+        }));
+        const all = [...cloud, ...extras, ...SEED];
+        // newest first by createdAt desc
+        all.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+        setItems(all);
+      });
+  }, []);
+
 
   const visible = useMemo(() => items.filter(i =>
     (kindFilter === "all" || i.kind === kindFilter) &&
