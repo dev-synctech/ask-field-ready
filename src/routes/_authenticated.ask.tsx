@@ -321,6 +321,14 @@ function decideAskMode(query: string):
   const slots = parseSlots(query);
   if (hasSpecificPatternHit(query, slots)) return { mode: "answer" };
 
+  // Phase A1: try direct matching first. Only show clarifier when match
+  // confidence is genuinely low. askLaunch returns "strong" | "related" | "general".
+  // Treat strong AND related as good enough to bypass clarifier (~0.55+ confidence).
+  const directAnswer = askLaunch(query);
+  if (directAnswer.matchQuality === "strong" || directAnswer.matchQuality === "related") {
+    return { mode: "answer" };
+  }
+
   const actionOptions = actionOptionsFor(query);
   if (slots.vendor_family === "unknown" && slots.action === "unknown" && !actionOptions.length) {
     return { mode: "no-match", slots };
