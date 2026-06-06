@@ -69,6 +69,17 @@ function FeedbackPage() {
   const [items, setItems] = useState<FeedbackItem[]>(SEED);
   const [kindFilter, setKindFilter] = useState<"all" | FeedbackKind>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
+  const [qaMarkers, setQaMarkers] = useState<Record<string, QAMarker[]>>(() => loadQAMarkers());
+
+  function toggleMarker(id: string, marker: QAMarker) {
+    setQaMarkers(prev => {
+      const current = prev[id] ?? [];
+      const next = current.includes(marker) ? current.filter(m => m !== marker) : [...current, marker];
+      const merged = { ...prev, [id]: next };
+      saveQAMarkers(merged);
+      return merged;
+    });
+  }
 
   useEffect(() => {
     const extras: FeedbackItem[] = [];
