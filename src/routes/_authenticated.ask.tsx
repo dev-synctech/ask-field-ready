@@ -726,10 +726,13 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             </p>
           </section>
 
-          {answer.sourceEntry?.is_deep_flow && answer.sourceEntry.nav_trail && (
-            <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-nowrap overflow-x-auto">
-              {answer.sourceEntry.nav_trail}
-            </div>
+          {answer.sourceEntry?.nav_trail && (
+            <section>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1.5">NAVIGATION TRAIL</div>
+              <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-nowrap overflow-x-auto">
+                {answer.sourceEntry.nav_trail}
+              </div>
+            </section>
           )}
 
           <section className="rounded-2xl border border-success/25 bg-success/5 p-3.5 border-l-[5px] border-l-success">
