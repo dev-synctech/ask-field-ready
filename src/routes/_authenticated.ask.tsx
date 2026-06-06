@@ -63,16 +63,15 @@ type ActionOption = {
   query: string;
 };
 
-const VENDOR_OPTIONS: { value: VendorFamily; label: string }[] = [
+const VENDOR_OPTIONS: { value: VendorFamily; label: string; disabled?: boolean }[] = [
   { value: "epic", label: "Epic" },
-  { value: "cerner", label: "Cerner" },
-  { value: "oracle_health", label: "Oracle Health" },
+  { value: "cerner", label: "Cerner (coming soon)", disabled: true },
+  { value: "oracle_health", label: "Oracle Health (coming soon)", disabled: true },
   { value: "unknown", label: "Not sure" },
 ];
 
 const SCREEN_CLUE_OPTIONS: { label: string; vendor: KnownVendor }[] = [
   { label: "Hyperspace / Storyboard", vendor: "epic" },
-  { label: "PowerChart / FirstNet", vendor: "cerner" },
 ];
 
 const ASK_TRADEMARK_LINE =
