@@ -213,6 +213,21 @@ function FeedbackPage() {
                   )}
                 </div>
               </div>
+              <div className="mt-3 pt-3 border-t border-border/60 flex items-center gap-1.5 flex-wrap">
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mr-1">QA</span>
+                {QA_MARKERS.map(m => {
+                  const active = (qaMarkers[f.id] ?? []).includes(m);
+                  return (
+                    <button
+                      key={m}
+                      onClick={() => toggleMarker(f.id, m)}
+                      className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${active ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:bg-secondary text-muted-foreground"}`}
+                    >
+                      {m}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           );
         })}
