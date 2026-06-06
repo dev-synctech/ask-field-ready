@@ -653,23 +653,8 @@ function LandingVideoPreview({ onJoin }: { onJoin: () => void }) {
   );
 }
 
-function buildWaitlistHref(form: WaitlistForm) {
-  const subject = "Mizly founding access request";
-  const body = [
-    "Hi Mizly team,",
-    "",
-    "I would like to join founding access.",
-    "",
-    `Name: ${form.name}`,
-    `Email: ${form.email}`,
-    `Role: ${form.role || "Not provided"}`,
-    `Best fit: ${form.interest}`,
-    "",
-    "Sent from the Mizly landing page.",
-  ].join("\n");
 
-  return `mailto:hello@mizly.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
+
 
 function FAQItem({ q, children }: { q: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
