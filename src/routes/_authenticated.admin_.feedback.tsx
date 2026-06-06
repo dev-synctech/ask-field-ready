@@ -51,6 +51,20 @@ const STATUS_CLS: Record<Status, string> = {
   dismissed: "bg-muted text-muted-foreground",
 };
 
+// Admin/content QA markers (Phase A1). Stored in localStorage — pre-pilot, no prod table needed.
+const QA_MARKERS = ["needs review", "intent drift", "too generic", "provenance risk", "ready for pilot"] as const;
+type QAMarker = (typeof QA_MARKERS)[number];
+const QA_STORE_KEY = "mizly.qa.markers.v1";
+
+function loadQAMarkers(): Record<string, QAMarker[]> {
+  if (typeof window === "undefined") return {};
+  try { return JSON.parse(localStorage.getItem(QA_STORE_KEY) ?? "{}"); } catch { return {}; }
+}
+function saveQAMarkers(m: Record<string, QAMarker[]>) {
+  if (typeof window === "undefined") return;
+  try { localStorage.setItem(QA_STORE_KEY, JSON.stringify(m)); } catch { /* ignore */ }
+}
+
 function FeedbackPage() {
   const [items, setItems] = useState<FeedbackItem[]>(SEED);
   const [kindFilter, setKindFilter] = useState<"all" | FeedbackKind>("all");
