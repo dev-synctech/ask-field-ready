@@ -127,7 +127,7 @@ function Landing() {
               Small answers for big go-live moments.
             </p>
             <p className="mt-5 text-[15px] md:text-base text-muted-foreground max-w-lg leading-relaxed">
-              The field-support academy and answer engine built for healthcare go-live consultants. Ask what just happened on the floor and get the first 90 seconds, what to say, what to check, and when to escalate.
+              Mizly structures go-live support knowledge into clear workflow answers consultants can use in the moment. A workflow wiki and answer engine for healthcare go-live teams — plain-language workflow answers, not vendor manuals.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Link
