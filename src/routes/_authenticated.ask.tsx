@@ -1135,18 +1135,20 @@ function CompactFeedbackBar({ query, answer }: { query: string; answer: AskAnswe
       try {
         const key = "ate.ask.feedback";
         const prev = JSON.parse(localStorage.getItem(key) ?? "[]");
-        prev.push({ q: query, answer_id: answerId(answer), kind, note: noteText, ts: Date.now() });
+        prev.push({ q: query, answer_id: answerId(answer), answer_title: answer.title, kind, note: noteText, ts: Date.now() });
         localStorage.setItem(key, JSON.stringify(prev.slice(-80)));
       } catch {
         // Local feedback is best-effort.
       }
     }
-    void postJsonSilently("/api/feedback", {
+    // Persist to Lovable Cloud so admin/feedback can read it.
+    void supabase.from("ask_feedback").insert({
       question: query,
       answer_id: answerId(answer),
+      answer_title: answer.title,
       rating: kind === "up" ? "helpful" : "not_helpful",
-      note: noteText,
-    });
+      note: noteText || null,
+    }).then(({ error }) => { if (error) console.warn("ask_feedback insert failed", error.message); });
     toast.success(kind === "up" ? "Marked helpful" : "Feedback sent");
   };
 
