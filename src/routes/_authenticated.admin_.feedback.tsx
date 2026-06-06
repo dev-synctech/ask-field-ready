@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, MessageSquare, ThumbsDown, ThumbsUp, FileQuestion, Sparkles, Filter } from "lucide-react";
 import { Header } from "./_authenticated.learn";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin_/feedback")({
   head: () => ({ meta: [{ title: "Ask Feedback Inbox — Mizly Admin" }] }),
