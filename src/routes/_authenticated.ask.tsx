@@ -18,6 +18,7 @@ import {
 } from "@/lib/launch-library";
 import { ASK_SAFETY_LINE } from "@/lib/legal";
 import { searchItems, type ContentType, type ContentItem } from "@/lib/demo-data";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
