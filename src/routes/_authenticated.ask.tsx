@@ -637,8 +637,9 @@ function ClarifierThread({
               <button
                 key={option.value}
                 type="button"
-                onClick={() => onVendor(option.value)}
-                className="press min-h-11 rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm font-medium hover:border-primary/35 hover:bg-primary-soft/45 hover:shadow-soft transition"
+                disabled={option.disabled}
+                onClick={() => !option.disabled && onVendor(option.value)}
+                className={`press min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition ${option.disabled ? "border-border bg-muted text-muted-foreground cursor-not-allowed opacity-70" : "border-border bg-surface-elevated hover:border-primary/35 hover:bg-primary-soft/45 hover:shadow-soft"}`}
               >
                 {option.label}
               </button>
