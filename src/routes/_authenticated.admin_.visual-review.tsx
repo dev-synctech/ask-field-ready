@@ -365,7 +365,7 @@ function Select({ label, value, onChange, options }: {
 }
 
 function ReviewDrawer({ refRow: ref, state, onClose, onChange }: {
-  ref: ReferenceRow;
+  refRow: ReferenceRow;
   state: ReviewState;
   onClose: () => void;
   onChange: (patch: Partial<ReviewState>) => void;
