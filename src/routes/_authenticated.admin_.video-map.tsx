@@ -4,6 +4,7 @@ import { ArrowLeft, ShieldAlert, Video, Search, Eye, EyeOff } from "lucide-react
 import { Header } from "./_authenticated.learn";
 import videoMap from "@/data/video-reference-map.json";
 import chapterMap from "@/data/video-chapter-map.json";
+import clipBacklog from "@/data/video-clip-backlog.json";
 
 export const Route = createFileRoute("/_authenticated/admin_/video-map")({
   head: () => ({ meta: [{ title: "Video Reference Map — Mizly Admin" }] }),
