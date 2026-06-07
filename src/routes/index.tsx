@@ -25,10 +25,10 @@ const EMPTY_WAITLIST: WaitlistForm = { email: "", firm: "", next_golive: "", pai
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mizly — Workflow answers for go-live consultants" },
-      { name: "description", content: "Mizly structures go-live support knowledge into clear workflow answers consultants can use in the moment." },
-      { property: "og:title", content: "Mizly — Workflow answers for go-live consultants" },
-      { property: "og:description", content: "A workflow wiki and answer engine: what to check, what to say, where to click, when to escalate." },
+      { title: "Mizly — The field reference for healthcare go-live consultants" },
+      { name: "description", content: "Mizly is the field reference for healthcare go-live consultants. Diagnosis-first answers for the thirty seconds between rooms. Try the demo." },
+      { property: "og:title", content: "Mizly — The field reference for healthcare go-live consultants" },
+      { property: "og:description", content: "Diagnosis-first answers for the thirty seconds between rooms — what to say, what to check, where to click, when to escalate." },
     ],
   }),
   component: Landing,
@@ -127,7 +127,7 @@ function Landing() {
               Small answers for big go-live moments.
             </p>
             <p className="mt-5 text-[15px] md:text-base text-muted-foreground max-w-lg leading-relaxed">
-              Mizly structures go-live support knowledge into clear workflow answers consultants can use in the moment. A workflow wiki and answer engine for healthcare go-live teams — plain-language workflow answers, not vendor manuals.
+              The field reference for healthcare go-live consultants. When the floor breaks, Mizly tells you the next move — what to say, what to check, where to click, when to escalate. Built for the thirty seconds between rooms.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Link
@@ -153,7 +153,7 @@ function Landing() {
               ))}
             </div>
             <p className="mt-5 text-xs text-muted-foreground max-w-md">
-              No payment needed to try the live demo. Built for training, field support, and workflow confidence.
+              No payment needed to try the live demo. Built for the floor — train before a shift, find answers during one.
             </p>
           </div>
 
@@ -297,7 +297,11 @@ function Landing() {
             </p>
           </div>
 
-          <ol className="mt-10 grid md:grid-cols-2 lg:grid-cols-5 gap-3">
+          <p className="mt-6 text-sm md:text-base text-foreground/80 max-w-2xl">
+            Diagnosis-first. Not how-to-first. Mizly tells you what&rsquo;s broken before it tells you how to fix it.
+          </p>
+
+          <ol className="mt-8 grid md:grid-cols-2 lg:grid-cols-5 gap-3">
             {[
               { icon: Clock, label: "First 90 seconds", desc: "What to do immediately." },
               { icon: MessageSquare, label: "What to say", desc: "Calm, professional language for users." },
@@ -341,23 +345,22 @@ function Landing() {
       <section id="safety" className="border-t border-border">
         <div className="max-w-4xl mx-auto px-5 py-16 md:py-20">
           <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-3">
-            <ShieldCheck className="size-3.5 text-primary" /> Safety &amp; sanitization
+            <ShieldCheck className="size-3.5 text-primary" /> Independently authored
           </div>
           <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
-            Built to keep training clean.
+            Authored independently.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Mizly content is rewritten as plain-language workflow guidance — no vendor manuals, screenshots, or PHI ever reach learners.
+            Mizly content is authored by consultants who&rsquo;ve worked go-live floors. We reference vendor systems descriptively because that&rsquo;s what consultants on the floor need — but the writing, the structure, and the field judgment are ours. Mizly is not affiliated with, endorsed by, sponsored by, or certified by any healthcare software vendor.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-2 text-sm">
             {[
-              "No PHI",
-              "No patient examples from real systems",
+              "Original writing, not copied vendor text",
+              "No PHI, no patient examples from real systems",
               "No hospital or organization names",
-              "No vendor logos or screenshots",
-              "No copied proprietary training text",
-              "Vendor names used only descriptively when necessary",
-              "Source material stays isolated until reviewed and approved",
+              "No vendor logos or proprietary screenshots",
+              "Vendor names used descriptively, not as endorsements",
+              "Source provenance tracked per entry",
             ].map(s => (
               <li key={s} className="flex items-start gap-2 rounded-md border border-border bg-card px-3 py-2">
                 <CheckCircle2 className="size-4 text-primary shrink-0 mt-0.5" />

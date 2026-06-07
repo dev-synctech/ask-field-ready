@@ -7,7 +7,7 @@ export const Route = createFileRoute("/legal")({
   head: () => ({
     meta: [
       { title: "Trademark & Legal Notice — Mizly" },
-      { name: "description", content: "Mizly trademark, vendor-neutrality, and legal notice." },
+      { name: "description", content: "Mizly trademark and legal notice. Mizly is an independent training and field-support product, authored independently." },
       { property: "og:title", content: "Trademark & Legal Notice — Mizly" },
       { property: "og:description", content: "Mizly is an independent training and field-support product. Not affiliated with EHR vendors." },
     ],
@@ -31,7 +31,7 @@ function LegalPage() {
 
       <main className="max-w-3xl mx-auto px-5 py-10 md:py-14">
         <div className="inline-flex items-center gap-2 text-xs text-muted-foreground mb-3">
-          <ShieldCheck className="size-3.5 text-primary" /> Vendor-neutral by design
+          <ShieldCheck className="size-3.5 text-primary" /> Independently authored
         </div>
         <h1 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
           Trademark &amp; Legal Notice
@@ -43,7 +43,7 @@ function LegalPage() {
         <section className="mt-8 rounded-2xl border border-border bg-card p-5 shadow-soft">
           <h2 className="font-display font-semibold">Content posture</h2>
           <ul className="mt-2 space-y-2 text-sm text-foreground/85 list-disc pl-5">
-            <li>Mizly content is rewritten as original, vendor-neutral workflow guidance.</li>
+            <li>Mizly content is independently authored as original workflow guidance; vendor systems are referenced descriptively only.</li>
             <li>No vendor logos, screenshots, manuals, or tip sheets are published in Mizly.</li>
             <li>No PHI, organization names, credentials, or links to private systems are published.</li>
             <li>Where vendor families are referenced (e.g. &ldquo;Epic-style workflows&rdquo;), the reference is descriptive only.</li>

@@ -14,7 +14,7 @@ export function GuardrailCard({ className = "" }: { className?: string }) {
       <div className="mt-2 text-[11px] text-muted-foreground">
         See the{" "}
         <Link to="/legal" className="underline hover:text-foreground">trademark &amp; legal notice</Link>{" "}
-        for vendor-neutrality policy.
+        for authorship and vendor-reference policy.
       </div>
     </div>
   );
