@@ -6377,6 +6377,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Guarantor / account lookup -> Account summary -> Statements / detail bill action -> Confirm delivery method -> Log communication",
+    visual_url: "/visual-guides/detail-bill-request.svg",
+    visual_callouts: [
+      "1 - Confirm the request type (detail / itemized).",
+      "2 - Open the correct account / encounter lane.",
+      "3 - Confirm the approved delivery method.",
+      "4 - Log communication and route to the billing owner.",
+    ],
     first90: [
       "Confirm caller identity and pull the correct guarantor or hospital account.",
       "Open the account summary, find the visit, and locate the approved detail-bill / itemized statement action.",
