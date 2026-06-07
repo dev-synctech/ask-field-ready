@@ -315,7 +315,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
   },
   {
     id: "ll_scope_orders",
-    title: "Orders — full scope (where to start)",
+    title: "Orders — full workflow map",
     type: "playbook",
     summary: "Orders are the chart instructions for meds, labs, imaging, consults, procedures, and follow-up. Confirm patient and encounter, open the order-entry area, then pick the exact order type before troubleshooting.",
     roles: k("all roles", "inpatient provider", "ambulatory provider", "inpatient nurse", "ambulatory nurse", "clinical support"),
@@ -368,9 +368,11 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     ],
     keywords: k(
       "orders", "order", "ordering", "place order", "order entry",
+      "enter order", "put in orders", "put in order",
       "how do orders work", "where are orders", "orders overview",
       "orders scope", "order scope", "orders help", "order help",
       "what are orders", "explain orders", "orders intro",
+      "orders workflow map", "order workflow", "orders map",
     ),
     related_ids: [
       "ll_order_entry",
