@@ -7311,6 +7311,24 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return -40;
   }
+  // Orders — broad scope card: boost only when query is genuinely broad/general
+  // about orders, not a specific issue (sign, missing, set, context, tab, etc.).
+  {
+    const isOrdersWord = /\b(orders?|ordering|order\s+entry|place\s+(an?\s+)?order)\b/.test(queryText);
+    const isSpecificOrderIssue = /\b(sign|signing|signed|cosign|co-?sign|won'?t\s+sign|cannot\s+sign|can'?t\s+sign|missing|pending|wrong\s+(department|place|location|context|pool|team|queue)|context|set|smart\s?set|powerplan|favorite|favourites?|imaging|radiology|radiant|lab|medication|med|procedure|tab|locked|discontinue|cancel|modify|edit|hold|relationship|filter|owner|diagnosis|priority|routed|routing|status|nurse\s+can(not|'?t)\s+see|expired|after\s+sign|chart|encounter|switch\w*\s+context)\b/.test(queryText);
+    if (entry.id === "ll_scope_orders") {
+      if (isOrdersWord && !isSpecificOrderIssue) return 50;
+      // Broad framings even with extra words
+      if (/\b(what\s+(are|is)\s+orders|how\s+do\s+orders?\s+work|orders?\s+overview|orders?\s+scope|orders?\s+help|where\s+(are|do\s+i\s+find)\s+orders|explain\s+orders?)\b/.test(queryText)) return 50;
+      // Demote when user clearly wants a specific order issue
+      if (isOrdersWord && isSpecificOrderIssue) return -30;
+    }
+    // Keep ll_order_entry winning when the query is specifically about placing/finding
+    // the order-entry workspace (not the broad scope card).
+    if (entry.id === "ll_order_entry" && /\b(where\s+do\s+i\s+put\s+(in\s+)?orders|where\s+to\s+(enter|place)\s+(an?\s+)?order|put\s+in\s+(an?\s+)?order|can(not|'?t)\s+place\s+(an?\s+)?order)\b/.test(queryText)) {
+      return 25;
+    }
+  }
   // --- Pack 13 trigger phrase boosts ---
   if (
     entry.id === "ll_p13_detail_bill_request" &&
