@@ -31,6 +31,10 @@ export interface ContentItem {
   escalation_id?: string;
   frequency_id?: string;
   sanitized_approved?: boolean;
+  /** Optional Mizly-created MP4 path for learner playback (vendor-neutral, public/videos/...). */
+  learner_video_url?: string;
+  /** Optional related-topic label for video cards. */
+  related_topic?: string;
 }
 
 export const MODULES: Module[] = [
