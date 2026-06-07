@@ -6749,7 +6749,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     urgency: 2,
     escalation: 2,
     vendor_family: "epic",
-    action: "select",
+    action: "document",
     nav_trail: "Visit / encounter -> Visit charge or LOS area -> Select level -> Owner for policy questions",
     visual_url: "/visual-guides/level-of-service.svg",
     visual_callouts: [
@@ -6792,7 +6792,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     urgency: 2,
     escalation: 2,
     vendor_family: "epic",
-    action: "switch",
+    action: "review",
     nav_trail: "Login / session info -> Profile / department selector -> Switch context -> Reload activity",
     visual_url: "/visual-guides/profile-department-context.svg",
     visual_callouts: [
