@@ -88,12 +88,14 @@ function matchesChapterFilter(row: VideoRow, filter: ChapterFilter): boolean {
 function VideoMapPage() {
   const [q, setQ] = useState("");
   const [rights, setRights] = useState<string>("all");
+  const [chapterFilter, setChapterFilter] = useState<ChapterFilter>("all");
   const [active, setActive] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     const n = q.trim().toLowerCase();
     return ROWS.filter(r => {
       if (rights !== "all" && r.rights_status !== rights) return false;
+      if (!matchesChapterFilter(r, chapterFilter)) return false;
       if (!n) return true;
       return (
         r.source_title.toLowerCase().includes(n) ||
@@ -102,10 +104,11 @@ function VideoMapPage() {
         r.suggested_ask_triggers.join(" ").toLowerCase().includes(n)
       );
     });
-  }, [q, rights]);
+  }, [q, rights, chapterFilter]);
 
   const learnerVisibleCount = ROWS.filter(r => r.learner_visible).length;
   const detail = ROWS.find(r => r.video_ref_id === active) ?? null;
+  const detailChapters = detail ? CHAPTER_BY_VIDEO[detail.video_ref_id] : undefined;
 
   return (
     <div className="max-w-5xl mx-auto px-5 py-8">
@@ -154,10 +157,28 @@ function VideoMapPage() {
             >{r}</button>
           ))}
         </div>
+        <div className="flex gap-2 flex-wrap text-xs">
+          {([
+            ["all", "All chapters"],
+            ["transcript_not_started", "Transcript not started"],
+            ["needs_transcript", "Needs transcript"],
+            ["chapters_drafted", "Chapters drafted"],
+            ["needs_clip", "Needs clip"],
+            ["learner_live", "Learner live"],
+          ] as const).map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setChapterFilter(key)}
+              className={`px-3 py-1.5 rounded-lg border ${chapterFilter === key ? "bg-primary text-primary-foreground border-primary" : "border-border bg-card hover:bg-secondary"}`}
+            >{label}</button>
+          ))}
+        </div>
       </div>
 
       <div className="mt-4 rounded-2xl border border-border bg-card divide-y">
-        {filtered.map(r => (
+        {filtered.map(r => {
+          const doc = CHAPTER_BY_VIDEO[r.video_ref_id];
+          return (
           <button
             key={r.video_ref_id}
             onClick={() => setActive(r.video_ref_id)}
