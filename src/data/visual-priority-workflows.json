@@ -1,0 +1,258 @@
+[
+{
+"priority":"P0",
+"workflowTitle":"Level of Service selection / missing LOS",
+"askId":"ll_level_of_service_selection",
+"selector":"V2 ?2 / V2 ?3",
+"aliases":"level of service; LOS; change level of service; service level missing; visit level; billing level",
+"action":"Create cleaned visual from Ambulatory/GL3 pages that show visit charge/LOS area"
+},
+{
+"priority":"P0",
+"workflowTitle":"Note area or note type hard to find",
+"askId":"ll_note_sidebar_or_note_type_missing",
+"selector":"V2 ?2 / V2 ?3 / V2 ?5",
+"aliases":"where do I write my note; notes missing; note area missing; note type missing; documentation sidebar",
+"action":"Attach cleaned note navigation visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"Dynamic note template missing",
+"askId":"ll_dynamic_note_template_missing",
+"selector":"V2 ?5",
+"aliases":"dynamic documentation; note template missing; provider note missing; wrong note type",
+"action":"Attach cleaned template search/context visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"Note required field / cannot sign",
+"askId":"ll_note_unsigned_missing_required_field",
+"selector":"V2 ?5",
+"aliases":"note won?t sign; required field missing; cannot save note; unsigned note",
+"action":"Attach cleaned sign-error visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"Signed note addendum / correction",
+"askId":"ll_signed_note_addendum_correction",
+"selector":"V2 ?5",
+"aliases":"addendum; correct signed note; edit signed note; late entry",
+"action":"Attach cleaned addendum/correction visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"SmartLink blank or wrong",
+"askId":"ll_p12r2_smartlink_blank_or_wrong",
+"selector":"V2 ?5",
+"aliases":"smartlink blank; smartlink wrong; smarttext; smartlist; dot phrase",
+"action":"Already visual-backed; verify against all SmartTools pages"
+},
+{
+"priority":"P0",
+"workflowTitle":"Ambulatory orders / order entry",
+"askId":"ll_order_entry_confusion",
+"selector":"V2 ?2 / V2 ?3",
+"aliases":"orders tab; where do I put orders; cannot sign order; order entry",
+"action":"Create cleaned order-entry visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"Schedule columns / personalization",
+"askId":"ll_schedule_columns",
+"selector":"V2 ?4 / V2 ?3",
+"aliases":"schedule columns; personalize schedule; missing column; schedule view",
+"action":"Already visual-backed; expand aliases"
+},
+{
+"priority":"P0",
+"workflowTitle":"Session information / profile context",
+"askId":"ll_profile_or_department_context_wrong",
+"selector":"V2 ?1 / V2 ?4",
+"aliases":"session information; profile context; department context; wrong login context",
+"action":"Create cleaned profile/context visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"Patient list / CareCompass missing patient",
+"askId":"ll_p13_carecompass_patient_missing",
+"selector":"V1 ?9",
+"aliases":"carecompass; patient missing; patient list; dashboard patient missing",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"IView correction / uncharting",
+"askId":"ll_iview_correction_uncharting",
+"selector":"V1 ?9",
+"aliases":"iview correction; unchart; flowsheet correction; wrong column",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Medication scan failure",
+"askId":"ll_barcode_med_admin_scan_mismatch",
+"selector":"V1 ?9",
+"aliases":"medication scan failure; barcode scan; wrong medication; MAR",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Flowsheet row / time column wrong",
+"askId":"ll_flowsheet_row_hidden_or_time_column_wrong",
+"selector":"V1 ?9",
+"aliases":"flowsheet row missing; wrong time column; charting column",
+"action":"Already has related visual in repo; verify Ask attachment"
+},
+{
+"priority":"P0",
+"workflowTitle":"Claim errors sidebar",
+"askId":"ll_claim_edit_workqueue_owner",
+"selector":"V1 ?4",
+"aliases":"claim errors sidebar; claim edit; claim error; claim workqueue",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Clearinghouse error",
+"askId":"ll_clearinghouse_error_refresh_retest",
+"selector":"V1 ?4",
+"aliases":"clearinghouse error; retest claim; claim rejection",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Coverage effective date / filing order",
+"askId":"ll_coverage_filing_order_term_delete",
+"selector":"V1 ?3 / V1 ?4",
+"aliases":"coverage effective date; coverage filing order; insurance date issue",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Detail bill request",
+"askId":"ll_detail_bill_request",
+"selector":"V1 ?5",
+"aliases":"detail bill; request detailed bill; itemized bill",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Payment plan setup",
+"askId":"ll_payment_plan_setup",
+"selector":"V1 ?6 / V1 ?8",
+"aliases":"payment plan; self pay plan; patient billing payment plan",
+"action":"Create cleaned payment-plan visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"MyChart proxy access",
+"askId":"ll_p12r2_portal_proxy_access",
+"selector":"V2 ?6",
+"aliases":"proxy access; caregiver access; family access; MyChart access",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"MyChart result release",
+"askId":"ll_mychart_result_release",
+"selector":"V2 ?6",
+"aliases":"result release; patient cannot see result; MyChart result",
+"action":"Create cleaned result-release visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"MyChart message routing",
+"askId":"ll_mychart_message_routing",
+"selector":"V2 ?6",
+"aliases":"message routing; patient message wrong pool; MyChart message",
+"action":"Create cleaned message-routing visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"Radiant scheduling / Snapboard",
+"askId":"ll_p13_radiant_snapboard_scheduling",
+"selector":"V2 ?7",
+"aliases":"radiant scheduling; snapboard; imaging schedule",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Beaker specimen collection",
+"askId":"ll_p13_beaker_specimen_collection",
+"selector":"V2 ?8",
+"aliases":"beaker specimen; collect specimen; lab collection",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Beaker verified result correction",
+"askId":"ll_p13_beaker_verified_result_correction",
+"selector":"V2 ?8",
+"aliases":"verified result correction; correct lab result; beaker result",
+"action":"Already visual-backed"
+},
+{
+"priority":"P0",
+"workflowTitle":"Kaleidoscope exam section missing",
+"askId":"ll_p13_kaleidoscope_exam_section_missing",
+"selector":"V2 ?9",
+"aliases":"eye exam section missing; kaleidoscope exam; ophthalmology section",
+"action":"Create/verify cleaned exam-section visual"
+},
+{
+"priority":"P0",
+"workflowTitle":"Kaleidoscope imaging wrong view",
+"askId":"ll_p13_kaleidoscope_imaging_wrong_view",
+"selector":"V2 ?9",
+"aliases":"eye image wrong view; ophthalmology imaging; imaging view missing",
+"action":"Create cleaned imaging-view visual"
+},
+{
+"priority":"P1",
+"workflowTitle":"ASAP ED trackboard / patient movement",
+"askId":"ll_asap_ed_trackboard_patient_flow",
+"selector":"V2 ?10",
+"aliases":"ED trackboard; patient movement; ED patient status; firstnet",
+"action":"Create cleaned ED trackboard visual"
+},
+{
+"priority":"P1",
+"workflowTitle":"Account lookup / guarantor account",
+"askId":"ll_billing_account_lookup",
+"selector":"V1 ?3",
+"aliases":"account lookup; guarantor account; hospital account; billing account",
+"action":"Create cleaned account lookup visual"
+},
+{
+"priority":"P1",
+"workflowTitle":"Claim attachment / documentation packet",
+"askId":"ll_claim_attachment_missing",
+"selector":"V1 ?4 / V1 ?5",
+"aliases":"claim attachment; attach document; payer request; documentation packet",
+"action":"Create cleaned claim attachment visual"
+},
+{
+"priority":"P1",
+"workflowTitle":"Charge not dropping / charge capture",
+"askId":"ll_charge_not_dropping_after_visit",
+"selector":"V1 ?1 / V1 ?2 / V2 ?2",
+"aliases":"charge not dropping; charge capture; life of a charge; visit charge",
+"action":"Create cleaned charge-flow visual"
+},
+{
+"priority":"P1",
+"workflowTitle":"Secure prescription printer",
+"askId":"ll_prescription_printer_routing_wrong",
+"selector":"V1 ?5",
+"aliases":"prescription printer; secure printer; wrong printer; e-prescribe print",
+"action":"Already visual-backed"
+},
+{
+"priority":"P1",
+"workflowTitle":"Haiku clinical photo",
+"askId":"ll_haiku_clinical_photo",
+"selector":"V2 ?10 or source guide",
+"aliases":"clinical photo; Haiku photo; mobile photo upload",
+"action":"Create cleaned mobile-photo visual if reference exists"
+}
+]
