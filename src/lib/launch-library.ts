@@ -6285,6 +6285,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Sample portal message -> Look at routing pool -> Compare with intended pool -> Adjust routing",
+    visual_url: "/visual-guides/mychart-message-routing.svg",
+    visual_callouts: [
+      "1 - Open a sample message; record type and time.",
+      "2 - Identify actual pool and who covers it.",
+      "3 - Compare with intended pool / routing rule.",
+      "4 - Route portal support to fix the rule.",
+    ],
     first90: [
       "Open a sample message and check which pool it landed in.",
       "Compare the actual pool with the intended pool for that message type.",
