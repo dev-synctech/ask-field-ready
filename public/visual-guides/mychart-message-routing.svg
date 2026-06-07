@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">Portal Message Routing</title>
+  <desc id="desc">Generic Mizly mock screen. No raw screenshots, no PHI, no vendor logos.</desc>
+  <defs><style>.bg{fill:#f6f8fb}.panel{fill:#fff;stroke:#d8e0eb;stroke-width:2}.nav{fill:#172033}.card{fill:#fff;stroke:#d8e0eb;stroke-width:2}.soft{fill:#eef5ff}.teal{fill:#ecfdf5;stroke:#14b8a6;stroke-width:2}.warn{fill:#fff7ed;stroke:#f59e0b;stroke-width:2}.text{font-family:Arial,sans-serif;fill:#172033}.muted{fill:#637083}.head{font-size:24px;font-weight:700}.small{font-size:16px}.tiny{font-size:13px}.line{stroke:#d8e0eb;stroke-width:2}.num{fill:#1554c7}.numtext{fill:#fff;font-size:18px;font-weight:700}</style></defs>
+  <rect width="960" height="560" rx="28" class="bg"/>
+  <rect x="36" y="36" width="888" height="488" rx="24" class="panel"/>
+  <rect x="36" y="36" width="888" height="58" rx="24" class="nav"/>
+  <text x="62" y="130" class="text head">Portal Message Routing</text>
+  <text x="62" y="156" class="text small muted">Compare actual pool with intended pool before changing user behavior.</text>
+  <rect x="62" y="190" width="268" height="218" rx="16" class="soft"/>
+  <text x="86" y="224" class="text small" font-weight="700">Sample message</text>
+  <path d="M86 260h180" class="line"/>
+  <path d="M86 290h164" class="line"/>
+  <path d="M86 320h148" class="line"/>
+  <g><circle cx="62" cy="190" r="18" class="num"/><text x="56" y="197" class="numtext">1</text></g>
+  <rect x="344" y="190" width="268" height="218" rx="16" class="warn"/>
+  <text x="368" y="224" class="text small" font-weight="700">Actual pool</text>
+  <path d="M368 260h180" class="line"/>
+  <path d="M368 290h164" class="line"/>
+  <path d="M368 320h148" class="line"/>
+  <g><circle cx="344" cy="190" r="18" class="num"/><text x="338" y="197" class="numtext">2</text></g>
+  <rect x="626" y="190" width="268" height="218" rx="16" class="teal"/>
+  <text x="650" y="224" class="text small" font-weight="700">Intended pool</text>
+  <path d="M650 260h180" class="line"/>
+  <path d="M650 290h164" class="line"/>
+  <path d="M650 320h148" class="line"/>
+  <g><circle cx="626" cy="190" r="18" class="num"/><text x="620" y="197" class="numtext">3</text></g>
+  <rect x="62" y="436" width="796" height="44" rx="16" fill="#f8fafc" stroke="#d8e0eb"/>
+  <text x="88" y="464" class="text tiny">Mizly visual guide: sample message, actual vs intended pool, route to portal support to fix rule.</text>
+  <g><circle cx="858" cy="436" r="18" class="num"/><text x="852" y="443" class="numtext">4</text></g>
+</svg>
