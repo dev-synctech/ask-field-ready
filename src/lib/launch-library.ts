@@ -2713,6 +2713,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "document",
     is_deep_flow: true,
     nav_trail: "Note editor -> SmartTool/SmartText/SmartPhrase -> Prompt or placeholder -> Required field/sign",
+    visual_url: "/visual-guides/smartlink-blank-wrong.svg",
+    visual_callouts: [
+      "1 - Open the note and find the unresolved or wrong-pull text.",
+      "2 - Identify the SmartLink, SmartPhrase, or placeholder name.",
+      "3 - Resolve the prompt or correct the source.",
+      "4 - If shared/broken for everyone, route to documentation/template owner.",
+    ],
     first90: [
       "Keep the note open and find the unresolved text.",
       "Confirm tool type and required prompt.",
