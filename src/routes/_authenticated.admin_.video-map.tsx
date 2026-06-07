@@ -345,6 +345,44 @@ function Drawer({ row, chapterDoc, onClose }: { row: VideoRow; chapterDoc: Chapt
               </div>
             </Field>
           )}
+          {(CLIPS_BY_VIDEO[row.video_ref_id] ?? []).length > 0 && (
+            <Field label={`Mizly clip scripts (${(CLIPS_BY_VIDEO[row.video_ref_id] ?? []).length})`}>
+              <div className="space-y-3">
+                {(CLIPS_BY_VIDEO[row.video_ref_id] ?? []).map(clip => (
+                  <details key={clip.clip_id} className="rounded-xl border border-border bg-background p-3">
+                    <summary className="cursor-pointer flex flex-wrap items-center gap-2">
+                      <span className="font-medium text-sm">{clip.title}</span>
+                      <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{clip.estimated_duration}</span>
+                      <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">clip: {clip.learner_clip_status}</span>
+                      <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">qa: {clip.qa_status}</span>
+                    </summary>
+                    <div className="mt-2 text-[10px] font-mono text-muted-foreground">{clip.clip_id}</div>
+                    {clip.related_ask_entry_ids.length > 0 && (
+                      <div className="mt-1 text-xs"><span className="text-muted-foreground">Ask:</span> <span className="font-mono">{clip.related_ask_entry_ids.join(", ")}</span></div>
+                    )}
+                    {clip.source_chapter_refs.length > 0 && (
+                      <div className="mt-1 text-xs"><span className="text-muted-foreground">Chapters:</span> <span className="font-mono">{clip.source_chapter_refs.join(", ")}</span></div>
+                    )}
+                    <div className="mt-2 text-xs font-medium text-foreground">Script</div>
+                    <ol className="mt-1 space-y-1 text-xs list-decimal list-inside">
+                      {clip.script.map((b, i) => (
+                        <li key={i}><span className="text-muted-foreground">[{b.beat}]</span> {b.voiceover}</li>
+                      ))}
+                    </ol>
+                    {clip.visual_scenes.length > 0 && (
+                      <>
+                        <div className="mt-2 text-xs font-medium text-foreground">Visuals</div>
+                        <ul className="mt-1 space-y-0.5 text-xs list-disc list-inside text-foreground/80">
+                          {clip.visual_scenes.map((v, i) => <li key={i}>{v}</li>)}
+                        </ul>
+                      </>
+                    )}
+                    {clip.notes && <div className="mt-2 text-xs text-foreground/80">{clip.notes}</div>}
+                  </details>
+                ))}
+              </div>
+            </Field>
+          )}
         </div>
         <div className="p-4 border-t border-border">
           <button onClick={onClose} className="w-full h-10 rounded-xl bg-primary text-primary-foreground text-sm font-medium">Close</button>
