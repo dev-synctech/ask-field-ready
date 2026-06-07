@@ -39,7 +39,7 @@ const SEED_ROWS: VisualMapRow[] = [
     notes: "Cleaned. No vendor labels.",
   },
   {
-    workflowId: "ll_p13_detail_bill_request",
+    workflowId: "ll_detail_bill_request",
     workflowTitle: "Detail bill request",
     exampleAsk: "How do I request a detailed bill for a patient?",
     visualStatus: "live_in_ask",
