@@ -184,7 +184,7 @@ function VisualReviewPage() {
 
   return (
     <>
-      <Header />
+      <Header title="Visual Review Viewer" subtitle="Admin-only triage of raw visual references" />
       <main className="mx-auto max-w-7xl px-4 py-8 space-y-6">
         <nav className="text-sm text-muted-foreground flex flex-wrap items-center gap-2">
           <Link to="/admin" className="hover:underline inline-flex items-center gap-1">
