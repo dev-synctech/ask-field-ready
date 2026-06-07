@@ -789,6 +789,8 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             </div>
           </section>
 
+          <MizlyClipChip answer={answer} />
+
           <section>
             <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">MORE HELP</div>
             <MoreHelpChips answer={answer} />
@@ -805,6 +807,40 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
     </div>
   );
 }
+
+function MizlyClipChip({ answer }: { answer: AskAnswer }) {
+  const clip = answer.related.videos.find(v => !!v.learner_video_url);
+  if (!clip) return null;
+  return (
+    <section>
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">MIZLY WALKTHROUGH VIDEO</div>
+      <Link
+        to="/videos"
+        search={{ item: clip.id }}
+        className="group flex items-center gap-3 rounded-2xl border border-primary/25 bg-primary-soft/40 hover:bg-primary-soft/60 hover:border-primary/40 px-4 py-3 transition shadow-soft"
+      >
+        <span className="size-10 shrink-0 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
+          <PlayCircleIcon />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[10px] uppercase tracking-wider text-primary font-semibold">Watch · {clip.estimated_minutes ? `${clip.estimated_minutes} min` : "short clip"}</span>
+          <span className="mt-0.5 block text-sm font-semibold text-foreground truncate">{clip.title}</span>
+          {clip.related_topic && (
+            <span className="mt-0.5 block text-[11px] text-muted-foreground truncate">{clip.related_topic}</span>
+          )}
+        </span>
+        <span className="text-xs font-medium text-primary group-hover:underline shrink-0">Watch</span>
+      </Link>
+    </section>
+  );
+}
+
+function PlayCircleIcon() {
+  // small inline play glyph; reuses lucide PlayCircle imported at top
+  return <Film className="size-5" />;
+}
+
+
 
 function compactAnswer(answer: AskAnswer) {
   const guide = answer.liveGuide;
