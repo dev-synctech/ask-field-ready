@@ -6878,6 +6878,49 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return -40;
   }
+  // --- Pack 13 trigger phrase boosts ---
+  if (
+    entry.id === "ll_p13_detail_bill_request" &&
+    /\b(detail\s+bill|itemized\s+(bill|statement)|send\s+(a\s+)?detail\s+bill|wants\s+itemized)\b/.test(queryText)
+  ) {
+    return 40;
+  }
+  if (
+    entry.id === "ll_p13_carecompass_patient_missing" &&
+    /\b(carecompass|rounding\s+(list|workspace).*missing|patient\s+(missing|not\s+on)\s+(my\s+)?(rounding|care)\b|care\s+workspace\s+missing)\b/.test(queryText)
+  ) {
+    return 40;
+  }
+  if (
+    entry.id === "ll_p13_iview_correction_uncharting" &&
+    /\b(iview|interactive\s+view|unchart\w*|uncharted\s+(entry|flowsheet)|correct\s+flowsheet|wrong\s+(row|time\s+column)\s+flowsheet|documented\s+on\s+wrong\s+patient)\b/.test(queryText)
+  ) {
+    return 40;
+  }
+  if (
+    entry.id === "ll_p13_radiant_snapboard_scheduling" &&
+    /\b(snapboard|radiant\s+schedul|radiology\s+(snapboard|board|scheduling\s+board)|modality\s+board)\b/.test(queryText)
+  ) {
+    return 40;
+  }
+  if (
+    entry.id === "ll_p13_beaker_specimen_collection" &&
+    /\b(beaker\s+specimen|specimen\s+collection|cannot\s+collect\s+specimen|specimen\s+label\s+(not\s+printing|won'?t\s+print)|phlebotomy\s+collection)\b/.test(queryText)
+  ) {
+    return 40;
+  }
+  if (
+    entry.id === "ll_p13_beaker_verified_result_correction" &&
+    /\b(verified\s+(lab\s+)?result|amend\s+(lab\s+)?result|lab\s+amendment|correct\s+released\s+result|verified\s+result\s+(wrong|correction))\b/.test(queryText)
+  ) {
+    return 40;
+  }
+  if (
+    entry.id === "ll_p13_haiku_clinical_photo" &&
+    /\b(haiku|clinical\s+photo|wound\s+photo|mobile\s+photo|photo\s+(not\s+attaching|not\s+uploading|not\s+in\s+chart)|in-?app\s+camera)\b/.test(queryText)
+  ) {
+    return 40;
+  }
   return 0;
 }
 
