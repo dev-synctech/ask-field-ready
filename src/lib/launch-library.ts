@@ -7136,14 +7136,21 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return -40;
   }
-  // Patient chart not loading / chart slow after admission → patient list / context, NOT media scanning
+  // Patient chart not loading after admission → dedicated workflow, not generic patient list
+  if (
+    entry.id === "ll_patient_chart_not_loading_after_admission" &&
+    (/\b(patient\s+)?chart\s+(not\s+loading|won'?t\s+load|wont\s+load|isn'?t\s+loading|not\s+opening|won'?t\s+open|wont\s+open|will\s+not\s+open|cannot\s+open|can'?t\s+open|blank|opens\s+blank|loading\s+forever|fails\s+to\s+load|spinning)\b/.test(queryText) ||
+     /\b(after\s+admission|after\s+admit|after\s+registration|after\s+transfer|after\s+context\s+change|admission\s+chart\s+issue|admitted\s+but\s+chart)\b/.test(queryText) ||
+     /\bchart\s+not\s+available\s+after\b/.test(queryText))
+  ) {
+    return 50;
+  }
+  // Keep ll_patient_list scoped to "list" phrasing, not chart-loading phrasing
   if (
     entry.id === "ll_patient_list" &&
-    (/\b(patient\s+)?chart\s+(not\s+loading|won'?t\s+load|isn'?t\s+loading|not\s+opening|blank|wont\s+open)\b/.test(queryText) ||
-     /\bafter\s+admission\b.*\bchart\b/.test(queryText) ||
-     /\bchart\b.*\bafter\s+admission\b/.test(queryText))
+    /\b(patient\s+)?chart\s+(not\s+loading|won'?t\s+load|isn'?t\s+loading|not\s+opening|won'?t\s+open|blank|opens\s+blank|loading\s+forever|fails\s+to\s+load|spinning)\b/.test(queryText)
   ) {
-    return 40;
+    return -20;
   }
   // Suppress the scanning/media entry when query is about chart loading after admission
   if (
