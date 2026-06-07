@@ -6106,6 +6106,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "document",
     nav_trail: "Patient chart -> Portal / proxy access -> Confirm relationship -> Add proxy -> Send activation -> Verify access status",
+    visual_url: "/visual-guides/mychart-proxy-access.svg",
+    visual_callouts: [
+      "1 - Confirm the caregiver-to-patient relationship and consent on file.",
+      "2 - Open the portal / proxy access area on the patient's chart.",
+      "3 - Add the proxy with the allowed proxy features.",
+      "4 - Send the activation invite and verify access becomes active.",
+    ],
     first90: [
       "Confirm the caregiver-to-patient relationship and that the right consent is on file for that relationship.",
       "Open the portal / proxy access area on the patient's chart and add the caregiver as a proxy with the allowed proxy features for that relationship.",
