@@ -1,0 +1,47 @@
+{
+  "footer_disclaimer": "For explanatory purposes only. Mizly is not affiliated with, endorsed by, or certified by any healthcare software vendor.",
+  "screenshots": [
+    {
+      "id": "sr_orders_workflow_overview",
+      "title": "Orders workflow overview (example placeholder)",
+      "note": "Placeholder entry. No image is attached yet; the high-fidelity Mizly walkthrough visual is shown until a rights-cleared screenshot is supplied.",
+      "asset_type": "rights_cleared_screenshot",
+      "rights_status": "needs_legal_review",
+      "clearance_note": "Awaiting written rights confirmation. Treat as internal-only until cleared.",
+      "approved_by": null,
+      "approval_date": null,
+      "redaction_status": "needs_redaction",
+      "learner_visible": false,
+      "image_path": null,
+      "related_ask_ids": ["ll_scope_orders", "ll_order_entry"]
+    },
+    {
+      "id": "sr_notes_signing_panel",
+      "title": "Notes signing panel (example placeholder)",
+      "note": "Placeholder. PHI, vendor chrome, and org identifiers must be redacted before any learner exposure.",
+      "asset_type": "rights_cleared_screenshot",
+      "rights_status": "internal_only",
+      "clearance_note": "Captured during internal walkthrough. Not authorized for public training use.",
+      "approved_by": null,
+      "approval_date": null,
+      "redaction_status": "not_needed",
+      "learner_visible": false,
+      "image_path": null,
+      "related_ask_ids": ["ll_scope_notes", "ll_note_signing"]
+    },
+    {
+      "id": "sr_smartlink_blank_state",
+      "title": "SmartLink blank/wrong state (example placeholder)",
+      "note": "Placeholder. Will be replaced with redrawn Mizly mock unless explicit clearance is obtained.",
+      "asset_type": "rights_cleared_screenshot",
+      "rights_status": "unknown",
+      "clearance_note": "Origin and licensing unknown. Do not surface publicly.",
+      "approved_by": null,
+      "approval_date": null,
+      "redaction_status": "needs_redaction",
+      "learner_visible": false,
+      "image_path": null,
+      "related_ask_ids": ["ll_smarttools_smartlink"]
+    }
+  ]
+}
