@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Mizly visual guide: verified lab result correction</title>
+  <desc id="desc">Sanitized mock of a result inquiry view showing verified status, lab amendment path, reason, and notify-provider step.</desc>
+  <defs>
+    <linearGradient id="brand" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#04B8AA"/><stop offset="1" stop-color="#1357C8"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#102033" flood-opacity=".16"/></filter>
+  </defs>
+  <rect width="1200" height="520" rx="36" fill="#F7FAFC"/>
+  <rect x="54" y="42" width="1092" height="436" rx="28" fill="#FFFFFF" stroke="#D7E0EA" filter="url(#shadow)"/>
+  <text x="88" y="92" font-family="Manrope, Arial, sans-serif" font-size="25" font-weight="800" fill="#172033">Verified result — amendment</text>
+
+  <!-- Result panel -->
+  <rect x="88" y="124" width="420" height="300" rx="18" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="116" y="160" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="900" fill="#172033">Result detail</text>
+  <rect x="116" y="180" width="364" height="44" rx="10" fill="#F4F8FB"/>
+  <text x="132" y="208" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="800" fill="#172033">Result value — under review</text>
+  <rect x="116" y="232" width="160" height="32" rx="14" fill="#E8FBF8" stroke="#04B8AA"/>
+  <text x="138" y="253" font-family="Manrope, Arial, sans-serif" font-size="12" font-weight="900" fill="#0D8B7E">Verified / released</text>
+  <rect x="284" y="232" width="160" height="32" rx="14" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="306" y="253" font-family="Manrope, Arial, sans-serif" font-size="12" font-weight="900" fill="#516070">Preliminary</text>
+  <rect x="116" y="280" width="364" height="56" rx="10" fill="#FDECEC" stroke="#E66767"/>
+  <text x="132" y="304" font-family="Manrope, Arial, sans-serif" font-size="12" font-weight="900" fill="#8B1F1F">Do not edit chart directly</text>
+  <text x="132" y="324" font-family="Manrope, Arial, sans-serif" font-size="12" font-weight="700" fill="#172033">Verified results are lab-owned</text>
+
+  <!-- Amendment -->
+  <rect x="528" y="124" width="546" height="300" rx="18" fill="#F4F8FB" stroke="#D8E2EC"/>
+  <text x="556" y="160" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="900" fill="#172033">Lab amendment</text>
+  <rect x="556" y="180" width="490" height="44" rx="10" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="572" y="208" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="800" fill="#172033">Open amendment / correction path</text>
+  <rect x="556" y="232" width="490" height="60" rx="10" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="572" y="256" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="800" fill="#172033">Reason for amendment</text>
+  <text x="572" y="278" font-family="Manrope, Arial, sans-serif" font-size="12" font-weight="700" fill="#516070">Required before save</text>
+  <rect x="556" y="300" width="490" height="44" rx="10" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="572" y="328" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="800" fill="#172033">Notify ordering provider</text>
+  <rect x="556" y="354" width="180" height="42" rx="12" fill="url(#brand)"/>
+  <text x="588" y="381" font-family="Manrope, Arial, sans-serif" font-size="14" font-weight="900" fill="#FFFFFF">Submit amendment</text>
+
+  <g font-family="Manrope, Arial, sans-serif" font-weight="900" font-size="20">
+    <circle cx="116" cy="248" r="20" fill="#04B8AA"/><text x="110" y="255" fill="#FFFFFF">1</text>
+    <circle cx="116" cy="308" r="20" fill="#E66767"/><text x="110" y="315" fill="#FFFFFF">2</text>
+    <circle cx="556" cy="208" r="20" fill="#1357C8"/><text x="550" y="215" fill="#FFFFFF">3</text>
+    <circle cx="556" cy="264" r="20" fill="#1357C8"/><text x="550" y="271" fill="#FFFFFF">4</text>
+    <circle cx="588" cy="376" r="20" fill="#04B8AA"/><text x="582" y="383" fill="#FFFFFF">5</text>
+  </g>
+  <text x="88" y="466" font-family="Manrope, Arial, sans-serif" font-size="18" font-weight="700" fill="#516070">A verified result is lab-owned — route through amendment and notify the ordering provider.</text>
+</svg>
