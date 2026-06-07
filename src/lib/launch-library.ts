@@ -17,6 +17,21 @@ export interface VisualAid {
   note: string;
   callouts?: string[];
   href?: string;
+  /**
+   * Rights-clearance metadata (optional). When omitted, the aid is treated as a
+   * Mizly-original asset (cleaned SVG / redrawn mock / text-only) and is safe
+   * for learner exposure. Only `rights_cleared_screenshot` aids with
+   * `rightsStatus === "cleared_for_public_training"` may render an actual image.
+   */
+  assetType?: "cleaned_svg" | "redrawn_mock" | "rights_cleared_screenshot";
+  rightsStatus?:
+    | "unknown"
+    | "internal_only"
+    | "needs_legal_review"
+    | "cleared_for_public_training";
+  imageHref?: string;
+  clearanceNote?: string;
+  footerDisclaimer?: string;
 }
 
 export interface LiveGuide {
