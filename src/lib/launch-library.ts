@@ -2999,6 +2999,14 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Prescription/order -> Print action -> Printer selector/route -> One controlled reprint",
+    visual_url: "/visual-guides/secure-prescription-printer.svg",
+    visual_callouts: [
+      "1 - Open the prescription/order print action.",
+      "2 - Select the approved secure prescription printer.",
+      "3 - Check duplicate risk before reprinting.",
+      "4 - Confirm printer is online and has paper.",
+      "5 - Print once; if missing/offline, route device support.",
+    ],
     first90: [
       "Keep the prescription/order screen open.",
       "Confirm the approved prescription printer route.",
