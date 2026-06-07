@@ -4267,7 +4267,14 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "MAR/med administration -> Patient scan -> Medication scan -> Mismatch alert -> Pharmacy/clinical owner",
-    visual_url: null,
+    visual_url: "/visual-guides/medication-scan-failure.svg",
+    visual_callouts: [
+      "1 - Scan wristband and verify patient.",
+      "2 - Scan medication package barcode.",
+      "3 - Read the mismatch alert reason.",
+      "4 - Route owner: pharmacy, clinical, or device.",
+      "5 - Hold the dose until resolved — never override.",
+    ],
     first90: [
       "Stop before administering.",
       "Confirm patient, medication, and order match.",
