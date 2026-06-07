@@ -18,7 +18,7 @@ const browser = await openBrowser("chrome", {
 
 const composition = await selectComposition({
   serveUrl: bundled,
-  id: "clip_orders_full_workflow",
+  id: "clip-orders-full-workflow",
   puppeteerInstance: browser,
 });
 

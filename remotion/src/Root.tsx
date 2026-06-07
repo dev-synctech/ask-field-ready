@@ -24,7 +24,7 @@ export const RemotionRoot: React.FC = () => {
       {(plan as Clip[]).map((c) => (
         <Composition
           key={c.clip_id}
-          id={c.clip_id}
+          id={c.clip_id.replace(/_/g, "-")}
           component={Clip as React.FC<{ clipId: string }>}
           durationInFrames={totalFrames(c.scenes)}
           fps={FPS}

@@ -6,9 +6,9 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const TARGETS = [
-  { id: "clip_orders_full_workflow", out: "orders-full-workflow-map.mp4" },
-  { id: "clip_notes_where_write_sign", out: "notes-write-and-sign.mp4" },
-  { id: "clip_smartlink_blank_or_wrong", out: "smarttools-smartlink-blank-wrong.mp4" },
+  { id: "clip-orders-full-workflow", out: "orders-full-workflow-map.mp4" },
+  { id: "clip-notes-where-write-sign", out: "notes-write-and-sign.mp4" },
+  { id: "clip-smartlink-blank-or-wrong", out: "smarttools-smartlink-blank-wrong.mp4" },
 ];
 
 const outDir = path.resolve(__dirname, "../../public/videos/mizly-clips");
@@ -21,7 +21,7 @@ const bundled = await bundle({
 console.log("Bundled.");
 
 const browser = await openBrowser("chrome", {
-  browserExecutable: process.env.PUPPETEER_EXECUTABLE_PATH ?? "/bin/chromium",
+  browserExecutable: "/bin/chromium",
   chromiumOptions: {
     args: ["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
   },
