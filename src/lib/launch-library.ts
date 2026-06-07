@@ -4803,7 +4803,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "cerner",
     action: "document",
     nav_trail: "Chart -> Documentation/Notes -> Sidebar or New Note -> Note type/filter -> Required sections",
-    visual_url: null,
+    visual_url: "/visual-guides/note-sidebar-area.svg",
+    visual_callouts: [
+      "1 - Confirm chart and encounter context.",
+      "2 - Expand the Notes / documentation sidebar.",
+      "3 - Filter or search the note type.",
+      "4 - Escalate build owner if team-wide missing.",
+    ],
     first90: [
       "Confirm this is the right encounter.",
       "Look for collapsed notes/sidebar area.",
