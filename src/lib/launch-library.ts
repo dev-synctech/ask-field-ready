@@ -2516,6 +2516,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Guarantor/account -> Payment plan or self-pay follow-up -> Workqueue/notes -> Owner",
+    visual_url: "/visual-guides/payment-plan-setup.svg",
+    visual_callouts: [
+      "1 - Open guarantor / account lane.",
+      "2 - Review plan terms (amount, cadence, start).",
+      "3 - Route to policy owner before changing terms.",
+      "4 - Document outcome with callback.",
+    ],
     first90: [
       "Open the guarantor/account lane.",
       "Check payment plan or self-pay follow-up status.",
