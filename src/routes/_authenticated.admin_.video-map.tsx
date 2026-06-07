@@ -4,6 +4,7 @@ import { ArrowLeft, ShieldAlert, Video, Search, Eye, EyeOff } from "lucide-react
 import { Header } from "./_authenticated.learn";
 import videoMap from "@/data/video-reference-map.json";
 import chapterMap from "@/data/video-chapter-map.json";
+import clipBacklog from "@/data/video-clip-backlog.json";
 
 export const Route = createFileRoute("/_authenticated/admin_/video-map")({
   head: () => ({ meta: [{ title: "Video Reference Map — Mizly Admin" }] }),
@@ -65,11 +66,34 @@ type ChapterDoc = {
   chapters: Chapter[];
 };
 
+type ClipScriptBeat = { beat: string; voiceover: string };
+type ClipRecord = {
+  clip_id: string;
+  title: string;
+  related_ask_entry_ids: string[];
+  source_video_refs: string[];
+  source_chapter_refs: string[];
+  script: ClipScriptBeat[];
+  visual_scenes: string[];
+  estimated_duration: string;
+  learner_clip_status: LearnerClipStatus;
+  learner_video_url: string | null;
+  qa_status: "needs_review" | "pass" | "needs_fix";
+  notes: string;
+};
+
 const ROWS = videoMap as VideoRow[];
 const CHAPTERS = chapterMap as ChapterDoc[];
+const CLIPS = clipBacklog as ClipRecord[];
 const CHAPTER_BY_VIDEO: Record<string, ChapterDoc | undefined> = Object.fromEntries(
   CHAPTERS.map(c => [c.video_ref_id, c])
 );
+const CLIPS_BY_VIDEO: Record<string, ClipRecord[]> = CLIPS.reduce((acc, clip) => {
+  for (const vid of clip.source_video_refs) {
+    (acc[vid] ||= []).push(clip);
+  }
+  return acc;
+}, {} as Record<string, ClipRecord[]>);
 
 type ChapterFilter = "all" | "transcript_not_started" | "needs_transcript" | "chapters_drafted" | "needs_clip" | "learner_live";
 
@@ -202,6 +226,7 @@ function VideoMapPage() {
             {doc && (
               <div className="mt-2 flex flex-wrap gap-2 text-[10px]">
                 <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{doc.chapters.length} chapters</span>
+                <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">drafted clips: {(CLIPS_BY_VIDEO[r.video_ref_id] ?? []).filter(c => c.learner_clip_status === "script_drafted").length}</span>
                 <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">live clips: {doc.chapters.filter(ch => ch.learner_clip_status === "live" && !!ch.learner_video_url).length}</span>
               </div>
             )}
@@ -317,6 +342,44 @@ function Drawer({ row, chapterDoc, onClose }: { row: VideoRow; chapterDoc: Chapt
                     );
                   })}
                 </ul>
+              </div>
+            </Field>
+          )}
+          {(CLIPS_BY_VIDEO[row.video_ref_id] ?? []).length > 0 && (
+            <Field label={`Mizly clip scripts (${(CLIPS_BY_VIDEO[row.video_ref_id] ?? []).length})`}>
+              <div className="space-y-3">
+                {(CLIPS_BY_VIDEO[row.video_ref_id] ?? []).map(clip => (
+                  <details key={clip.clip_id} className="rounded-xl border border-border bg-background p-3">
+                    <summary className="cursor-pointer flex flex-wrap items-center gap-2">
+                      <span className="font-medium text-sm">{clip.title}</span>
+                      <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{clip.estimated_duration}</span>
+                      <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">clip: {clip.learner_clip_status}</span>
+                      <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">qa: {clip.qa_status}</span>
+                    </summary>
+                    <div className="mt-2 text-[10px] font-mono text-muted-foreground">{clip.clip_id}</div>
+                    {clip.related_ask_entry_ids.length > 0 && (
+                      <div className="mt-1 text-xs"><span className="text-muted-foreground">Ask:</span> <span className="font-mono">{clip.related_ask_entry_ids.join(", ")}</span></div>
+                    )}
+                    {clip.source_chapter_refs.length > 0 && (
+                      <div className="mt-1 text-xs"><span className="text-muted-foreground">Chapters:</span> <span className="font-mono">{clip.source_chapter_refs.join(", ")}</span></div>
+                    )}
+                    <div className="mt-2 text-xs font-medium text-foreground">Script</div>
+                    <ol className="mt-1 space-y-1 text-xs list-decimal list-inside">
+                      {clip.script.map((b, i) => (
+                        <li key={i}><span className="text-muted-foreground">[{b.beat}]</span> {b.voiceover}</li>
+                      ))}
+                    </ol>
+                    {clip.visual_scenes.length > 0 && (
+                      <>
+                        <div className="mt-2 text-xs font-medium text-foreground">Visuals</div>
+                        <ul className="mt-1 space-y-0.5 text-xs list-disc list-inside text-foreground/80">
+                          {clip.visual_scenes.map((v, i) => <li key={i}>{v}</li>)}
+                        </ul>
+                      </>
+                    )}
+                    {clip.notes && <div className="mt-2 text-xs text-foreground/80">{clip.notes}</div>}
+                  </details>
+                ))}
               </div>
             </Field>
           )}
