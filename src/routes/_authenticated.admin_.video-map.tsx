@@ -361,7 +361,7 @@ function Drawer({ row, chapterDoc, onClose }: { row: VideoRow; chapterDoc: Chapt
                       <span className="font-medium text-sm">{clip.title}</span>
                       <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{clip.estimated_duration}</span>
                       <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">clip: {clip.learner_clip_status}</span>
-                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${clip.qa_status === "approved_for_production" || clip.qa_status === "pass" ? "bg-success/15 text-success" : clip.qa_status === "needs_fix" ? "bg-destructive/15 text-destructive" : "bg-warning/15 text-warning"}`}>qa: {clip.qa_status}</span>
+                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${clip.qa_status === "approved_for_production" || clip.qa_status === "pass" || clip.qa_status === "video_approved" ? "bg-success/15 text-success" : clip.qa_status === "needs_fix" ? "bg-destructive/15 text-destructive" : "bg-warning/15 text-warning"}`}>qa: {clip.qa_status}</span>
                     </summary>
                     <div className="mt-2 text-[10px] font-mono text-muted-foreground">{clip.clip_id}</div>
                     {clip.related_ask_entry_ids.length > 0 && (
