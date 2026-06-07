@@ -19,6 +19,14 @@ export interface AskGapLogRecord {
   ts?: number;
 }
 
+export interface VisualReferencePointer {
+  pdf: string;
+  section: string;
+  refPattern: string;
+  use: string;
+  exposureStatus: string;
+}
+
 export interface VisualNeed {
   id: string;
   kind: VisualAidKind;
@@ -33,6 +41,7 @@ export interface VisualNeed {
   conversionId?: string;
   relatedContentIds: string[];
   createdAt: string;
+  reference?: VisualReferencePointer;
 }
 
 export interface FactoryStage {
