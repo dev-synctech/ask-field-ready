@@ -2138,6 +2138,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     escalation: 2,
     vendor_family: "epic",
     action: "review",
+    visual_url: "/visual-guides/detail-bill-request.svg",
+    visual_callouts: [
+      "1 - Confirm the request type (detail / itemized).",
+      "2 - Open the correct account / encounter lane.",
+      "3 - Confirm the approved delivery method.",
+      "4 - Log communication and route to the billing owner.",
+    ],
     first90: [
       "Confirm this is a detailed bill request.",
       "Verify account/encounter lane without collecting identifiers in chat.",
