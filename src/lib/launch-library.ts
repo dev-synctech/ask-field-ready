@@ -6418,6 +6418,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Nursing rounding / care workspace -> View / list selector -> Unit / team / assignment filter -> Refresh -> Approved patient search fallback",
+    visual_url: "/visual-guides/carecompass-patient-missing.svg",
+    visual_callouts: [
+      "1 - Open the rounding or care workspace.",
+      "2 - Check unit, team, and assignment filters.",
+      "3 - Refresh, then use the approved patient search.",
+      "4 - If still missing for multiple users, escalate to the workflow owner.",
+    ],
     first90: [
       "Confirm the user is on the correct rounding or care workspace and the correct unit / team view.",
       "Check the assignment, relationship, and shift filters — most 'missing' patients are filtered out, not missing.",
