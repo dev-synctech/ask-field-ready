@@ -199,12 +199,19 @@ function VideoMapPage() {
             <div className="mt-2 text-xs text-foreground/80">
               <span className="text-muted-foreground">Topics:</span> {r.workflow_topics.join(", ")}
             </div>
+            {doc && (
+              <div className="mt-2 flex flex-wrap gap-2 text-[10px]">
+                <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{doc.chapters.length} chapters</span>
+                <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">live clips: {doc.chapters.filter(ch => ch.learner_clip_status === "live" && !!ch.learner_video_url).length}</span>
+              </div>
+            )}
           </button>
-        ))}
+          );
+        })}
         {filtered.length === 0 && <div className="p-6 text-sm text-muted-foreground text-center">No matching videos.</div>}
       </div>
 
-      {detail && <Drawer row={detail} onClose={() => setActive(null)} />}
+      {detail && <Drawer row={detail} chapterDoc={detailChapters} onClose={() => setActive(null)} />}
     </div>
   );
 }
