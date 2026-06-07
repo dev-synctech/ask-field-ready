@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import {
-  ArrowLeft, ShieldCheck, Search, ExternalLink, Download, Upload,
+  ArrowLeft, ShieldCheck, Search, Download, Upload,
   CheckCircle2, AlertTriangle, EyeOff, Eraser, Pencil, HelpCircle, SkipForward,
 } from "lucide-react";
 import { Header } from "./_authenticated.learn";
