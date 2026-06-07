@@ -2366,6 +2366,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Claim edit -> Clearinghouse/external status -> Correction -> Refresh/retest result",
+    visual_url: "/visual-guides/clearinghouse-error.svg",
+    visual_callouts: [
+      "1 - Capture the exact external status text.",
+      "2 - Identify the owner lane that fixes it.",
+      "3 - Correct it once in that lane.",
+      "4 - Refresh / retest before resending.",
+    ],
     first90: [
       "Open the clearinghouse or external-status error.",
       "Capture the exact error text and owner lane.",
