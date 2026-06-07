@@ -226,6 +226,7 @@ function VideoMapPage() {
             {doc && (
               <div className="mt-2 flex flex-wrap gap-2 text-[10px]">
                 <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{doc.chapters.length} chapters</span>
+                <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">drafted clips: {(CLIPS_BY_VIDEO[r.video_ref_id] ?? []).filter(c => c.learner_clip_status === "script_drafted").length}</span>
                 <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">live clips: {doc.chapters.filter(ch => ch.learner_clip_status === "live" && !!ch.learner_video_url).length}</span>
               </div>
             )}
