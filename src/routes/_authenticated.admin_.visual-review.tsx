@@ -395,7 +395,7 @@ function ReviewDrawer({ refRow: ref, state, onClose, onChange }: {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="min-w-0">
                 <div className="text-xs text-muted-foreground">Combined review PDF (offline reference)</div>
-                <div className="font-medium font-mono text-xs break-all">{ref.pdf} · page {ref.pdfPage}</div>
+                <div className="font-medium font-mono text-xs break-all">{ref.pdf} · source p.{ref.pdfPage}{ref.combinedPdfPage ? ` · combined p.${ref.combinedPdfPage}` : ""}</div>
               </div>
               <span className="inline-flex items-center gap-1 rounded-md bg-muted text-muted-foreground px-3 py-1.5 text-xs font-medium">
                 <EyeOff className="h-3.5 w-3.5" /> Reference stored offline
