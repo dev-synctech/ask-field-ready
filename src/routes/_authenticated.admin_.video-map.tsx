@@ -78,7 +78,7 @@ type ClipRecord = {
   estimated_duration: string;
   learner_clip_status: LearnerClipStatus;
   learner_video_url: string | null;
-  qa_status: "needs_review" | "pass" | "needs_fix";
+  qa_status: "needs_review" | "approved_for_production" | "pass" | "needs_fix";
   notes: string;
 };
 
