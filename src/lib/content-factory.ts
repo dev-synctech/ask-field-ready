@@ -430,7 +430,7 @@ const PACK13_REFERENCE_NEEDS: VisualNeed[] = [
     reason: "Need a sanitized secure-printer / favorites / print path mock. Confirm exact pages from page index.",
     reference: { pdf: "Vol 2 (Part A/B/C — confirm from page index)", section: "§11", refPattern: "V2-§11-*", use: "Secure printer / favorites / print path.", exposureStatus: "confirm page location from page index" },
   },
-].map((n, i) => ({
+] as Array<Omit<VisualNeed, "id" | "kind" | "status" | "title" | "suggestedOutput" | "source" | "relatedContentIds" | "createdAt">>).map((n, i) => ({
   id: `pack13_ref_${slug(n.workflowTitle)}_${i}`,
   kind: "screenshot" as const,
   status: "new" as const,
