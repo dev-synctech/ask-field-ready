@@ -759,6 +759,14 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     phases: k("cutover day 0", "stabilization week 1"),
     urgency: 2,
     escalation: 2,
+    visual_url: "/visual-guides/schedule-columns-personalization.svg",
+    visual_callouts: [
+      "1 - Confirm context: location, date, provider, view.",
+      "2 - Open Personalize / Columns / View options.",
+      "3 - Add or remove columns.",
+      "4 - Watch for template-locked columns.",
+      "5 - Apply, then save only if local policy allows.",
+    ],
     first90: [
       "Open the exact schedule view the user is working from.",
       "Confirm the top filters first: location/department, date range, provider/resource, and schedule view/template.",
