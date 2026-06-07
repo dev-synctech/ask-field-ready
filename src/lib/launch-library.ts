@@ -6976,6 +6976,13 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   ) {
     return 40;
   }
+  // SmartLink blank/wrong/pulling-wrong-info — prefer the specific entry over generic SmartTools
+  if (
+    entry.id === "ll_p12r2_smartlink_blank_or_wrong" &&
+    /\b(smart\s?link\s+(blank|empty|wrong|not\s+pulling|pulling\s+wrong|old\s+data)|smartlink.*pulling\s+wrong|note\s+pulling\s+wrong\s+information)\b/.test(queryText)
+  ) {
+    return 45;
+  }
   return 0;
 }
 
