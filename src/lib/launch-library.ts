@@ -394,6 +394,77 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     status: "published",
   },
   {
+    id: "ll_scope_notes",
+    title: "Notes — full workflow map",
+    type: "playbook",
+    summary: "Notes are the chart documents used to record what happened, what was assessed, what was planned, and what needs follow-up. Confirm patient and encounter, open the notes/documentation area, then pick the right note type before troubleshooting.",
+    roles: k("all roles", "inpatient provider", "ambulatory provider", "inpatient nurse", "ambulatory nurse", "clinical support"),
+    domains: k("documentation", "notes", "scope"),
+    phases: k("cutover day 0", "stabilization week 1", "optimization"),
+    urgency: 2,
+    escalation: 1,
+    action: "document",
+    is_deep_flow: false,
+    nav_trail: "Patient chart -> Notes/documentation -> New note or note type -> Complete required sections -> Sign/route",
+    visual_url: "/visual-guides/notes-scope-overview.svg",
+    visual_callouts: [
+      "1 - Confirm patient and encounter.",
+      "2 - Open Notes / documentation activity.",
+      "3 - Choose the right note type (provider, nursing, procedure, therapy).",
+      "4 - Complete required sections (subjective, objective, assessment, plan, attestation).",
+      "5 - Sign or route to cosign / save.",
+    ],
+    first90: [
+      "Confirm the patient and the correct encounter.",
+      "Find the note / documentation area.",
+      "Choose the right note type.",
+    ],
+    whatToSay: [
+      "'Let's make sure we're in the right chart and note type before we troubleshoot the note.'",
+    ],
+    whatToCheck: [
+      "Common note paths: Where do I write my note | Note type missing | Note won't sign | Required field missing | Signed note correction | Addendum | SmartText/SmartPhrase | SmartList | SmartLink blank or wrong | Note pulled wrong data.",
+      "By role: Provider note | Nursing documentation | Procedure note | Therapy note.",
+      "Patient context, encounter, role, specialty, and template availability.",
+    ],
+    whenToEscalate: "If patient, encounter, role, and note type are confirmed and the note still cannot be written, signed, or routed, escalate with note type, encounter, role, error text, and whether one user or the whole role is affected.",
+    walkthrough: [
+      "Confirm patient and encounter.",
+      "Open the Notes / documentation activity from the chart.",
+      "Pick the exact note type or path below, then drill into the specific workflow.",
+      "Path: 'Where do I write my note' -> notes sidebar / note type workflow.",
+      "Path: 'Note type missing' -> dynamic note template workflow.",
+      "Path: \"Note won't sign\" -> sign error / required field workflow.",
+      "Path: 'Signed note correction / addendum' -> signed note addendum workflow.",
+      "Path: 'SmartLink blank or wrong' -> SmartLink workflow.",
+      "Path: 'SmartText / SmartPhrase / SmartList' -> SmartTools workflow.",
+    ],
+    ifThatFails: [
+      "If you cannot identify the note type, stay on the notes/documentation activity and capture exact wording the user expects.",
+      "If the user is in the wrong encounter or role context, switch to the context/profile workflow first.",
+      "If the template is built but unavailable for the user's role, escalate to documentation/template owner.",
+    ],
+    keywords: k(
+      "notes", "note", "documentation", "provider note", "clinical note",
+      "note entry", "write note", "where do i write my note", "where are notes",
+      "start note", "note workflow", "documentation workflow",
+      "how do notes work", "notes overview", "notes scope", "note scope",
+      "notes help", "note help", "what are notes", "explain notes",
+      "notes workflow map", "note workflow map", "notes map",
+    ),
+    related_ids: [
+      "ll_note_sidebar_or_note_type_missing",
+      "ll_dynamic_note_template_missing",
+      "ll_signed_note_addendum_correction",
+      "ll_p12r2_smartlink_blank_or_wrong",
+      "ll_documentation",
+      "p2",
+      "s1",
+    ],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
     id: "ll_med_workflow",
     title: "Medication workflow support",
     type: "playbook",
@@ -7329,6 +7400,17 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
     // the order-entry workspace (not the broad scope card).
     if (entry.id === "ll_order_entry" && /\b(where\s+do\s+i\s+put\s+(in\s+)?orders|where\s+to\s+(enter|place)\s+(an?\s+)?order|put\s+in\s+(an?\s+)?order|can(not|'?t)\s+place\s+(an?\s+)?order)\b/.test(queryText)) {
       return 25;
+    }
+  }
+  // Notes — broad scope card: boost only on truly broad/general notes queries,
+  // demote on specific note problems (template, sign, addendum, SmartTools, etc.).
+  {
+    const isNotesWord = /\b(notes?|documentation|provider\s+note|clinical\s+note|nursing\s+(doc|documentation|note)|procedure\s+note|therapy\s+note|note\s+entry|write\s+(a\s+|my\s+)?note|start\s+(a\s+)?note)\b/.test(queryText);
+    const isSpecificNoteIssue = /\b(template|won'?t\s+sign|wont\s+sign|cannot\s+sign|can'?t\s+sign|not\s+signing|sign\s+error|required\s+field|missing\s+field|addendum|amend|amendment|correct(ion)?|signed\s+note|smart\s?link|smart\s?text|smart\s?phrase|smart\s?list|dot\s+phrase|pulled\s+wrong|pulling\s+wrong|wrong\s+data|wrong\s+encounter|wrong\s+chart|sidebar|hidden|collapsed|cosign|co-?sign|locked|late\s+entry|scanned?\s+to\s+wrong)\b/.test(queryText);
+    if (entry.id === "ll_scope_notes") {
+      if (isNotesWord && !isSpecificNoteIssue) return 50;
+      if (/\b(what\s+(are|is)\s+notes|how\s+do\s+notes?\s+work|notes?\s+overview|notes?\s+scope|notes?\s+help|where\s+(are|do\s+i\s+find)\s+notes|explain\s+notes?|documentation\s+workflow|notes?\s+workflow\s+map)\b/.test(queryText)) return 50;
+      if (isNotesWord && isSpecificNoteIssue) return -30;
     }
   }
   // --- Pack 13 trigger phrase boosts ---
