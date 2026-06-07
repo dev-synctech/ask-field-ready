@@ -2316,6 +2316,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Claim edit workqueue -> Claim/edit detail -> Error owner -> Retest or route",
+    visual_url: "/visual-guides/claim-errors-sidebar.svg",
+    visual_callouts: [
+      "1 - Open the claim/account.",
+      "2 - Find the error sidebar.",
+      "3 - Read the top error first.",
+      "4 - Fix or route to billing/claims lead.",
+    ],
     first90: [
       "Open the claim edit detail.",
       "Identify the exact edit code and owner.",
