@@ -370,10 +370,6 @@ function ReviewDrawer({ refRow: ref, state, onClose, onChange }: {
   onClose: () => void;
   onChange: (patch: Partial<ReviewState>) => void;
 }) {
-  // Best-effort link to the combined review PDF page. Files don't ship in /public;
-  // the URL is provided for admins who keep the PDFs locally / on a private bucket.
-  const pdfHref = `/visual-references/${ref.pdf}#page=${ref.pdfPage}`;
-
   return (
     <div className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-6" onClick={onClose}>
       <div
@@ -396,18 +392,13 @@ function ReviewDrawer({ refRow: ref, state, onClose, onChange }: {
         <div className="p-5 space-y-5">
           <div className="rounded-lg border border-border bg-secondary/30 p-3 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <div className="text-xs text-muted-foreground">Combined review PDF</div>
-                <div className="font-medium">{ref.pdf} · page {ref.pdfPage}</div>
+              <div className="min-w-0">
+                <div className="text-xs text-muted-foreground">Combined review PDF (offline reference)</div>
+                <div className="font-medium font-mono text-xs break-all">{ref.pdf} · page {ref.pdfPage}</div>
               </div>
-              <a
-                href={pdfHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-md bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium hover:opacity-90"
-              >
-                <ExternalLink className="h-3.5 w-3.5" /> Open PDF page
-              </a>
+              <span className="inline-flex items-center gap-1 rounded-md bg-muted text-muted-foreground px-3 py-1.5 text-xs font-medium">
+                <EyeOff className="h-3.5 w-3.5" /> Reference stored offline
+              </span>
             </div>
             <p className="text-[11px] text-muted-foreground mt-2 flex items-start gap-1">
               <EyeOff className="h-3 w-3 mt-0.5 shrink-0" />
