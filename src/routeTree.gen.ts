@@ -36,6 +36,7 @@ import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAdminVisualReviewRouteImport } from './routes/_authenticated.admin_.visual-review'
 import { Route as AuthenticatedAdminVisualNeedsRouteImport } from './routes/_authenticated.admin_.visual-needs'
 import { Route as AuthenticatedAdminVisualMapRouteImport } from './routes/_authenticated.admin_.visual-map'
+import { Route as AuthenticatedAdminVideoMapRouteImport } from './routes/_authenticated.admin_.video-map'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated.admin_.users'
 import { Route as AuthenticatedAdminTaxonomyRouteImport } from './routes/_authenticated.admin_.taxonomy'
 import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authenticated.admin_.sources'
@@ -190,6 +191,12 @@ const AuthenticatedAdminVisualMapRoute =
     path: '/admin/visual-map',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminVideoMapRoute =
+  AuthenticatedAdminVideoMapRouteImport.update({
+    id: '/admin_/video-map',
+    path: '/admin/video-map',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   id: '/admin_/users',
   path: '/admin/users',
@@ -305,6 +312,7 @@ export interface FileRoutesByFullPath {
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/admin/video-map': typeof AuthenticatedAdminVideoMapRoute
   '/admin/visual-map': typeof AuthenticatedAdminVisualMapRoute
   '/admin/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
   '/admin/visual-review': typeof AuthenticatedAdminVisualReviewRoute
@@ -347,6 +355,7 @@ export interface FileRoutesByTo {
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/admin/video-map': typeof AuthenticatedAdminVideoMapRoute
   '/admin/visual-map': typeof AuthenticatedAdminVisualMapRoute
   '/admin/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
   '/admin/visual-review': typeof AuthenticatedAdminVisualReviewRoute
@@ -391,6 +400,7 @@ export interface FileRoutesById {
   '/_authenticated/admin_/sources': typeof AuthenticatedAdminSourcesRoute
   '/_authenticated/admin_/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
   '/_authenticated/admin_/users': typeof AuthenticatedAdminUsersRoute
+  '/_authenticated/admin_/video-map': typeof AuthenticatedAdminVideoMapRoute
   '/_authenticated/admin_/visual-map': typeof AuthenticatedAdminVisualMapRoute
   '/_authenticated/admin_/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
   '/_authenticated/admin_/visual-review': typeof AuthenticatedAdminVisualReviewRoute
@@ -435,6 +445,7 @@ export interface FileRouteTypes {
     | '/admin/sources'
     | '/admin/taxonomy'
     | '/admin/users'
+    | '/admin/video-map'
     | '/admin/visual-map'
     | '/admin/visual-needs'
     | '/admin/visual-review'
@@ -477,6 +488,7 @@ export interface FileRouteTypes {
     | '/admin/sources'
     | '/admin/taxonomy'
     | '/admin/users'
+    | '/admin/video-map'
     | '/admin/visual-map'
     | '/admin/visual-needs'
     | '/admin/visual-review'
@@ -520,6 +532,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin_/sources'
     | '/_authenticated/admin_/taxonomy'
     | '/_authenticated/admin_/users'
+    | '/_authenticated/admin_/video-map'
     | '/_authenticated/admin_/visual-map'
     | '/_authenticated/admin_/visual-needs'
     | '/_authenticated/admin_/visual-review'
@@ -738,6 +751,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminVisualMapRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/video-map': {
+      id: '/_authenticated/admin_/video-map'
+      path: '/admin/video-map'
+      fullPath: '/admin/video-map'
+      preLoaderRoute: typeof AuthenticatedAdminVideoMapRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/users': {
       id: '/_authenticated/admin_/users'
       path: '/admin/users'
@@ -858,6 +878,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminSourcesRoute: typeof AuthenticatedAdminSourcesRoute
   AuthenticatedAdminTaxonomyRoute: typeof AuthenticatedAdminTaxonomyRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
+  AuthenticatedAdminVideoMapRoute: typeof AuthenticatedAdminVideoMapRoute
   AuthenticatedAdminVisualMapRoute: typeof AuthenticatedAdminVisualMapRoute
   AuthenticatedAdminVisualNeedsRoute: typeof AuthenticatedAdminVisualNeedsRoute
   AuthenticatedAdminVisualReviewRoute: typeof AuthenticatedAdminVisualReviewRoute
@@ -889,6 +910,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminSourcesRoute: AuthenticatedAdminSourcesRoute,
   AuthenticatedAdminTaxonomyRoute: AuthenticatedAdminTaxonomyRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
+  AuthenticatedAdminVideoMapRoute: AuthenticatedAdminVideoMapRoute,
   AuthenticatedAdminVisualMapRoute: AuthenticatedAdminVisualMapRoute,
   AuthenticatedAdminVisualNeedsRoute: AuthenticatedAdminVisualNeedsRoute,
   AuthenticatedAdminVisualReviewRoute: AuthenticatedAdminVisualReviewRoute,
