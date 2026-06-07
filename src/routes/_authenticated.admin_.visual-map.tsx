@@ -138,6 +138,20 @@ const SEED_ROWS: VisualMapRow[] = [
     qaStatus: "pass",
     notes: "Print dialog mock, generic printer names.",
   },
+  // Separate admin tracker row for the original "Medication scan failure" visual
+  // (kept distinct from the wrong-patient warning row above). This row is admin-only
+  // tracking — the learner Ask entry already routes to the wrong-patient warning visual.
+  {
+    workflowId: "ll_barcode_med_admin_scan_mismatch__failure_variant",
+    workflowTitle: "Medication scan failure",
+    exampleAsk: "medication scan failure",
+    visualStatus: "live_in_ask",
+    visualPath: "/visual-guides/medication-scan-failure.svg",
+    calloutCount: 5,
+    learnerVisible: true,
+    qaStatus: "pass",
+    notes: "Original scan-failure mock (package barcode / device / clinical owner routing).",
+  },
   // Pack 13 Visual Batch 3
   {
     workflowId: "ll_p13_iview_correction_uncharting",
