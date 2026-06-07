@@ -6827,7 +6827,7 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   }
   if (
     entry.id === "ll_coverage_filing_order_term_delete" &&
-    /\b(filing\s+order|term\s+coverage|delete\s+coverage|effective\s+to\s+field|coverage\s+added\s+in\s+error|old\s+insurance\s+coverage)\b/.test(queryText)
+    /\b(filing\s+order|term\s+coverage|delete\s+coverage|effective\s+to\s+field|coverage\s+added\s+in\s+error|old\s+insurance\s+coverage|coverage\s+effective\s+date|effective\s+date\s+(issue|wrong|problem))\b/.test(queryText)
   ) {
     return 30;
   }
