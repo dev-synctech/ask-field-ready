@@ -16,6 +16,7 @@ type ReferenceRow = {
   id: string;
   pdf: string;
   pdfPage: number | string;
+  combinedPdfPage?: number | string;
   sectionNumber: number | string;
   sectionTitle: string;
   sourceTitle: string;
