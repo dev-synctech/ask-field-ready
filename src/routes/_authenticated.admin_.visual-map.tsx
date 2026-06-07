@@ -163,10 +163,18 @@ function VisualMapPage() {
         Only sanitized Mizly-original visuals reach learner Ask. The reference rows below are admin tracking — raw PDFs, raw screenshots, guide names, org names, MRNs, DOBs, and vendor logos never reach learner-facing surfaces.
       </div>
 
-      <div className="mt-4 inline-flex gap-1 rounded-xl border border-border bg-card p-1 text-xs">
-        <TabBtn current={tab} value="workflows" onClick={setTab}>Workflows ({rows.length})</TabBtn>
-        <TabBtn current={tab} value="priority" onClick={setTab}>Priority Roadmap ({PRIORITY.length})</TabBtn>
-        <TabBtn current={tab} value="reference" onClick={setTab}>Reference DB ({REFS.length})</TabBtn>
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="inline-flex gap-1 rounded-xl border border-border bg-card p-1 text-xs">
+          <TabBtn current={tab} value="workflows" onClick={setTab}>Workflows ({rows.length})</TabBtn>
+          <TabBtn current={tab} value="priority" onClick={setTab}>Priority Roadmap ({PRIORITY.length})</TabBtn>
+          <TabBtn current={tab} value="reference" onClick={setTab}>Reference DB ({REFS.length})</TabBtn>
+        </div>
+        <Link
+          to="/admin/visual-review"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-primary/40 bg-primary-soft text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition"
+        >
+          <ShieldCheck className="size-3.5" /> Open Visual Review Viewer
+        </Link>
       </div>
 
       <div className="mt-4">
