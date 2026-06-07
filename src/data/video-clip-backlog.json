@@ -1,7 +1,7 @@
 [
   {
     "clip_id": "clip_orders_full_workflow",
-    "title": "Orders \u2014 full workflow map",
+    "title": "Orders — full workflow map",
     "related_ask_entry_ids": [
       "ll_scope_orders",
       "ll_order_entry"
@@ -17,7 +17,7 @@
     "script": [
       {
         "beat": "open",
-        "voiceover": "Placing an order? Use the same five steps every time. Lab, med, imaging, referral \u2014 same shape."
+        "voiceover": "Placing an order? Use the same five steps every time. Lab, med, imaging, referral — same shape."
       },
       {
         "beat": "step1_confirm",
@@ -25,7 +25,7 @@
       },
       {
         "beat": "step2_open",
-        "voiceover": "Two. In the chart sidebar, click Orders or Order Entry. If you don't see it, your role or department context is off \u2014 fix that first."
+        "voiceover": "Two. In the chart sidebar, click Orders or Order Entry. If you don't see it, your role or department context is off — fix that first."
       },
       {
         "beat": "step3_choose",
@@ -45,7 +45,7 @@
       },
       {
         "beat": "if_fails",
-        "voiceover": "If sign fails, read the inline message \u2014 it names the missing field. Fill it in and sign again."
+        "voiceover": "If sign fails, read the inline message — it names the missing field. Fill it in and sign again."
       },
       {
         "beat": "escalate",
@@ -53,7 +53,7 @@
       }
     ],
     "visual_scenes": [
-      "Title card: Orders \u2014 5 steps",
+      "Title card: Orders — 5 steps",
       "Mock chart header with patient banner and encounter selector highlighted",
       "Mock sidebar with Orders item highlighted",
       "Order-type picker tiles: Lab, Med, Imaging, Referral",
@@ -67,11 +67,11 @@
     "learner_clip_status": "created",
     "learner_video_url": "/videos/mizly-clips/orders-full-workflow-map.mp4",
     "qa_status": "video_needs_review",
-    "notes": "QA Batch 01 approved. Mizly-original script, plain language, no source narration, no vendor names, includes happy path + failure path + escalation. Clip stays admin-only until video is produced."
+    "notes": "QA Batch 01 approved. Mizly-original script, plain language, no source narration, no vendor names, includes happy path + failure path + escalation. Clip stays admin-only until video is produced. | QA Batch 01 (video): FAIL — footer disclaimer missing. Video footer currently shows 'Plain-language workflow guide / mizly.app'; required text is: 'For explanatory purposes only. Mizly is not affiliated with, endorsed by, or certified by any healthcare software vendor.' All other checks pass: duration in range (57–67s), Mizly branding visible, Mizly-original visuals only, no raw source video, no transcript text, no vendor logos, no PHI/org/MRN/DOB/passwords/private links, plain-language voice/text, matches Ask answer (5-step + if_works/if_fails/escalate beats present), 1280x720 scales cleanly on mobile."
   },
   {
     "clip_id": "clip_notes_where_write_sign",
-    "title": "Notes \u2014 where to write and sign",
+    "title": "Notes — where to write and sign",
     "related_ask_entry_ids": [
       "ll_scope_notes",
       "ll_note_sidebar_or_note_type_missing",
@@ -97,7 +97,7 @@
       },
       {
         "beat": "step2_open",
-        "voiceover": "Two. In the chart sidebar, click Notes or Documentation. If Notes is missing, your role or department context is off \u2014 fix that first."
+        "voiceover": "Two. In the chart sidebar, click Notes or Documentation. If Notes is missing, your role or department context is off — fix that first."
       },
       {
         "beat": "step3_choose",
@@ -117,7 +117,7 @@
       },
       {
         "beat": "if_fails",
-        "voiceover": "If sign fails, read the inline error \u2014 it names the exact missing field. Fill it in and try again."
+        "voiceover": "If sign fails, read the inline error — it names the exact missing field. Fill it in and try again."
       },
       {
         "beat": "escalate",
@@ -125,7 +125,7 @@
       }
     ],
     "visual_scenes": [
-      "Title card: Notes \u2014 5 steps",
+      "Title card: Notes — 5 steps",
       "Mock chart header with encounter selector highlighted",
       "Mock sidebar with Notes / Documentation highlighted",
       "Note-type picker grid",
@@ -139,11 +139,11 @@
     "learner_clip_status": "created",
     "learner_video_url": "/videos/mizly-clips/notes-write-and-sign.mp4",
     "qa_status": "video_needs_review",
-    "notes": "QA Batch 01 approved. Mizly-original script, plain language, mirrors the Orders clip shape so learners build one mental model. No source narration, no vendor names, no PHI."
+    "notes": "QA Batch 01 approved. Mizly-original script, plain language, mirrors the Orders clip shape so learners build one mental model. No source narration, no vendor names, no PHI. | QA Batch 01 (video): FAIL — footer disclaimer missing. Video footer currently shows 'Plain-language workflow guide / mizly.app'; required text is: 'For explanatory purposes only. Mizly is not affiliated with, endorsed by, or certified by any healthcare software vendor.' All other checks pass: duration in range (57–67s), Mizly branding visible, Mizly-original visuals only, no raw source video, no transcript text, no vendor logos, no PHI/org/MRN/DOB/passwords/private links, plain-language voice/text, matches Ask answer (5-step + if_works/if_fails/escalate beats present), 1280x720 scales cleanly on mobile."
   },
   {
     "clip_id": "clip_smartlink_blank_or_wrong",
-    "title": "SmartTools \u2014 SmartLink blank or wrong",
+    "title": "SmartTools — SmartLink blank or wrong",
     "related_ask_entry_ids": [
       "ll_p12r2_smartlink_blank_or_wrong",
       "ll_dynamic_note_template_missing"
@@ -162,7 +162,7 @@
       },
       {
         "beat": "check1_context",
-        "voiceover": "One. Patient and encounter. Check the top of the chart. SmartLinks pull from the chart you're in \u2014 wrong chart, wrong data."
+        "voiceover": "One. Patient and encounter. Check the top of the chart. SmartLinks pull from the chart you're in — wrong chart, wrong data."
       },
       {
         "beat": "check2_refresh",
@@ -197,6 +197,6 @@
     "learner_clip_status": "created",
     "learner_video_url": "/videos/mizly-clips/smarttools-smartlink-blank-wrong.mp4",
     "qa_status": "video_needs_review",
-    "notes": "QA Batch 01 approved. Mizly-original script, plain language, pairs with public/visual-guides/smartlink-blank-wrong.svg. Stays admin-only until video produced."
+    "notes": "QA Batch 01 approved. Mizly-original script, plain language, pairs with public/visual-guides/smartlink-blank-wrong.svg. Stays admin-only until video produced. | QA Batch 01 (video): FAIL — footer disclaimer missing. Video footer currently shows 'Plain-language workflow guide / mizly.app'; required text is: 'For explanatory purposes only. Mizly is not affiliated with, endorsed by, or certified by any healthcare software vendor.' All other checks pass: duration in range (57–67s), Mizly branding visible, Mizly-original visuals only, no raw source video, no transcript text, no vendor logos, no PHI/org/MRN/DOB/passwords/private links, plain-language voice/text, matches Ask answer (5-step + if_works/if_fails/escalate beats present), 1280x720 scales cleanly on mobile."
   }
 ]
