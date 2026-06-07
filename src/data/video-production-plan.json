@@ -1,0 +1,272 @@
+[
+  {
+    "clip_id": "clip_orders_full_workflow",
+    "title": "Orders — full workflow map",
+    "related_ask_entry_ids": ["ll_scope_orders", "ll_order_entry"],
+    "estimated_duration": "70s",
+    "production_status": "ready_to_generate",
+    "format": {
+      "aspect_ratio": "16:9",
+      "resolution": "1080p",
+      "voice": "calm, plain-language, neutral US accent",
+      "music": "soft ambient pad, low volume bed"
+    },
+    "scenes": [
+      {
+        "scene_id": "s01_title",
+        "duration_seconds": 4,
+        "narration": "Placing an order? Use the same five steps every time. Lab, med, imaging, referral — same shape.",
+        "on_screen_text": "Orders — 5 steps",
+        "visual_asset": "title_card_orders",
+        "motion": "fade in title, soft scale 1.0 → 1.02, hold",
+        "callout": "subtitle pill: Lab · Med · Imaging · Referral"
+      },
+      {
+        "scene_id": "s02_confirm_patient",
+        "duration_seconds": 10,
+        "narration": "One. Look at the top of the chart. Check the patient name and the encounter you're in. Wrong encounter is the number one reason orders land in the wrong place.",
+        "on_screen_text": "1. Confirm patient + encounter",
+        "visual_asset": "mock_chart_header_with_encounter",
+        "motion": "pan from name → encounter selector, 1.5s",
+        "callout": "highlight ring around encounter selector, red pulse 2x"
+      },
+      {
+        "scene_id": "s03_open_orders",
+        "duration_seconds": 10,
+        "narration": "Two. In the chart sidebar, click Orders or Order Entry. If you don't see it, your role or department context is off — fix that first.",
+        "on_screen_text": "2. Open Orders",
+        "visual_asset": "mock_sidebar_orders_highlighted",
+        "motion": "cursor moves to sidebar, click ripple on Orders",
+        "callout": "side note: 'No Orders? Check role + department'"
+      },
+      {
+        "scene_id": "s04_choose_type",
+        "duration_seconds": 10,
+        "narration": "Three. Pick the order type, then search by name and select the exact orderable.",
+        "on_screen_text": "3. Pick type → search → select",
+        "visual_asset": "order_type_tiles_lab_med_imaging_referral",
+        "motion": "tiles fade in in sequence, search field types 'CBC' as example placeholder",
+        "callout": "underline the selected orderable row"
+      },
+      {
+        "scene_id": "s05_review_details",
+        "duration_seconds": 12,
+        "narration": "Four. Check the details panel. Priority, frequency, dose, indication. Anything starred or red is required before you can sign.",
+        "on_screen_text": "4. Review required fields",
+        "visual_asset": "order_detail_panel_required_starred",
+        "motion": "scroll detail panel slowly, stars glow yellow",
+        "callout": "legend: ★ = required"
+      },
+      {
+        "scene_id": "s06_sign",
+        "duration_seconds": 8,
+        "narration": "Five. Click Sign. If you're not the responsible provider, route for cosign instead.",
+        "on_screen_text": "5. Sign or route for cosign",
+        "visual_asset": "sign_button_success_state",
+        "motion": "button press, success check fades in",
+        "callout": "small chip: 'Cosign? route it'"
+      },
+      {
+        "scene_id": "s07_if_works",
+        "duration_seconds": 5,
+        "narration": "If it worked, the order moves to Active and shows up on the order list.",
+        "on_screen_text": "Worked → Active",
+        "visual_asset": "order_list_active_row",
+        "motion": "new row slides in, green status pill",
+        "callout": "pill: Active"
+      },
+      {
+        "scene_id": "s08_if_fails",
+        "duration_seconds": 6,
+        "narration": "If sign fails, read the inline message — it names the missing field. Fill it in and sign again.",
+        "on_screen_text": "Failed → read inline error",
+        "visual_asset": "sign_button_inline_error_callout",
+        "motion": "shake on Sign, error banner slides under field",
+        "callout": "arrow pointing to inline error text"
+      },
+      {
+        "scene_id": "s09_escalate",
+        "duration_seconds": 5,
+        "narration": "Still stuck after two tries? Capture your role, the patient encounter, the order name, and the exact error text, then send it to your support contact.",
+        "on_screen_text": "Stuck twice? Escalate",
+        "visual_asset": "escalation_card_role_encounter_order_error",
+        "motion": "card assembles field-by-field",
+        "callout": "checklist ticks for each captured field"
+      }
+    ]
+  },
+  {
+    "clip_id": "clip_notes_where_write_sign",
+    "title": "Notes — where to write and sign",
+    "related_ask_entry_ids": ["ll_scope_notes", "ll_note_sidebar_or_note_type_missing", "ll_note_unsigned_missing_required_field"],
+    "estimated_duration": "70s",
+    "production_status": "ready_to_generate",
+    "format": {
+      "aspect_ratio": "16:9",
+      "resolution": "1080p",
+      "voice": "calm, plain-language, neutral US accent",
+      "music": "soft ambient pad, low volume bed"
+    },
+    "scenes": [
+      {
+        "scene_id": "s01_title",
+        "duration_seconds": 4,
+        "narration": "Writing a note? Use the same five steps every time. Same shape as orders.",
+        "on_screen_text": "Notes — 5 steps",
+        "visual_asset": "title_card_notes",
+        "motion": "fade in title, subtle scale",
+        "callout": "subtitle pill: same shape as Orders"
+      },
+      {
+        "scene_id": "s02_confirm_patient",
+        "duration_seconds": 10,
+        "narration": "One. Check the patient name and the encounter at the top of the chart. The note will attach to whatever encounter is open right now.",
+        "on_screen_text": "1. Confirm patient + encounter",
+        "visual_asset": "mock_chart_header_with_encounter",
+        "motion": "pan to encounter selector, ring pulse",
+        "callout": "warning chip: 'Note attaches to open encounter'"
+      },
+      {
+        "scene_id": "s03_open_notes",
+        "duration_seconds": 10,
+        "narration": "Two. In the chart sidebar, click Notes or Documentation. If Notes is missing, your role or department context is off — fix that first.",
+        "on_screen_text": "2. Open Notes",
+        "visual_asset": "mock_sidebar_notes_highlighted",
+        "motion": "cursor click ripple on Notes item",
+        "callout": "side note: 'Missing? Check role + department'"
+      },
+      {
+        "scene_id": "s04_choose_note_type",
+        "duration_seconds": 12,
+        "narration": "Three. Pick the note type. Progress, H and P, procedure, discharge. The note type controls which template and required fields you'll see.",
+        "on_screen_text": "3. Pick note type",
+        "visual_asset": "note_type_picker_grid",
+        "motion": "grid tiles fade in, hover state on Progress",
+        "callout": "label: Type → Template → Required fields"
+      },
+      {
+        "scene_id": "s05_complete_required",
+        "duration_seconds": 10,
+        "narration": "Four. Fill in every starred section. The editor will not let you sign until they're done.",
+        "on_screen_text": "4. Complete starred sections",
+        "visual_asset": "note_editor_required_sections",
+        "motion": "scroll editor, stars glow yellow on empty sections",
+        "callout": "legend: ★ = required"
+      },
+      {
+        "scene_id": "s06_sign",
+        "duration_seconds": 8,
+        "narration": "Five. Click Sign. If a cosign is needed, route it to the right provider.",
+        "on_screen_text": "5. Sign or route for cosign",
+        "visual_asset": "note_sign_button_success",
+        "motion": "button press, success check fades in",
+        "callout": "small chip: 'Cosign? route it'"
+      },
+      {
+        "scene_id": "s07_if_works",
+        "duration_seconds": 5,
+        "narration": "If it worked, the note moves to Signed and shows on the chart.",
+        "on_screen_text": "Worked → Signed",
+        "visual_asset": "note_list_signed_row",
+        "motion": "new row slides in, Signed pill",
+        "callout": "pill: Signed"
+      },
+      {
+        "scene_id": "s08_if_fails",
+        "duration_seconds": 6,
+        "narration": "If sign fails, read the inline error — it names the exact missing field. Fill it in and try again.",
+        "on_screen_text": "Failed → read inline error",
+        "visual_asset": "note_sign_inline_error",
+        "motion": "shake on Sign, error banner slides under section",
+        "callout": "arrow pointing to inline error text"
+      },
+      {
+        "scene_id": "s09_escalate",
+        "duration_seconds": 5,
+        "narration": "Still stuck after two tries? Capture your role, the encounter, the note type, and the exact error text, then send it to your support contact.",
+        "on_screen_text": "Stuck twice? Escalate",
+        "visual_asset": "escalation_card_role_encounter_notetype_error",
+        "motion": "card assembles field-by-field",
+        "callout": "checklist ticks for each captured field"
+      }
+    ]
+  },
+  {
+    "clip_id": "clip_smartlink_blank_or_wrong",
+    "title": "SmartTools — SmartLink blank or wrong",
+    "related_ask_entry_ids": ["ll_p12r2_smartlink_blank_or_wrong", "ll_dynamic_note_template_missing"],
+    "estimated_duration": "60s",
+    "production_status": "ready_to_generate",
+    "format": {
+      "aspect_ratio": "16:9",
+      "resolution": "1080p",
+      "voice": "calm, plain-language, neutral US accent",
+      "music": "soft ambient pad, low volume bed"
+    },
+    "scenes": [
+      {
+        "scene_id": "s01_title",
+        "duration_seconds": 5,
+        "narration": "A SmartLink came up blank, or pulled the wrong info? Work it in four quick checks before you escalate.",
+        "on_screen_text": "SmartLink blank or wrong — 4 checks",
+        "visual_asset": "title_card_smartlink",
+        "motion": "fade in title, subtitle pill slides in",
+        "callout": "subtitle pill: 4 checks before escalate"
+      },
+      {
+        "scene_id": "s02_check_context",
+        "duration_seconds": 12,
+        "narration": "One. Patient and encounter. Check the top of the chart. SmartLinks pull from the chart you're in — wrong chart, wrong data.",
+        "on_screen_text": "1. Check patient + encounter",
+        "visual_asset": "note_editor_with_patient_banner",
+        "motion": "pan up to banner, ring pulse on encounter",
+        "callout": "tooltip: 'SmartLinks read from this chart'"
+      },
+      {
+        "scene_id": "s03_check_refresh",
+        "duration_seconds": 12,
+        "narration": "Two. Refresh the note, or delete the SmartLink and insert it again. A stale insert won't pick up new data until it re-resolves.",
+        "on_screen_text": "2. Refresh or re-insert",
+        "visual_asset": "smartlink_token_blank_then_refresh",
+        "motion": "token shown blank → delete → re-insert → resolves with text",
+        "callout": "arrow loop icon over the token"
+      },
+      {
+        "scene_id": "s04_check_prompt",
+        "duration_seconds": 12,
+        "narration": "Three. Look for a prompt. Some SmartLinks need a date range, a result type, or a user pick before they return anything.",
+        "on_screen_text": "3. Look for a prompt",
+        "visual_asset": "prompt_dialog_required_field",
+        "motion": "dialog slides up, starred field glows",
+        "callout": "legend: ★ = required"
+      },
+      {
+        "scene_id": "s05_check_owner",
+        "duration_seconds": 10,
+        "narration": "Four. If it's a shared template or shared SmartTool and it's still blank, this is a build issue, not a click issue. That means it needs the template owner.",
+        "on_screen_text": "4. Route to template owner",
+        "visual_asset": "shared_template_owner_route",
+        "motion": "template card highlights, arrow routes to owner avatar",
+        "callout": "chip: 'Build issue → owner'"
+      },
+      {
+        "scene_id": "s06_if_works",
+        "duration_seconds": 4,
+        "narration": "If one of the first three checks fixed it, you're done.",
+        "on_screen_text": "Fixed in checks 1–3 → done",
+        "visual_asset": "smartlink_resolved_success",
+        "motion": "green check fades in over token",
+        "callout": "pill: Resolved"
+      },
+      {
+        "scene_id": "s07_escalate",
+        "duration_seconds": 5,
+        "narration": "If you reach check four, capture the SmartLink name, the patient encounter, and a screenshot, then route it to the documentation or template owner.",
+        "on_screen_text": "Reached check 4 → escalate",
+        "visual_asset": "escalation_card_smartlink_name_encounter_screenshot",
+        "motion": "card assembles field-by-field",
+        "callout": "checklist ticks for each captured field"
+      }
+    ]
+  }
+]
