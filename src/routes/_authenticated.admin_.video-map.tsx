@@ -78,7 +78,7 @@ type ClipRecord = {
   estimated_duration: string;
   learner_clip_status: LearnerClipStatus;
   learner_video_url: string | null;
-  qa_status: "needs_review" | "pass" | "needs_fix";
+  qa_status: "needs_review" | "approved_for_production" | "pass" | "needs_fix";
   notes: string;
 };
 
@@ -223,13 +223,20 @@ function VideoMapPage() {
             <div className="mt-2 text-xs text-foreground/80">
               <span className="text-muted-foreground">Topics:</span> {r.workflow_topics.join(", ")}
             </div>
-            {doc && (
-              <div className="mt-2 flex flex-wrap gap-2 text-[10px]">
-                <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{doc.chapters.length} chapters</span>
-                <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">drafted clips: {(CLIPS_BY_VIDEO[r.video_ref_id] ?? []).filter(c => c.learner_clip_status === "script_drafted").length}</span>
-                <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">live clips: {doc.chapters.filter(ch => ch.learner_clip_status === "live" && !!ch.learner_video_url).length}</span>
-              </div>
-            )}
+            {doc && (() => {
+              const clips = CLIPS_BY_VIDEO[r.video_ref_id] ?? [];
+              const approved = clips.filter(c => c.qa_status === "approved_for_production").length;
+              const needsReview = clips.filter(c => c.qa_status === "needs_review").length;
+              return (
+                <div className="mt-2 flex flex-wrap gap-2 text-[10px]">
+                  <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{doc.chapters.length} chapters</span>
+                  <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">drafted clips: {clips.filter(c => c.learner_clip_status === "script_drafted").length}</span>
+                  {approved > 0 && <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-success/15 text-success">approved scripts: {approved}</span>}
+                  {needsReview > 0 && <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-warning/15 text-warning">needs review: {needsReview}</span>}
+                  <span className="uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">live clips: {doc.chapters.filter(ch => ch.learner_clip_status === "live" && !!ch.learner_video_url).length}</span>
+                </div>
+              );
+            })()}
           </button>
           );
         })}
@@ -354,7 +361,7 @@ function Drawer({ row, chapterDoc, onClose }: { row: VideoRow; chapterDoc: Chapt
                       <span className="font-medium text-sm">{clip.title}</span>
                       <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{clip.estimated_duration}</span>
                       <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">clip: {clip.learner_clip_status}</span>
-                      <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">qa: {clip.qa_status}</span>
+                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${clip.qa_status === "approved_for_production" || clip.qa_status === "pass" ? "bg-success/15 text-success" : clip.qa_status === "needs_fix" ? "bg-destructive/15 text-destructive" : "bg-warning/15 text-warning"}`}>qa: {clip.qa_status}</span>
                     </summary>
                     <div className="mt-2 text-[10px] font-mono text-muted-foreground">{clip.clip_id}</div>
                     {clip.related_ask_entry_ids.length > 0 && (
