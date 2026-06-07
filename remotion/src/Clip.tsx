@@ -256,19 +256,39 @@ const SceneCard: React.FC<{ scene: Scene; index: number; total: number }> = ({
       <div
         style={{
           position: "absolute",
-          bottom: 36,
+          bottom: 24,
           left: 64,
           right: 64,
           display: "flex",
-          justifyContent: "space-between",
+          flexDirection: "column",
+          gap: 6,
           color: MUTED,
-          fontSize: 16,
-          letterSpacing: 1,
-          textTransform: "uppercase",
         }}
       >
-        <span>Plain-language workflow guide</span>
-        <span>mizly.app</span>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: 14,
+            letterSpacing: 1,
+            textTransform: "uppercase",
+            opacity: 0.85,
+          }}
+        >
+          <span>Plain-language workflow guide</span>
+          <span>mizly.app</span>
+        </div>
+        <div
+          style={{
+            fontSize: 15,
+            lineHeight: 1.35,
+            color: "rgba(241,245,249,0.78)",
+            fontWeight: 400,
+            maxWidth: "100%",
+          }}
+        >
+          For explanatory purposes only. Mizly is not affiliated with, endorsed by, or certified by any healthcare software vendor.
+        </div>
       </div>
     </AbsoluteFill>
   );
