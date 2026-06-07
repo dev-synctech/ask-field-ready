@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Mizly visual guide: medication scan failure</title>
+  <desc id="desc">Sanitized mock of a bedside med-administration view showing patient scan, medication scan, mismatch alert, and pharmacy/clinical owner route.</desc>
+  <defs>
+    <linearGradient id="brand" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#04B8AA"/><stop offset="1" stop-color="#1357C8"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#102033" flood-opacity=".16"/></filter>
+  </defs>
+  <rect width="1200" height="520" rx="36" fill="#F7FAFC"/>
+  <rect x="54" y="42" width="1092" height="436" rx="28" fill="#FFFFFF" stroke="#D7E0EA" filter="url(#shadow)"/>
+  <text x="88" y="92" font-family="Manrope, Arial, sans-serif" font-size="25" font-weight="800" fill="#172033">Bedside med administration</text>
+  <rect x="88" y="124" width="302" height="300" rx="18" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="116" y="162" font-family="Manrope, Arial, sans-serif" font-size="18" font-weight="900" fill="#172033">Patient scan</text>
+  <rect x="116" y="190" width="246" height="46" rx="12" fill="#F4F8FB"/>
+  <text x="140" y="219" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="800" fill="#516070">Wristband barcode</text>
+  <rect x="116" y="252" width="246" height="46" rx="12" fill="#E8FBF8" stroke="#04B8AA"/>
+  <text x="140" y="281" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="900" fill="#0D8B7E">Patient verified</text>
+  <rect x="410" y="124" width="302" height="300" rx="18" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="438" y="162" font-family="Manrope, Arial, sans-serif" font-size="18" font-weight="900" fill="#172033">Medication scan</text>
+  <rect x="438" y="190" width="246" height="46" rx="12" fill="#F4F8FB"/>
+  <text x="462" y="219" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="800" fill="#516070">Package barcode</text>
+  <rect x="438" y="252" width="246" height="74" rx="12" fill="#FDECEC" stroke="#E66767"/>
+  <text x="462" y="278" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="900" fill="#8B1F1F">Mismatch alert</text>
+  <text x="462" y="302" font-family="Manrope, Arial, sans-serif" font-size="14" font-weight="800" fill="#172033">Med does not match order</text>
+  <rect x="732" y="124" width="342" height="300" rx="18" fill="#F4F8FB" stroke="#D8E2EC"/>
+  <text x="760" y="162" font-family="Manrope, Arial, sans-serif" font-size="19" font-weight="900" fill="#172033">Decide owner</text>
+  <rect x="760" y="190" width="286" height="40" rx="11" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="780" y="216" font-family="Manrope, Arial, sans-serif" font-size="14" font-weight="800" fill="#516070">Package barcode issue → pharmacy</text>
+  <rect x="760" y="240" width="286" height="40" rx="11" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="780" y="266" font-family="Manrope, Arial, sans-serif" font-size="14" font-weight="800" fill="#516070">Wrong med / order → clinical owner</text>
+  <rect x="760" y="290" width="286" height="40" rx="11" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <text x="780" y="316" font-family="Manrope, Arial, sans-serif" font-size="14" font-weight="800" fill="#516070">Scanner/device → device support</text>
+  <rect x="760" y="350" width="140" height="42" rx="12" fill="url(#brand)"/>
+  <text x="800" y="377" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="900" fill="#FFFFFF">Hold dose</text>
+  <rect x="912" y="350" width="134" height="42" rx="12" fill="#FFFFFF" stroke="#1357C8"/>
+  <text x="940" y="377" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="900" fill="#1357C8">Route</text>
+  <g font-family="Manrope, Arial, sans-serif" font-weight="900" font-size="20">
+    <circle cx="116" cy="190" r="22" fill="#04B8AA"/><text x="110" y="197" fill="#FFFFFF">1</text>
+    <circle cx="438" cy="190" r="22" fill="#04B8AA"/><text x="432" y="197" fill="#FFFFFF">2</text>
+    <circle cx="438" cy="252" r="22" fill="#E66767"/><text x="432" y="259" fill="#FFFFFF">3</text>
+    <circle cx="760" cy="240" r="22" fill="#1357C8"/><text x="754" y="247" fill="#FFFFFF">4</text>
+    <circle cx="760" cy="350" r="22" fill="#1357C8"/><text x="754" y="357" fill="#FFFFFF">5</text>
+  </g>
+  <text x="88" y="466" font-family="Manrope, Arial, sans-serif" font-size="18" font-weight="700" fill="#516070">Verify patient first, then read the mismatch reason and route the correct owner — never override the alert.</text>
+</svg>
