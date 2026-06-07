@@ -2019,7 +2019,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "document",
     is_deep_flow: true,
     nav_trail: "From documentation -> New note/document -> Type/template search -> Role/specialty context",
-    visual_url: null,
+    visual_url: "/visual-guides/dynamic-note-template.svg",
+    visual_callouts: [
+      "1 - Confirm encounter / role / specialty.",
+      "2 - Search exact template name and one synonym.",
+      "3 - Check role/specialty/location context.",
+      "4 - Escalate template build if team-wide gap.",
+    ],
     first90: [
       "Confirm the note belongs in this encounter.",
       "Search the expected note type and one approved synonym.",
