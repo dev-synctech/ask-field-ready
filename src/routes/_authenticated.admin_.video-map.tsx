@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, ShieldAlert, Video, Search, Eye, EyeOff } from "lucide-react";
 import { Header } from "./_authenticated.learn";
 import videoMap from "@/data/video-reference-map.json";
+import chapterMap from "@/data/video-chapter-map.json";
 
 export const Route = createFileRoute("/_authenticated/admin_/video-map")({
   head: () => ({ meta: [{ title: "Video Reference Map — Mizly Admin" }] }),
@@ -37,7 +38,52 @@ type VideoRow = {
   notes: string;
 };
 
+type ClipType = "answer-support" | "training" | "both";
+type LearnerClipStatus = "not_started" | "script_drafted" | "created" | "approved" | "live";
+
+type Chapter = {
+  chapter_id: string;
+  title: string;
+  timestamp_start: string | null;
+  timestamp_end: string | null;
+  workflow_topic: string;
+  related_ask_entry_ids: string[];
+  suggested_ask_triggers: string[];
+  clip_type: ClipType;
+  learner_clip_status: LearnerClipStatus;
+  learner_video_url: string | null;
+  notes: string;
+};
+
+type ChapterDoc = {
+  video_ref_id: string;
+  source_title: string;
+  source_type: string;
+  rights_status: RightsStatus;
+  transcript_status: TranscriptStatus;
+  transcript_summary: string;
+  chapters: Chapter[];
+};
+
 const ROWS = videoMap as VideoRow[];
+const CHAPTERS = chapterMap as ChapterDoc[];
+const CHAPTER_BY_VIDEO: Record<string, ChapterDoc | undefined> = Object.fromEntries(
+  CHAPTERS.map(c => [c.video_ref_id, c])
+);
+
+type ChapterFilter = "all" | "transcript_not_started" | "needs_transcript" | "chapters_drafted" | "needs_clip" | "learner_live";
+
+function matchesChapterFilter(row: VideoRow, filter: ChapterFilter): boolean {
+  const doc = CHAPTER_BY_VIDEO[row.video_ref_id];
+  switch (filter) {
+    case "all": return true;
+    case "transcript_not_started": return (doc?.transcript_status ?? row.transcript_status) === "not started";
+    case "needs_transcript": return (doc?.transcript_status ?? row.transcript_status) !== "approved";
+    case "chapters_drafted": return !!doc && doc.chapters.length > 0;
+    case "needs_clip": return !!doc && doc.chapters.some(ch => ch.learner_clip_status === "not_started" || ch.learner_clip_status === "script_drafted");
+    case "learner_live": return !!doc && doc.chapters.some(ch => ch.learner_clip_status === "live" && !!ch.learner_video_url);
+  }
+}
 
 function VideoMapPage() {
   const [q, setQ] = useState("");
