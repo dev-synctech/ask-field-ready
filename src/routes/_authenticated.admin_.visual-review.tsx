@@ -324,7 +324,7 @@ function VisualReviewPage() {
 
         {active && activeState && (
           <ReviewDrawer
-            ref={active}
+            refRow={active}
             state={activeState}
             onClose={() => setActiveId(null)}
             onChange={(patch) => update(active.id, patch)}
@@ -364,7 +364,7 @@ function Select({ label, value, onChange, options }: {
   );
 }
 
-function ReviewDrawer({ ref, state, onClose, onChange }: {
+function ReviewDrawer({ refRow: ref, state, onClose, onChange }: {
   ref: ReferenceRow;
   state: ReviewState;
   onClose: () => void;
