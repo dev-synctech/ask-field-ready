@@ -5977,6 +5977,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Open note -> Place cursor on SmartLink -> Refresh note -> Verify patient and encounter",
+    visual_url: "/visual-guides/smartlink-blank-wrong.svg",
+    visual_callouts: [
+      "1 - Open the note and find the unresolved or wrong-pull text.",
+      "2 - Identify the SmartLink, SmartPhrase, or placeholder name.",
+      "3 - Refresh the note or correct the source.",
+      "4 - If shared/broken for everyone, route to documentation/template owner.",
+    ],
     first90: [
       "Confirm the note is on today's encounter, not an old one.",
       "Refresh the note so SmartLinks re-pull from the chart.",
