@@ -2745,7 +2745,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Shared tool broken: content/build owner.",
       "Signed note affected: use correction/addendum path.",
     ],
-    keywords: k("smarttools", "smart tools", "smarttool", "smart tool", "smartphrase prompt", "smart phrase prompt", "smarttext prompt", "smart text prompt", "smartlist prompt", "smart list prompt", "placeholder not resolving", "unresolved placeholder", "wildcard in note", "*** in note", "smartlink blank", "smart link blank", "prompt won't resolve", "prompt wont resolve", "note placeholder"),
+    keywords: k("smarttools", "smart tools", "smarttool", "smart tool", "smartphrase prompt", "smart phrase prompt", "smarttext prompt", "smart text prompt", "smartlist prompt", "smart list prompt", "placeholder not resolving", "unresolved placeholder", "wildcard in note", "*** in note", "smartlink blank", "smart link blank", "smartlink wrong", "smartlink pulling wrong", "smarttext blank", "dot phrase blank", "note pulling wrong information", "prompt won't resolve", "prompt wont resolve", "note placeholder"),
     related_ids: ["p24", "c18", "v20"],
     sanitized_approved: true,
     status: "published",
