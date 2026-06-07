@@ -738,7 +738,7 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
           {answer.sourceEntry?.nav_trail && (
             <section>
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1.5">NAVIGATION TRAIL</div>
-              <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-nowrap overflow-x-auto">
+              <div className="text-[11px] leading-relaxed text-muted-foreground break-words [overflow-wrap:anywhere]">
                 {answer.sourceEntry.nav_trail}
               </div>
             </section>
