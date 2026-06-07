@@ -1741,7 +1741,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "From patient list/worklist -> Filters -> Location/relationship -> Refresh",
-    visual_url: null,
+    visual_url: "/visual-guides/carecompass-patient-missing.svg",
+    visual_callouts: [
+      "1 - Open the rounding or care workspace.",
+      "2 - Check unit, team, and assignment filters.",
+      "3 - Refresh, then use the approved patient search.",
+      "4 - If still missing for multiple users, escalate to the workflow owner.",
+    ],
     first90: [
       "Confirm the user is on the expected list.",
       "Check location, relationship, date, and status filters.",
@@ -1767,7 +1773,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Multiple users affected: escalate list/worklist build.",
       "Care task blocked: route through floor lead with callback.",
     ],
-    keywords: k("patient list", "worklist", "patient not on list", "missing from list", "not showing on list", "my list", "provider list", "rounding list", "location filter", "relationship filter", "refresh list", "patient not showing", "powerchart list"),
+    keywords: k("patient list", "worklist", "patient not on list", "missing from list", "not showing on list", "my list", "provider list", "rounding list", "location filter", "relationship filter", "refresh list", "patient not showing", "powerchart list", "carecompass", "care compass", "patient missing", "patient list missing", "dashboard missing patient"),
     related_ids: ["p25", "c19", "v21"],
     sanitized_approved: true,
     status: "published",
@@ -2132,6 +2138,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     escalation: 2,
     vendor_family: "epic",
     action: "review",
+    visual_url: "/visual-guides/detail-bill-request.svg",
+    visual_callouts: [
+      "1 - Confirm the request type (detail / itemized).",
+      "2 - Open the correct account / encounter lane.",
+      "3 - Confirm the approved delivery method.",
+      "4 - Log communication and route to the billing owner.",
+    ],
     first90: [
       "Confirm this is a detailed bill request.",
       "Verify account/encounter lane without collecting identifiers in chat.",
@@ -2303,6 +2316,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Claim edit workqueue -> Claim/edit detail -> Error owner -> Retest or route",
+    visual_url: "/visual-guides/claim-errors-sidebar.svg",
+    visual_callouts: [
+      "1 - Open the claim/account.",
+      "2 - Find the error sidebar.",
+      "3 - Read the top error first.",
+      "4 - Fix or route to billing/claims lead.",
+    ],
     first90: [
       "Open the claim edit detail.",
       "Identify the exact edit code and owner.",
@@ -2693,6 +2713,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "document",
     is_deep_flow: true,
     nav_trail: "Note editor -> SmartTool/SmartText/SmartPhrase -> Prompt or placeholder -> Required field/sign",
+    visual_url: "/visual-guides/smartlink-blank-wrong.svg",
+    visual_callouts: [
+      "1 - Open the note and find the unresolved or wrong-pull text.",
+      "2 - Identify the SmartLink, SmartPhrase, or placeholder name.",
+      "3 - Resolve the prompt or correct the source.",
+      "4 - If shared/broken for everyone, route to documentation/template owner.",
+    ],
     first90: [
       "Keep the note open and find the unresolved text.",
       "Confirm tool type and required prompt.",
@@ -2718,7 +2745,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Shared tool broken: content/build owner.",
       "Signed note affected: use correction/addendum path.",
     ],
-    keywords: k("smarttools", "smart tools", "smarttool", "smart tool", "smartphrase prompt", "smart phrase prompt", "smarttext prompt", "smart text prompt", "smartlist prompt", "smart list prompt", "placeholder not resolving", "unresolved placeholder", "wildcard in note", "*** in note", "smartlink blank", "smart link blank", "prompt won't resolve", "prompt wont resolve", "note placeholder"),
+    keywords: k("smarttools", "smart tools", "smarttool", "smart tool", "smartphrase prompt", "smart phrase prompt", "smarttext prompt", "smart text prompt", "smartlist prompt", "smart list prompt", "placeholder not resolving", "unresolved placeholder", "wildcard in note", "*** in note", "smartlink blank", "smart link blank", "smartlink wrong", "smartlink pulling wrong", "smarttext blank", "dot phrase blank", "note pulling wrong information", "prompt won't resolve", "prompt wont resolve", "note placeholder"),
     related_ids: ["p24", "c18", "v20"],
     sanitized_approved: true,
     status: "published",
@@ -5950,6 +5977,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Open note -> Place cursor on SmartLink -> Refresh note -> Verify patient and encounter",
+    visual_url: "/visual-guides/smartlink-blank-wrong.svg",
+    visual_callouts: [
+      "1 - Open the note and find the unresolved or wrong-pull text.",
+      "2 - Identify the SmartLink, SmartPhrase, or placeholder name.",
+      "3 - Refresh the note or correct the source.",
+      "4 - If shared/broken for everyone, route to documentation/template owner.",
+    ],
     first90: [
       "Confirm the note is on today's encounter, not an old one.",
       "Refresh the note so SmartLinks re-pull from the chart.",
@@ -6079,6 +6113,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "document",
     nav_trail: "Patient chart -> Portal / proxy access -> Confirm relationship -> Add proxy -> Send activation -> Verify access status",
+    visual_url: "/visual-guides/mychart-proxy-access.svg",
+    visual_callouts: [
+      "1 - Confirm the caregiver-to-patient relationship and consent on file.",
+      "2 - Open the portal / proxy access area on the patient's chart.",
+      "3 - Add the proxy with the allowed proxy features.",
+      "4 - Send the activation invite and verify access becomes active.",
+    ],
     first90: [
       "Confirm the caregiver-to-patient relationship and that the right consent is on file for that relationship.",
       "Open the portal / proxy access area on the patient's chart and add the caregiver as a proxy with the allowed proxy features for that relationship.",
@@ -6105,7 +6146,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Age-based rules unclear: portal support team.",
       "Activation email not received: resend; if still failing, portal support.",
     ],
-    keywords: k("portal proxy", "proxy access", "proxy cannot see", "proxy cant see portal", "proxy can not see portal", "proxy cannot see portal information", "caregiver cannot see patient portal", "caregiver cant see portal", "family access", "parent access", "caregiver access", "mychart proxy", "patient portal proxy", "share access", "minor portal access", "spouse portal access"),
+    keywords: k("portal proxy", "proxy access", "proxy cannot see", "proxy cant see portal", "proxy can not see portal", "proxy cannot see portal information", "caregiver cannot see patient portal", "caregiver cant see portal", "family access", "parent access", "caregiver access", "guardian access", "mychart proxy", "mychart access", "child chart access", "proxy not showing", "patient portal proxy", "share access", "minor portal access", "spouse portal access"),
     related_ids: ["p1", "c1", "v1"],
     sanitized_approved: true,
     status: "published",
@@ -6343,6 +6384,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Guarantor / account lookup -> Account summary -> Statements / detail bill action -> Confirm delivery method -> Log communication",
+    visual_url: "/visual-guides/detail-bill-request.svg",
+    visual_callouts: [
+      "1 - Confirm the request type (detail / itemized).",
+      "2 - Open the correct account / encounter lane.",
+      "3 - Confirm the approved delivery method.",
+      "4 - Log communication and route to the billing owner.",
+    ],
     first90: [
       "Confirm caller identity and pull the correct guarantor or hospital account.",
       "Open the account summary, find the visit, and locate the approved detail-bill / itemized statement action.",
@@ -6377,6 +6425,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Nursing rounding / care workspace -> View / list selector -> Unit / team / assignment filter -> Refresh -> Approved patient search fallback",
+    visual_url: "/visual-guides/carecompass-patient-missing.svg",
+    visual_callouts: [
+      "1 - Open the rounding or care workspace.",
+      "2 - Check unit, team, and assignment filters.",
+      "3 - Refresh, then use the approved patient search.",
+      "4 - If still missing for multiple users, escalate to the workflow owner.",
+    ],
     first90: [
       "Confirm the user is on the correct rounding or care workspace and the correct unit / team view.",
       "Check the assignment, relationship, and shift filters — most 'missing' patients are filtered out, not missing.",
@@ -6920,6 +6975,13 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
     /\b(haiku|clinical\s+photo|wound\s+photo|mobile\s+photo|photo\s+(not\s+attaching|not\s+uploading|not\s+in\s+chart)|in-?app\s+camera)\b/.test(queryText)
   ) {
     return 40;
+  }
+  // SmartLink blank/wrong/pulling-wrong-info — prefer the specific entry over generic SmartTools
+  if (
+    entry.id === "ll_p12r2_smartlink_blank_or_wrong" &&
+    /\b(smart\s?link\s+(blank|empty|wrong|not\s+pulling|pulling\s+wrong|old\s+data)|smartlink.*pulling\s+wrong|note\s+pulling\s+wrong\s+information)\b/.test(queryText)
+  ) {
+    return 45;
   }
   return 0;
 }
