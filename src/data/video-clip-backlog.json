@@ -6,28 +6,32 @@
     "source_video_refs": ["vid_provider_notes_orders"],
     "source_chapter_refs": ["vid_provider_notes_orders__ch01", "vid_provider_notes_orders__ch03", "vid_provider_notes_orders__ch04"],
     "script": [
-      { "beat": "open", "voiceover": "Orders in five steps. Same shape every time, whether it's a lab, a med, or imaging." },
-      { "beat": "step1", "voiceover": "Step one. Confirm the patient banner and the encounter you're in. Wrong encounter is the number one cause of orders landing in the wrong place." },
-      { "beat": "step2", "voiceover": "Step two. Open Orders or Order Entry from the chart sidebar. If you don't see it, check your role and department context." },
-      { "beat": "step3", "voiceover": "Step three. Pick the order type. Lab, medication, imaging, referral. Search by name, then select the specific orderable." },
-      { "beat": "step4", "voiceover": "Step four. Review details. Priority, frequency, dose, indication. Anything red or starred is required before sign." },
-      { "beat": "step5", "voiceover": "Step five. Sign, or route for cosign if you're not the responsible provider. If sign fails, the system will tell you exactly which field is missing." },
-      { "beat": "close", "voiceover": "That's the full order workflow. Confirm, open, choose, review, sign." }
+      { "beat": "open", "voiceover": "Placing an order? Use the same five steps every time. Lab, med, imaging, referral — same shape." },
+      { "beat": "step1_confirm", "voiceover": "One. Look at the top of the chart. Check the patient name and the encounter you're in. Wrong encounter is the number one reason orders land in the wrong place." },
+      { "beat": "step2_open", "voiceover": "Two. In the chart sidebar, click Orders or Order Entry. If you don't see it, your role or department context is off — fix that first." },
+      { "beat": "step3_choose", "voiceover": "Three. Pick the order type, then search by name and select the exact orderable." },
+      { "beat": "step4_review", "voiceover": "Four. Check the details panel. Priority, frequency, dose, indication. Anything starred or red is required before you can sign." },
+      { "beat": "step5_sign", "voiceover": "Five. Click Sign. If you're not the responsible provider, route for cosign instead." },
+      { "beat": "if_works", "voiceover": "If it worked, the order moves to Active and shows up on the order list." },
+      { "beat": "if_fails", "voiceover": "If sign fails, read the inline message — it names the missing field. Fill it in and sign again." },
+      { "beat": "escalate", "voiceover": "Still stuck after two tries? Capture your role, the patient encounter, the order name, and the exact error text, then send it to your support contact." }
     ],
     "visual_scenes": [
-      "Title card: Orders — full workflow",
-      "Mock chart header: patient banner + encounter selector highlighted",
-      "Mock sidebar with 'Orders' item highlighted",
-      "Order-type picker with Lab / Med / Imaging tiles",
+      "Title card: Orders — 5 steps",
+      "Mock chart header with patient banner and encounter selector highlighted",
+      "Mock sidebar with Orders item highlighted",
+      "Order-type picker tiles: Lab, Med, Imaging, Referral",
       "Order detail panel with required fields starred",
-      "Sign button + 'missing field' callout",
+      "Sign button with success state",
+      "Sign button with inline 'missing field' callout",
+      "Escalation card: role, encounter, order name, error text",
       "End card: 5-step recap"
     ],
-    "estimated_duration": "60s",
+    "estimated_duration": "70s",
     "learner_clip_status": "script_drafted",
     "learner_video_url": null,
-    "qa_status": "needs_review",
-    "notes": "Mizly-original script. Do not reuse source narration verbatim. Visuals must be Mizly-created mocks, no source screen recording."
+    "qa_status": "approved_for_production",
+    "notes": "QA Batch 01 approved. Mizly-original script, plain language, no source narration, no vendor names, includes happy path + failure path + escalation. Clip stays admin-only until video is produced."
   },
   {
     "clip_id": "clip_notes_where_write_sign",
@@ -36,28 +40,32 @@
     "source_video_refs": ["vid_provider_notes_orders", "vid_inpatient_provider_notes"],
     "source_chapter_refs": ["vid_provider_notes_orders__ch01", "vid_provider_notes_orders__ch02", "vid_provider_notes_orders__ch04"],
     "script": [
-      { "beat": "open", "voiceover": "Notes follow the same five-step shape as orders. Here's where to write one and how to sign it." },
-      { "beat": "step1", "voiceover": "Step one. Confirm the chart and the encounter. The note attaches to whatever encounter is open right now." },
-      { "beat": "step2", "voiceover": "Step two. Open Notes or Documentation from the chart sidebar. If Notes is missing, your role or department context is wrong." },
-      { "beat": "step3", "voiceover": "Step three. Choose the note type. Progress, H&P, procedure, discharge. Each type controls which template and required fields load." },
-      { "beat": "step4", "voiceover": "Step four. Complete every required section. Required fields are starred and the editor will not let you sign until they're filled." },
-      { "beat": "step5", "voiceover": "Step five. Sign, or route for cosign. If sign fails, read the inline error — it names the exact missing field." },
-      { "beat": "close", "voiceover": "Confirm, open, choose, complete, sign. Same shape, every note." }
+      { "beat": "open", "voiceover": "Writing a note? Use the same five steps every time. Same shape as orders." },
+      { "beat": "step1_confirm", "voiceover": "One. Check the patient name and the encounter at the top of the chart. The note will attach to whatever encounter is open right now." },
+      { "beat": "step2_open", "voiceover": "Two. In the chart sidebar, click Notes or Documentation. If Notes is missing, your role or department context is off — fix that first." },
+      { "beat": "step3_choose", "voiceover": "Three. Pick the note type. Progress, H and P, procedure, discharge. The note type controls which template and required fields you'll see." },
+      { "beat": "step4_complete", "voiceover": "Four. Fill in every starred section. The editor will not let you sign until they're done." },
+      { "beat": "step5_sign", "voiceover": "Five. Click Sign. If a cosign is needed, route it to the right provider." },
+      { "beat": "if_works", "voiceover": "If it worked, the note moves to Signed and shows on the chart." },
+      { "beat": "if_fails", "voiceover": "If sign fails, read the inline error — it names the exact missing field. Fill it in and try again." },
+      { "beat": "escalate", "voiceover": "Still stuck after two tries? Capture your role, the encounter, the note type, and the exact error text, then send it to your support contact." }
     ],
     "visual_scenes": [
-      "Title card: Notes — where to write and sign",
-      "Mock chart header with encounter selector",
+      "Title card: Notes — 5 steps",
+      "Mock chart header with encounter selector highlighted",
       "Mock sidebar with Notes / Documentation highlighted",
       "Note-type picker grid",
       "Note editor with required section starred",
-      "Sign button + 'required field missing' inline error",
+      "Sign button with success state",
+      "Sign button with inline 'required field missing' callout",
+      "Escalation card: role, encounter, note type, error text",
       "End card: 5-step recap"
     ],
-    "estimated_duration": "65s",
+    "estimated_duration": "70s",
     "learner_clip_status": "script_drafted",
     "learner_video_url": null,
-    "qa_status": "needs_review",
-    "notes": "Mizly-original script. Mirrors the Orders clip's 5-step shape so learners build one mental model."
+    "qa_status": "approved_for_production",
+    "notes": "QA Batch 01 approved. Mizly-original script, plain language, mirrors the Orders clip shape so learners build one mental model. No source narration, no vendor names, no PHI."
   },
   {
     "clip_id": "clip_smartlink_blank_or_wrong",
@@ -66,25 +74,26 @@
     "source_video_refs": ["vid_smartset_smarttools", "vid_provider_notes_orders"],
     "source_chapter_refs": ["vid_provider_notes_orders__ch05"],
     "script": [
-      { "beat": "open", "voiceover": "SmartLink blank or pulling the wrong info? Work this in four checks before you escalate." },
-      { "beat": "step1", "voiceover": "Check one. Patient and encounter context. SmartLinks pull from the chart you're in. Wrong chart, wrong data." },
-      { "beat": "step2", "voiceover": "Check two. Refresh, or delete and reinsert the SmartLink. A stale insert won't pick up new data until it re-resolves." },
-      { "beat": "step3", "voiceover": "Check three. Required prompts. Some SmartLinks need a date range, a result type, or a user pick before they return anything." },
-      { "beat": "step4", "voiceover": "Check four. If it's a shared template or shared SmartTool and still blank, it's a build issue. Capture the SmartLink name and route to the documentation or template owner." },
-      { "beat": "close", "voiceover": "Context, refresh, prompt, owner. Four checks, then escalate." }
+      { "beat": "open", "voiceover": "A SmartLink came up blank, or pulled the wrong info? Work it in four quick checks before you escalate." },
+      { "beat": "check1_context", "voiceover": "One. Patient and encounter. Check the top of the chart. SmartLinks pull from the chart you're in — wrong chart, wrong data." },
+      { "beat": "check2_refresh", "voiceover": "Two. Refresh the note, or delete the SmartLink and insert it again. A stale insert won't pick up new data until it re-resolves." },
+      { "beat": "check3_prompt", "voiceover": "Three. Look for a prompt. Some SmartLinks need a date range, a result type, or a user pick before they return anything." },
+      { "beat": "check4_owner", "voiceover": "Four. If it's a shared template or shared SmartTool and it's still blank, this is a build issue, not a click issue. That means it needs the template owner." },
+      { "beat": "if_works", "voiceover": "If one of the first three checks fixed it, you're done." },
+      { "beat": "escalate", "voiceover": "If you reach check four, capture the SmartLink name, the patient encounter, and a screenshot, then route it to the documentation or template owner." }
     ],
     "visual_scenes": [
       "Title card: SmartLink blank or wrong",
-      "Note editor with patient banner + encounter highlighted",
-      "SmartLink token shown blank, then refresh action",
+      "Note editor with patient banner and encounter highlighted",
+      "SmartLink token shown blank, then a refresh action",
       "Prompt dialog with required field starred",
-      "Escalation card with SmartLink name + owner route",
+      "Escalation card: SmartLink name, encounter, screenshot, owner route",
       "End card: 4-step recap"
     ],
-    "estimated_duration": "55s",
+    "estimated_duration": "60s",
     "learner_clip_status": "script_drafted",
     "learner_video_url": null,
-    "qa_status": "needs_review",
-    "notes": "Mizly-original script. Pairs with public/visual-guides/smartlink-blank-wrong.svg. Stays admin-only until QA reviewed."
+    "qa_status": "approved_for_production",
+    "notes": "QA Batch 01 approved. Mizly-original script, plain language, pairs with public/visual-guides/smartlink-blank-wrong.svg. Stays admin-only until video produced."
   }
 ]
