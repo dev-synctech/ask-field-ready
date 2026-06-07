@@ -91,12 +91,20 @@ function VisualNeedsPage() {
       </Link>
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <Header title="Visual Needs Queue" subtitle="Screenshots, click paths, and short training clips that Ask needs next." />
-        <Link
-          to="/admin/factory"
-          className="h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium inline-flex items-center gap-2 shadow-soft"
-        >
-          <Sparkles className="size-4" /> Factory
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            to="/admin/visual-map"
+            className="h-10 px-4 rounded-xl border border-border bg-card text-sm font-medium inline-flex items-center gap-2"
+          >
+            <ShieldCheck className="size-4" /> Visual Map
+          </Link>
+          <Link
+            to="/admin/factory"
+            className="h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium inline-flex items-center gap-2 shadow-soft"
+          >
+            <Sparkles className="size-4" /> Factory
+          </Link>
+        </div>
       </div>
 
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-5 gap-3">
