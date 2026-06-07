@@ -78,7 +78,7 @@ type ClipRecord = {
   estimated_duration: string;
   learner_clip_status: LearnerClipStatus;
   learner_video_url: string | null;
-  qa_status: "needs_review" | "approved_for_production" | "pass" | "needs_fix";
+  qa_status: "needs_review" | "approved_for_production" | "pass" | "needs_fix" | "video_needs_review" | "video_approved";
   notes: string;
 };
 
@@ -157,9 +157,9 @@ function VideoMapPage() {
 
       <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
         <Stat label="Source videos" value={ROWS.length} />
-        <Stat label="Rights unknown" value={ROWS.filter(r => r.rights_status === "unknown").length} />
         <Stat label="Cleared for training" value={ROWS.filter(r => r.rights_status === "cleared-for-training" || r.rights_status === "Mizly-created").length} />
-        <Stat label="Learner-visible" value={learnerVisibleCount} />
+        <Stat label="Learner-visible sources" value={learnerVisibleCount} />
+        <Stat label="Live Mizly clips" value={CLIPS.filter(c => c.learner_clip_status === "live" && !!c.learner_video_url && (c.qa_status === "video_approved" || c.qa_status === "approved_for_production" || c.qa_status === "pass")).length} />
       </div>
 
       <div className="mt-5 space-y-3">
