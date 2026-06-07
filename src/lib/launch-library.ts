@@ -5736,6 +5736,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Patient chart -> Result or message -> Release status -> Release rule and timing -> Portal account / proxy check",
+    visual_url: "/visual-guides/mychart-result-release.svg",
+    visual_callouts: [
+      "1 - Open result record and read release status.",
+      "2 - Check release rule and timing window.",
+      "3 - Confirm patient vs proxy account / access level.",
+      "4 - Escalate to portal support after rule clears.",
+    ],
     first90: [
       "Open the result or message in the chart and check the release status — released, pending, or held.",
       "Check the release rule and timing window for this result type — many results hold for a short provider-review window by design.",
