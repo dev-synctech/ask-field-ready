@@ -237,7 +237,7 @@ function Stat({ label, value }: { label: string; value: number }) {
   );
 }
 
-function Drawer({ row, onClose }: { row: VideoRow; onClose: () => void }) {
+function Drawer({ row, chapterDoc, onClose }: { row: VideoRow; chapterDoc: ChapterDoc | undefined; onClose: () => void }) {
   const showRawLink = row.rights_status === "cleared-for-training" || row.rights_status === "Mizly-created";
   return (
     <div className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4" onClick={onClose}>
@@ -289,6 +289,37 @@ function Drawer({ row, onClose }: { row: VideoRow; onClose: () => void }) {
           </Field>
           <Field label="QA">{row.qa_status}</Field>
           <Field label="Notes">{row.notes}</Field>
+          {chapterDoc && (
+            <Field label={`Chapters (${chapterDoc.chapters.length})`}>
+              <div className="space-y-2">
+                <div className="text-xs text-muted-foreground">Transcript: {chapterDoc.transcript_status} — {chapterDoc.transcript_summary}</div>
+                <ul className="space-y-2">
+                  {chapterDoc.chapters.map(ch => {
+                    const liveClip = ch.learner_clip_status === "live" && !!ch.learner_video_url;
+                    return (
+                      <li key={ch.chapter_id} className="rounded-xl border border-border bg-background p-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-medium text-sm">{ch.title}</span>
+                          <span className="text-[10px] font-mono text-muted-foreground">{ch.timestamp_start ?? "--:--"} – {ch.timestamp_end ?? "--:--"}</span>
+                          <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{ch.clip_type}</span>
+                          <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${liveClip ? "bg-success/15 text-success" : "bg-muted text-muted-foreground"}`}>clip: {ch.learner_clip_status}</span>
+                        </div>
+                        <div className="mt-1 text-[10px] font-mono text-muted-foreground">{ch.chapter_id}</div>
+                        <div className="mt-1 text-xs"><span className="text-muted-foreground">Topic:</span> {ch.workflow_topic}</div>
+                        {ch.related_ask_entry_ids.length > 0 && (
+                          <div className="mt-1 text-xs"><span className="text-muted-foreground">Ask:</span> <span className="font-mono">{ch.related_ask_entry_ids.join(", ")}</span></div>
+                        )}
+                        {ch.suggested_ask_triggers.length > 0 && (
+                          <div className="mt-1 text-xs"><span className="text-muted-foreground">Triggers:</span> {ch.suggested_ask_triggers.join(" • ")}</div>
+                        )}
+                        {ch.notes && <div className="mt-1 text-xs text-foreground/80">{ch.notes}</div>}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </Field>
+          )}
         </div>
         <div className="p-4 border-t border-border">
           <button onClick={onClose} className="w-full h-10 rounded-xl bg-primary text-primary-foreground text-sm font-medium">Close</button>
