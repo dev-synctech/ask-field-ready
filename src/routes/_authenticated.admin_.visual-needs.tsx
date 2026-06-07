@@ -191,6 +191,18 @@ function VisualNeedCard({ need, onStatus }: { need: VisualNeed; onStatus: (id: s
             <div className="font-medium text-foreground">Production output</div>
             <div className="mt-0.5 text-muted-foreground">{need.suggestedOutput}</div>
           </div>
+          {need.reference && (
+            <div className="mt-2 rounded-xl border border-primary/30 bg-primary-soft/40 px-3 py-2 text-xs">
+              <div className="font-medium text-primary inline-flex items-center gap-1.5">
+                <ShieldCheck className="size-3" /> Internal reference pointer (admin-only)
+              </div>
+              <div className="mt-1 text-foreground/85">
+                <span className="font-medium">{need.reference.pdf}</span> · {need.reference.section} · <span className="font-mono text-[11px]">{need.reference.refPattern}</span>
+              </div>
+              <div className="mt-0.5 text-muted-foreground">{need.reference.use}</div>
+              <div className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">{need.reference.exposureStatus}</div>
+            </div>
+          )}
           <div className="mt-2 text-[11px] text-muted-foreground">
             Trigger: <span className="text-foreground">{need.question}</span>
           </div>
