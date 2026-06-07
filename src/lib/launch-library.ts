@@ -3637,7 +3637,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     phases: k("cutover day 0", "stabilization week 1"),
     urgency: 3,
     escalation: 2,
-    action: "lookup",
+    action: "review",
     is_deep_flow: true,
     nav_trail: "Patient search/list -> Confirm correct encounter/admission -> Open chart -> Check context/banner/error -> Route if blocked",
     visual_url: "/visual-guides/patient-chart-not-loading-after-admission.svg",
