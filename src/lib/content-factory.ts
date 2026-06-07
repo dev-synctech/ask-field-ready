@@ -567,6 +567,7 @@ export function mergeVisualNeeds(logged: AskGapLogRecord[]): VisualNeed[] {
   return dedupeNeeds([
     ...PACK08_VISUAL_NEEDS,
     ...PACK09_VISUAL_NEEDS,
+    ...PACK13_REFERENCE_NEEDS,
     ...visualNeedsFromAskGapLog(logged),
     ...visualNeedsFromLibrary(),
   ]).sort((a, b) => PRIORITY_WEIGHT[a.priority] - PRIORITY_WEIGHT[b.priority] || b.createdAt.localeCompare(a.createdAt));
