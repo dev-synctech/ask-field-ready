@@ -402,7 +402,7 @@ function ReviewDrawer({ refRow: ref, state, onClose, onChange }: {
             </div>
             <p className="text-[11px] text-muted-foreground mt-2 flex items-start gap-1">
               <EyeOff className="h-3 w-3 mt-0.5 shrink-0" />
-              Raw screenshots stay admin-only. Learners only see cleaned, blurred, or redrawn Mizly visuals after approval.
+              Raw PDFs and screenshots are not hosted by the app. Reference IDs and page numbers are kept as text-only metadata for offline attorney review. Learners only see cleaned, blurred, or redrawn Mizly visuals after approval.
             </p>
           </div>
 
