@@ -281,6 +281,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     roles: k("inpatient provider", "ambulatory provider", "resident / fellow", "app"),
     domains: k("order entry"), phases: k("stabilization week 1"),
     urgency: 3, escalation: 2,
+    visual_url: "/visual-guides/order-entry-ambulatory.svg",
+    visual_callouts: [
+      "1 - Confirm encounter / patient class / provider.",
+      "2 - Search exact order name plus one synonym.",
+      "3 - Check association and signing path.",
+      "4 - Escalate clinical informatics if time-sensitive.",
+    ],
     first90: [
       "Ask the provider to show you exactly what they're searching.",
       "Try one synonym before assuming the order doesn't exist.",
