@@ -1741,7 +1741,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "From patient list/worklist -> Filters -> Location/relationship -> Refresh",
-    visual_url: null,
+    visual_url: "/visual-guides/carecompass-patient-missing.svg",
+    visual_callouts: [
+      "1 - Open the rounding or care workspace.",
+      "2 - Check unit, team, and assignment filters.",
+      "3 - Refresh, then use the approved patient search.",
+      "4 - If still missing for multiple users, escalate to the workflow owner.",
+    ],
     first90: [
       "Confirm the user is on the expected list.",
       "Check location, relationship, date, and status filters.",
