@@ -64,10 +64,10 @@
       "End card: 5-step recap"
     ],
     "estimated_duration": "70s",
-    "learner_clip_status": "created",
+    "learner_clip_status": "approved",
     "learner_video_url": "/videos/mizly-clips/orders-full-workflow-map.mp4",
-    "qa_status": "video_needs_review",
-    "notes": "QA Batch 01 approved. Mizly-original script, plain language, no source narration, no vendor names, includes happy path + failure path + escalation. Clip stays admin-only until video is produced. | QA Batch 01 (video): FAIL — footer disclaimer missing. Video footer currently shows 'Plain-language workflow guide / mizly.app'; required text is: 'For explanatory purposes only. Mizly is not affiliated with, endorsed by, or certified by any healthcare software vendor.' All other checks pass: duration in range (57–67s), Mizly branding visible, Mizly-original visuals only, no raw source video, no transcript text, no vendor logos, no PHI/org/MRN/DOB/passwords/private links, plain-language voice/text, matches Ask answer (5-step + if_works/if_fails/escalate beats present), 1280x720 scales cleanly on mobile."
+    "qa_status": "video_approved",
+    "notes": "QA Batch 01 approved. Mizly-original script, plain language, no source narration, no vendor names, includes happy path + failure path + escalation. Clip stays admin-only until video is produced. | QA Batch 01 (video) re-render: PASS. Footer disclaimer now reads exactly 'For explanatory purposes only. Mizly is not affiliated with, endorsed by, or certified by any healthcare software vendor.' Duration 66.8s (in 45–75s range), Mizly branding visible, Mizly-original visuals only, no raw source video, no transcript text, no vendor logos, no PHI/org/MRN/DOB/passwords/private links, plain-language voice/text, matches Ask answer (5-step + if_works/if_fails/escalate beats present), 1280x720 scales cleanly on mobile. Learner-facing chips remain hidden; not yet on /videos."
   },
   {
     "clip_id": "clip_notes_where_write_sign",
