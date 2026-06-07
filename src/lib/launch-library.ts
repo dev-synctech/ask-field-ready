@@ -6738,6 +6738,91 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     sanitized_approved: true,
     status: "published",
   },
+  {
+    id: "ll_level_of_service_selection",
+    title: "Level of Service selection (LOS)",
+    type: "playbook",
+    summary: "Confirm the visit-charge / LOS area before changing level. Route owner for policy or billing questions.",
+    roles: k("ambulatory provider", "billing", "clinic support"),
+    domains: k("ambulatory", "charge capture", "billing"),
+    phases: k("stabilization week 1", "optimization weeks 2-4"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "select",
+    nav_trail: "Visit / encounter -> Visit charge or LOS area -> Select level -> Owner for policy questions",
+    visual_url: "/visual-guides/level-of-service.svg",
+    visual_callouts: [
+      "1 - Confirm visit context (encounter, date, provider).",
+      "2 - Open visit charge / LOS area.",
+      "3 - Select level using approved coding guidance.",
+      "4 - Route policy / billing owner if unclear.",
+    ],
+    first90: [
+      "Confirm encounter and provider context.",
+      "Open the visit charge / LOS area.",
+      "Pick the level using approved policy.",
+    ],
+    whatToSay: [
+      "'Let's confirm the visit context before we set the level.'",
+      "'If the level we need isn't available, that's a coding or policy question, not a click.'",
+    ],
+    whatToCheck: [
+      "Encounter, provider, and visit type.",
+      "Available LOS values and approved coding guidance.",
+      "Whether the level is locked by template or workflow.",
+    ],
+    whenToEscalate: "If the correct level isn't available, the visit type looks wrong, or coding policy is unclear, escalate to billing/coding owner with encounter and provider.",
+    keywords: k(
+      "level of service", "LOS", "los selection", "change level of service", "service level missing",
+      "visit level", "billing level", "visit charge level", "encounter level", "los missing", "set los"
+    ),
+    related_ids: ["ll_order_entry"],
+    sanitized_approved: true,
+    status: "published",
+  },
+  {
+    id: "ll_profile_or_department_context_wrong",
+    title: "Profile or department context is wrong",
+    type: "playbook",
+    summary: "Session, profile, and department context drive what a user sees. Confirm context before troubleshooting missing data.",
+    roles: k("all roles"),
+    domains: k("login", "profile", "context"),
+    phases: k("cutover day 0", "stabilization week 1"),
+    urgency: 2,
+    escalation: 2,
+    vendor_family: "epic",
+    action: "switch",
+    nav_trail: "Login / session info -> Profile / department selector -> Switch context -> Reload activity",
+    visual_url: "/visual-guides/profile-department-context.svg",
+    visual_callouts: [
+      "1 - Check session / login info (user, role, time).",
+      "2 - Open profile / department selector.",
+      "3 - Switch to the correct context and reload.",
+      "4 - Escalate if context keeps reverting.",
+    ],
+    first90: [
+      "Confirm who is logged in and which profile is active.",
+      "Open department / location context selector.",
+      "Switch and reload the activity.",
+    ],
+    whatToSay: [
+      "'A lot of \"missing\" data is really wrong context — let's confirm profile and department first.'",
+    ],
+    whatToCheck: [
+      "Session info, profile name, and department/location.",
+      "Whether the same user sees the right data after switching profile.",
+      "Whether context reverts on next login (bad default).",
+    ],
+    whenToEscalate: "If context keeps reverting or the right department isn't available, escalate to access/security with user, role, and expected department.",
+    keywords: k(
+      "session information", "profile context", "department context", "wrong login context",
+      "wrong department", "wrong profile", "context switcher", "login context", "department selector"
+    ),
+    related_ids: [],
+    sanitized_approved: true,
+    status: "published",
+  },
 ];
 
 // --- Match engine -------------------------------------------------------
