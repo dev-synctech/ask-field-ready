@@ -6761,7 +6761,7 @@ function dedupeVisualAids(aids: VisualAid[]): VisualAid[] {
 function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   if (
     entry.id === "ll_barcode_med_admin_scan_mismatch" &&
-    /\b(barcode\s+(med|medication).*mismatch|medication\s+barcode.*mismatch|bcma\s+mismatch|barcode\s+alert|med\s+won'?t\s+scan)\b/.test(queryText)
+    /\b(barcode\s+(med|medication).*mismatch|medication\s+barcode.*mismatch|bcma\s+mismatch|barcode\s+alert|med\s+won'?t\s+scan|medication\s+scan\s+(failure|failed|fail|not\s+working)|med\s+scan\s+(failure|failed|fail))\b/.test(queryText)
   ) {
     return 30;
   }
