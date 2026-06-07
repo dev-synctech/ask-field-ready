@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Notes — Mizly scope overview</title>
+  <desc id="desc">Generic Mizly mock of a chart documentation screen. No raw screenshots, no PHI, no vendor logos.</desc>
+  <defs><style>
+    .bg{fill:#f6f8fb}
+    .panel{fill:#fff;stroke:#d8e0eb;stroke-width:2}
+    .nav{fill:#172033}
+    .rail{fill:#1f2a3d}
+    .soft{fill:#eef5ff;stroke:#c9d8ee;stroke-width:2}
+    .warm{fill:#fff7ed;stroke:#f59e0b;stroke-width:2}
+    .teal{fill:#ecfdf5;stroke:#14b8a6;stroke-width:2}
+    .text{font-family:Arial,sans-serif;fill:#172033}
+    .light{fill:#e8eef8;font-family:Arial,sans-serif}
+    .muted{fill:#637083}
+    .small{font-size:14px}
+    .tiny{font-size:12px}
+    .line{stroke:#d8e0eb;stroke-width:2}
+    .num{fill:#1554c7}
+    .numtext{fill:#fff;font-size:16px;font-weight:700;font-family:Arial,sans-serif}
+    .chip{fill:#eef5ff;stroke:#c9d8ee;stroke-width:1.5}
+    .chiptxt{font-family:Arial,sans-serif;fill:#1554c7;font-size:12px;font-weight:600}
+  </style></defs>
+
+  <rect width="960" height="600" rx="28" class="bg"/>
+  <rect x="24" y="24" width="912" height="552" rx="22" class="panel"/>
+
+  <!-- Top bar: patient/context header -->
+  <rect x="24" y="24" width="912" height="56" rx="22" class="nav"/>
+  <text x="56" y="59" class="light" font-size="14" font-weight="700">Patient context</text>
+  <text x="200" y="59" class="light" font-size="12" opacity="0.85">Encounter • Location • Role</text>
+  <g><circle cx="44" cy="52" r="14" class="num"/><text x="39" y="58" class="numtext">1</text></g>
+
+  <!-- Left activity rail -->
+  <rect x="24" y="80" width="120" height="496" rx="0" class="rail"/>
+  <text x="44" y="118" class="light" font-size="12" opacity="0.8">Activities</text>
+  <rect x="40" y="138" width="88" height="28" rx="8" fill="#2a3a55"/>
+  <text x="52" y="157" class="light" font-size="12">Chart Review</text>
+  <rect x="40" y="174" width="88" height="28" rx="8" fill="#1554c7"/>
+  <text x="60" y="193" class="light" font-size="12" font-weight="700">Notes</text>
+  <g><circle cx="36" cy="188" r="14" class="num"/><text x="31" y="194" class="numtext">2</text></g>
+  <rect x="40" y="210" width="88" height="28" rx="8" fill="#2a3a55"/>
+  <text x="56" y="229" class="light" font-size="12">Orders</text>
+  <rect x="40" y="246" width="88" height="28" rx="8" fill="#2a3a55"/>
+  <text x="56" y="265" class="light" font-size="12">Results</text>
+  <rect x="40" y="282" width="88" height="28" rx="8" fill="#2a3a55"/>
+  <text x="56" y="301" class="light" font-size="12">MAR</text>
+
+  <!-- Note type selector -->
+  <rect x="164" y="100" width="540" height="64" rx="14" class="soft"/>
+  <text x="184" y="124" class="text small" font-weight="700">Note type</text>
+  <rect x="184" y="132" width="500" height="22" rx="6" fill="#fff" stroke="#c9d8ee"/>
+  <text x="194" y="148" class="text tiny muted">Choose a note type before writing…</text>
+  <g><circle cx="156" cy="132" r="14" class="num"/><text x="151" y="138" class="numtext">3</text></g>
+
+  <!-- Note type chips -->
+  <g font-family="Arial,sans-serif">
+    <rect x="164" y="176" width="92" height="24" rx="12" class="chip"/><text x="174" y="192" class="chiptxt">Provider</text>
+    <rect x="264" y="176" width="86" height="24" rx="12" class="chip"/><text x="276" y="192" class="chiptxt">Nursing</text>
+    <rect x="358" y="176" width="92" height="24" rx="12" class="chip"/><text x="370" y="192" class="chiptxt">Procedure</text>
+    <rect x="458" y="176" width="82" height="24" rx="12" class="chip"/><text x="470" y="192" class="chiptxt">Therapy</text>
+    <rect x="548" y="176" width="84" height="24" rx="12" class="chip"/><text x="560" y="192" class="chiptxt">Progress</text>
+    <rect x="640" y="176" width="64" height="24" rx="12" class="chip"/><text x="654" y="192" class="chiptxt">H&amp;P</text>
+  </g>
+
+  <!-- Required sections / composer -->
+  <rect x="164" y="212" width="540" height="252" rx="14" class="warm"/>
+  <text x="184" y="238" class="text small" font-weight="700">Required sections</text>
+  <path d="M184 256h500" class="line"/>
+  <text x="184" y="278" class="text tiny muted">Subjective / chief concern</text>
+  <path d="M184 290h500" class="line"/>
+  <text x="184" y="312" class="text tiny muted">Objective / exam</text>
+  <path d="M184 324h500" class="line"/>
+  <text x="184" y="346" class="text tiny muted">Assessment</text>
+  <path d="M184 358h500" class="line"/>
+  <text x="184" y="380" class="text tiny muted">Plan / follow-up</text>
+  <path d="M184 392h500" class="line"/>
+  <text x="184" y="414" class="text tiny muted">Attestation / cosign</text>
+  <path d="M184 426h500" class="line"/>
+  <text x="184" y="448" class="text tiny muted">Encounter association</text>
+  <g><circle cx="156" cy="216" r="14" class="num"/><text x="151" y="222" class="numtext">4</text></g>
+
+  <!-- Right rail: sign / save -->
+  <rect x="724" y="100" width="196" height="364" rx="14" class="teal"/>
+  <text x="744" y="124" class="text small" font-weight="700">Sign / save</text>
+  <path d="M744 144h156" class="line"/>
+  <rect x="744" y="158" width="156" height="28" rx="8" fill="#fff" stroke="#14b8a6"/>
+  <text x="758" y="177" class="text tiny" font-weight="700">Draft saved</text>
+  <rect x="744" y="196" width="156" height="28" rx="8" fill="#fff" stroke="#14b8a6"/>
+  <text x="758" y="215" class="text tiny" font-weight="700">Required: 0 missing</text>
+  <rect x="744" y="234" width="156" height="28" rx="8" fill="#fff" stroke="#14b8a6"/>
+  <text x="758" y="253" class="text tiny" font-weight="700">Routing / cosign</text>
+  <rect x="744" y="416" width="156" height="36" rx="10" fill="#14b8a6"/>
+  <text x="788" y="439" fill="#fff" font-family="Arial,sans-serif" font-size="13" font-weight="700">Sign</text>
+  <g><circle cx="716" cy="104" r="14" class="num"/><text x="711" y="110" class="numtext">5</text></g>
+
+  <!-- Footer caption -->
+  <rect x="164" y="488" width="756" height="76" rx="14" fill="#f8fafc" stroke="#d8e0eb"/>
+  <text x="184" y="512" class="text small" font-weight="700">Mizly visual guide — generic notes / documentation</text>
+  <text x="184" y="532" class="text tiny muted">1 Confirm patient/encounter  •  2 Open Notes  •  3 Choose note type  •  4 Complete required sections  •  5 Sign or route</text>
+  <text x="184" y="552" class="text tiny muted">Pick the exact note type (provider, nursing, procedure, therapy) before troubleshooting.</text>
+</svg>
