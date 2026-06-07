@@ -3525,7 +3525,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "sign",
     is_deep_flow: true,
     nav_trail: "Chart -> Notes/documentation -> Note type -> Required fields/errors -> Sign/submit",
-    visual_url: null,
+    visual_url: "/visual-guides/note-required-field-sign.svg",
+    visual_callouts: [
+      "1 - Read the sign error banner exactly.",
+      "2 - Complete the required field named in the error.",
+      "3 - Check cosign / owner routing.",
+      "4 - Retry sign once after correction.",
+    ],
     first90: [
       "Read the sign error exactly.",
       "Check note type and encounter context.",
