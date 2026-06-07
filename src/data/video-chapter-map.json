@@ -1,0 +1,157 @@
+[
+  {
+    "video_ref_id": "vid_provider_notes_orders",
+    "source_title": "Provider notes and orders",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. Source recording covers provider notes + order entry end-to-end.",
+    "chapters": [
+      { "chapter_id": "vid_provider_notes_orders__ch01", "title": "Chart / encounter context", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "patient context", "related_ask_entry_ids": ["ll_p12r2_wrong_department_context"], "suggested_ask_triggers": ["wrong encounter", "department context wrong"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Confirm patient + encounter before note or order." },
+      { "chapter_id": "vid_provider_notes_orders__ch02", "title": "Provider note workflow", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "provider notes", "related_ask_entry_ids": ["ll_scope_notes", "ll_note_sidebar_or_note_type_missing"], "suggested_ask_triggers": ["where do I write my note", "provider note workflow"], "clip_type": "both", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Open Notes activity, pick note type." },
+      { "chapter_id": "vid_provider_notes_orders__ch03", "title": "Order entry workflow", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "order entry", "related_ask_entry_ids": ["ll_scope_orders", "ll_order_entry"], "suggested_ask_triggers": ["where do I put orders", "place an order"], "clip_type": "both", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Place med/lab/imaging from order entry." },
+      { "chapter_id": "vid_provider_notes_orders__ch04", "title": "Signing / submitting", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "signing", "related_ask_entry_ids": ["ll_signature_failure", "ll_note_unsigned_missing_required_field"], "suggested_ask_triggers": ["order won't sign", "note won't sign"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Sign block / required-field gate." },
+      { "chapter_id": "vid_provider_notes_orders__ch05", "title": "Common blockers", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "blockers", "related_ask_entry_ids": ["ll_p12r2_smartlink_blank_or_wrong"], "suggested_ask_triggers": ["smartlink blank", "note pulled wrong data"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Missing template, smarttool, context." },
+      { "chapter_id": "vid_provider_notes_orders__ch06", "title": "Escalation handoff", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "escalation", "related_ask_entry_ids": ["ll_escalation_packet_for_command_center"], "suggested_ask_triggers": ["escalation packet"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Capture role, encounter, error text." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_provider_inbasket_lessons",
+    "source_title": "Provider In Basket — Lessons Learned",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. In Basket triage, pools, results, refills.",
+    "chapters": [
+      { "chapter_id": "vid_provider_inbasket_lessons__ch01", "title": "In Basket overview", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "in basket", "related_ask_entry_ids": [], "suggested_ask_triggers": ["in basket overflowing"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Folders, pools, filters." },
+      { "chapter_id": "vid_provider_inbasket_lessons__ch02", "title": "Message pools", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "pools", "related_ask_entry_ids": [], "suggested_ask_triggers": ["messages in wrong pool"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Pool membership + coverage." },
+      { "chapter_id": "vid_provider_inbasket_lessons__ch03", "title": "Results / refills", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "results refills", "related_ask_entry_ids": [], "suggested_ask_triggers": ["result follow-up", "refill request workflow"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Result and Rx refill folders." },
+      { "chapter_id": "vid_provider_inbasket_lessons__ch04", "title": "Routing / reassigning", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "routing", "related_ask_entry_ids": [], "suggested_ask_triggers": ["reassign message"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Forward, route, delegate." },
+      { "chapter_id": "vid_provider_inbasket_lessons__ch05", "title": "Closing the loop", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "close loop", "related_ask_entry_ids": [], "suggested_ask_triggers": ["close message", "done complete"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Done / complete actions." },
+      { "chapter_id": "vid_provider_inbasket_lessons__ch06", "title": "Common wrong-pool issues", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "wrong pool", "related_ask_entry_ids": [], "suggested_ask_triggers": ["wrong pool", "missing message"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Coverage gaps, pool not assigned." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_provider_inbasket_extra",
+    "source_title": "More Provider In Basket",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. Companion In Basket recording.",
+    "chapters": [
+      { "chapter_id": "vid_provider_inbasket_extra__ch01", "title": "In Basket overview", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "in basket", "related_ask_entry_ids": [], "suggested_ask_triggers": ["in basket overview"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Layout recap." },
+      { "chapter_id": "vid_provider_inbasket_extra__ch02", "title": "Message pools", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "pools", "related_ask_entry_ids": [], "suggested_ask_triggers": ["pool coverage"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Shared pool basics." },
+      { "chapter_id": "vid_provider_inbasket_extra__ch03", "title": "Results / refills", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "results refills", "related_ask_entry_ids": [], "suggested_ask_triggers": ["result routing"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Result triage." },
+      { "chapter_id": "vid_provider_inbasket_extra__ch04", "title": "Routing / reassigning", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "routing", "related_ask_entry_ids": [], "suggested_ask_triggers": ["reassign", "forward"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Reassignment paths." },
+      { "chapter_id": "vid_provider_inbasket_extra__ch05", "title": "Closing the loop", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "close loop", "related_ask_entry_ids": [], "suggested_ask_triggers": ["mark done"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Completing items." },
+      { "chapter_id": "vid_provider_inbasket_extra__ch06", "title": "Common wrong-pool issues", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "wrong pool", "related_ask_entry_ids": [], "suggested_ask_triggers": ["wrong pool"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Pool mis-routing." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_smartset_smarttools",
+    "source_title": "Provider SmartSet and SmartTools",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. SmartSet + SmartText/Phrase/List/Link.",
+    "chapters": [
+      { "chapter_id": "vid_smartset_smarttools__ch01", "title": "SmartSet basics", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "smartset", "related_ask_entry_ids": ["ll_smartset_order_set_missing"], "suggested_ask_triggers": ["smartset basics"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Open/apply a smartset." },
+      { "chapter_id": "vid_smartset_smarttools__ch02", "title": "Order set selection", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "order set", "related_ask_entry_ids": ["ll_smartset_section_or_order_not_selected"], "suggested_ask_triggers": ["order set missing item"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Selecting sections and orders." },
+      { "chapter_id": "vid_smartset_smarttools__ch03", "title": "SmartText / SmartPhrase", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "smarttext", "related_ask_entry_ids": [], "suggested_ask_triggers": ["smartphrase missing", "dot phrase"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Insert and share smarttext." },
+      { "chapter_id": "vid_smartset_smarttools__ch04", "title": "SmartList prompts", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "smartlist", "related_ask_entry_ids": [], "suggested_ask_triggers": ["smartlist not prompting"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Pick lists in notes." },
+      { "chapter_id": "vid_smartset_smarttools__ch05", "title": "SmartLink troubleshooting", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "smartlink", "related_ask_entry_ids": ["ll_p12r2_smartlink_blank_or_wrong"], "suggested_ask_triggers": ["smartlink blank", "smartlink wrong data"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Blank/old data fixes." },
+      { "chapter_id": "vid_smartset_smarttools__ch06", "title": "Personal vs shared tools", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "personal shared", "related_ask_entry_ids": [], "suggested_ask_triggers": ["share smartphrase"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Ownership + sharing." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_procedure_docs_macros",
+    "source_title": "Procedure Documentation and Macros",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. Procedure notes + macros.",
+    "chapters": [
+      { "chapter_id": "vid_procedure_docs_macros__ch01", "title": "Procedure note context", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "procedure context", "related_ask_entry_ids": [], "suggested_ask_triggers": ["procedure encounter"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Right encounter + role." },
+      { "chapter_id": "vid_procedure_docs_macros__ch02", "title": "Macro / template selection", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "macro template", "related_ask_entry_ids": ["ll_dynamic_note_template_missing"], "suggested_ask_triggers": ["procedure note macro", "macro missing"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Choose the procedure macro." },
+      { "chapter_id": "vid_procedure_docs_macros__ch03", "title": "Required fields", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "required fields", "related_ask_entry_ids": ["ll_note_unsigned_missing_required_field"], "suggested_ask_triggers": ["required field missing"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Sign-block gates." },
+      { "chapter_id": "vid_procedure_docs_macros__ch04", "title": "Signing", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "sign", "related_ask_entry_ids": [], "suggested_ask_triggers": ["sign procedure note"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Sign + cosign." },
+      { "chapter_id": "vid_procedure_docs_macros__ch05", "title": "Correction / escalation", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "correction", "related_ask_entry_ids": ["ll_signed_note_addendum_correction"], "suggested_ask_triggers": ["addendum", "correct signed note"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Addendum lane." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_inpatient_ordering",
+    "source_title": "Inpatient Ordering (Diagnosis and Ordering)",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. Diagnosis-driven inpatient ordering.",
+    "chapters": [
+      { "chapter_id": "vid_inpatient_ordering__ch01", "title": "Diagnosis context", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "diagnosis", "related_ask_entry_ids": ["ll_diagnosis_needed_for_order"], "suggested_ask_triggers": ["add diagnosis to order"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Dx required for orders." },
+      { "chapter_id": "vid_inpatient_ordering__ch02", "title": "Order entry", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "order entry", "related_ask_entry_ids": ["ll_order_entry", "ll_scope_orders"], "suggested_ask_triggers": ["inpatient order entry"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Search + select order." },
+      { "chapter_id": "vid_inpatient_ordering__ch03", "title": "Labs / imaging / meds", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "order types", "related_ask_entry_ids": [], "suggested_ask_triggers": ["lab order", "imaging order", "med order"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Type-specific paths." },
+      { "chapter_id": "vid_inpatient_ordering__ch04", "title": "Signing orders", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "sign", "related_ask_entry_ids": ["ll_signature_failure"], "suggested_ask_triggers": ["order won't sign"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Sign block + cosign." },
+      { "chapter_id": "vid_inpatient_ordering__ch05", "title": "Pending / missing orders", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "pending missing", "related_ask_entry_ids": ["ll_order_status_unsigned_initiated", "ll_order_missing_due_to_encounter_context"], "suggested_ask_triggers": ["order pending", "order missing"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Encounter + status." },
+      { "chapter_id": "vid_inpatient_ordering__ch06", "title": "Escalation", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "escalation", "related_ask_entry_ids": ["ll_escalation_packet_for_command_center"], "suggested_ask_triggers": ["escalation packet"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Packet contents." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_inpatient_provider_notes",
+    "source_title": "Inpatient Provider Notes",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. Inpatient note types + sign flow.",
+    "chapters": [
+      { "chapter_id": "vid_inpatient_provider_notes__ch01", "title": "Note type selection", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "note type", "related_ask_entry_ids": ["ll_dynamic_note_template_missing", "ll_note_sidebar_or_note_type_missing"], "suggested_ask_triggers": ["note type missing"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Pick H&P, progress, etc." },
+      { "chapter_id": "vid_inpatient_provider_notes__ch02", "title": "Required sections", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "required sections", "related_ask_entry_ids": ["ll_note_unsigned_missing_required_field"], "suggested_ask_triggers": ["required field missing"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "S/O/A/P + attestation." },
+      { "chapter_id": "vid_inpatient_provider_notes__ch03", "title": "Copy-forward / refresh", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "copy forward", "related_ask_entry_ids": ["ll_p12r2_smartlink_blank_or_wrong"], "suggested_ask_triggers": ["note pulled wrong data", "refresh smartlink"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Refresh stale pulls." },
+      { "chapter_id": "vid_inpatient_provider_notes__ch04", "title": "Signing / cosign", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "sign cosign", "related_ask_entry_ids": [], "suggested_ask_triggers": ["cosign routing"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Attestation routing." },
+      { "chapter_id": "vid_inpatient_provider_notes__ch05", "title": "Addendum / correction", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "addendum", "related_ask_entry_ids": ["ll_signed_note_addendum_correction"], "suggested_ask_triggers": ["addendum", "correct signed note"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Post-sign correction lane." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_patient_lists_clinical_review",
+    "source_title": "Provider Inpatient List and Clinical Review",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. Patient lists + chart review.",
+    "chapters": [
+      { "chapter_id": "vid_patient_lists_clinical_review__ch01", "title": "Patient list basics", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "patient list", "related_ask_entry_ids": ["ll_patient_list"], "suggested_ask_triggers": ["patient list basics"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "System vs my list." },
+      { "chapter_id": "vid_patient_lists_clinical_review__ch02", "title": "Filters / context", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "filters", "related_ask_entry_ids": [], "suggested_ask_triggers": ["list filter", "context wrong"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Unit, team, coverage filters." },
+      { "chapter_id": "vid_patient_lists_clinical_review__ch03", "title": "Missing patient", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "missing patient", "related_ask_entry_ids": ["ll_p13_carecompass_patient_missing"], "suggested_ask_triggers": ["patient missing from list"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Coverage + filter checks." },
+      { "chapter_id": "vid_patient_lists_clinical_review__ch04", "title": "Clinical review", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "chart review", "related_ask_entry_ids": ["ll_patient_chart_not_loading_after_admission"], "suggested_ask_triggers": ["chart review workflow"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Review tabs/filters." },
+      { "chapter_id": "vid_patient_lists_clinical_review__ch05", "title": "Handoff / escalation", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "handoff", "related_ask_entry_ids": ["ll_escalation_packet_for_command_center"], "suggested_ask_triggers": ["handoff", "escalation"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Sign-out + packet." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_surgical_workflow_efficiency",
+    "source_title": "Provider Surgical Workflow Efficiency",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. Surgical case + perioperative flow.",
+    "chapters": [
+      { "chapter_id": "vid_surgical_workflow_efficiency__ch01", "title": "Case status", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "case status", "related_ask_entry_ids": [], "suggested_ask_triggers": ["surgical case status"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Status board." },
+      { "chapter_id": "vid_surgical_workflow_efficiency__ch02", "title": "Pre-op readiness", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "pre-op", "related_ask_entry_ids": [], "suggested_ask_triggers": ["pre-op checklist"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Pre-op orders + checks." },
+      { "chapter_id": "vid_surgical_workflow_efficiency__ch03", "title": "Consent / orders", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "consent orders", "related_ask_entry_ids": ["ll_consent_procedure_status"], "suggested_ask_triggers": ["consent for procedure"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Consent status + orders." },
+      { "chapter_id": "vid_surgical_workflow_efficiency__ch04", "title": "Procedure documentation", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "procedure note", "related_ask_entry_ids": ["ll_dynamic_note_template_missing"], "suggested_ask_triggers": ["procedure note"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Op note + macros." },
+      { "chapter_id": "vid_surgical_workflow_efficiency__ch05", "title": "Room / status movement", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "room movement", "related_ask_entry_ids": [], "suggested_ask_triggers": ["case status move"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Status events + movements." }
+    ]
+  },
+  {
+    "video_ref_id": "vid_clindoc",
+    "source_title": "ClinDoc — Clinical Documentation",
+    "source_type": "LearnShare",
+    "rights_status": "unknown",
+    "transcript_status": "not started",
+    "transcript_summary": "Pending. Nursing clinical documentation + flowsheets.",
+    "chapters": [
+      { "chapter_id": "vid_clindoc__ch01", "title": "Clinical documentation overview", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "clindoc overview", "related_ask_entry_ids": [], "suggested_ask_triggers": ["nursing documentation"], "clip_type": "training", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "ClinDoc layout." },
+      { "chapter_id": "vid_clindoc__ch02", "title": "Flowsheets", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "flowsheets", "related_ask_entry_ids": ["ll_flowsheet_row_hidden_or_time_column_wrong"], "suggested_ask_triggers": ["flowsheet row missing"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Rows + time columns." },
+      { "chapter_id": "vid_clindoc__ch03", "title": "Required fields", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "required fields", "related_ask_entry_ids": [], "suggested_ask_triggers": ["required field nursing"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Mandatory entries." },
+      { "chapter_id": "vid_clindoc__ch04", "title": "Corrections / uncharting", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "uncharting", "related_ask_entry_ids": ["ll_p13_iview_correction_uncharting"], "suggested_ask_triggers": ["unchart flowsheet", "correct flowsheet"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Correction lane." },
+      { "chapter_id": "vid_clindoc__ch05", "title": "Escalation", "timestamp_start": null, "timestamp_end": null, "workflow_topic": "escalation", "related_ask_entry_ids": ["ll_escalation_packet_for_command_center"], "suggested_ask_triggers": ["nursing escalation"], "clip_type": "answer-support", "learner_clip_status": "not_started", "learner_video_url": null, "notes": "Escalation packet." }
+    ]
+  }
+]
