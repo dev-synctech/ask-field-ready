@@ -82,6 +82,7 @@ const SEED_ROWS: VisualMapRow[] = [
   { workflowId: "ll_sbo_payment_plan_or_self_pay_followup", workflowTitle: "Payment plan setup", exampleAsk: "payment plan", visualStatus: "live_in_ask", visualPath: "/visual-guides/payment-plan-setup.svg", calloutCount: 4, learnerVisible: true, qaStatus: "pass", notes: "Account / plan terms mock." },
   { workflowId: "ll_p12_portal_message_or_result_missing", workflowTitle: "MyChart result release", exampleAsk: "patient cant see result in portal", visualStatus: "live_in_ask", visualPath: "/visual-guides/mychart-result-release.svg", calloutCount: 4, learnerVisible: true, qaStatus: "pass", notes: "Release status mock." },
   { workflowId: "ll_p12r2_portal_message_routing", workflowTitle: "MyChart message routing", exampleAsk: "portal message routing", visualStatus: "live_in_ask", visualPath: "/visual-guides/mychart-message-routing.svg", calloutCount: 4, learnerVisible: true, qaStatus: "pass", notes: "Actual vs intended pool mock." },
+  { workflowId: "ll_patient_chart_not_loading_after_admission", workflowTitle: "Patient chart does not load after admission", exampleAsk: "patient chart not loading after admission", visualStatus: "live_in_ask", visualPath: "/visual-guides/patient-chart-not-loading-after-admission.svg", calloutCount: 5, learnerVisible: true, qaStatus: "pass", notes: "Generic EHR mock — search, encounter banner, blank/spinner state, context/access check, escalation packet. No PHI, vendor logos, or org names." },
 ];
 
 function readQA(): Record<string, QAStatus> {
