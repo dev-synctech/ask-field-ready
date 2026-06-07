@@ -3576,7 +3576,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "modify",
     is_deep_flow: true,
     nav_trail: "Chart -> Notes -> Signed note -> Addendum/correction action -> Sign addendum",
-    visual_url: null,
+    visual_url: "/visual-guides/signed-note-addendum.svg",
+    visual_callouts: [
+      "1 - Confirm the note is signed/locked.",
+      "2 - Open the addendum or correction lane.",
+      "3 - Capture reason in policy language.",
+      "4 - Escalate immediately if wrong encounter.",
+    ],
     first90: [
       "Confirm the note is already signed.",
       "Use addendum or correction, not direct edit.",
