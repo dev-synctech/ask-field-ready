@@ -107,14 +107,14 @@ const SEED_ROWS: VisualMapRow[] = [
   },
   {
     workflowId: "ll_barcode_med_admin_scan_mismatch",
-    workflowTitle: "Medication scan failure",
-    exampleAsk: "Medication scan failure",
+    workflowTitle: "Medication scan wrong patient / wrong med warning",
+    exampleAsk: "medication scan wrong patient warning",
     visualStatus: "live_in_ask",
-    visualPath: "/visual-guides/medication-scan-failure.svg",
+    visualPath: "/visual-guides/medication-scan-wrong-patient-warning.svg",
     calloutCount: 5,
     learnerVisible: true,
     qaStatus: "pass",
-    notes: "Bedside MAR mock — no patient name, MRN, or DOB.",
+    notes: "Safety-warning mock — no PHI, no MRN, no patient name.",
   },
   {
     workflowId: "ll_schedule_columns",
