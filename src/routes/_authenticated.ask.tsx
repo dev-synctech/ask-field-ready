@@ -789,6 +789,8 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             </div>
           </section>
 
+          <MizlyClipChip answer={answer} />
+
           <section>
             <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">MORE HELP</div>
             <MoreHelpChips answer={answer} />
