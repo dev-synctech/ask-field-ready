@@ -33,6 +33,7 @@ import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedScenariosIdRouteImport } from './routes/_authenticated.scenarios_.$id'
 import { Route as AuthenticatedPlaybooksIdRouteImport } from './routes/_authenticated.playbooks_.$id'
 import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated.lessons_.$id'
+import { Route as AuthenticatedAdminVisualReviewRouteImport } from './routes/_authenticated.admin_.visual-review'
 import { Route as AuthenticatedAdminVisualNeedsRouteImport } from './routes/_authenticated.admin_.visual-needs'
 import { Route as AuthenticatedAdminVisualMapRouteImport } from './routes/_authenticated.admin_.visual-map'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated.admin_.users'
@@ -171,6 +172,12 @@ const AuthenticatedLessonsIdRoute = AuthenticatedLessonsIdRouteImport.update({
   path: '/lessons/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminVisualReviewRoute =
+  AuthenticatedAdminVisualReviewRouteImport.update({
+    id: '/admin_/visual-review',
+    path: '/admin/visual-review',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminVisualNeedsRoute =
   AuthenticatedAdminVisualNeedsRouteImport.update({
     id: '/admin_/visual-needs',
@@ -300,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/visual-map': typeof AuthenticatedAdminVisualMapRoute
   '/admin/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
+  '/admin/visual-review': typeof AuthenticatedAdminVisualReviewRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
   '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
@@ -341,6 +349,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/visual-map': typeof AuthenticatedAdminVisualMapRoute
   '/admin/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
+  '/admin/visual-review': typeof AuthenticatedAdminVisualReviewRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
   '/playbooks/$id': typeof AuthenticatedPlaybooksIdRoute
   '/scenarios/$id': typeof AuthenticatedScenariosIdRoute
@@ -384,6 +393,7 @@ export interface FileRoutesById {
   '/_authenticated/admin_/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin_/visual-map': typeof AuthenticatedAdminVisualMapRoute
   '/_authenticated/admin_/visual-needs': typeof AuthenticatedAdminVisualNeedsRoute
+  '/_authenticated/admin_/visual-review': typeof AuthenticatedAdminVisualReviewRoute
   '/_authenticated/lessons_/$id': typeof AuthenticatedLessonsIdRoute
   '/_authenticated/playbooks_/$id': typeof AuthenticatedPlaybooksIdRoute
   '/_authenticated/scenarios_/$id': typeof AuthenticatedScenariosIdRoute
@@ -427,6 +437,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/visual-map'
     | '/admin/visual-needs'
+    | '/admin/visual-review'
     | '/lessons/$id'
     | '/playbooks/$id'
     | '/scenarios/$id'
@@ -468,6 +479,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/visual-map'
     | '/admin/visual-needs'
+    | '/admin/visual-review'
     | '/lessons/$id'
     | '/playbooks/$id'
     | '/scenarios/$id'
@@ -510,6 +522,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin_/users'
     | '/_authenticated/admin_/visual-map'
     | '/_authenticated/admin_/visual-needs'
+    | '/_authenticated/admin_/visual-review'
     | '/_authenticated/lessons_/$id'
     | '/_authenticated/playbooks_/$id'
     | '/_authenticated/scenarios_/$id'
@@ -704,6 +717,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLessonsIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/visual-review': {
+      id: '/_authenticated/admin_/visual-review'
+      path: '/admin/visual-review'
+      fullPath: '/admin/visual-review'
+      preLoaderRoute: typeof AuthenticatedAdminVisualReviewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/visual-needs': {
       id: '/_authenticated/admin_/visual-needs'
       path: '/admin/visual-needs'
@@ -840,6 +860,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVisualMapRoute: typeof AuthenticatedAdminVisualMapRoute
   AuthenticatedAdminVisualNeedsRoute: typeof AuthenticatedAdminVisualNeedsRoute
+  AuthenticatedAdminVisualReviewRoute: typeof AuthenticatedAdminVisualReviewRoute
   AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
   AuthenticatedPlaybooksIdRoute: typeof AuthenticatedPlaybooksIdRoute
   AuthenticatedScenariosIdRoute: typeof AuthenticatedScenariosIdRoute
@@ -870,6 +891,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVisualMapRoute: AuthenticatedAdminVisualMapRoute,
   AuthenticatedAdminVisualNeedsRoute: AuthenticatedAdminVisualNeedsRoute,
+  AuthenticatedAdminVisualReviewRoute: AuthenticatedAdminVisualReviewRoute,
   AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
   AuthenticatedPlaybooksIdRoute: AuthenticatedPlaybooksIdRoute,
   AuthenticatedScenariosIdRoute: AuthenticatedScenariosIdRoute,
