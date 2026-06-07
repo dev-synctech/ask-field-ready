@@ -66,11 +66,34 @@ type ChapterDoc = {
   chapters: Chapter[];
 };
 
+type ClipScriptBeat = { beat: string; voiceover: string };
+type ClipRecord = {
+  clip_id: string;
+  title: string;
+  related_ask_entry_ids: string[];
+  source_video_refs: string[];
+  source_chapter_refs: string[];
+  script: ClipScriptBeat[];
+  visual_scenes: string[];
+  estimated_duration: string;
+  learner_clip_status: LearnerClipStatus;
+  learner_video_url: string | null;
+  qa_status: "needs_review" | "pass" | "needs_fix";
+  notes: string;
+};
+
 const ROWS = videoMap as VideoRow[];
 const CHAPTERS = chapterMap as ChapterDoc[];
+const CLIPS = clipBacklog as ClipRecord[];
 const CHAPTER_BY_VIDEO: Record<string, ChapterDoc | undefined> = Object.fromEntries(
   CHAPTERS.map(c => [c.video_ref_id, c])
 );
+const CLIPS_BY_VIDEO: Record<string, ClipRecord[]> = CLIPS.reduce((acc, clip) => {
+  for (const vid of clip.source_video_refs) {
+    (acc[vid] ||= []).push(clip);
+  }
+  return acc;
+}, {} as Record<string, ClipRecord[]>);
 
 type ChapterFilter = "all" | "transcript_not_started" | "needs_transcript" | "chapters_drafted" | "needs_clip" | "learner_live";
 
