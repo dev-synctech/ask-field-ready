@@ -2538,6 +2538,14 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Registration or account -> Coverage area -> Filing order/effective dates -> Owner",
+    visual_url: "/visual-guides/coverage-effective-date.svg",
+    visual_callouts: [
+      "1 - Confirm payer, filing order, and status.",
+      "2 - Check 'Effective from' date.",
+      "3 - Check 'Effective to' date.",
+      "4 - Decide term vs. delete (delete only if added in error).",
+      "5 - Route order/owner question to coverage lead.",
+    ],
     first90: [
       "Open the account or encounter coverage lane.",
       "Check active dates and filing order.",
