@@ -6887,7 +6887,7 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   }
   if (
     entry.id === "ll_prescription_printer_routing_wrong" &&
-    /\b(print\s+prescriptions?|prescription\s+printer|rx\s+printer|troy\s+printer|t\s+printer|prescription\s+not\s+printing|print\s+rx|paper\s+prescription\s+printer)\b/.test(queryText)
+    /\b(print\s+prescriptions?|prescription\s+printer|rx\s+printer|troy\s+printer|t\s+printer|prescription\s+not\s+printing|print\s+rx|paper\s+prescription\s+printer|secure\s+prescription\s+printer|secure\s+rx\s+printer)\b/.test(queryText)
   ) {
     return 30;
   }
