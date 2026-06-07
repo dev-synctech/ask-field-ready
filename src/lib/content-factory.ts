@@ -269,7 +269,7 @@ const PACK09_VISUAL_NEEDS: VisualNeed[] = [
 // raw cross-reference IDs to learners. Each entry stays in the backlog until
 // a sanitized Mizly-original visual is produced and reviewed for org names,
 // patient identifiers, passwords, private links, and source residue.
-const PACK13_REFERENCE_NEEDS: VisualNeed[] = [
+const PACK13_REFERENCE_NEEDS: VisualNeed[] = ([
   {
     workflowTitle: "Claim errors sidebar",
     question: "Ask: claim error sidebar",
