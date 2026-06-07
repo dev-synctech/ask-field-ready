@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Mizly visual guide: schedule columns personalization</title>
+  <desc id="desc">Sanitized mock of a schedule view with personalize panel showing column add/remove, save scope, and locked-template note.</desc>
+  <defs>
+    <linearGradient id="brand" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#04B8AA"/><stop offset="1" stop-color="#1357C8"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#102033" flood-opacity=".16"/></filter>
+  </defs>
+  <rect width="1200" height="520" rx="36" fill="#F7FAFC"/>
+  <rect x="54" y="42" width="1092" height="436" rx="28" fill="#FFFFFF" stroke="#D7E0EA" filter="url(#shadow)"/>
+  <text x="88" y="92" font-family="Manrope, Arial, sans-serif" font-size="25" font-weight="800" fill="#172033">Schedule view</text>
+  <rect x="88" y="124" width="640" height="300" rx="18" fill="#FFFFFF" stroke="#D8E2EC"/>
+  <rect x="116" y="156" width="584" height="40" rx="10" fill="#F4F8FB"/>
+  <text x="140" y="183" font-family="Manrope, Arial, sans-serif" font-size="14" font-weight="800" fill="#516070">Location · Date · Provider · View/template</text>
+  <g>
+    <rect x="116" y="210" width="180" height="32" rx="8" fill="#EDF3F9"/>
+    <text x="132" y="232" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="800" fill="#516070">Time</text>
+    <rect x="304" y="210" width="180" height="32" rx="8" fill="#EDF3F9"/>
+    <text x="320" y="232" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="800" fill="#516070">Patient</text>
+    <rect x="492" y="210" width="208" height="32" rx="8" fill="#EDF3F9"/>
+    <text x="508" y="232" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="800" fill="#516070">Visit type</text>
+  </g>
+  <rect x="116" y="252" width="584" height="40" rx="8" fill="#FAFCFD" stroke="#E2E8EE"/>
+  <rect x="116" y="296" width="584" height="40" rx="8" fill="#FAFCFD" stroke="#E2E8EE"/>
+  <rect x="116" y="340" width="584" height="40" rx="8" fill="#FAFCFD" stroke="#E2E8EE"/>
+  <rect x="116" y="392" width="160" height="20" rx="6" fill="#E8FBF8"/>
+  <text x="128" y="408" font-family="Manrope, Arial, sans-serif" font-size="12" font-weight="800" fill="#0D8B7E">Personalize ▾</text>
+  <rect x="754" y="124" width="320" height="300" rx="18" fill="#F4F8FB" stroke="#D8E2EC"/>
+  <text x="782" y="162" font-family="Manrope, Arial, sans-serif" font-size="19" font-weight="900" fill="#172033">Column personalization</text>
+  <g font-family="Manrope, Arial, sans-serif" font-size="14" fill="#172033">
+    <rect x="782" y="186" width="262" height="34" rx="8" fill="#FFFFFF" stroke="#D8E2EC"/>
+    <text x="804" y="208" font-weight="800">☑ Time</text>
+    <rect x="782" y="226" width="262" height="34" rx="8" fill="#FFFFFF" stroke="#D8E2EC"/>
+    <text x="804" y="248" font-weight="800">☑ Patient</text>
+    <rect x="782" y="266" width="262" height="34" rx="8" fill="#FFFFFF" stroke="#D8E2EC"/>
+    <text x="804" y="288" font-weight="800">☐ Visit type</text>
+    <rect x="782" y="306" width="262" height="34" rx="8" fill="#FFF7E6" stroke="#F1C46C"/>
+    <text x="804" y="328" font-weight="800" fill="#9A6500">⚠ Locked by template</text>
+  </g>
+  <rect x="782" y="354" width="130" height="42" rx="12" fill="url(#brand)"/>
+  <text x="822" y="381" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="900" fill="#FFFFFF">Apply</text>
+  <rect x="924" y="354" width="120" height="42" rx="12" fill="#FFFFFF" stroke="#1357C8"/>
+  <text x="950" y="381" font-family="Manrope, Arial, sans-serif" font-size="15" font-weight="900" fill="#1357C8">Save view</text>
+  <g font-family="Manrope, Arial, sans-serif" font-weight="900" font-size="20">
+    <circle cx="116" cy="156" r="22" fill="#04B8AA"/><text x="110" y="163" fill="#FFFFFF">1</text>
+    <circle cx="116" cy="392" r="22" fill="#04B8AA"/><text x="110" y="399" fill="#FFFFFF">2</text>
+    <circle cx="782" cy="266" r="22" fill="#1357C8"/><text x="776" y="273" fill="#FFFFFF">3</text>
+    <circle cx="782" cy="306" r="22" fill="#F1C46C"/><text x="776" y="313" fill="#172033">4</text>
+    <circle cx="782" cy="354" r="22" fill="#1357C8"/><text x="776" y="361" fill="#FFFFFF">5</text>
+  </g>
+  <text x="88" y="466" font-family="Manrope, Arial, sans-serif" font-size="18" font-weight="700" fill="#516070">Confirm context first, open Personalize, change columns, then save only if local policy allows.</text>
+</svg>

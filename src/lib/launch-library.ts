@@ -759,6 +759,14 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     phases: k("cutover day 0", "stabilization week 1"),
     urgency: 2,
     escalation: 2,
+    visual_url: "/visual-guides/schedule-columns-personalization.svg",
+    visual_callouts: [
+      "1 - Confirm context: location, date, provider, view.",
+      "2 - Open Personalize / Columns / View options.",
+      "3 - Add or remove columns.",
+      "4 - Watch for template-locked columns.",
+      "5 - Apply, then save only if local policy allows.",
+    ],
     first90: [
       "Open the exact schedule view the user is working from.",
       "Confirm the top filters first: location/department, date range, provider/resource, and schedule view/template.",
@@ -2366,6 +2374,13 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Claim edit -> Clearinghouse/external status -> Correction -> Refresh/retest result",
+    visual_url: "/visual-guides/clearinghouse-error.svg",
+    visual_callouts: [
+      "1 - Capture the exact external status text.",
+      "2 - Identify the owner lane that fixes it.",
+      "3 - Correct it once in that lane.",
+      "4 - Refresh / retest before resending.",
+    ],
     first90: [
       "Open the clearinghouse or external-status error.",
       "Capture the exact error text and owner lane.",
@@ -2538,6 +2553,14 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     vendor_family: "epic",
     action: "review",
     nav_trail: "Registration or account -> Coverage area -> Filing order/effective dates -> Owner",
+    visual_url: "/visual-guides/coverage-effective-date.svg",
+    visual_callouts: [
+      "1 - Confirm payer, filing order, and status.",
+      "2 - Check 'Effective from' date.",
+      "3 - Check 'Effective to' date.",
+      "4 - Decide term vs. delete (delete only if added in error).",
+      "5 - Route order/owner question to coverage lead.",
+    ],
     first90: [
       "Open the account or encounter coverage lane.",
       "Check active dates and filing order.",
@@ -2984,6 +3007,14 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "Prescription/order -> Print action -> Printer selector/route -> One controlled reprint",
+    visual_url: "/visual-guides/secure-prescription-printer.svg",
+    visual_callouts: [
+      "1 - Open the prescription/order print action.",
+      "2 - Select the approved secure prescription printer.",
+      "3 - Check duplicate risk before reprinting.",
+      "4 - Confirm printer is online and has paper.",
+      "5 - Print once; if missing/offline, route device support.",
+    ],
     first90: [
       "Keep the prescription/order screen open.",
       "Confirm the approved prescription printer route.",
@@ -4252,7 +4283,14 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
     action: "review",
     is_deep_flow: true,
     nav_trail: "MAR/med administration -> Patient scan -> Medication scan -> Mismatch alert -> Pharmacy/clinical owner",
-    visual_url: null,
+    visual_url: "/visual-guides/medication-scan-failure.svg",
+    visual_callouts: [
+      "1 - Scan wristband and verify patient.",
+      "2 - Scan medication package barcode.",
+      "3 - Read the mismatch alert reason.",
+      "4 - Route owner: pharmacy, clinical, or device.",
+      "5 - Hold the dose until resolved — never override.",
+    ],
     first90: [
       "Stop before administering.",
       "Confirm patient, medication, and order match.",
@@ -6723,7 +6761,7 @@ function dedupeVisualAids(aids: VisualAid[]): VisualAid[] {
 function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   if (
     entry.id === "ll_barcode_med_admin_scan_mismatch" &&
-    /\b(barcode\s+(med|medication).*mismatch|medication\s+barcode.*mismatch|bcma\s+mismatch|barcode\s+alert|med\s+won'?t\s+scan)\b/.test(queryText)
+    /\b(barcode\s+(med|medication).*mismatch|medication\s+barcode.*mismatch|bcma\s+mismatch|barcode\s+alert|med\s+won'?t\s+scan|medication\s+scan\s+(failure|failed|fail|not\s+working)|med\s+scan\s+(failure|failed|fail))\b/.test(queryText)
   ) {
     return 30;
   }
@@ -6789,7 +6827,7 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   }
   if (
     entry.id === "ll_coverage_filing_order_term_delete" &&
-    /\b(filing\s+order|term\s+coverage|delete\s+coverage|effective\s+to\s+field|coverage\s+added\s+in\s+error|old\s+insurance\s+coverage)\b/.test(queryText)
+    /\b(filing\s+order|term\s+coverage|delete\s+coverage|effective\s+to\s+field|coverage\s+added\s+in\s+error|old\s+insurance\s+coverage|coverage\s+effective\s+date|effective\s+date\s+(issue|wrong|problem))\b/.test(queryText)
   ) {
     return 30;
   }
@@ -6848,8 +6886,14 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
     return 30;
   }
   if (
+    entry.id === "ll_schedule_columns" &&
+    /\b(schedule\s+columns?(\s+personali[sz]ation)?|personali[sz]e\s+schedule|change\s+schedule\s+columns?|add\s+schedule\s+column|schedule\s+view\s+columns?)\b/.test(queryText)
+  ) {
+    return 30;
+  }
+  if (
     entry.id === "ll_prescription_printer_routing_wrong" &&
-    /\b(print\s+prescriptions?|prescription\s+printer|rx\s+printer|troy\s+printer|t\s+printer|prescription\s+not\s+printing|print\s+rx|paper\s+prescription\s+printer)\b/.test(queryText)
+    /\b(print\s+prescriptions?|prescription\s+printer|rx\s+printer|troy\s+printer|t\s+printer|prescription\s+not\s+printing|print\s+rx|paper\s+prescription\s+printer|secure\s+prescription\s+printer|secure\s+rx\s+printer)\b/.test(queryText)
   ) {
     return 30;
   }
