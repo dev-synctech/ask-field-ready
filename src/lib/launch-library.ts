@@ -1773,7 +1773,7 @@ export const LAUNCH_LIBRARY: LaunchEntry[] = [
       "Multiple users affected: escalate list/worklist build.",
       "Care task blocked: route through floor lead with callback.",
     ],
-    keywords: k("patient list", "worklist", "patient not on list", "missing from list", "not showing on list", "my list", "provider list", "rounding list", "location filter", "relationship filter", "refresh list", "patient not showing", "powerchart list"),
+    keywords: k("patient list", "worklist", "patient not on list", "missing from list", "not showing on list", "my list", "provider list", "rounding list", "location filter", "relationship filter", "refresh list", "patient not showing", "powerchart list", "carecompass", "care compass", "patient missing", "patient list missing", "dashboard missing patient"),
     related_ids: ["p25", "c19", "v21"],
     sanitized_approved: true,
     status: "published",
