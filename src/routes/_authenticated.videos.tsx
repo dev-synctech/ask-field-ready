@@ -1,12 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Film, PlayCircle, FileText, Search, Copy, X, Clock } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Film, PlayCircle, FileText, Search, Copy, X, Clock, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { itemsByType, VIDEO_DETAIL, relatedFor, linkFor } from "@/lib/demo-data";
+import { itemsByType, VIDEO_DETAIL, relatedFor, linkFor, type ContentItem } from "@/lib/demo-data";
 import { Header } from "./_authenticated.learn";
+
+type VideosSearch = { item?: string };
 
 export const Route = createFileRoute("/_authenticated/videos")({
   head: () => ({ meta: [{ title: "Videos — Mizly" }] }),
+  validateSearch: (s: Record<string, unknown>): VideosSearch => ({
+    item: typeof s.item === "string" ? s.item : undefined,
+  }),
   component: VideosPage,
 });
 
@@ -19,53 +24,91 @@ function highlight(text: string, q: string) {
 }
 
 function VideosPage() {
-  const videos = itemsByType("video");
-  const [activeId, setActive] = useState<string | null>(null);
-  const [tSearch, setTSearch] = useState("");
-  const active = videos.find(v => v.id === activeId);
+  const search = Route.useSearch();
+  const allVideos = itemsByType("video");
+  const mizlyClips = useMemo(() => allVideos.filter(v => !!v.learner_video_url), [allVideos]);
+  const otherVideos = useMemo(() => allVideos.filter(v => !v.learner_video_url), [allVideos]);
+
+  const [activeId, setActive] = useState<string | null>(search.item ?? null);
+  useEffect(() => {
+    if (search.item) setActive(search.item);
+  }, [search.item]);
+
+  const active = allVideos.find(v => v.id === activeId);
   const detail = active ? VIDEO_DETAIL[active.id] : undefined;
   const transcript = detail?.transcript ?? active?.transcript ?? "";
   const chapters = detail?.chapters ?? [];
   const related = useMemo(() => active ? relatedFor(active.id, ["lesson", "playbook"], 4) : [], [active]);
+  const [tSearch, setTSearch] = useState("");
 
   const close = () => { setActive(null); setTSearch(""); };
 
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
       <Header title="Videos" subtitle="Short walkthroughs for high-pressure support moments." />
-      <div className="mt-6 grid sm:grid-cols-2 gap-3">
-        {videos.map(v => (
-          <button key={v.id} onClick={() => setActive(v.id)}
-            className="text-left group rounded-2xl border border-border bg-card overflow-hidden shadow-soft hover:border-primary/40 hover:-translate-y-0.5 transition-all">
-            <div className="aspect-video relative bg-secondary flex items-center justify-center">
-              <div className="size-14 rounded-full bg-background/90 backdrop-blur flex items-center justify-center shadow-elevated group-hover:scale-105 transition-transform">
-                <PlayCircle className="size-7 text-primary" />
-              </div>
-              <span className="absolute bottom-2 right-2 text-[10px] px-2 py-0.5 rounded-full bg-foreground/80 text-background inline-flex items-center gap-1">
-                <Clock className="size-3" /> {v.estimated_minutes} min
-              </span>
-              {VIDEO_DETAIL[v.id]?.chapters.length ? (
-                <span className="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-background/90 text-foreground">
-                  {VIDEO_DETAIL[v.id].chapters.length} chapters
-                </span>
-              ) : null}
-            </div>
-            <div className="p-4">
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
-                <Film className="size-3 text-primary" /> Video
-              </div>
-              <div className="mt-1 font-display font-semibold">{v.title}</div>
-              <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{v.summary}</p>
-            </div>
-          </button>
-        ))}
-      </div>
+
+      {mizlyClips.length > 0 && (
+        <section className="mt-6">
+          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-primary font-semibold mb-2">
+            <Sparkles className="size-3" /> Mizly walkthroughs
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {mizlyClips.map(v => (
+              <MizlyClipCard key={v.id} clip={v} onWatch={() => setActive(v.id)} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {otherVideos.length > 0 && (
+        <section className="mt-8">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">Library videos</div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {otherVideos.map(v => (
+              <button key={v.id} onClick={() => setActive(v.id)}
+                className="text-left group rounded-2xl border border-border bg-card overflow-hidden shadow-soft hover:border-primary/40 hover:-translate-y-0.5 transition-all">
+                <div className="aspect-video relative bg-secondary flex items-center justify-center">
+                  <div className="size-14 rounded-full bg-background/90 backdrop-blur flex items-center justify-center shadow-elevated group-hover:scale-105 transition-transform">
+                    <PlayCircle className="size-7 text-primary" />
+                  </div>
+                  <span className="absolute bottom-2 right-2 text-[10px] px-2 py-0.5 rounded-full bg-foreground/80 text-background inline-flex items-center gap-1">
+                    <Clock className="size-3" /> {v.estimated_minutes} min
+                  </span>
+                  {VIDEO_DETAIL[v.id]?.chapters.length ? (
+                    <span className="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-background/90 text-foreground">
+                      {VIDEO_DETAIL[v.id].chapters.length} chapters
+                    </span>
+                  ) : null}
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <Film className="size-3 text-primary" /> Video
+                  </div>
+                  <div className="mt-1 font-display font-semibold">{v.title}</div>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{v.summary}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {active && (
         <div className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4" onClick={close}>
           <div className="bg-card md:rounded-3xl rounded-t-3xl border border-border shadow-elevated w-full max-w-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-4 duration-300" onClick={e => e.stopPropagation()}>
-            <div className="relative aspect-video bg-secondary flex items-center justify-center shrink-0">
-              <PlayCircle className="size-16 text-primary/70" />
+            <div className="relative aspect-video bg-black flex items-center justify-center shrink-0">
+              {active.learner_video_url ? (
+                <video
+                  key={active.id}
+                  src={active.learner_video_url}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-contain bg-black"
+                />
+              ) : (
+                <PlayCircle className="size-16 text-primary/70" />
+              )}
               <button onClick={close} aria-label="Close" className="absolute top-3 right-3 size-9 rounded-full bg-background/90 inline-flex items-center justify-center hover:bg-background">
                 <X className="size-4" />
               </button>
@@ -74,8 +117,14 @@ function VideosPage() {
             <div className="p-5 overflow-y-auto">
               <div className="font-display font-semibold text-lg">{active.title}</div>
               <p className="mt-1 text-sm text-muted-foreground">{active.summary}</p>
+              {active.related_topic && (
+                <div className="mt-2 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary-soft text-primary font-medium">
+                  {active.related_topic}
+                </div>
+              )}
 
-              {chapters.length > 0 && (
+              {/* Chapters and transcript hidden for Mizly clips — those are admin-only source material. */}
+              {!active.learner_video_url && chapters.length > 0 && (
                 <div className="mt-4">
                   <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">Chapters</div>
                   <ul className="space-y-1.5">
@@ -92,7 +141,7 @@ function VideosPage() {
                 </div>
               )}
 
-              {transcript && (
+              {!active.learner_video_url && transcript && (
                 <div className="mt-4">
                   <div className="flex items-center justify-between gap-3 mb-2">
                     <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium inline-flex items-center gap-1.5">
@@ -142,6 +191,59 @@ function VideosPage() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function MizlyClipCard({ clip, onWatch }: { clip: ContentItem; onWatch: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  return (
+    <div className="group rounded-2xl border border-border bg-card overflow-hidden shadow-soft hover:border-primary/40 transition-all">
+      <button
+        type="button"
+        onClick={onWatch}
+        className="block w-full aspect-video relative bg-black"
+        aria-label={`Watch ${clip.title}`}
+      >
+        <video
+          ref={videoRef}
+          src={clip.learner_video_url}
+          muted
+          playsInline
+          preload="metadata"
+          className="w-full h-full object-contain"
+        />
+        <span className="absolute inset-0 flex items-center justify-center bg-foreground/10 group-hover:bg-foreground/0 transition-colors">
+          <span className="size-14 rounded-full bg-background/90 backdrop-blur flex items-center justify-center shadow-elevated group-hover:scale-105 transition-transform">
+            <PlayCircle className="size-7 text-primary" />
+          </span>
+        </span>
+        <span className="absolute bottom-2 right-2 text-[10px] px-2 py-0.5 rounded-full bg-foreground/80 text-background inline-flex items-center gap-1">
+          <Clock className="size-3" /> {clip.estimated_minutes ?? 1} min
+        </span>
+        <span className="absolute top-2 left-2 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary text-primary-foreground font-medium inline-flex items-center gap-1">
+          <Sparkles className="size-3" /> Mizly
+        </span>
+      </button>
+      <div className="p-4">
+        <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+          <Film className="size-3 text-primary" /> Walkthrough
+          {clip.related_topic && (
+            <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground normal-case tracking-normal">
+              {clip.related_topic}
+            </span>
+          )}
+        </div>
+        <div className="mt-1 font-display font-semibold leading-snug">{clip.title}</div>
+        <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{clip.summary}</p>
+        <button
+          type="button"
+          onClick={onWatch}
+          className="mt-3 inline-flex items-center gap-1.5 h-9 px-3 rounded-xl bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90"
+        >
+          <PlayCircle className="size-4" /> Watch
+        </button>
+      </div>
     </div>
   );
 }
