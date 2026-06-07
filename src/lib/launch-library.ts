@@ -7092,9 +7092,15 @@ function exactWorkflowBoost(entry: LaunchEntry, queryText: string): number {
   }
   if (
     entry.id === "ll_p12r2_portal_message_routing" &&
-    /\b(portal\s+message\s+(routed|went|routing)|portal\s+message\s+wrong\s+(team|place|pool)|patient\s+message\s+wrong\s+team|mychart\s+message\s+wrong\s+team)\b/.test(queryText)
+    /\b((portal|mychart|patient\s+portal|patient)\s+message\s+(routed|went|routing|sent|landed|wrong\s+(team|place|pool|inbox|queue))|message\s+(routed|sent|went)\s+to\s+wrong\s+(pool|team|inbox|queue)|portal\s+message\s+routing)\b/.test(queryText)
   ) {
-    return 30;
+    return 40;
+  }
+  if (
+    entry.id === "ll_signed_note_addendum_correction" &&
+    /\b(correct(ing)?\s+(a\s+)?signed\s+note|signed\s+note\s+(correction|addendum|fix)|edit\s+(a\s+)?signed\s+note|change\s+(a\s+)?signed\s+note|modify\s+(a\s+)?signed\s+note|amend\s+(a\s+)?signed\s+note|note\s+addendum|addendum\s+to\s+note|^addendum$|\baddendum\b|late\s+entry|how\s+do\s+i\s+correct\s+(a\s+)?signed\s+note)\b/.test(queryText)
+  ) {
+    return 40;
   }
   if (
     entry.id === "ll_p12_portal_message_or_result_missing" &&
