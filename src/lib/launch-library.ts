@@ -32,6 +32,29 @@ export interface VisualAid {
   imageHref?: string;
   clearanceNote?: string;
   footerDisclaimer?: string;
+  /**
+   * Visual-mode pipeline (optional). When omitted, the aid is treated as a
+   * Mizly-original public visual (back-compat with existing aids). Learner
+   * surfaces only render aids that are `public_mizly_visual` AND
+   * `publicVisualStatus === "live"`. Everything else is admin-only.
+   */
+  visualMode?: "internal_reference" | "public_mizly_visual";
+  sourceReferenceAvailable?: "yes" | "no";
+  publicVisualStatus?:
+    | "not_started"
+    | "redrawn"
+    | "needs_review"
+    | "approved"
+    | "live";
+  screenshotReviewNotes?: string;
+  transcriptExplanation?: string;
+  whatUserIsTryingToDo?: string;
+  whereToClick?: string;
+  whatToCheck?: string;
+  whatToSay?: string;
+  escalationNote?: string;
+  /** Key into the realistic-visual catalog (see realistic-ehr-visual.tsx). */
+  realisticVisualKey?: string;
 }
 
 export interface LiveGuide {

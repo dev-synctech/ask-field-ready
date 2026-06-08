@@ -195,6 +195,10 @@ function dedupeVisualAids(aids: VisualAid[]): VisualAid[] {
  *   from learner-facing surfaces (Ask, Learn, Videos, public routes).
  */
 function isLearnerSafeVisualAid(aid: VisualAid): boolean {
+  // Visual-mode gate: if either field is set, both must hold for learner exposure.
+  if (aid.visualMode === "internal_reference") return false;
+  if (aid.publicVisualStatus && aid.publicVisualStatus !== "live") return false;
+  // Rights gate: default-safe for Mizly-original aids; strict for real screenshots.
   if (!aid.assetType) return true;
   if (aid.assetType === "cleaned_svg" || aid.assetType === "redrawn_mock") return true;
   return aid.rightsStatus === "cleared_for_public_training";

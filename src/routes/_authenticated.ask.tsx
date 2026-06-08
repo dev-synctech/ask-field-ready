@@ -19,6 +19,8 @@ import {
 import { ASK_SAFETY_LINE } from "@/lib/legal";
 import { searchItems, type ContentType, type ContentItem } from "@/lib/demo-data";
 import { supabase } from "@/integrations/supabase/client";
+import { learnerWorkflowsForAsk } from "@/lib/visual-mode";
+import { RealisticEHRVisual, hasRealisticVisual } from "@/components/realistic-ehr-visual";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
@@ -1442,25 +1444,48 @@ function VisualGuideSection({ answer }: { answer: AskAnswer }) {
     return "Training video";
   };
 
+  // Public learner mode only: live, redrawn Mizly walkthrough visuals.
+  const askId = answer.sourceEntry?.id;
+  const learnerWorkflow = askId
+    ? learnerWorkflowsForAsk(askId).find((w) => hasRealisticVisual(w.realistic_visual_key))
+    : undefined;
+
+  const realisticVisualBlock = learnerWorkflow ? (
+    <figure className="rounded-xl border border-border bg-card p-3">
+      <figcaption className="mb-2 flex items-center justify-between gap-2">
+        <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
+          Mizly walkthrough visual
+        </span>
+        <span className="text-[10px] text-muted-foreground">{learnerWorkflow.workflow_title}</span>
+      </figcaption>
+      <RealisticEHRVisual visualKey={learnerWorkflow.realistic_visual_key as never} />
+    </figure>
+  ) : null;
+
   if (!answer.visualAids.length) {
     const topGap = answer.kbSupport.gaps[0];
     return (
       <Section title="VISUAL GUIDE">
-        <div className="rounded-xl border border-dashed border-border bg-secondary/45 p-4">
-          <div className="flex items-start gap-3">
-            <span className="size-9 shrink-0 rounded-xl bg-primary-soft text-primary flex items-center justify-center">
-              <ImageIcon className="size-4" />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">No visual guide yet</span>
-              <span className="mt-0.5 block text-sm font-semibold text-foreground">
-                {topGap?.label ?? "Written walkthrough only for now"}
-              </span>
-              <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
-                Mizly has the written workflow. The content factory should add a sanitized screenshot, click path, or short training clip next.
-              </span>
-            </span>
-          </div>
+        <div className="space-y-3">
+          {realisticVisualBlock}
+          {!realisticVisualBlock && (
+            <div className="rounded-xl border border-dashed border-border bg-secondary/45 p-4">
+              <div className="flex items-start gap-3">
+                <span className="size-9 shrink-0 rounded-xl bg-primary-soft text-primary flex items-center justify-center">
+                  <ImageIcon className="size-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[10px] uppercase tracking-wider text-muted-foreground font-medium">No visual guide yet</span>
+                  <span className="mt-0.5 block text-sm font-semibold text-foreground">
+                    {topGap?.label ?? "Written walkthrough only for now"}
+                  </span>
+                  <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                    Mizly has the written workflow. The content factory should add a sanitized screenshot, click path, or short training clip next.
+                  </span>
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </Section>
     );
@@ -1469,6 +1494,7 @@ function VisualGuideSection({ answer }: { answer: AskAnswer }) {
   return (
     <Section title="VISUAL GUIDE">
       <div className="space-y-3">
+        {realisticVisualBlock}
         {answer.visualAids.map((aid, i) => {
           const Icon = iconFor(aid.kind);
           const body = (
