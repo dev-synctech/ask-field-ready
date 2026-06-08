@@ -12,11 +12,16 @@ function LearnPage() {
     <div className="max-w-3xl mx-auto px-5 py-8">
       <Header title="Learn" subtitle="Short lessons organized by role, domain, and go-live phase." />
 
-      <div className="mt-6 rounded-2xl border border-dashed border-border bg-surface p-5">
-        <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Coming soon</div>
-        <div className="mt-1 font-display font-semibold">Visual references</div>
-        <div className="mt-1 text-sm text-muted-foreground">Coming after attorney review.</div>
-      </div>
+      <Link
+        to="/org-library"
+        className="mt-6 block rounded-2xl border border-primary/30 bg-primary/5 p-5 hover:bg-primary/10 transition"
+      >
+        <div className="text-[10px] uppercase tracking-wider text-primary font-semibold">Your organization</div>
+        <div className="mt-1 font-display font-semibold">Org content library</div>
+        <div className="mt-1 text-sm text-muted-foreground">
+          Tip sheets, screenshots, training videos, and LearnShare links your org admin has approved for ATE use.
+        </div>
+      </Link>
 
       <div className="mt-6 space-y-4">
         {MODULES.map(m => {
