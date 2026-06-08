@@ -19,6 +19,8 @@ import {
 import { ASK_SAFETY_LINE } from "@/lib/legal";
 import { searchItems, type ContentType, type ContentItem } from "@/lib/demo-data";
 import { supabase } from "@/integrations/supabase/client";
+import { learnerWorkflowsForAsk } from "@/lib/visual-mode";
+import { RealisticEHRVisual, hasRealisticVisual } from "@/components/realistic-ehr-visual";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
