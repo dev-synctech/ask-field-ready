@@ -1444,6 +1444,12 @@ function VisualGuideSection({ answer }: { answer: AskAnswer }) {
     return "Training video";
   };
 
+  // Public learner mode only: live, redrawn Mizly walkthrough visuals.
+  const askId = answer.sourceEntry?.id;
+  const learnerWorkflow = askId
+    ? learnerWorkflowsForAsk(askId).find((w) => hasRealisticVisual(w.realistic_visual_key))
+    : undefined;
+
   if (!answer.visualAids.length) {
     const topGap = answer.kbSupport.gaps[0];
     return (
