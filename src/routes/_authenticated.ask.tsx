@@ -1493,6 +1493,22 @@ function VisualGuideSection({ answer }: { answer: AskAnswer }) {
                   ))}
                 </ul>
               ) : null}
+              {aid.assetType === "rights_cleared_screenshot" &&
+              aid.rightsStatus === "cleared_for_public_training" &&
+              aid.imageHref ? (
+                <figure className="mt-3">
+                  <img
+                    src={aid.imageHref}
+                    alt={aid.title}
+                    loading="lazy"
+                    className="w-full rounded-lg border border-border"
+                  />
+                  <figcaption className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+                    {aid.footerDisclaimer ??
+                      "For explanatory purposes only. Mizly is not affiliated with, endorsed by, or certified by any healthcare software vendor."}
+                  </figcaption>
+                </figure>
+              ) : null}
             </>
           );
 

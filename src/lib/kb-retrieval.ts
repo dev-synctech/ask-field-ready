@@ -184,6 +184,22 @@ function dedupeVisualAids(aids: VisualAid[]): VisualAid[] {
   });
 }
 
+/**
+ * Rights-clearance gate for learner-facing visuals.
+ *
+ * - Aids with no `assetType` are Mizly-original (cleaned SVG / redrawn mock /
+ *   text-only click path) and are always allowed.
+ * - `rights_cleared_screenshot` aids are only allowed when
+ *   `rightsStatus === "cleared_for_public_training"`. All other states
+ *   (unknown / internal_only / needs_legal_review, or missing) are stripped
+ *   from learner-facing surfaces (Ask, Learn, Videos, public routes).
+ */
+function isLearnerSafeVisualAid(aid: VisualAid): boolean {
+  if (!aid.assetType) return true;
+  if (aid.assetType === "cleaned_svg" || aid.assetType === "redrawn_mock") return true;
+  return aid.rightsStatus === "cleared_for_public_training";
+}
+
 function gapsFor(visualAids: VisualAid[], relatedItems: ContentItem[]): KbGap[] {
   const has = (kind: VisualAidKind) => visualAids.some(aid => aid.kind === kind);
   const hasRelatedVideo = relatedItems.some(item => item.content_type === "video");
@@ -212,7 +228,7 @@ export function retrieveKbSupport(
     VISUAL_ASSETS
       .filter(asset => queryMatches(asset, query, entry, relatedItems))
       .map(({ id: _id, entryIds: _entryIds, contentIds: _contentIds, keywords: _keywords, ...aid }) => aid),
-  );
+  ).filter(isLearnerSafeVisualAid);
 
   const matches: KbMatch[] = [
     {

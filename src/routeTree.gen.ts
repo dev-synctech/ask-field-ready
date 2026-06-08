@@ -41,6 +41,7 @@ import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminTaxonomyRouteImport } from './routes/_authenticated.admin_.taxonomy'
 import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authenticated.admin_.sources'
 import { Route as AuthenticatedAdminSourcePacksRouteImport } from './routes/_authenticated.admin_.source-packs'
+import { Route as AuthenticatedAdminScreenshotRightsRouteImport } from './routes/_authenticated.admin_.screenshot-rights'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
 import { Route as AuthenticatedAdminFoundingAccessRouteImport } from './routes/_authenticated.admin_.founding-access'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated.admin_.feedback'
@@ -220,6 +221,12 @@ const AuthenticatedAdminSourcePacksRoute =
     path: '/admin/source-packs',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminScreenshotRightsRoute =
+  AuthenticatedAdminScreenshotRightsRouteImport.update({
+    id: '/admin_/screenshot-rights',
+    path: '/admin/screenshot-rights',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminQuestionsRoute =
   AuthenticatedAdminQuestionsRouteImport.update({
     id: '/admin_/questions',
@@ -308,6 +315,7 @@ export interface FileRoutesByFullPath {
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/admin/screenshot-rights': typeof AuthenticatedAdminScreenshotRightsRoute
   '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
@@ -351,6 +359,7 @@ export interface FileRoutesByTo {
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/admin/screenshot-rights': typeof AuthenticatedAdminScreenshotRightsRoute
   '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/admin/sources': typeof AuthenticatedAdminSourcesRoute
   '/admin/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
@@ -396,6 +405,7 @@ export interface FileRoutesById {
   '/_authenticated/admin_/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin_/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
   '/_authenticated/admin_/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/_authenticated/admin_/screenshot-rights': typeof AuthenticatedAdminScreenshotRightsRoute
   '/_authenticated/admin_/source-packs': typeof AuthenticatedAdminSourcePacksRoute
   '/_authenticated/admin_/sources': typeof AuthenticatedAdminSourcesRoute
   '/_authenticated/admin_/taxonomy': typeof AuthenticatedAdminTaxonomyRoute
@@ -441,6 +451,7 @@ export interface FileRouteTypes {
     | '/admin/feedback'
     | '/admin/founding-access'
     | '/admin/questions'
+    | '/admin/screenshot-rights'
     | '/admin/source-packs'
     | '/admin/sources'
     | '/admin/taxonomy'
@@ -484,6 +495,7 @@ export interface FileRouteTypes {
     | '/admin/feedback'
     | '/admin/founding-access'
     | '/admin/questions'
+    | '/admin/screenshot-rights'
     | '/admin/source-packs'
     | '/admin/sources'
     | '/admin/taxonomy'
@@ -528,6 +540,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin_/feedback'
     | '/_authenticated/admin_/founding-access'
     | '/_authenticated/admin_/questions'
+    | '/_authenticated/admin_/screenshot-rights'
     | '/_authenticated/admin_/source-packs'
     | '/_authenticated/admin_/sources'
     | '/_authenticated/admin_/taxonomy'
@@ -786,6 +799,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSourcePacksRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/screenshot-rights': {
+      id: '/_authenticated/admin_/screenshot-rights'
+      path: '/admin/screenshot-rights'
+      fullPath: '/admin/screenshot-rights'
+      preLoaderRoute: typeof AuthenticatedAdminScreenshotRightsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/questions': {
       id: '/_authenticated/admin_/questions'
       path: '/admin/questions'
@@ -874,6 +894,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminFoundingAccessRoute: typeof AuthenticatedAdminFoundingAccessRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
+  AuthenticatedAdminScreenshotRightsRoute: typeof AuthenticatedAdminScreenshotRightsRoute
   AuthenticatedAdminSourcePacksRoute: typeof AuthenticatedAdminSourcePacksRoute
   AuthenticatedAdminSourcesRoute: typeof AuthenticatedAdminSourcesRoute
   AuthenticatedAdminTaxonomyRoute: typeof AuthenticatedAdminTaxonomyRoute
@@ -906,6 +927,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminFoundingAccessRoute: AuthenticatedAdminFoundingAccessRoute,
   AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
+  AuthenticatedAdminScreenshotRightsRoute:
+    AuthenticatedAdminScreenshotRightsRoute,
   AuthenticatedAdminSourcePacksRoute: AuthenticatedAdminSourcePacksRoute,
   AuthenticatedAdminSourcesRoute: AuthenticatedAdminSourcesRoute,
   AuthenticatedAdminTaxonomyRoute: AuthenticatedAdminTaxonomyRoute,
