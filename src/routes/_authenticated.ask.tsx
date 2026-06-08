@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Search, Sparkles, BookOpen, ListChecks, Film, ClipboardCheck,
   NotebookPen, Copy, Bookmark, Loader2, Clock, X, ShieldCheck,
-  ThumbsUp, ThumbsDown, MessageSquarePlus, FileQuestion, CheckCircle2, AlertTriangle,
+  ThumbsUp, ThumbsDown, MessageSquarePlus, MessageSquare, FileQuestion, CheckCircle2, AlertTriangle,
   ImageIcon, MousePointerClick,
 } from "lucide-react";
 import { toast } from "sonner";
