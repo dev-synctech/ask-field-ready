@@ -126,8 +126,12 @@ function Landing() {
             <p className="mt-5 text-xl md:text-2xl font-display text-foreground/85 max-w-xl">
               Small answers for big go-live moments.
             </p>
+            <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 text-[11px] font-medium text-primary">
+              <Sparkles className="size-3" />
+              Real-time support intelligence for go-live teams
+            </div>
             <p className="mt-5 text-[15px] md:text-base text-muted-foreground max-w-lg leading-relaxed">
-              The field reference for healthcare go-live consultants. When the floor breaks, Mizly tells you the next move — what to say, what to check, where to click, when to escalate. Built for the thirty seconds between rooms.
+              The field reference for healthcare go-live consultants and at-the-elbow support. When the floor breaks, Mizly tells you the next move — what to say, what to check, where to click, when to escalate. Built for the thirty seconds between rooms.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Link
@@ -253,6 +257,39 @@ function Landing() {
       </section>
 
       <LandingVideoPreview onJoin={() => setWaitlistOpen(true)} />
+
+      {/* ATE Mode positioning */}
+      <section className="border-t border-border bg-background">
+        <div className="max-w-6xl mx-auto px-5 py-16 md:py-20">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-elevated px-3 py-1 text-[11px] font-medium text-muted-foreground">
+              <MessageSquare className="size-3 text-teal" />
+              ATE Mode
+            </div>
+            <h2 className="mt-5 text-3xl md:text-4xl font-display font-semibold tracking-tight text-foreground">
+              For the moments when "I don't know" costs trust
+            </h2>
+            <p className="mt-5 text-base md:text-lg leading-relaxed text-muted-foreground">
+              Go-live floors move fast. End users ask questions about orders, notes, results, scheduling, billing, access, documentation, and screens they cannot find. Mizly helps ATEs respond in the moment with plain-language answers, visual guidance, and escalation paths.
+            </p>
+            <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
+              {[
+                "Answer workflow questions in real time",
+                "Coach ATEs on what to say",
+                "Show where to click and what to check",
+                "Standardize support across the floor",
+                "Escalate cleanly when the issue needs build, access, or command-center help",
+              ].map((b) => (
+                <li key={b} className="flex items-start gap-2.5 rounded-xl border border-border bg-card px-3.5 py-3 shadow-soft">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-teal" />
+                  <span className="text-sm leading-snug text-foreground/85">{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
 
       {/* Section 1: Pillars */}
       <section className="border-t border-border bg-surface">

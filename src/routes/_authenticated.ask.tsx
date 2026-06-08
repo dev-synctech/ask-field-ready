@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Search, Sparkles, BookOpen, ListChecks, Film, ClipboardCheck,
   NotebookPen, Copy, Bookmark, Loader2, Clock, X, ShieldCheck,
-  ThumbsUp, ThumbsDown, MessageSquarePlus, FileQuestion, CheckCircle2, AlertTriangle,
+  ThumbsUp, ThumbsDown, MessageSquarePlus, MessageSquare, FileQuestion, CheckCircle2, AlertTriangle,
   ImageIcon, MousePointerClick,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -686,6 +686,7 @@ function ClarifierThread({
 function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
   const compact = compactAnswer(answer);
   const visual = visualForAnswer(answer);
+  const [mode, setMode] = useState<"answer" | "say" | "escalate">("answer");
 
   useEffect(() => {
     if (visual) return;
@@ -746,50 +747,148 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
             </section>
           )}
 
-          <section className="rounded-2xl border border-success/25 bg-success/5 p-3.5 border-l-[5px] border-l-success">
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-success font-semibold mb-3">
-              <Clock className="size-3.5" /> FIRST 90 SECONDS
-            </div>
-            <ol className="space-y-2.5 md:space-y-0 md:grid md:grid-cols-3 md:gap-2">
-              {compact.steps.map((step, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm leading-snug">
-                  <span className="size-6 shrink-0 rounded-full bg-success/15 text-success text-xs font-semibold flex items-center justify-center">
-                    {i + 1}
-                  </span>
-                  <StepLine text={step} />
-                </li>
-              ))}
-            </ol>
-            <div className="mt-3 rounded-xl bg-card border border-border px-3 py-2.5 text-sm">
-              <span className="font-semibold text-foreground">Say this: </span>
-              <span className="text-foreground/85">"{compact.sayThis}"</span>
-            </div>
-            <div className="mt-2 rounded-xl bg-card/70 border border-border px-3 py-2 text-xs leading-relaxed text-muted-foreground">
-              <span className="font-semibold text-foreground">Check: </span>
-              {compact.checkThis.join(" | ")}
-            </div>
-          </section>
+          <div role="tablist" aria-label="ATE Mode view" className="inline-flex w-full sm:w-auto rounded-xl border border-border bg-surface-elevated p-1 gap-1">
+            {([
+              { id: "answer", label: "Answer" },
+              { id: "say", label: "Say this" },
+              { id: "escalate", label: "Escalate" },
+            ] as const).map((t) => {
+              const active = mode === t.id;
+              return (
+                <button
+                  key={t.id}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setMode(t.id)}
+                  className={`flex-1 sm:flex-none h-9 px-3 rounded-lg text-xs font-medium transition-colors ${
+                    active
+                      ? "bg-card text-foreground shadow-soft border border-border"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
 
-          <section>
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">IF IT WORKS / IF IT DOESN'T</div>
-            <div className="grid sm:grid-cols-2 gap-2.5">
-              <div className="rounded-2xl border border-success/25 bg-success/5 p-3.5">
-                <div className="flex items-center gap-2 text-sm font-semibold text-success">
-                  <CheckCircle2 className="size-4" /> What should happen
+          {mode === "answer" && (
+            <>
+              <section className="rounded-2xl border border-success/25 bg-success/5 p-3.5 border-l-[5px] border-l-success">
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-success font-semibold mb-3">
+                  <Clock className="size-3.5" /> FIRST 90 SECONDS
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-foreground/85">{compact.ifWorks}</p>
+                <ol className="space-y-2.5 md:space-y-0 md:grid md:grid-cols-3 md:gap-2">
+                  {compact.steps.map((step, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm leading-snug">
+                      <span className="size-6 shrink-0 rounded-full bg-success/15 text-success text-xs font-semibold flex items-center justify-center">
+                        {i + 1}
+                      </span>
+                      <StepLine text={step} />
+                    </li>
+                  ))}
+                </ol>
+                <div className="mt-3 rounded-xl bg-card border border-border px-3 py-2.5 text-sm">
+                  <span className="font-semibold text-foreground">Say this: </span>
+                  <span className="text-foreground/85">"{compact.sayThis}"</span>
+                </div>
+                <div className="mt-2 rounded-xl bg-card/70 border border-border px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+                  <span className="font-semibold text-foreground">Check: </span>
+                  {compact.checkThis.join(" | ")}
+                </div>
+              </section>
+
+              <section>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">IF IT WORKS / IF IT DOESN'T</div>
+                <div className="grid sm:grid-cols-2 gap-2.5">
+                  <div className="rounded-2xl border border-success/25 bg-success/5 p-3.5">
+                    <div className="flex items-center gap-2 text-sm font-semibold text-success">
+                      <CheckCircle2 className="size-4" /> What should happen
+                    </div>
+                    <p className="mt-2 text-sm leading-relaxed text-foreground/85">{compact.ifWorks}</p>
+                  </div>
+                  <div className="rounded-2xl border border-warning/35 bg-warning/10 p-3.5">
+                    <div className="flex items-center gap-2 text-sm font-semibold text-warning">
+                      <AlertTriangle className="size-4" /> If you don't see it
+                    </div>
+                    <p className="mt-2 text-sm leading-relaxed text-foreground/85">{compact.ifNot}</p>
+                    <div className="mt-2 inline-flex items-center rounded-full bg-card border border-border px-2.5 py-1 text-[11px] font-medium text-foreground">
+                      Escalate to: {compact.escalationTarget}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </>
+          )}
+
+          {mode === "say" && (
+            <section className="rounded-2xl border border-primary/25 bg-primary/5 p-4">
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-primary font-semibold mb-3">
+                <MessageSquare className="size-3.5" /> SAY THIS
               </div>
-              <div className="rounded-2xl border border-warning/35 bg-warning/10 p-3.5">
-                <div className="flex items-center gap-2 text-sm font-semibold text-warning">
-                  <AlertTriangle className="size-4" /> If you don't see it
+              <p className="font-display text-lg md:text-xl leading-snug text-foreground">
+                "{compact.sayThis}"
+              </p>
+              {answer.whatToSay.length > 1 && (
+                <div className="mt-4">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">More phrasing</div>
+                  <ul className="space-y-2">
+                    {answer.whatToSay.slice(0, 4).map((line, i) => (
+                      <li key={i} className="rounded-xl bg-card border border-border px-3 py-2 text-sm text-foreground/85">
+                        "{stripOuterQuotes(line)}"
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-foreground/85">{compact.ifNot}</p>
-                <div className="mt-2 inline-flex items-center rounded-full bg-card border border-border px-2.5 py-1 text-[11px] font-medium text-foreground">
-                  Escalate to: {compact.escalationTarget}
-                </div>
+              )}
+              <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
+                Use plain language. Stay with the user until the next step is stable.
+              </p>
+            </section>
+          )}
+
+          {mode === "escalate" && (
+            <section className="rounded-2xl border border-warning/35 bg-warning/10 p-4 space-y-3">
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-warning font-semibold">
+                <AlertTriangle className="size-3.5" /> ESCALATE
               </div>
-            </div>
-          </section>
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-1.5">Who to escalate to</div>
+                <div className="inline-flex items-center rounded-full bg-card border border-border px-2.5 py-1 text-[12px] font-medium text-foreground">
+                  {compact.escalationTarget}
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-foreground/85">{answer.whenToEscalate}</p>
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-1.5">Details to capture</div>
+                <ul className="space-y-1.5">
+                  {compact.checkThis.map((c, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-foreground/85">
+                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-warning" />
+                      <span>{c}</span>
+                    </li>
+                  ))}
+                  <li className="flex items-start gap-2 text-sm text-foreground/85">
+                    <span className="mt-1 size-1.5 shrink-0 rounded-full bg-warning" />
+                    <span>Exact step that fails and any visible error text</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-foreground/85">
+                    <span className="mt-1 size-1.5 shrink-0 rounded-full bg-warning" />
+                    <span>Scope: one user, one workstation, one unit, or floor-wide</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-foreground/85">
+                    <span className="mt-1 size-1.5 shrink-0 rounded-full bg-warning" />
+                    <span>Callback number and best time to reach</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="rounded-xl bg-card border border-border px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
+                <span className="font-semibold text-foreground">Do not guess: </span>
+                passwords, build configuration, access decisions, or clinical judgment. Hand those to the right owner with the details above.
+              </div>
+            </section>
+          )}
+
 
           <MizlyClipChip answer={answer} />
 
