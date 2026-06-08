@@ -686,6 +686,7 @@ function ClarifierThread({
 function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
   const compact = compactAnswer(answer);
   const visual = visualForAnswer(answer);
+  const [mode, setMode] = useState<"answer" | "say" | "escalate">("answer");
 
   useEffect(() => {
     if (visual) return;
