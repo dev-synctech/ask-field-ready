@@ -1890,3 +1890,61 @@ function FeedbackBar({ query }: { query: string }) {
     </div>
   );
 }
+
+function OrgMoreHelpChips({ askId }: { askId: string }) {
+  const assets = useOrgAssets();
+  const viewer = useViewer();
+  const items = assets.filter(
+    (a) => a.related_ask_ids.includes(askId) && isAteVisible(a, viewer),
+  );
+  if (items.length === 0) return null;
+  return (
+    <div className="mt-3">
+      <div className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium text-muted-foreground">
+        <ShieldCheck className="size-3" /> Org-approved
+      </div>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {items.map((a) => {
+          const isLink = !!a.external_url;
+          const Icon = isLink ? OrgLinkIcon : (a.asset_kind === "mp4" || a.asset_kind === "external_video") ? OrgFilmIcon : OrgFileIcon;
+          const label =
+            a.doc_type === "tip_sheet" ? "Open tip sheet"
+              : a.doc_type === "checklist" ? "View checklist"
+              : a.doc_type === "training_video" ? "Watch training video"
+              : a.doc_type === "screenshot" ? "View screenshot"
+              : "Open source doc";
+          return (
+            <button
+              key={a.id}
+              type="button"
+              onClick={() => {
+                recordView(a.id, viewer.role);
+                if (a.external_url) {
+                  window.open(a.external_url, "_blank", "noopener,noreferrer");
+                } else {
+                  toast(`Opening ${a.file_name ?? a.title} in secure viewer (demo)`);
+                }
+              }}
+              className="text-left min-h-11 rounded-xl border border-border bg-surface-elevated px-3 py-2 hover:border-primary/35 hover:bg-primary-soft/45 transition group"
+            >
+              <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium rounded-full px-2 py-0.5 bg-primary-soft text-primary">
+                <Icon className="size-3" /> {label}
+              </div>
+              {a.timestamp && (
+                <span className="ml-1 inline-flex rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                  Start at {a.timestamp}
+                </span>
+              )}
+              <div className="mt-1 text-sm font-medium leading-snug line-clamp-2 group-hover:text-primary">
+                {a.title}
+              </div>
+              <div className="text-[10px] text-muted-foreground mt-0.5">
+                {ASSET_KIND_LABEL[a.asset_kind]} · {a.workflow_area}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
