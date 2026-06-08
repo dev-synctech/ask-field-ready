@@ -235,6 +235,7 @@ function AdminPage() {
       <div className="mt-6 grid sm:grid-cols-2 gap-2.5">
         <AdminTile to="/admin/factory" icon={Edit3} title="Content factory" desc="Run intake, scan, rewrite, visual needs, review, and publish." />
         <AdminTile to="/admin/visual-needs" icon={Eye} title="Visual needs" desc="Screenshots, click paths, and short videos Ask still needs." />
+        <AdminTile to="/admin/screenshot-rights" icon={ShieldCheck} title="Screenshot rights" desc="Track rights-clearance, redaction, and learner exposure for real EHR screenshots." />
         <AdminTile to="/admin/video-map" icon={Video} title="Video reference map" desc="Source recordings, transcript status, learner-video pipeline (admin only)." />
         <AdminTile to="/admin/source-packs" icon={FileArchive} title="Source packs" desc="Register full KB bundles and manage quarantined intake." />
         <AdminTile to="/admin/conversions" icon={GitBranch} title="Source conversion queue" desc="Sanitize and route raw sources into Mizly content." />
