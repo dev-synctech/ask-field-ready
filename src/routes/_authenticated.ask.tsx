@@ -895,6 +895,7 @@ function AnswerView({ answer, query }: { answer: AskAnswer; query: string }) {
           <section>
             <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">MORE HELP</div>
             <MoreHelpChips answer={answer} />
+            <OrgMoreHelpChips askId={answerId(answer)} />
           </section>
 
           <CompactFeedbackBar query={query} answer={answer} />
