@@ -25,6 +25,7 @@ import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated.videos'
 import { Route as AuthenticatedScenariosRouteImport } from './routes/_authenticated.scenarios'
 import { Route as AuthenticatedPlaybooksRouteImport } from './routes/_authenticated.playbooks'
+import { Route as AuthenticatedOrgLibraryRouteImport } from './routes/_authenticated.org-library'
 import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated.learn'
 import { Route as AuthenticatedChecklistsRouteImport } from './routes/_authenticated.checklists'
 import { Route as AuthenticatedAskRouteImport } from './routes/_authenticated.ask'
@@ -44,6 +45,7 @@ import { Route as AuthenticatedAdminSourcesRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminSourcePacksRouteImport } from './routes/_authenticated.admin_.source-packs'
 import { Route as AuthenticatedAdminScreenshotRightsRouteImport } from './routes/_authenticated.admin_.screenshot-rights'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated.admin_.questions'
+import { Route as AuthenticatedAdminOrgLibraryRouteImport } from './routes/_authenticated.admin_.org-library'
 import { Route as AuthenticatedAdminFoundingAccessRouteImport } from './routes/_authenticated.admin_.founding-access'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated.admin_.feedback'
 import { Route as AuthenticatedAdminFactoryRouteImport } from './routes/_authenticated.admin_.factory'
@@ -131,6 +133,11 @@ const AuthenticatedScenariosRoute = AuthenticatedScenariosRouteImport.update({
 const AuthenticatedPlaybooksRoute = AuthenticatedPlaybooksRouteImport.update({
   id: '/playbooks',
   path: '/playbooks',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedOrgLibraryRoute = AuthenticatedOrgLibraryRouteImport.update({
+  id: '/org-library',
+  path: '/org-library',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedLearnRoute = AuthenticatedLearnRouteImport.update({
@@ -240,6 +247,12 @@ const AuthenticatedAdminQuestionsRoute =
     path: '/admin/questions',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminOrgLibraryRoute =
+  AuthenticatedAdminOrgLibraryRouteImport.update({
+    id: '/admin_/org-library',
+    path: '/admin/org-library',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminFoundingAccessRoute =
   AuthenticatedAdminFoundingAccessRouteImport.update({
     id: '/admin_/founding-access',
@@ -311,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/ask': typeof AuthenticatedAskRoute
   '/checklists': typeof AuthenticatedChecklistsRoute
   '/learn': typeof AuthenticatedLearnRoute
+  '/org-library': typeof AuthenticatedOrgLibraryRoute
   '/playbooks': typeof AuthenticatedPlaybooksRoute
   '/scenarios': typeof AuthenticatedScenariosRoute
   '/videos': typeof AuthenticatedVideosRoute
@@ -321,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/admin/factory': typeof AuthenticatedAdminFactoryRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
+  '/admin/org-library': typeof AuthenticatedAdminOrgLibraryRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/screenshot-rights': typeof AuthenticatedAdminScreenshotRightsRoute
   '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
@@ -356,6 +371,7 @@ export interface FileRoutesByTo {
   '/ask': typeof AuthenticatedAskRoute
   '/checklists': typeof AuthenticatedChecklistsRoute
   '/learn': typeof AuthenticatedLearnRoute
+  '/org-library': typeof AuthenticatedOrgLibraryRoute
   '/playbooks': typeof AuthenticatedPlaybooksRoute
   '/scenarios': typeof AuthenticatedScenariosRoute
   '/videos': typeof AuthenticatedVideosRoute
@@ -366,6 +382,7 @@ export interface FileRoutesByTo {
   '/admin/factory': typeof AuthenticatedAdminFactoryRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/admin/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
+  '/admin/org-library': typeof AuthenticatedAdminOrgLibraryRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/admin/screenshot-rights': typeof AuthenticatedAdminScreenshotRightsRoute
   '/admin/source-packs': typeof AuthenticatedAdminSourcePacksRoute
@@ -403,6 +420,7 @@ export interface FileRoutesById {
   '/_authenticated/ask': typeof AuthenticatedAskRoute
   '/_authenticated/checklists': typeof AuthenticatedChecklistsRoute
   '/_authenticated/learn': typeof AuthenticatedLearnRoute
+  '/_authenticated/org-library': typeof AuthenticatedOrgLibraryRoute
   '/_authenticated/playbooks': typeof AuthenticatedPlaybooksRoute
   '/_authenticated/scenarios': typeof AuthenticatedScenariosRoute
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
@@ -413,6 +431,7 @@ export interface FileRoutesById {
   '/_authenticated/admin_/factory': typeof AuthenticatedAdminFactoryRoute
   '/_authenticated/admin_/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/admin_/founding-access': typeof AuthenticatedAdminFoundingAccessRoute
+  '/_authenticated/admin_/org-library': typeof AuthenticatedAdminOrgLibraryRoute
   '/_authenticated/admin_/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/admin_/screenshot-rights': typeof AuthenticatedAdminScreenshotRightsRoute
   '/_authenticated/admin_/source-packs': typeof AuthenticatedAdminSourcePacksRoute
@@ -450,6 +469,7 @@ export interface FileRouteTypes {
     | '/ask'
     | '/checklists'
     | '/learn'
+    | '/org-library'
     | '/playbooks'
     | '/scenarios'
     | '/videos'
@@ -460,6 +480,7 @@ export interface FileRouteTypes {
     | '/admin/factory'
     | '/admin/feedback'
     | '/admin/founding-access'
+    | '/admin/org-library'
     | '/admin/questions'
     | '/admin/screenshot-rights'
     | '/admin/source-packs'
@@ -495,6 +516,7 @@ export interface FileRouteTypes {
     | '/ask'
     | '/checklists'
     | '/learn'
+    | '/org-library'
     | '/playbooks'
     | '/scenarios'
     | '/videos'
@@ -505,6 +527,7 @@ export interface FileRouteTypes {
     | '/admin/factory'
     | '/admin/feedback'
     | '/admin/founding-access'
+    | '/admin/org-library'
     | '/admin/questions'
     | '/admin/screenshot-rights'
     | '/admin/source-packs'
@@ -541,6 +564,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ask'
     | '/_authenticated/checklists'
     | '/_authenticated/learn'
+    | '/_authenticated/org-library'
     | '/_authenticated/playbooks'
     | '/_authenticated/scenarios'
     | '/_authenticated/videos'
@@ -551,6 +575,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin_/factory'
     | '/_authenticated/admin_/feedback'
     | '/_authenticated/admin_/founding-access'
+    | '/_authenticated/admin_/org-library'
     | '/_authenticated/admin_/questions'
     | '/_authenticated/admin_/screenshot-rights'
     | '/_authenticated/admin_/source-packs'
@@ -700,6 +725,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlaybooksRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/org-library': {
+      id: '/_authenticated/org-library'
+      path: '/org-library'
+      fullPath: '/org-library'
+      preLoaderRoute: typeof AuthenticatedOrgLibraryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/learn': {
       id: '/_authenticated/learn'
       path: '/learn'
@@ -833,6 +865,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminQuestionsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin_/org-library': {
+      id: '/_authenticated/admin_/org-library'
+      path: '/admin/org-library'
+      fullPath: '/admin/org-library'
+      preLoaderRoute: typeof AuthenticatedAdminOrgLibraryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin_/founding-access': {
       id: '/_authenticated/admin_/founding-access'
       path: '/admin/founding-access'
@@ -905,6 +944,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAskRoute: typeof AuthenticatedAskRoute
   AuthenticatedChecklistsRoute: typeof AuthenticatedChecklistsRoute
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRoute
+  AuthenticatedOrgLibraryRoute: typeof AuthenticatedOrgLibraryRoute
   AuthenticatedPlaybooksRoute: typeof AuthenticatedPlaybooksRoute
   AuthenticatedScenariosRoute: typeof AuthenticatedScenariosRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
@@ -913,6 +953,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminFactoryRoute: typeof AuthenticatedAdminFactoryRoute
   AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
   AuthenticatedAdminFoundingAccessRoute: typeof AuthenticatedAdminFoundingAccessRoute
+  AuthenticatedAdminOrgLibraryRoute: typeof AuthenticatedAdminOrgLibraryRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
   AuthenticatedAdminScreenshotRightsRoute: typeof AuthenticatedAdminScreenshotRightsRoute
   AuthenticatedAdminSourcePacksRoute: typeof AuthenticatedAdminSourcePacksRoute
@@ -939,6 +980,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAskRoute: AuthenticatedAskRoute,
   AuthenticatedChecklistsRoute: AuthenticatedChecklistsRoute,
   AuthenticatedLearnRoute: AuthenticatedLearnRoute,
+  AuthenticatedOrgLibraryRoute: AuthenticatedOrgLibraryRoute,
   AuthenticatedPlaybooksRoute: AuthenticatedPlaybooksRoute,
   AuthenticatedScenariosRoute: AuthenticatedScenariosRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
@@ -947,6 +989,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminFactoryRoute: AuthenticatedAdminFactoryRoute,
   AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
   AuthenticatedAdminFoundingAccessRoute: AuthenticatedAdminFoundingAccessRoute,
+  AuthenticatedAdminOrgLibraryRoute: AuthenticatedAdminOrgLibraryRoute,
   AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
   AuthenticatedAdminScreenshotRightsRoute:
     AuthenticatedAdminScreenshotRightsRoute,
@@ -1001,13 +1044,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

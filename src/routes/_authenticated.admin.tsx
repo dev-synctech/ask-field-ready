@@ -244,6 +244,7 @@ function AdminPage() {
         <AdminTile to="/admin/founding-access" icon={Users} title="Founding access" desc="Pilot interest submissions from the landing page." />
         <AdminTile to="/admin/coverage" icon={BarChart3} title="Coverage" desc="Where the library is thin across roles and phases." />
         <AdminTile to="/admin/sources" icon={FolderInput} title="Source library" desc="Admin-only raw source material." />
+        <AdminTile to="/admin/org-library" icon={FileArchive} title="Org content library" desc="Org-owned docs, tip sheets, screenshots, training links. ATEs see only approved items." />
         <AdminTile to="/admin/questions" icon={HelpCircle} title="Question bank" desc="Curated questions and their routed answers." />
         <AdminTile to="/admin/taxonomy" icon={Tags} title="Taxonomy" desc="Roles, domains, phases, urgency, escalation." />
         <AdminTile to="/admin/users" icon={Users} title="Users" desc="Roles and access." />
