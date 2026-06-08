@@ -1,0 +1,74 @@
+{
+  "internal_reference_label": "Internal reference only",
+  "workflows": [
+    {
+      "id": "vm_orders_full_workflow_map",
+      "askIds": ["ll_scope_orders", "ll_order_entry", "ll_order_entry_confusion"],
+      "workflow_title": "Orders — full workflow map",
+      "visual_mode": "public_mizly_visual",
+      "source_reference_available": "yes",
+      "public_visual_status": "live",
+      "realistic_visual_key": "orders_workflow",
+      "screenshot_review_notes": "Internal reference shows Orders activity, Order Entry tab, and Sign basket. PHI, org names, and vendor chrome must be removed from any learner exposure.",
+      "transcript_explanation": "User opens a patient chart, navigates to the Orders activity, places or modifies an order in the Order Entry tab, then signs in the basket. The most frequent failure is signing before the required fields (priority, indication, frequency) are completed.",
+      "what_user_is_trying_to_do": "Place or modify an order and sign it cleanly the first time.",
+      "where_to_click": "Left activity sidebar → Orders → Order Entry tab → search and add → Sign basket.",
+      "what_to_check": "Required fields are green, no red exclamation on the order row, signing context (encounter, authorizing provider) is correct.",
+      "what_to_say": "If signing fails, name the missing field aloud: 'Sign blocked — priority is missing on order line 2.'",
+      "escalation_note": "If the order set is locked or a required field is missing from the system (not just blank), escalate to the workflow analyst."
+    },
+    {
+      "id": "vm_notes_write_and_sign",
+      "askIds": [
+        "ll_scope_notes",
+        "ll_note_signing",
+        "ll_note_sidebar_or_note_type_missing",
+        "ll_note_unsigned_missing_required_field"
+      ],
+      "workflow_title": "Notes — where to write and sign notes",
+      "visual_mode": "public_mizly_visual",
+      "source_reference_available": "yes",
+      "public_visual_status": "live",
+      "realistic_visual_key": "notes_workflow",
+      "screenshot_review_notes": "Internal reference shows note sidebar, note-type picker, template body, and sign panel with required-field warning.",
+      "transcript_explanation": "User opens a patient encounter, opens the Notes activity, picks the correct note type, writes inside the template body, then signs. Frequent failure: cannot sign because a required SmartList or attestation is unanswered.",
+      "what_user_is_trying_to_do": "Document the visit and sign the note in the correct note type for billing and continuity.",
+      "where_to_click": "Notes activity in the left sidebar → New note → pick note type → write in body → Sign.",
+      "what_to_check": "Note type matches the encounter, required SmartLists are answered, attestation block is filled if you are a supervising clinician.",
+      "what_to_say": "If sign is blocked, read the warning out loud: 'Required field — attestation' before clicking again.",
+      "escalation_note": "If the correct note type is not in the picker for this encounter type, escalate to the template/build team."
+    },
+    {
+      "id": "vm_smarttools_smartlink_blank_wrong",
+      "askIds": ["ll_smarttools_smartlink", "ll_p12r2_smartlink_blank_or_wrong"],
+      "workflow_title": "SmartTools — SmartLink blank or wrong",
+      "visual_mode": "public_mizly_visual",
+      "source_reference_available": "yes",
+      "public_visual_status": "live",
+      "realistic_visual_key": "smartlink_workflow",
+      "screenshot_review_notes": "Internal reference shows SmartLink rendered with empty placeholder and wrong-context warning panel. Patient context info must be stripped on any public visual.",
+      "transcript_explanation": "User inserts a SmartLink in a note. It renders blank or pulls the wrong patient/encounter context. Frequent failure: SmartLink depends on data that is not entered yet, or the user is in the wrong encounter context.",
+      "what_user_is_trying_to_do": "Insert a SmartLink that pulls the correct, current patient data into the note.",
+      "where_to_click": "Note body → SmartTools button → search SmartLink by name → insert → refresh.",
+      "what_to_check": "SmartLink resolves to real data (not the placeholder name), and the data matches the current encounter.",
+      "what_to_say": "If blank, say what's missing: 'SmartLink for last A1c is blank — no result in the chart yet.'",
+      "escalation_note": "If the SmartLink resolves to another patient or another encounter, stop and escalate to security/build immediately."
+    },
+    {
+      "id": "vm_internal_los_reference",
+      "askIds": ["ll_level_of_service_selection"],
+      "workflow_title": "Level of Service / missing LOS — internal reference",
+      "visual_mode": "internal_reference",
+      "source_reference_available": "yes",
+      "public_visual_status": "not_started",
+      "realistic_visual_key": null,
+      "screenshot_review_notes": "Source pages show visit charge / LOS area in Ambulatory and GL3. Contains vendor chrome and org-specific lane names — strip before any public version.",
+      "transcript_explanation": "User cannot find or change the Level of Service on a visit charge. Most common cause is the LOS column hidden in the personalized schedule view or the charge is locked by claim status.",
+      "what_user_is_trying_to_do": "Set or change the Level of Service on the visit charge.",
+      "where_to_click": "Visit Navigator → Charge Capture → LOS field.",
+      "what_to_check": "Charge is not yet on a closed claim, LOS column is visible, user role allows charge edits.",
+      "what_to_say": "If LOS is locked, say which claim status is blocking it: 'LOS locked — claim is in submitted status.'",
+      "escalation_note": "Escalate to billing build if LOS picker is empty for a visit type that should have one."
+    }
+  ]
+}
