@@ -21,6 +21,11 @@ import { searchItems, type ContentType, type ContentItem } from "@/lib/demo-data
 import { supabase } from "@/integrations/supabase/client";
 import { learnerWorkflowsForAsk } from "@/lib/visual-mode";
 import { RealisticEHRVisual, hasRealisticVisual } from "@/components/realistic-ehr-visual";
+import {
+  useOrgAssets, useViewer, isAteVisible, recordView, recordDownload,
+  ASSET_KIND_LABEL,
+} from "@/lib/org-library";
+import { FileText as OrgFileIcon, Film as OrgFilmIcon, Link2 as OrgLinkIcon, Download as OrgDownloadIcon } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/ask")({
   head: () => ({ meta: [{ title: "Ask — Mizly" }] }),
