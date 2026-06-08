@@ -228,7 +228,7 @@ export function retrieveKbSupport(
     VISUAL_ASSETS
       .filter(asset => queryMatches(asset, query, entry, relatedItems))
       .map(({ id: _id, entryIds: _entryIds, contentIds: _contentIds, keywords: _keywords, ...aid }) => aid),
-  );
+  ).filter(isLearnerSafeVisualAid);
 
   const matches: KbMatch[] = [
     {
