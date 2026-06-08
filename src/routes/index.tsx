@@ -126,8 +126,12 @@ function Landing() {
             <p className="mt-5 text-xl md:text-2xl font-display text-foreground/85 max-w-xl">
               Small answers for big go-live moments.
             </p>
+            <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 text-[11px] font-medium text-primary">
+              <Sparkles className="size-3" />
+              Real-time support intelligence for go-live teams
+            </div>
             <p className="mt-5 text-[15px] md:text-base text-muted-foreground max-w-lg leading-relaxed">
-              The field reference for healthcare go-live consultants. When the floor breaks, Mizly tells you the next move — what to say, what to check, where to click, when to escalate. Built for the thirty seconds between rooms.
+              The field reference for healthcare go-live consultants and at-the-elbow support. When the floor breaks, Mizly tells you the next move — what to say, what to check, where to click, when to escalate. Built for the thirty seconds between rooms.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Link
