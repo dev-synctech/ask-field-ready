@@ -1495,6 +1495,7 @@ function VisualGuideSection({ answer }: { answer: AskAnswer }) {
     <Section title="VISUAL GUIDE">
       <div className="space-y-3">
         {realisticVisualBlock}
+        {answer.visualAids.map((aid, i) => {
           const Icon = iconFor(aid.kind);
           const body = (
             <>
