@@ -400,7 +400,7 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
             {askIds.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
                 {askIds.map((id) => {
-                  const entry = LAUNCH_LIBRARY.find((e) => e.id === id);
+                  const entry = LAUNCH_LIBRARY.find((e: LaunchEntry) => e.id === id);
                   return (
                     <span key={id} className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full bg-primary/15 text-primary">
                       {entry?.title ?? id}
