@@ -146,6 +146,11 @@ function AssetRow({ asset, viewerEmail }: { asset: OrgAsset; viewerEmail: string
             <div className="text-sm font-medium truncate">{asset.title}</div>
             <VisibilityBadge v={asset.visibility} />
             <ApprovalBadge status={asset.approval_status} />
+            {(!asset.phi_attestation || !asset.rights_attestation) && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-warning/15 text-warning inline-flex items-center gap-1">
+                <AlertTriangle className="size-3" /> Needs attestation
+              </span>
+            )}
             {asset.risk_flags.length > 0 && (
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-destructive/15 text-destructive inline-flex items-center gap-1">
                 <ShieldAlert className="size-3" /> {asset.risk_flags.length} risk
