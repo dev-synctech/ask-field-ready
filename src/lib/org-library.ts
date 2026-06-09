@@ -100,13 +100,22 @@ const seed = registry as Registry;
 // ---------- in-memory mutable store ----------
 const LS_KEY = "mizly.org-library.user-assets";
 
+function migrateVisibility(v: unknown): Visibility {
+  if (v === "ate_visible" || v === "org_ate_visible") return "ate_visible";
+  return "org_internal";
+}
+
+function normalizeAsset(a: OrgAsset): OrgAsset {
+  return { ...a, visibility: migrateVisibility(a.visibility) };
+}
+
 function loadUserAssets(): OrgAsset[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(LS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as OrgAsset[]) : [];
+    return Array.isArray(parsed) ? (parsed as OrgAsset[]).map(normalizeAsset) : [];
   } catch {
     return [];
   }
@@ -123,7 +132,7 @@ function persistUserAssets() {
   }
 }
 
-let _assets: OrgAsset[] = [...loadUserAssets(), ...seed.assets];
+let _assets: OrgAsset[] = [...loadUserAssets(), ...seed.assets.map(normalizeAsset)];
 let _audit: AuditEntry[] = [];
 const _orgs: Organization[] = seed.organizations;
 const _viewer: ViewerContext = seed.current_viewer;
