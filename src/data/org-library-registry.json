@@ -34,7 +34,7 @@
       "download_disabled": true,
       "watermark": true,
       "risk_flags": [],
-      "related_ask_ids": ["ans_provider_notes_orders"]
+      "related_ask_ids": ["ll_scope_notes", "ans_provider_notes_orders"]
     },
     {
       "id": "oa_seed_002",
