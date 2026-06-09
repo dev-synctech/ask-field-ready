@@ -173,22 +173,14 @@ export function useAuditLog(): AuditEntry[] {
 
 // ---------- access rules ----------
 /**
- * Single source of truth for whether a raw uploaded asset may be shown to an
- * ATE learner in the floor surfaces (Learn / Videos / Tip Sheets / Ask).
- *
- * - Must belong to the viewer's organization.
- * - Visibility must be org_ate_visible (admin_only_source never leaks).
- * - Must be explicitly approved by an org admin.
- * - Rights + PHI attestations must both be confirmed.
- * - public_mizly_demo content is handled by other registries, never here.
+ * Simplified gating: an asset is visible to ATE users when it belongs to the
+ * viewer's organization and is marked ate_visible. No approval / attestation
+ * gates — the org admin decides by toggling visibility.
  */
 export function isAteVisible(asset: OrgAsset, viewer: ViewerContext): boolean {
   return (
     asset.organization_id === viewer.organization_id &&
-    asset.visibility === "org_ate_visible" &&
-    asset.approval_status === "approved" &&
-    asset.rights_attestation === true &&
-    asset.phi_attestation === true
+    asset.visibility === "ate_visible"
   );
 }
 
@@ -223,14 +215,13 @@ export function addAsset(
   > &
     Partial<Pick<OrgAsset, "visibility" | "approval_status">>,
 ): OrgAsset {
-  const approved = input.approval_status === "approved";
   const a: OrgAsset = {
     id: `oa_user_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     organization_id: _viewer.organization_id,
-    visibility: input.visibility ?? "admin_only_source",
-    approval_status: input.approval_status ?? "pending",
-    approved_by: approved ? input.uploaded_by : null,
-    approved_at: approved ? new Date().toISOString() : null,
+    visibility: input.visibility ?? "org_internal",
+    approval_status: input.approval_status ?? "approved",
+    approved_by: input.uploaded_by,
+    approved_at: new Date().toISOString(),
     uploaded_at: new Date().toISOString(),
     ...input,
   };
