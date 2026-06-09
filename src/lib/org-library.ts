@@ -215,19 +215,21 @@ export function addAsset(
     | "approved_at"
     | "visibility"
   > &
-    Partial<Pick<OrgAsset, "visibility">>,
+    Partial<Pick<OrgAsset, "visibility" | "approval_status">>,
 ): OrgAsset {
+  const approved = input.approval_status === "approved";
   const a: OrgAsset = {
-    id: `oa_${Date.now()}`,
+    id: `oa_user_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     organization_id: _viewer.organization_id,
     visibility: input.visibility ?? "admin_only_source",
-    approval_status: "pending",
-    approved_by: null,
-    approved_at: null,
+    approval_status: input.approval_status ?? "pending",
+    approved_by: approved ? input.uploaded_by : null,
+    approved_at: approved ? new Date().toISOString() : null,
     uploaded_at: new Date().toISOString(),
     ...input,
   };
   _assets = [a, ..._assets];
+  persistUserAssets();
   logAudit({ actor: a.uploaded_by, action: "upload", asset_id: a.id });
   emit();
   return a;
@@ -235,12 +237,14 @@ export function addAsset(
 
 export function updateAsset(id: string, patch: Partial<OrgAsset>) {
   _assets = _assets.map((a) => (a.id === id ? { ...a, ...patch } : a));
+  persistUserAssets();
   logAudit({ actor: _viewer.role, action: "edit", asset_id: id });
   emit();
 }
 
 export function setVisibility(id: string, visibility: Visibility, actor: string) {
   _assets = _assets.map((a) => (a.id === id ? { ...a, visibility } : a));
+  persistUserAssets();
   logAudit({
     actor,
     action: "visibility_change",
