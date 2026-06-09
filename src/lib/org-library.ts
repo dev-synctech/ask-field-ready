@@ -61,6 +61,8 @@ export interface OrgAsset {
   watermark: boolean;
   risk_flags: string[];
   related_ask_ids: string[];
+  tags?: string[];
+  notes?: string;
 }
 
 export interface Organization {
