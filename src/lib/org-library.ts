@@ -265,6 +265,7 @@ export function approveAsset(id: string, actor: string) {
         }
       : a,
   );
+  persistUserAssets();
   logAudit({ actor, action: "approve", asset_id: id });
   emit();
 }
@@ -280,6 +281,7 @@ export function unapproveAsset(id: string, actor: string) {
         }
       : a,
   );
+  persistUserAssets();
   logAudit({ actor, action: "unapprove", asset_id: id });
   emit();
 }
