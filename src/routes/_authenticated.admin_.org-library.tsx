@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
-  ArrowLeft, Upload, Search, ShieldCheck, ShieldAlert, Check, X,
-  FileText, Film, Link2, Eye, EyeOff, AlertTriangle, ClipboardList,
+  ArrowLeft, Upload, Search, ShieldCheck, Check, X,
+  FileText, Film, Link2, Eye, EyeOff, ClipboardList,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
   useOrgAssets, useViewer, useAuditLog,
-  addAsset, approveAsset, unapproveAsset, setVisibility, updateAsset,
+  addAsset, setVisibility,
   VISIBILITY_LABEL, ASSET_KIND_LABEL, DOC_TYPES, ASSET_KINDS,
   type OrgAsset, type Visibility, type AssetKind, type DocType,
 } from "@/lib/org-library";
@@ -46,9 +46,8 @@ function OrgLibraryAdmin() {
 
   const counts = useMemo(() => ({
     total: assets.length,
-    ate: assets.filter((a) => a.visibility === "org_ate_visible" && a.approval_status === "approved").length,
-    pending: assets.filter((a) => a.approval_status === "pending").length,
-    flagged: assets.filter((a) => a.risk_flags.length > 0).length,
+    ate: assets.filter((a) => a.visibility === "ate_visible").length,
+    internal: assets.filter((a) => a.visibility === "org_internal").length,
   }), [assets]);
 
   return (
@@ -60,29 +59,26 @@ function OrgLibraryAdmin() {
           </Link>
           <Header
             title="Organization Content Library"
-            subtitle="Upload org-owned docs, tip sheets, screenshots, and training links. ATEs only see what you mark ATE-visible and approve."
+            subtitle="Upload org-owned tip sheets, docs, screenshots, and training links. Mark ATE-visible to share with assigned ATEs."
           />
         </div>
         <button
           onClick={() => setShowUpload(true)}
           className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90"
         >
-          <Upload className="size-4" /> Upload / Add link
+          <Upload className="size-4" /> Add asset
         </button>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="mt-6 grid grid-cols-3 gap-3">
         <KPI label="Total assets" value={counts.total} />
         <KPI label="ATE-visible" value={counts.ate} tone="success" />
-        <KPI label="Pending approval" value={counts.pending} tone="warning" />
-        <KPI label="Risk-flagged" value={counts.flagged} tone="danger" />
+        <KPI label="Org internal" value={counts.internal} />
       </div>
 
-      <div className="mt-4 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-xs text-foreground/80">
-        <div className="font-semibold flex items-center gap-2 mb-1">
-          <ShieldCheck className="size-3.5 text-warning" /> Organization-scoped
-        </div>
-        Raw docs and videos never leave your organization. ATEs see only items you mark ATE-visible and approve. Default for new uploads is admin-only.
+      <div className="mt-4 rounded-2xl border border-primary/30 bg-primary/5 p-4 text-xs text-foreground/80 inline-flex items-start gap-2">
+        <ShieldCheck className="size-3.5 text-primary mt-0.5" />
+        <span>ATE-visible content is available only to users assigned to this organization.</span>
       </div>
 
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-4 gap-2">
@@ -92,8 +88,8 @@ function OrgLibraryAdmin() {
         </div>
         <select value={visF} onChange={(e) => setVisF(e.target.value as Visibility | "all")} className={inputCls}>
           <option value="all">All visibility</option>
-          <option value="admin_only_source">Admin only</option>
-          <option value="org_ate_visible">ATE-visible</option>
+          <option value="org_internal">Org internal</option>
+          <option value="ate_visible">ATE-visible</option>
         </select>
         <select value={docF} onChange={(e) => setDocF(e.target.value as DocType | "all")} className={inputCls}>
           <option value="all">All doc types</option>
@@ -135,6 +131,7 @@ function OrgLibraryAdmin() {
 function AssetRow({ asset, viewerEmail }: { asset: OrgAsset; viewerEmail: string }) {
   const isLink = !!asset.external_url;
   const Icon = isLink ? Link2 : asset.asset_kind === "mp4" || asset.asset_kind === "external_video" ? Film : FileText;
+  const [confirming, setConfirming] = useState(false);
 
   return (
     <div className="rounded-xl border border-border bg-card p-4">
@@ -146,82 +143,61 @@ function AssetRow({ asset, viewerEmail }: { asset: OrgAsset; viewerEmail: string
           <div className="flex items-center gap-2 flex-wrap">
             <div className="text-sm font-medium truncate">{asset.title}</div>
             <VisibilityBadge v={asset.visibility} />
-            <ApprovalBadge status={asset.approval_status} />
-            {(!asset.phi_attestation || !asset.rights_attestation) && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-warning/15 text-warning inline-flex items-center gap-1">
-                <AlertTriangle className="size-3" /> Needs attestation
-              </span>
-            )}
-            {asset.risk_flags.length > 0 && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-destructive/15 text-destructive inline-flex items-center gap-1">
-                <ShieldAlert className="size-3" /> {asset.risk_flags.length} risk
-              </span>
-            )}
           </div>
           <div className="text-[11px] text-muted-foreground mt-0.5">
             {ASSET_KIND_LABEL[asset.asset_kind]} · {asset.department} · {asset.role} · {asset.workflow_area}
             {asset.timestamp && <> · @ {asset.timestamp}</>}
           </div>
           <div className="text-xs mt-1 text-foreground/80 line-clamp-2">{asset.summary}</div>
-          {!asset.phi_attestation && (
-            <div className="mt-2 text-[11px] text-warning inline-flex items-center gap-1">
-              <AlertTriangle className="size-3" /> PHI attestation missing — cannot mark ATE-visible until confirmed.
-            </div>
-          )}
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
-          {asset.visibility === "admin_only_source" ? (
+          {asset.visibility === "org_internal" ? (
             <button
-              onClick={() => {
-                if (!asset.phi_attestation || !asset.rights_attestation) {
-                  toast.error("Confirm rights + PHI attestation before exposing to ATEs.");
-                  return;
-                }
-                setVisibility(asset.id, "org_ate_visible", viewerEmail);
-                toast.success("Marked ATE-visible");
-              }}
+              onClick={() => setConfirming(true)}
               className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary inline-flex items-center gap-1.5"
             >
               <Eye className="size-3.5" /> Make ATE-visible
             </button>
           ) : (
             <button
-              onClick={() => { setVisibility(asset.id, "admin_only_source", viewerEmail); toast.success("Reverted to admin-only"); }}
+              onClick={() => { setVisibility(asset.id, "org_internal", viewerEmail); toast.success("Set to org internal"); }}
               className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary inline-flex items-center gap-1.5"
             >
-              <EyeOff className="size-3.5" /> Admin only
+              <EyeOff className="size-3.5" /> Set internal
             </button>
           )}
-          {asset.approval_status !== "approved" ? (
-            <button
-              onClick={() => {
-                if (!asset.phi_attestation || !asset.rights_attestation) {
-                  toast.error("Both attestations required to approve.");
-                  return;
-                }
-                approveAsset(asset.id, viewerEmail);
-                toast.success("Approved");
-              }}
-              className="text-xs px-3 py-1.5 rounded-lg bg-primary text-primary-foreground inline-flex items-center gap-1.5"
-            >
-              <Check className="size-3.5" /> Approve
-            </button>
-          ) : (
-            <button
-              onClick={() => { unapproveAsset(asset.id, viewerEmail); toast("Approval revoked"); }}
-              className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary inline-flex items-center gap-1.5"
-            >
-              <X className="size-3.5" /> Unapprove
-            </button>
-          )}
-          {!asset.phi_attestation && (
-            <button
-              onClick={() => { updateAsset(asset.id, { phi_attestation: true }); toast.success("PHI attestation confirmed"); }}
-              className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary"
-            >
-              Confirm PHI ok
-            </button>
-          )}
+        </div>
+      </div>
+
+      {confirming && (
+        <ConfirmDialog
+          onCancel={() => setConfirming(false)}
+          onConfirm={() => {
+            setVisibility(asset.id, "ate_visible", viewerEmail);
+            setConfirming(false);
+            toast.success("Now visible to ATEs in this organization");
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function ConfirmDialog({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 bg-foreground/60 flex items-center justify-center p-4" onClick={onCancel}>
+      <div className="bg-card rounded-2xl border border-border shadow-elevated max-w-sm w-full p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
+        <div className="font-display font-semibold flex items-center gap-2">
+          <Eye className="size-4 text-primary" /> Make this visible to ATEs in this organization?
+        </div>
+        <p className="text-xs text-muted-foreground">
+          ATE-visible content is available only to users assigned to this organization. You can change this any time.
+        </p>
+        <div className="flex justify-end gap-2">
+          <button onClick={onCancel} className="h-9 px-3 rounded-lg border border-border text-xs">Cancel</button>
+          <button onClick={onConfirm} className="h-9 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5">
+            <Check className="size-3.5" /> Make ATE-visible
+          </button>
         </div>
       </div>
     </div>
@@ -229,19 +205,8 @@ function AssetRow({ asset, viewerEmail }: { asset: OrgAsset; viewerEmail: string
 }
 
 function VisibilityBadge({ v }: { v: Visibility }) {
-  const cls =
-    v === "org_ate_visible" ? "bg-success/15 text-success"
-      : v === "public_mizly_demo" ? "bg-primary/15 text-primary"
-        : "bg-muted text-muted-foreground";
+  const cls = v === "ate_visible" ? "bg-success/15 text-success" : "bg-muted text-muted-foreground";
   return <span className={`text-[10px] px-2 py-0.5 rounded-full ${cls}`}>{VISIBILITY_LABEL[v]}</span>;
-}
-
-function ApprovalBadge({ status }: { status: OrgAsset["approval_status"] }) {
-  const cls =
-    status === "approved" ? "bg-success/15 text-success"
-      : status === "rejected" ? "bg-destructive/15 text-destructive"
-        : "bg-warning/15 text-warning";
-  return <span className={`text-[10px] px-2 py-0.5 rounded-full ${cls}`}>{status}</span>;
 }
 
 function KPI({ label, value, tone }: { label: string; value: number; tone?: "success" | "warning" | "danger" }) {
@@ -271,14 +236,10 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
   const [notes, setNotes] = useState("");
   const [askIds, setAskIds] = useState<string[]>([]);
   const [askQuery, setAskQuery] = useState("");
-  const [rights, setRights] = useState(false);
-  const [phi, setPhi] = useState(false);
-  const [approval, setApproval] = useState<"draft" | "approved">("draft");
-  const [ateVisible, setAteVisible] = useState(false);
+  const [visibility, setVisibilityState] = useState<Visibility>("ate_visible");
   const [confirmAte, setConfirmAte] = useState(false);
 
   const isLinkKind = ["external_video", "learnshare_link", "zoom_link"].includes(kind);
-  const canBeAteVisible = rights && phi && approval === "approved";
   const tags = tagsInput.split(",").map((t) => t.trim()).filter(Boolean);
 
   const askMatches = useMemo(() => {
@@ -307,18 +268,18 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
       external_url: isLinkKind ? externalUrl.trim() : null,
       timestamp: timestamp.trim() || null,
       uploaded_by: viewerEmail,
-      rights_attestation: rights,
-      phi_attestation: phi,
+      rights_attestation: true,
+      phi_attestation: true,
       download_disabled: isLinkKind,
       watermark: true,
-      risk_flags: phi ? [] : ["needs_phi_review"],
+      risk_flags: [],
       related_ask_ids: askIds,
       tags,
       notes: notes.trim() || undefined,
-      approval_status: approval === "approved" ? "approved" : "pending",
-      visibility: ateVisible && canBeAteVisible ? "org_ate_visible" : "admin_only_source",
+      approval_status: "approved",
+      visibility,
     });
-    toast.success("Asset saved");
+    toast.success(visibility === "ate_visible" ? "Saved — visible to ATEs" : "Saved as org internal");
     onClose();
   }
 
@@ -326,11 +287,7 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
     e.preventDefault();
     if (!title.trim()) { toast.error("Title required"); return; }
     if (isLinkKind && !externalUrl.trim()) { toast.error("Link URL required"); return; }
-    if (ateVisible && !canBeAteVisible) {
-      toast.error("ATE-visible requires approved + both attestations.");
-      return;
-    }
-    if (ateVisible) { setConfirmAte(true); return; }
+    if (visibility === "ate_visible") { setConfirmAte(true); return; }
     commit();
   }
 
@@ -351,7 +308,7 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
         </div>
 
         <div className="rounded-xl bg-primary/5 border border-primary/20 p-2.5 text-[11px] text-foreground/80">
-          Only <strong>approved + ATE-visible</strong> assets with both attestations appear to floor support users.
+          ATE-visible content is available only to users assigned to this organization.
         </div>
 
         <Field label="Title*">
@@ -440,7 +397,7 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
             )}
           </div>
           <div className="text-[11px] text-muted-foreground mt-1">
-            ATE users see this asset in More Help when they ask about the linked topics.
+            ATE users in this org see this asset in More Help when they ask about the linked topics.
           </div>
         </div>
 
@@ -448,49 +405,22 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className={`${inputCls} h-14 py-2`} />
         </Field>
 
-        <label className="flex items-start gap-2 rounded-xl border border-border bg-secondary/40 p-3 cursor-pointer">
-          <input type="checkbox" checked={rights} onChange={(e) => setRights(e.target.checked)} className="mt-0.5 size-4 accent-primary" />
-          <div className="text-xs">
-            <div className="font-medium">Rights attestation</div>
-            <div className="text-muted-foreground">The organization has permission to use this content for internal training.</div>
-          </div>
-        </label>
-        <label className="flex items-start gap-2 rounded-xl border border-border bg-secondary/40 p-3 cursor-pointer">
-          <input type="checkbox" checked={phi} onChange={(e) => setPhi(e.target.checked)} className="mt-0.5 size-4 accent-primary" />
-          <div className="text-xs">
-            <div className="font-medium">PHI attestation</div>
-            <div className="text-muted-foreground">No PHI is present, or PHI has been approved for internal use.</div>
-          </div>
-        </label>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <Field label="Approval status">
-            <select value={approval} onChange={(e) => setApproval(e.target.value as "draft" | "approved")} className={inputCls}>
-              <option value="draft">Draft (admin review)</option>
-              <option value="approved">Approved</option>
-            </select>
-          </Field>
-          <Field label="Visibility">
-            <select
-              value={ateVisible ? "ate" : "admin"}
-              onChange={(e) => setAteVisible(e.target.value === "ate")}
-              className={inputCls}
-            >
-              <option value="admin">Admin only (source)</option>
-              <option value="ate" disabled={!canBeAteVisible}>
-                ATE visible{!canBeAteVisible ? " — needs approved + attestations" : ""}
-              </option>
-            </select>
-          </Field>
-        </div>
+        <Field label="Visibility">
+          <select
+            value={visibility}
+            onChange={(e) => setVisibilityState(e.target.value as Visibility)}
+            className={inputCls}
+          >
+            <option value="ate_visible">ATE-visible (assigned org users can see this)</option>
+            <option value="org_internal">Org internal (admins only)</option>
+          </select>
+        </Field>
 
         <PreviewCard
           title={title}
           summary={summary}
           kind={kind}
-          ateVisible={ateVisible && canBeAteVisible}
-          approved={approval === "approved"}
-          attested={rights && phi}
+          ateVisible={visibility === "ate_visible"}
           askCount={askIds.length}
         />
 
@@ -501,35 +431,20 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
       </form>
 
       {confirmAte && (
-        <div className="fixed inset-0 z-50 bg-foreground/60 flex items-center justify-center p-4" onClick={() => setConfirmAte(false)}>
-          <div className="bg-card rounded-2xl border border-border shadow-elevated max-w-sm w-full p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
-            <div className="font-display font-semibold flex items-center gap-2">
-              <Eye className="size-4 text-primary" /> Make ATE-visible?
-            </div>
-            <p className="text-xs text-muted-foreground">
-              This asset will appear in floor support users' Ask More Help for the {askIds.length} linked topic{askIds.length === 1 ? "" : "s"}. You can revert any time.
-            </p>
-            <div className="flex justify-end gap-2">
-              <button onClick={() => setConfirmAte(false)} className="h-9 px-3 rounded-lg border border-border text-xs">Cancel</button>
-              <button
-                onClick={() => { setConfirmAte(false); commit(); }}
-                className="h-9 px-3 rounded-lg bg-primary text-primary-foreground text-xs font-medium"
-              >
-                Confirm & publish
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDialog
+          onCancel={() => setConfirmAte(false)}
+          onConfirm={() => { setConfirmAte(false); commit(); }}
+        />
       )}
     </div>
   );
 }
 
 function PreviewCard({
-  title, summary, kind, ateVisible, approved, attested, askCount,
+  title, summary, kind, ateVisible, askCount,
 }: {
   title: string; summary: string; kind: AssetKind;
-  ateVisible: boolean; approved: boolean; attested: boolean; askCount: number;
+  ateVisible: boolean; askCount: number;
 }) {
   const Icon = ["external_video", "mp4", "zoom_link"].includes(kind) ? Film
     : ["learnshare_link"].includes(kind) ? Link2
@@ -552,24 +467,16 @@ function PreviewCard({
         </div>
       </div>
       <div className="mt-2 flex flex-wrap gap-1.5 text-[10px]">
-        <span className={`px-2 py-0.5 rounded-full ${approved ? "bg-success/15 text-success" : "bg-warning/15 text-warning"}`}>
-          {approved ? "Approved" : "Draft"}
-        </span>
         <span className={`px-2 py-0.5 rounded-full ${ateVisible ? "bg-success/15 text-success" : "bg-muted text-muted-foreground"}`}>
-          {ateVisible ? "ATE visible" : "Admin only"}
+          {ateVisible ? "ATE visible" : "Org internal"}
         </span>
-        {!attested && (
-          <span className="px-2 py-0.5 rounded-full bg-warning/15 text-warning inline-flex items-center gap-1">
-            <AlertTriangle className="size-3" /> Needs attestation
-          </span>
-        )}
         <span className="px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">
           {askCount} Ask topic{askCount === 1 ? "" : "s"}
         </span>
       </div>
       {!ateVisible && (
         <div className="text-[11px] text-muted-foreground mt-2">
-          Won't appear to ATE users until approved, ATE-visible, and both attestations confirmed.
+          Won't appear to ATE users until you set this to ATE-visible.
         </div>
       )}
     </div>
