@@ -101,7 +101,32 @@ type Registry = {
 const seed = registry as Registry;
 
 // ---------- in-memory mutable store ----------
-let _assets: OrgAsset[] = [...seed.assets];
+const LS_KEY = "mizly.org-library.user-assets";
+
+function loadUserAssets(): OrgAsset[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(LS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as OrgAsset[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function persistUserAssets() {
+  if (typeof window === "undefined") return;
+  const seedIds = new Set(seed.assets.map((a) => a.id));
+  const userOnly = _assets.filter((a) => !seedIds.has(a.id));
+  try {
+    window.localStorage.setItem(LS_KEY, JSON.stringify(userOnly));
+  } catch {
+    /* quota / SSR: ignore */
+  }
+}
+
+let _assets: OrgAsset[] = [...loadUserAssets(), ...seed.assets];
 let _audit: AuditEntry[] = [];
 const _orgs: Organization[] = seed.organizations;
 const _viewer: ViewerContext = seed.current_viewer;
