@@ -146,7 +146,7 @@
       "download_disabled": false,
       "watermark": true,
       "risk_flags": [],
-      "related_ask_ids": ["ans_notes_workflow"]
+      "related_ask_ids": ["ll_scope_notes", "ans_notes_workflow"]
     },
     {
       "id": "oa_001",
