@@ -283,10 +283,10 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
 
   const askMatches = useMemo(() => {
     const tk = askQuery.trim().toLowerCase();
-    const list = LAUNCH_LIBRARY.filter((e) => !askIds.includes(e.id));
+    const list = LAUNCH_LIBRARY.filter((e: LaunchEntry) => !askIds.includes(e.id));
     if (!tk) return list.slice(0, 6);
     return list
-      .filter((e) =>
+      .filter((e: LaunchEntry) =>
         `${e.id} ${e.title} ${e.summary} ${e.keywords.join(" ")}`.toLowerCase().includes(tk),
       )
       .slice(0, 8);
