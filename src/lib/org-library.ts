@@ -6,10 +6,7 @@ import registry from "@/data/org-library-registry.json";
 // Demo-only: in-memory, seeded from JSON. No cross-tenant reads.
 // ============================================================
 
-export type Visibility =
-  | "admin_only_source"
-  | "org_ate_visible"
-  | "public_mizly_demo";
+export type Visibility = "org_internal" | "ate_visible";
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
 
