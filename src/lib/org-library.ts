@@ -6,10 +6,7 @@ import registry from "@/data/org-library-registry.json";
 // Demo-only: in-memory, seeded from JSON. No cross-tenant reads.
 // ============================================================
 
-export type Visibility =
-  | "admin_only_source"
-  | "org_ate_visible"
-  | "public_mizly_demo";
+export type Visibility = "org_internal" | "ate_visible";
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
 
@@ -103,13 +100,22 @@ const seed = registry as Registry;
 // ---------- in-memory mutable store ----------
 const LS_KEY = "mizly.org-library.user-assets";
 
+function migrateVisibility(v: unknown): Visibility {
+  if (v === "ate_visible" || v === "org_ate_visible") return "ate_visible";
+  return "org_internal";
+}
+
+function normalizeAsset(a: OrgAsset): OrgAsset {
+  return { ...a, visibility: migrateVisibility(a.visibility) };
+}
+
 function loadUserAssets(): OrgAsset[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(LS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as OrgAsset[]) : [];
+    return Array.isArray(parsed) ? (parsed as OrgAsset[]).map(normalizeAsset) : [];
   } catch {
     return [];
   }
@@ -126,7 +132,7 @@ function persistUserAssets() {
   }
 }
 
-let _assets: OrgAsset[] = [...loadUserAssets(), ...seed.assets];
+let _assets: OrgAsset[] = [...loadUserAssets(), ...seed.assets.map(normalizeAsset)];
 let _audit: AuditEntry[] = [];
 const _orgs: Organization[] = seed.organizations;
 const _viewer: ViewerContext = seed.current_viewer;
@@ -167,22 +173,14 @@ export function useAuditLog(): AuditEntry[] {
 
 // ---------- access rules ----------
 /**
- * Single source of truth for whether a raw uploaded asset may be shown to an
- * ATE learner in the floor surfaces (Learn / Videos / Tip Sheets / Ask).
- *
- * - Must belong to the viewer's organization.
- * - Visibility must be org_ate_visible (admin_only_source never leaks).
- * - Must be explicitly approved by an org admin.
- * - Rights + PHI attestations must both be confirmed.
- * - public_mizly_demo content is handled by other registries, never here.
+ * Simplified gating: an asset is visible to ATE users when it belongs to the
+ * viewer's organization and is marked ate_visible. No approval / attestation
+ * gates — the org admin decides by toggling visibility.
  */
 export function isAteVisible(asset: OrgAsset, viewer: ViewerContext): boolean {
   return (
     asset.organization_id === viewer.organization_id &&
-    asset.visibility === "org_ate_visible" &&
-    asset.approval_status === "approved" &&
-    asset.rights_attestation === true &&
-    asset.phi_attestation === true
+    asset.visibility === "ate_visible"
   );
 }
 
@@ -217,14 +215,13 @@ export function addAsset(
   > &
     Partial<Pick<OrgAsset, "visibility" | "approval_status">>,
 ): OrgAsset {
-  const approved = input.approval_status === "approved";
   const a: OrgAsset = {
     id: `oa_user_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     organization_id: _viewer.organization_id,
-    visibility: input.visibility ?? "admin_only_source",
-    approval_status: input.approval_status ?? "pending",
-    approved_by: approved ? input.uploaded_by : null,
-    approved_at: approved ? new Date().toISOString() : null,
+    visibility: input.visibility ?? "org_internal",
+    approval_status: input.approval_status ?? "approved",
+    approved_by: input.uploaded_by,
+    approved_at: new Date().toISOString(),
     uploaded_at: new Date().toISOString(),
     ...input,
   };
@@ -298,9 +295,8 @@ export function recordDownload(id: string, actor: string) {
 
 // ---------- labels ----------
 export const VISIBILITY_LABEL: Record<Visibility, string> = {
-  admin_only_source: "Admin only (source)",
-  org_ate_visible: "ATE visible",
-  public_mizly_demo: "Public Mizly demo",
+  org_internal: "Org internal",
+  ate_visible: "ATE visible",
 };
 
 export const ASSET_KIND_LABEL: Record<AssetKind, string> = {
