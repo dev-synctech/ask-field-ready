@@ -34,7 +34,14 @@
       "download_disabled": true,
       "watermark": true,
       "risk_flags": [],
-      "related_ask_ids": ["ll_scope_notes", "ans_provider_notes_orders"]
+      "related_ask_ids": [
+        "ll_scope_notes",
+        "ll_note_sidebar_or_note_type_missing",
+        "ll_note_unsigned_missing_required_field",
+        "ll_scope_orders",
+        "ll_order_entry",
+        "ans_provider_notes_orders"
+      ]
     },
     {
       "id": "oa_seed_002",
@@ -62,7 +69,15 @@
       "download_disabled": true,
       "watermark": true,
       "risk_flags": [],
-      "related_ask_ids": ["ans_provider_in_basket"]
+      "related_ask_ids": [
+        "ll_inbasket_message_wrong_pool",
+        "ll_provider_inbasket_folder_filter_overload",
+        "ll_provider_inbasket_result_or_refill_followup",
+        "ll_p12r2_inbasket_empty_or_wrong_pool",
+        "ll_p12r2_portal_message_routing",
+        "ll_p12_portal_message_or_result_missing",
+        "ans_provider_in_basket"
+      ]
     },
     {
       "id": "oa_seed_003",
@@ -90,7 +105,17 @@
       "download_disabled": true,
       "watermark": true,
       "risk_flags": [],
-      "related_ask_ids": ["ans_smartset_smarttools"]
+      "related_ask_ids": [
+        "ll_p12r2_smartlink_blank_or_wrong",
+        "ll_dynamic_note_template_missing",
+        "ll_smartset_order_set_missing",
+        "ll_smarttool_missing",
+        "ll_smartset_section_or_order_not_selected",
+        "ll_smarttools_placeholder_prompt_unresolved",
+        "ll_p12_smartlink_not_pulling_data",
+        "ll_p12_smartphrase_parameter_prompt",
+        "ans_smartset_smarttools"
+      ]
     },
     {
       "id": "oa_seed_004",
@@ -118,7 +143,7 @@
       "download_disabled": false,
       "watermark": true,
       "risk_flags": [],
-      "related_ask_ids": ["ans_level_of_service"]
+      "related_ask_ids": ["ll_level_of_service_selection", "ans_level_of_service"]
     },
     {
       "id": "oa_seed_005",
@@ -146,7 +171,15 @@
       "download_disabled": false,
       "watermark": true,
       "risk_flags": [],
-      "related_ask_ids": ["ll_scope_notes", "ans_notes_workflow"]
+      "related_ask_ids": [
+        "ll_scope_notes",
+        "ll_note_sidebar_or_note_type_missing",
+        "ll_dynamic_note_template_missing",
+        "ll_note_unsigned_missing_required_field",
+        "ll_signed_note_addendum_correction",
+        "ll_provider_note_copy_forward_or_refresh_wrong",
+        "ans_notes_workflow"
+      ]
     },
     {
       "id": "oa_001",
