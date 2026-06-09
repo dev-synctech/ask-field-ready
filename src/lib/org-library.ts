@@ -295,9 +295,8 @@ export function recordDownload(id: string, actor: string) {
 
 // ---------- labels ----------
 export const VISIBILITY_LABEL: Record<Visibility, string> = {
-  admin_only_source: "Admin only (source)",
-  org_ate_visible: "ATE visible",
-  public_mizly_demo: "Public Mizly demo",
+  org_internal: "Org internal",
+  ate_visible: "ATE visible",
 };
 
 export const ASSET_KIND_LABEL: Record<AssetKind, string> = {
