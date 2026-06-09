@@ -425,7 +425,7 @@ function UploadDialog({ viewerEmail, onClose }: { viewerEmail: string; onClose: 
             />
             {askMatches.length > 0 && (
               <div className="max-h-40 overflow-y-auto border border-border rounded-lg divide-y divide-border bg-card">
-                {askMatches.map((e) => (
+                {askMatches.map((e: LaunchEntry) => (
                   <button
                     type="button"
                     key={e.id}
